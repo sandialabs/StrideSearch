@@ -68,15 +68,18 @@ This version has been updated to use the CMake cross-platform Makefile generator
     export CXX=mpicxx
 	export FC=mpifort
 	export NETCDF=/opt/netcdf-4.3.2
-	export SOURCE_ROOT=$HOME/stormSearch
+	
+	SRC_DIR=$HOME/StrideSearch
+	BUILD_DIR=$SRC_DIR/build
+	INSTALL_DIR=$SRC_DIR/install
 
 	rm -rf CMakeCache.txt
 	rm -rf CMakeFiles/
 
 	cmake \
 	-D CMAKE_BUILD_TYPE:STRING=RELEASE \
-	-D CMAKE_INSTALL_PREFIX:FILEPATH=$HOME/stormSearch/install \
-	$SOURCE_ROOT
+	-D CMAKE_INSTALL_PREFIX:FILEPATH=$INSTALL_DIR \
+	$SRC_DIR
 
 Users should edit the `-D CMAKE_INSTALL_PREFIX:FILEPATH` variable to their desired install directory, and edit the 
 `NETCDF` variable to the root of their local [NetCDF](http://www.unidata.ucar.edu/software/netcdf/) library.  @n
