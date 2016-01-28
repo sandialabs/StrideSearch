@@ -1,0 +1,8 @@
+<map id="time_manager_mod::decrement_no_leap" name="time_manager_mod::decrement_no_leap">
+<area shape="rect" id="node2" href="$classtime__manager__mod.html#aa75ed1e73642ea212f9b9e64470bb8e0" title="time_manager_mod::error\l_handler" alt="" coords="815,85,991,127"/>
+<area shape="rect" id="node3" href="$classtime__manager__mod.html#acc590ee22b4b4b0a01b20777f60d2c10" title="time_manager_mod::decrement\l_thirty" alt="" coords="264,43,475,84"/>
+<area shape="rect" id="node5" href="$classtime__manager__mod.html#a5825b92972e868baa71dcef0d8355d7b" title="time_manager_mod::get\l_date_no_leap" alt="" coords="286,108,453,149"/>
+<area shape="rect" id="node6" href="$classtime__manager__mod.html#ac7ce396f6f67f64d717ea1b7b353e64b" title="time_manager_mod::set\l_date_no_leap" alt="" coords="287,173,452,215"/>
+<area shape="rect" id="node4" href="$classtime__manager__mod.html#a3569323c51bacaf4139ec50da35a96fc" title="time_manager_mod::decrement_time" alt="" coords="523,93,767,119"/>
+<area shape="rect" id="node7" href="$classtime__manager__mod.html#a49d0e8625bf9d4526a982406e7cd5415" title="time_manager_mod::set_time" alt="" coords="545,194,744,221"/>
+</map>

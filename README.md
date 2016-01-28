@@ -97,7 +97,7 @@ Then install it with
 
 Software / algorithm design
 ===============
-The fundamental data structure in the StrideSearch software is a linked-list.  @n
+The fundamental data structure in the StrideSearch software is a linked-list e.g. @ref StormListNode, @ref TrackListNode.  @n
 We do not know in advance how many storms will be detected per timestep, or how many storm tracks may be built from one dataset. @n
 Linked-lists handled these unknowns using dynamic memory allocation; each time a new storm or new track is found, the software
 allocates memory for that storm and saves its information to that newly allocated memory.  @n

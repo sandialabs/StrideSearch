@@ -1,0 +1,7 @@
+<map id="tropicaldatamodule::initializetropicaldata" name="tropicaldatamodule::initializetropicaldata">
+<area shape="rect" id="node2" href="$group___stride_search_data.html#gac94efcee03125a902bc9df4259d7fcc2" title="Reads coordinate dimensions and allocates memory to prepare a StrideSearchData object. Does not read variables, only coordinates. " alt="" coords="199,55,363,96"/>
+<area shape="rect" id="node3" href="$classnetcdfutilitiesmodule.html#a4214d4712e99256f040640d853d9d087" title="Get netCDF metadata from file header. " alt="" coords="411,24,553,66"/>
+<area shape="rect" id="node6" href="$group__netcdf_utilities.html#ga6d85fc23a16396c1f2e184f8f435df31" title="reads a 1d variable from a netcdf file into a buffer " alt="" coords="601,90,744,131"/>
+<area shape="rect" id="node4" href="$classget__date__mod.html#afea4d47ed104c709c7ef6d40d2d2374c" title="get_date_mod::handle_err" alt="" coords="792,32,971,58"/>
+<area shape="rect" id="node5" href="$group__netcdf_utilities.html#ga259598816dcb08d4ece13c86943b5a7e" title="determines the length of a netcdf file coordinate axis array. " alt="" coords="601,24,744,66"/>
+</map>

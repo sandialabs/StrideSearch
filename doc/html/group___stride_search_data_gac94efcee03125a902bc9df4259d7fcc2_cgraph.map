@@ -1,0 +1,6 @@
+<map id="stridesearchdatamodule::initializedata" name="stridesearchdatamodule::initializedata">
+<area shape="rect" id="node2" href="$classnetcdfutilitiesmodule.html#a4214d4712e99256f040640d853d9d087" title="Get netCDF metadata from file header. " alt="" coords="217,24,360,66"/>
+<area shape="rect" id="node5" href="$group__netcdf_utilities.html#ga6d85fc23a16396c1f2e184f8f435df31" title="reads a 1d variable from a netcdf file into a buffer " alt="" coords="408,90,551,131"/>
+<area shape="rect" id="node3" href="$classget__date__mod.html#afea4d47ed104c709c7ef6d40d2d2374c" title="get_date_mod::handle_err" alt="" coords="599,32,777,58"/>
+<area shape="rect" id="node4" href="$group__netcdf_utilities.html#ga259598816dcb08d4ece13c86943b5a7e" title="determines the length of a netcdf file coordinate axis array. " alt="" coords="408,24,551,66"/>
+</map>

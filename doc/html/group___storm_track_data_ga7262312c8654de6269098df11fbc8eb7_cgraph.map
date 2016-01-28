@@ -1,0 +1,6 @@
+<map id="stormtrackdatamodule::readstormtrackdatafile" name="stormtrackdatamodule::readstormtrackdatafile">
+<area shape="rect" id="node2" href="$group___storm_track_data.html#ga047a384bc1f732db6bcddac5bff146cc" title="stormtrackdatamodule\l::datedstormlistnode\l::initializedatednode" alt="" coords="215,5,368,61"/>
+<area shape="rect" id="node3" href="$group___storm_track_data.html#gae8f888e7195d1ad126c3090e4886b44f" title="Adds an initialized (initializeDatedNode must be called on newNode prior to this subroutine) to a lin..." alt="" coords="215,86,368,127"/>
+<area shape="rect" id="node4" href="$group___storm_track_data.html#ga45e4905ed70c096a68f714c8e3d13b3d" title="Copies a datedStormListNode object. " alt="" coords="416,86,569,127"/>
+<area shape="rect" id="node5" href="$group___storm_list_node.html#ga9b34aa8100d47395af8f1c72969bf8aa" title="Copies a StormListNode. " alt="" coords="617,86,763,127"/>
+</map>

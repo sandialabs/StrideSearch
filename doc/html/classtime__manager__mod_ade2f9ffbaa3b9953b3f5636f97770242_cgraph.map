@@ -1,0 +1,5 @@
+<map id="time_manager_mod::decrement_gregorian" name="time_manager_mod::decrement_gregorian">
+<area shape="rect" id="node2" href="$classtime__manager__mod.html#aa75ed1e73642ea212f9b9e64470bb8e0" title="time_manager_mod::error\l_handler" alt="" coords="479,29,655,70"/>
+<area shape="rect" id="node3" href="$classtime__manager__mod.html#af4981ba2ab10fa2d53cd163e199331b2" title="time_manager_mod::get\l_date_gregorian" alt="" coords="264,25,431,66"/>
+<area shape="rect" id="node4" href="$classtime__manager__mod.html#ad93055b1c272841283e311a8d7a28a44" title="time_manager_mod::set\l_date_gregorian" alt="" coords="265,90,430,132"/>
+</map>

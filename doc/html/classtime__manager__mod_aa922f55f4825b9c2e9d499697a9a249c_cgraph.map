@@ -1,0 +1,7 @@
+<map id="time_manager_mod::get_date" name="time_manager_mod::get_date">
+<area shape="rect" id="node2" href="$classtime__manager__mod.html#ae7ff98a793a87fa28e42724bb1666d6e" title="time_manager_mod::get\l_date_thirty" alt="" coords="258,5,425,47"/>
+<area shape="rect" id="node3" href="$classtime__manager__mod.html#af4981ba2ab10fa2d53cd163e199331b2" title="time_manager_mod::get\l_date_gregorian" alt="" coords="258,71,425,112"/>
+<area shape="rect" id="node4" href="$classtime__manager__mod.html#a3aa4943a023df517bc3cbc3403a152f7" title="time_manager_mod::get\l_date_julian" alt="" coords="258,136,425,177"/>
+<area shape="rect" id="node5" href="$classtime__manager__mod.html#a5825b92972e868baa71dcef0d8355d7b" title="time_manager_mod::get\l_date_no_leap" alt="" coords="258,201,425,243"/>
+<area shape="rect" id="node6" href="$classtime__manager__mod.html#aa75ed1e73642ea212f9b9e64470bb8e0" title="time_manager_mod::error\l_handler" alt="" coords="253,267,429,308"/>
+</map>

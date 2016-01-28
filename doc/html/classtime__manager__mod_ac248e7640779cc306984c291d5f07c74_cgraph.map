@@ -1,0 +1,15 @@
+<map id="time_manager_mod::decrement_date" name="time_manager_mod::decrement_date">
+<area shape="rect" id="node2" href="$classtime__manager__mod.html#acc590ee22b4b4b0a01b20777f60d2c10" title="time_manager_mod::decrement\l_thirty" alt="" coords="556,383,767,424"/>
+<area shape="rect" id="node3" href="$classtime__manager__mod.html#aa75ed1e73642ea212f9b9e64470bb8e0" title="time_manager_mod::error\l_handler" alt="" coords="1107,349,1283,391"/>
+<area shape="rect" id="node5" href="$classtime__manager__mod.html#ade2f9ffbaa3b9953b3f5636f97770242" title="time_manager_mod::decrement\l_gregorian" alt="" coords="556,148,767,189"/>
+<area shape="rect" id="node8" href="$classtime__manager__mod.html#aaf3dd1a9588a727736db35df3b9dae15" title="time_manager_mod::decrement\l_julian" alt="" coords="297,287,508,328"/>
+<area shape="rect" id="node11" href="$classtime__manager__mod.html#a476b10d536ec702104cc5d6a13ba0648" title="time_manager_mod::decrement\l_no_leap" alt="" coords="297,472,508,513"/>
+<area shape="rect" id="node4" href="$classtime__manager__mod.html#a3569323c51bacaf4139ec50da35a96fc" title="time_manager_mod::decrement_time" alt="" coords="815,382,1059,409"/>
+<area shape="rect" id="node6" href="$classtime__manager__mod.html#af4981ba2ab10fa2d53cd163e199331b2" title="time_manager_mod::get\l_date_gregorian" alt="" coords="853,83,1020,124"/>
+<area shape="rect" id="node7" href="$classtime__manager__mod.html#ad93055b1c272841283e311a8d7a28a44" title="time_manager_mod::set\l_date_gregorian" alt="" coords="854,148,1019,189"/>
+<area shape="rect" id="node9" href="$classtime__manager__mod.html#a3aa4943a023df517bc3cbc3403a152f7" title="time_manager_mod::get\l_date_julian" alt="" coords="578,215,745,256"/>
+<area shape="rect" id="node10" href="$classtime__manager__mod.html#ad209ddc895277cc8619f21e6fa1252b0" title="time_manager_mod::set\l_date_julian" alt="" coords="854,265,1019,307"/>
+<area shape="rect" id="node12" href="$classtime__manager__mod.html#a5825b92972e868baa71dcef0d8355d7b" title="time_manager_mod::get\l_date_no_leap" alt="" coords="578,531,745,572"/>
+<area shape="rect" id="node13" href="$classtime__manager__mod.html#ac7ce396f6f67f64d717ea1b7b353e64b" title="time_manager_mod::set\l_date_no_leap" alt="" coords="579,596,744,637"/>
+<area shape="rect" id="node14" href="$classtime__manager__mod.html#a49d0e8625bf9d4526a982406e7cd5415" title="time_manager_mod::set_time" alt="" coords="837,539,1036,566"/>
+</map>

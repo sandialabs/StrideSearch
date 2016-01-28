@@ -1,0 +1,3 @@
+<map id="polardatamodule::printpolardatainfo" name="polardatamodule::printpolardatainfo">
+<area shape="rect" id="node2" href="$group___stride_search_data.html#gaab104fcc77947c6bd81f9e6460166c17" title="Prints variable info about netcdf data. Must be called after ReadVariablesAtTimestep. " alt="" coords="285,5,449,47"/>
+</map>
