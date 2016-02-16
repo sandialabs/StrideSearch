@@ -259,7 +259,7 @@ subroutine DoTropicalSearch( tstormList, tSearch, tData )
 			endif! foundStorm
 		enddo!j
 	enddo! i
-	print *, "maxPtsPerSector = ", maxPtsPerSector, ", minPtsPerSector = ", minPtsPerSector
+	!print *, "maxPtsPerSector = ", maxPtsPerSector, ", minPtsPerSector = ", minPtsPerSector
 	deallocate(tempNode)
 end subroutine
 
