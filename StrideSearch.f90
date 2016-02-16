@@ -112,7 +112,6 @@ subroutine SearchSetup( sSearch, southernBoundary, northernBoundary, sectorRadiu
 	enddo
 	
 	print *, "StrideSearch::SearchSetup complete : ", nSectors, " search sectors defined."
-	print *, "Max possible number of data points per sector = ", (2 * latStride + 1)*maxval(lonStrides)
 end subroutine
 
 !> @brief Deletes memory used for stride search.

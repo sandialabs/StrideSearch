@@ -80,7 +80,8 @@ call PrintTropicalSearchInfo( tSearch )
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 do timeIndex = 1, ncData%nTimesteps
 	allocate(tstormList)
-	write(6,'(A,I4,A,I4,A)',advance='no') "processing time step ", timeIndex, " of ", ncData%nTimesteps, "..."
+	if ( mod(timeIndex, 40) == 0 ) &
+	write(6,'(A,I4,A,I4,A)') "processing time step ", timeIndex, " of ", ncData%nTimesteps, "..."
 	
 	call ReadTropicalVariablesAtTimestep( ncData, year, month, day, hour, timeIndex )
 		
@@ -92,7 +93,7 @@ do timeIndex = 1, ncData%nTimesteps
 		
 	call RemoveMarkedTropicalNodes(tstormList)
 		
-	write(6,'(A,I4,A)') " found ", tstormList%listSize, " storms that match the per-timestep spatial criteria."
+	!write(6,'(A,I4,A)') " found ", tstormList%listSize, " storms that match the per-timestep spatial criteria."
 	
 	call PrintTropicalTSTORMSOutput( tstormList, 14, year, month, day, hour )
 	
