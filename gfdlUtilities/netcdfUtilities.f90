@@ -32,9 +32,9 @@ subroutine GetDimensions( filename, ncFileID, nLon, nLat, nTimesteps )
 	nLat = AXIS_LENGTH( ncFileID, 'lat')
 	nTimesteps = AXIS_LENGTH( ncFileID, 'time')
 	
-	write(6,*) "nLon = ", nLon
-	write(6,*) "nLat = ", nLat
-	write(6,*) "nTimesteps = ", nTimesteps
+!	write(6,*) "nLon = ", nLon
+!	write(6,*) "nLat = ", nLat
+!	write(6,*) "nTimesteps = ", nTimesteps
 	
 end subroutine
 

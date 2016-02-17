@@ -108,9 +108,11 @@ subroutine SearchSetup( sSearch, southernBoundary, northernBoundary, sectorRadiu
 	
 	allocate(sectorCenterLons( nSectors ) )
 
+	k = 0
 	do i = 1, nStrips + 1
 		do j = 1, nLonsPerLatLine(i)
-			sectorCenterLons(i+j-1) = (j - 1) * lonStrideReals(i)
+			k = k + 1
+			sectorCenterLons(k) = (j - 1) * lonStrideReals(i)
 		enddo
 	enddo
 	deallocate(latLines)
@@ -204,7 +206,7 @@ subroutine DoStrideSearch( stormList, sSearch, searchData )
 	type(StrideSearchSector), intent(inout) :: sSearch
 	type(StrideSearchData), intent(in) :: searchData
 	!
-	integer :: i, j, k, ii, jj, lonIndex, latIndex, stormI, stormJ
+	integer :: i, j, k, ii, jj, kk, lonIndex, latIndex, stormI, stormJ
 	real :: stormLon, stormLat, stormPsl, stormVort, stormWind
 	type(StormListNode), pointer :: tempNodePtr
 	logical :: foundStorm
@@ -219,15 +221,17 @@ subroutine DoStrideSearch( stormList, sSearch, searchData )
 
 	!
 	! loop over search sector centers
-	!	
+	!
+	kk = 0	
 	do ii = 1, nStrips + 1
 		do jj = 1, nLonsPerLatLine(ii) 
+			kk = kk + 1
 			!
 			!	locate sector center in data
 			!
 			sSearch%centerLat = sectorCenterLats(ii)
 			sSearch%centerLatIndex = floor( (sectorCenterLats(ii) + 90.0) / dataRes )
-			sSearch%centerLon = sectorCenterLons( ii + jj - 1 )
+			sSearch%centerLon = sectorCenterLons( kk )
 			sSearch%centerLonIndex = floor( sSearch%centerLon / dataRes )
 			sSearch%myLons = 0.0
 			sSearch%myLonJs = 0

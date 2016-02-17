@@ -16,7 +16,7 @@ integer :: year, month, day, hour
 call initializeData(ncData, sampleFile)
 call PrintCoordinateInfo(ncData)
 
-do k = 1, ncData%nTimesteps
+do k = 1, 10
 	call ReadVariablesAtTimestep( ncData, year, month, day, hour, k )
 	print *, "year = ", year, ", month = ", month, ", day = ", day, ", hour = ", hour
 	call PrintVariableInfo(ncData)
