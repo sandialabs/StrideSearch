@@ -25,7 +25,7 @@ integer :: readstat
 
 type(PolarData) :: ncData
 integer :: year, month, day, hour, timeIndex
-type(PolarStrideSearch) :: sSearch
+type(PolarStrideSearchSector) :: sSearch
 
 type(PolarLowListNode), pointer :: storms
 

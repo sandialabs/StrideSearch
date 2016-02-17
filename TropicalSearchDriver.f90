@@ -23,7 +23,7 @@ integer :: readStat
 
 type(TropicalData) :: ncData
 integer :: year, month, day, hour, timeIndex
-type(TropicalStrideSearch) :: tSearch
+type(TropicalStrideSearchSector) :: tSearch
 
 type(TropicalStormListNode), pointer :: tstormList
 

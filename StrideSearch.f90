@@ -13,16 +13,18 @@ use StormListNodeModule
 
 implicit none
 private
-public StrideSearch, SearchSetup, DoStrideSearch, FinalizeSearch, PrintSearchInfo
+public StrideSearchSector, SearchSetup, DoStrideSearch, FinalizeSearch, PrintSearchInfo
 public MarkNodesForRemoval, RemoveMarkedNodes, ApplyLandMask, SphereDistance
 
 integer, allocatable, public :: lonStrides(:)
 integer, public :: latMinIndex, latMaxIndex, latStride
 
-!> @class StrideSearch
+!> @class StrideSearchSector
 !> @brief Container for small sets of working data (enough to contain the largest search sector), used to identify storms.
 !> Provides a workspace for spatial search.
-type StrideSearch
+type StrideSearchSector
+	real :: centerLon
+	real :: centerLat
 	logical, pointer, dimension(:,:) :: neighborhood  !< neighborhood(j,i) = true if grid point at (lon(j),lat(i)) is 
 													  !< within a sectorRadius of the sector center
 	real, pointer, dimension(:,:) :: pslWork, & !< array for sector's sea level pressure data
@@ -52,7 +54,7 @@ contains
 !> @param searchData container for netcdf data
 subroutine SearchSetup( sSearch, southernBoundary, northernBoundary, sectorRadius, &
 					 	pslThreshold, vortThreshold, windThreshold, searchData)
-	type(StrideSearch), intent(out) :: sSearch
+	type(StrideSearchSector), intent(out) :: sSearch
 	real, intent(in) :: southernBoundary, northernBoundary, sectorRadius, pslThreshold, vortThreshold, windThreshold
 	type(StrideSearchData), intent(in) :: searchData
 	!
@@ -118,7 +120,7 @@ end subroutine
 !> This memory was allocated by SearchSetup.
 !> @param sSearch object to be deleted.
 subroutine FinalizeSearch( sSearch )
-	type(StrideSearch), intent(inout) :: sSearch
+	type(StrideSearchSector), intent(inout) :: sSearch
 	deallocate(sSearch%neighborhood)
 	deallocate(sSearch%pslWork)
 	deallocate(sSearch%windWork)
@@ -132,7 +134,7 @@ end subroutine
 !> @brief Prints basic info about a StrideSearch object to the console.
 !> @param sSearch
 subroutine PrintSearchInfo( sSearch )
-	type(StrideSearch), intent(in) :: sSearch
+	type(StrideSearchSector), intent(in) :: sSearch
 	print *, "sector radius = ", sSearch%sectorRadius, " km."
 	print *, "pslThreshold = ", sSearch%pslThreshold, " Pa."
 	print *, "vortThreshold = ", sSearch%vortThreshold, " 1/s"
@@ -147,7 +149,7 @@ end subroutine
 !> @param searchData data container for netcdf input data
 subroutine DoStrideSearch( stormList, sSearch, searchData )
 	type(StormListNode), pointer, intent(inout) :: stormList
-	type(StrideSearch), intent(inout) :: sSearch
+	type(StrideSearchSector), intent(inout) :: sSearch
 	type(StrideSearchData), intent(in) :: searchData
 	!
 	integer :: i, j, k, ii, jj, lonIndex, latIndex, stormI, stormJ

@@ -14,12 +14,12 @@ use StrideSearchModule
 implicit none
 
 private
-public PolarStrideSearch, PolarSearchSetup, DoPolarSearch, FinalizePolarSearch
+public PolarStrideSearchSector, PolarSearchSetup, DoPolarSearch, FinalizePolarSearch
 public RemoveMarkedPolarNodes, MarkPolarNodesForRemoval
 
 !> @class PolarStrideSearch
 !> @brief Container for local data sets (one sector).  Provides a workspace for spatial search.
-type, extends(StrideSearch) :: PolarStrideSearch
+type, extends(StrideSearchSector) :: PolarStrideSearchSector
 	real, pointer, dimension(:,:) :: tempWork
 	real, pointer, dimension(:,:) :: iceWork
 	real :: coldAirThreshold
@@ -44,12 +44,12 @@ contains
 subroutine PolarSearchSetup( pSearch, southernBoundary, northernBoundary, sectorRadius, &
 						 	 pslThreshold, vortThreshold, windThreshold, coldAirThreshold, vortPslDistThreshold, iceThreshold, &
 						 	 pData )
-	type(PolarStrideSearch), intent(out) :: pSearch
+	type(PolarStrideSearchSector), intent(out) :: pSearch
 	real, intent(in) :: southernBoundary, northernBoundary, sectorRadius
 	real, intent(in) :: pslThreshold, vortThreshold, windThreshold, coldAirThreshold, vortPslDistThreshold, iceThreshold
 	type(PolarData), intent(in) :: pData
 	
-	call SearchSetup( pSearch%StrideSearch, southernBoundary, northernBoundary, sectorRadius, &
+	call SearchSetup( pSearch%StrideSearchSector, southernBoundary, northernBoundary, sectorRadius, &
 					  pslThreshold, vortThreshold, windThreshold, pData%StrideSearchData )
 	allocate( pSearch%tempWork( 2*maxval(lonStrides) + 1, 2*latStride + 1) )
 	allocate( pSearch%iceWork( 2*maxval(lonStrides) + 1, 2*latStride + 1) )
@@ -61,10 +61,10 @@ end subroutine
 !> @brief Frees memory used by a PolarStrideSearch object. This memory was initialized by PolarSearchSetup
 !> @param pSearch
 subroutine FinalizePolarSearch( pSearch )
-	type(PolarStrideSearch), intent(inout) :: pSearch
+	type(PolarStrideSearchSector), intent(inout) :: pSearch
 	deallocate(pSearch%tempWork)
 	deallocate(pSearch%iceWork)
-	call FinalizeSearch(pSearch%StrideSearch)
+	call FinalizeSearch(pSearch%StrideSearchSector)
 end subroutine
 
 !> @brief Performs a Stride Search of polar domains.
@@ -73,7 +73,7 @@ end subroutine
 !> @param pData data container
 subroutine DoPolarSearch( pstormList, pSearch, pData )
 	type(PolarLowListNode), pointer, intent(inout) :: pstormList
-	type(PolarStrideSearch), intent(inout) :: pSearch
+	type(PolarStrideSearchSector), intent(inout) :: pSearch
 	type(PolarData), intent(in) :: pData
 	!
 	integer :: i, j, k, ii, jj, lonIndex, latINdex, stormI, stormJ
@@ -238,7 +238,7 @@ end subroutine
 !> @param northernBoundary
 subroutine MarkPolarNodesForRemoval( pstorms, pSearch, southernBoundary, northernBoundary )
 	type(PolarLowListNode), pointer, intent(inout) :: pstorms
-	type(PolarStrideSearch), intent(in) :: pSearch
+	type(PolarStrideSearchSector), intent(in) :: pSearch
 	real, intent(in) :: southernBoundary, northernBoundary
 	type(PolarLowListNode), pointer :: current, next, query, querynext
 	

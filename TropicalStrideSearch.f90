@@ -15,10 +15,10 @@ use TropicalStormListNodeModule
 
 implicit none
 private 
-public TropicalStrideSearch, TropicalSearchSetup, DoTropicalSearch, FinalizeTropicalSearch, PrintTropicalSearchInfo
+public TropicalStrideSearchSector, TropicalSearchSetup, DoTropicalSearch, FinalizeTropicalSearch, PrintTropicalSearchInfo
 public RemoveMarkedTropicalNodes, MarkTropicalNodesForRemoval, ApplyTropicalLandMask, GetLandMask
 
-type, extends(StrideSearch) :: TropicalStrideSearch
+type, extends(StrideSearchSector) :: TropicalStrideSearchSector
 	real, pointer, dimension(:,:) :: tempWork
 	real :: vortPslDistThreshold
 	real :: tempExcessThreshold
@@ -48,13 +48,13 @@ subroutine TropicalSearchSetup( tSearch, southernBoundary, northernBoundary, sec
 								pslThreshold, vortThreshold, windThreshold, &
 								vortPslDistThreshold, tempExcessThreshold, tempPslDistThreshold, &
 								tData )	
-	type(TropicalStrideSearch), intent(out) :: tSearch
+	type(TropicalStrideSearchSector), intent(out) :: tSearch
 	real, intent(in) :: southernBoundary, northernBoundary, sectorRadius
 	real, intent(in) :: pslThreshold, vortThreshold, windThreshold
 	real, intent(in) :: vortPslDistThreshold, tempExcessThreshold, tempPslDistThreshold
 	type(TropicalData), intent(in) :: tData
 	
-	call SearchSetup(tSearch%StrideSearch, southernBoundary, northernBoundary, sectorRadius, &
+	call SearchSetup(tSearch%StrideSearchSector, southernBoundary, northernBoundary, sectorRadius, &
 					 pslThreshold, vortThreshold, windThreshold, tData%StrideSearchData)
 	allocate(tSearch%tempWork( 2*maxval(lonStrides) + 1, 2*latStride+1))
 	tSearch%vortPslDistThreshold = vortPslDistThreshold
@@ -65,16 +65,16 @@ end subroutine
 !> @brief Frees memory used by a TropicalStrideSearch object which is allocated in TropicalSearchSetup.  
 !> @param tSearch object to be deleted
 subroutine FinalizeTropicalSearch( tSearch )
-	type(TropicalStrideSearch), intent(inout) :: tSearch
+	type(TropicalStrideSearchSector), intent(inout) :: tSearch
 	deallocate(tSearch%tempWork)
-	call FinalizeSearch(tSearch%StrideSearch)
+	call FinalizeSearch(tSearch%StrideSearchSector)
 end subroutine
 
 !> @brief Prints basic info about a TropicalStrideSearch object to the console
 !> @param tSearch
 subroutine PrintTropicalSearchInfo( tSearch )
-	type(TropicalStrideSearch), intent(in) :: tSearch
-	call PrintSearchInfo( tSearch%StrideSearch )
+	type(TropicalStrideSearchSector), intent(in) :: tSearch
+	call PrintSearchInfo( tSearch%StrideSearchSector )
 	print *, "vortPslDistThreshold = ", tSearch%vortPslDistThreshold
 	print *, "tempExcessThreshold = ", tSearch%tempExcessThreshold
 	print *, "tempPslDistThreshold = ", tSearch%tempPslDistThreshold
@@ -86,7 +86,7 @@ end subroutine
 !> @param tData netcdf data output by ReadTropicalVariablesAtTimestep
 subroutine DoTropicalSearch( tstormList, tSearch, tData )
 	type(TropicalStormListNode), pointer, intent(inout) :: tstormList
-	type(TropicalStrideSearch), intent(inout) :: tSearch
+	type(TropicalStrideSearchSector), intent(inout) :: tSearch
 	type(TropicalData), intent(in) :: tData
 	!
 	integer :: i, j, k, ii, jj, lonIndex, latIndex, stormI, stormJ
@@ -270,7 +270,7 @@ end subroutine
 !> @param northernBoundary northernmost latitude (in degrees_north) of search domain
 subroutine MarkTropicalNodesForRemoval( stormList, tSearch, southernBoundary, northernBoundary )
 	type(TropicalStormListNode), pointer, intent(inout) :: stormList
-	type(TropicalStrideSearch), intent(in) :: tSearch
+	type(TropicalStrideSearchSector), intent(in) :: tSearch
 	real, intent(in) :: southernBoundary, northernBoundary
 	type(TropicalStormListNode), pointer :: current, next, query, querynext
 	
@@ -319,7 +319,7 @@ end subroutine
 !> @param stormlist
 subroutine ApplyTropicalLandMask( stormList )
 	type(TropicalStormListNode), pointer, intent(inout) :: stormList
-	character(len=256), parameter :: maskfile = "/Users/pabosle/Desktop/stormSearch2/gfdlUtilities/landsea.map"
+	character(len=256), parameter :: maskfile = "/Users/pabosle/Desktop/StrideSearch/gfdlUtilities/landsea.map"
 	integer, parameter :: maskNLat = 180, &
 						  maskNLon = 360, &
 						  maskFileRows = 1620, &
@@ -339,7 +339,7 @@ subroutine ApplyTropicalLandMask( stormList )
 	mask = CSHIFT( mask, maskNLon/2, 1 )
 	
 	lon0 = 0.0
-	lat0 = -90.0 + 90.0 / float( maskNLat )
+	lat0 = -90.0 + 0.5
 	
 	dlon = 360.0 / float(maskNLon)
 	dLat = -2.0 * lat0 / float(maskNLat - 1)
@@ -363,7 +363,7 @@ end subroutine
 !> @return ArithmeticAverageTemp
 pure function ArithmeticAverageTemp( tSearch )
 	real :: ArithmeticAverageTemp
-	type(TropicalStrideSearch), intent(in) :: tSearch
+	type(TropicalStrideSearchSector), intent(in) :: tSearch
 	!
 	integer :: ii, jj
 	real :: sum
@@ -379,7 +379,7 @@ end function
 !> @brief Returns an integer array used to define land masks
 function GetLandMask()
 	real :: GetLandMask(360,180)
-	character(len=256), parameter :: maskfile = "/Users/pabosle/Desktop/stormSearch2/gfdlUtilities/landsea.map"
+	character(len=256), parameter :: maskfile = "/Users/pabosle/Desktop/StrideSearch/gfdlUtilities/landsea.map"
 	integer :: mask0(40,1620)
 	integer :: j
 	open(unit=12, file=maskfile, status='OLD', action='READ')
