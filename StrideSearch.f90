@@ -15,6 +15,7 @@ implicit none
 private
 public StrideSearchSector, SearchSetup, DoStrideSearch, FinalizeSearch, PrintSearchInfo
 public MarkNodesForRemoval, RemoveMarkedNodes, ApplyLandMask, SphereDistance
+public DefineSectorInData
 
 !	
 !	sector definition variables
@@ -74,12 +75,29 @@ subroutine SearchSetup( sSearch, southernBoundary, northernBoundary, sectorRadiu
 	integer :: i, j, k, nSectors, nStrips, latPtsPerSector, lonPtsPerSector
 	real :: eqGridSpacing, latCircSpacing 
 	real :: stormArcLength, latStripWidth
-	real, allocatable :: latLines(:)
+	real :: dataRes, dLambda
 	
 	sSearch%sectorRadius = sectorRadius
 	sSearch%pslThreshold = pslThreshold
 	sSearch%vortThreshold = vortThreshold
 	sSearch%windThreshold = windThreshold
+	
+	!
+	!	Find boundaries of search domain in data arrays
+	!
+	dataRes = 360.0 / searchData%nLon
+	if ( southernBoundary > -90.0 ) then
+		latMinIndex = floor( ( southernBoundary + 90.0 ) / dataRes )
+	else
+		latMinIndex = 1
+	endif
+	
+	if ( northernBoundary < 90.0 ) then
+		latMaxIndex = floor( (northernBoundary + 90.0) / dataRes ) + 1
+	else
+		latMaxIndex = searchData%nLat
+	endif
+	print *, "latMinIndex = ", latMinIndex, ", latMaxIndex = ", latMaxIndex
 	
 	!
 	!	Define sector centers
@@ -89,17 +107,29 @@ subroutine SearchSetup( sSearch, southernBoundary, northernBoundary, sectorRadiu
 	latStripWidth = (northernBoundary - southernBoundary) / real(nStrips)
 	latStrideReal = latStripWidth
 	
-	allocate(latLines( nStrips + 1))
 	allocate(sectorCenterLats( nStrips + 1 ) )
 	do i = 1, nStrips + 1
-		latLines(i) = southernBoundary + (i - 1) * latStripWidth
+		sectorCenterLats(i) = southernBoundary + (i - 1) * latStripWidth
 	enddo
-	sectorCenterLats = latLines
 		
 	allocate(nLonsPerLatLine( nStrips + 1) )
 	allocate(lonStrideReals( nStrips + 1) )
 	allocate(lonStrideInts( nStrips + 1) )
-	do i = 1, nStrips + 1
+	if ( latMinIndex == 1 ) then
+		lonStrideReals(1) = PI
+		nLonsPerLatLine(1) = 1
+	else
+		lonStrideReals(1) = min( sectorRadius / ( EARTH_RADIUS * cos( sectorCenterLats(1) * DEG_2_RAD ) ), 2.0 * PI )
+		nLonsPerLatLine(1) = floor( 2.0 * PI / lonStrideReals(1) ) 
+	endif
+	if ( latMaxIndex == searchData%nLat ) then
+		lonStrideReals(nStrips + 1) = PI
+		nLonsPerLatLine(nStrips + 1) = 1
+	else
+		lonStrideReals(nStrips + 1) = min( sectorRadius / ( EARTH_RADIUS * cos( sectorCenterLats(nStrips + 1) * DEG_2_RAD ) ), 2.0 * PI )
+		nLonsPerLatLine(nStrips + 1) = floor( 2.0 * PI / lonStrideReals(nStrips + 1) ) 
+	endif
+	do i = 2, nStrips
 		lonStrideReals(i) = min( sectorRadius / ( EARTH_RADIUS * cos( sectorCenterLats(i) * DEG_2_RAD ) ), 2.0 * PI )
 		nLonsPerLatLine(i) = floor( 2.0 * PI / lonStrideReals(i) ) 
 	enddo
@@ -115,57 +145,15 @@ subroutine SearchSetup( sSearch, southernBoundary, northernBoundary, sectorRadiu
 			sectorCenterLons(k) = (j - 1) * lonStrideReals(i)
 		enddo
 	enddo
-	deallocate(latLines)
-
-	!
-	!	Find boundaries of search domain in data arrays
-	!
-	if ( southernBoundary > -90.0 ) then
-		do i = 1, searchData%nLat
-			if ( searchData%lats(i) >= southernBoundary ) then
-				latMinIndex = i
-				exit
-			endif
-		enddo
-	else
-		latMinIndex = 1
-	endif
-	
-	if ( northernBoundary < 90.0 ) then
-		do i = latMinIndex, searchData%nLat
-			if ( searchData%lats(i) >= northernBoundary ) then
-				latMaxIndex = i
-				exit
-			endif
-		enddo
-	else
-		latMaxIndex = searchData%nLat
-	endif
 
 	!
 	!	Allocate sufficient space for each sector to search the data
 	!
-	latStrideInt = floor( latStrideReal * searchData%nLon / ( 2.0 * PI ) ) + 1
-	latPtsPerSector = 2 * latStrideInt + 1
-	
+	latStrideInt = floor( latStrideReal * DEG_2_RAD * searchData%nLon / ( 2.0 * PI ) ) + 1
+
 	do i = 1, nStrips + 1
-		if ( abs(sectorCenterLats(i) - 90.0) < ZERO_TOL ) then ! sector center is a pole
-			lonStrideInts(i) = searchData%nLon 
-		else
-			lonStrideInts(i) = floor( lonStrideReals(i) * searchData%nLon / (2.0 * PI ) ) + 1
-		endif
+		lonStrideInts(i) = floor( lonStrideReals(i) * DEG_2_RAD * searchData%nLon / (2.0 * PI ) ) + 1
 	enddo
-	lonPtsPerSector = 2 * maxval(lonStrideInts) + 1
-	
-	allocate(sSearch%neighborhood( lonPtsPerSector, latPtsPerSector ))
-	allocate(sSearch%pslWork( lonPtsPerSector , latPtsPerSector))
-	allocate(sSearch%windWork(lonPtsPerSector, latPtsPerSector))
-	allocate(sSearch%vortWork( lonPtsPerSector, latPtsPerSector))
-	allocate(sSearch%myLats(latPtsPerSector))
-	allocate(sSearch%myLatIs(latPtsPerSector))
-	allocate(sSearch%myLons( lonPtsPerSector ) )
-	allocate(sSearch%myLonJs(lonPtsPerSector ) )
-	
 	
 	print *, "StrideSearch::SearchSetup complete : ", nSectors, " search sectors defined."
 end subroutine
@@ -226,67 +214,8 @@ subroutine DoStrideSearch( stormList, sSearch, searchData )
 	do ii = 1, nStrips + 1
 		do jj = 1, nLonsPerLatLine(ii) 
 			kk = kk + 1
-			!
-			!	locate sector center in data
-			!
-			sSearch%centerLat = sectorCenterLats(ii)
-			sSearch%centerLatIndex = floor( (sectorCenterLats(ii) + 90.0) / dataRes )
-			sSearch%centerLon = sectorCenterLons( kk )
-			sSearch%centerLonIndex = floor( sSearch%centerLon / dataRes )
-			sSearch%myLons = 0.0
-			sSearch%myLonJs = 0
-			sSearch%myLats = 0.0
-			sSearch%myLatIs = 0
 			
-			!
-			!	define sector's neighborhood
-			!
-			sSearch%neighborhood = .FALSE.
-			latIndex = 0
-			do i = max(latMinIndex, sSearch%centerLatIndex - latStrideInt), min( latMaxIndex, sSearch%centerLatIndex + latStrideInt )
-				latIndex = latIndex + 1
-				sSearch%myLats(latIndex) = searchData%lats(i)
-				sSearch%myLatIs(latIndex) = i
-				
-				lonIndex = 0
-				if ( sSearch%centerLonIndex - lonStrideInts(ii) < 1 ) then ! sector crosses longitude = 0
-					do j = 1, sSearch%centerLonIndex + lonStrideInts(ii)
-						lonIndex = lonIndex + 1
-						sSearch%myLons(lonIndex) = searchData%lons(j)
-						sSearch%myLonJs(lonIndex)= j
-					enddo
-					do j = searchData%nLon + sSearch%centerLonIndex - lonStrideInts(ii), searchData%nLon
-						lonIndex = lonIndex + 1
-						sSearch%myLons(lonIndex) = searchData%lons(j)
-						sSearch%myLonJs(lonIndex)= j
-					enddo
-				elseif ( sSearch%centerLonIndex + lonStrideInts(ii) > searchData%nLon ) then ! sector crosses longitude = 360
-					do j = sSearch%centerLonIndex - lonStrideInts(ii), searchData%nLon
-						lonIndex = lonIndex + 1
-						sSearch%myLons(lonIndex) = searchData%lons(j)
-						sSearch%myLonJs(lonIndex)= j
-					enddo
-					do j = 1, lonStrideInts(ii) + searchData%nLon - sSearch%centerLonIndex
-						lonIndex = lonIndex + 1
-						sSearch%myLons(lonIndex) = searchData%lons(j)
-						sSearch%myLonJs(lonIndex)= j
-					enddo
-				else 
-					do j = sSearch%centerLonIndex - lonStrideInts(ii), sSearch%centerLonIndex + lonStrideInts(ii)
-						lonIndex = lonIndex + 1
-						sSearch%myLons(lonIndex) = searchData%lons(j)
-						sSearch%myLonJs(lonIndex)= j
-					enddo
-				endif	
-			enddo
-			
-			do j = 1, lonIndex
-				do i = 1, latIndex				
-					if ( SphereDistance( sSearch%centerLon * DEG_2_RAD, sSearch%centerLat * DEG_2_RAD , &
-										 sSearch%myLons(j) * DEG_2_RAD, sSearch%myLats(i) * DEG_2_RAD ) < sSearch%sectorRadius ) &
-							sSearch%neighborhood(i,j) = .TRUE.
-				enddo
-			enddo
+			call DefineSectorInData( sSearch, searchData, ii, kk )
 			
 			!
 			!	collect data from sector's neighborhood
@@ -341,6 +270,95 @@ subroutine DoStrideSearch( stormList, sSearch, searchData )
 	enddo
 
 	deallocate(tempNodePtr)
+end subroutine
+
+subroutine DefineSectorInData( sSearch, searchData, stripIndex, sectorIndex )
+	type(StrideSearchSector), intent(inout) :: sSearch
+	type(StrideSearchData), intent(in) :: searchData
+	integer, intent(in) :: stripIndex, sectorIndex
+	integer :: i, j, k
+	real :: dLambda, dataRes
+	integer :: latIndex, lonIndex
+	
+	!
+	!	locate sector center in data
+	!
+	dLambda = 2.0 * PI / searchData%nLon
+	dataRes = 360.0 / searchData%nLon
+	
+	sSearch%centerLon = sectorCenterLons(sectorIndex)
+	sSearch%centerLat = sectorCenterLats(stripIndex)
+	sSearch%centerLonIndex = floor( sSearch%centerLon / dataRes )
+	sSearch%centerLatIndex = floor( (sectorCenterLats(stripIndex) + 90.0 ) / dataRes )
+	
+	!
+	!	define sector's neighborhood
+	!
+	allocate(sSearch%neighborhood( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
+	allocate(sSearch%pslWork( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
+	allocate(sSearch%windWork( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
+	allocate(sSearch%vortWork( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
+	allocate(sSearch%myLats( 2 * latStrideInt + 1))
+	allocate(sSearch%myLatIs( 2 * latStrideInt + 1))
+	allocate(sSearch%myLons( 2 * lonStrideInts(stripIndex) + 1))
+	allocate(sSearch%myLonJs( 2 * lonStrideInts(stripIndex) + 1))
+	
+	sSearch%neighborhood = .FALSE.
+	
+	sSearch%myLons = 0.0
+	sSearch%myLonJs = 0
+	sSearch%myLats = 0.0
+	sSearch%myLatIs = 0
+	
+!	print *, "latIsPerSector = ", size(sSearch%myLatIs)
+!	print *, "lonJsPerSector = ", size(sSearch%myLonJs)
+	
+	latIndex = 0
+	do i = max( latMinIndex, sSearch%centerLatIndex - latStrideInt ), min (latMaxIndex, sSearch%centerLatIndex + latStrideInt)
+		latIndex = latIndex + 1
+		sSearch%myLats(latIndex) = searchData%lats(i)
+		sSearch%myLatIs(latIndex) = i
+!		print *, "latI = ", i
+!		print *, "centerLonIndex = ", sSearch%centerLonIndex, ", lonStrideInt = ", lonStrideInts(stripIndex)
+		lonIndex = 0
+		if ( sSearch%centerLonIndex - lonStrideInts(stripIndex) < 1 ) then ! sector crosses longitude = 0
+			do j = 1, sSearch%centerLonIndex + lonStrideInts(stripIndex)
+				lonIndex = lonIndex + 1
+				sSearch%myLons(lonIndex) = searchData%lons(j)
+				sSearch%myLonJs(lonIndex)= j
+			enddo
+			do j = searchData%nLon + sSearch%centerLonIndex - lonStrideInts(stripIndex), searchData%nLon
+				lonIndex = lonIndex + 1
+				sSearch%myLons(lonIndex) = searchData%lons(j)
+				sSearch%myLonJs(lonIndex)= j
+			enddo
+		elseif ( sSearch%centerLonIndex + lonStrideInts(stripIndex) > searchData%nLon ) then ! sector crosses longitude = 360
+			do j = sSearch%centerLonIndex - lonStrideInts(stripIndex), searchData%nLon
+				lonIndex = lonIndex + 1
+				sSearch%myLons(lonIndex) = searchData%lons(j)
+				sSearch%myLonJs(lonIndex)= j
+			enddo
+			do j = 1, lonStrideInts(stripIndex) + searchData%nLon - sSearch%centerLonIndex
+				lonIndex = lonIndex + 1
+				sSearch%myLons(lonIndex) = searchData%lons(j)
+				sSearch%myLonJs(lonIndex)= j
+			enddo
+		else 
+			do j = sSearch%centerLonIndex - lonStrideInts(stripIndex), sSearch%centerLonIndex + lonStrideInts(stripIndex)
+				lonIndex = lonIndex + 1
+				sSearch%myLons(lonIndex) = searchData%lons(j)
+				sSearch%myLonJs(lonIndex)= j
+			enddo
+		endif
+	enddo
+!	print *, "size(myLonJs) = ", size(sSearch%myLonJs), ", lonIndex = ", lonIndex
+	do j = 1, lonIndex
+		do i = 1, latIndex				
+			if ( SphereDistance( sSearch%centerLon * DEG_2_RAD, sSearch%centerLat * DEG_2_RAD , &
+								 sSearch%myLons(j) * DEG_2_RAD, sSearch%myLats(i) * DEG_2_RAD ) < sSearch%sectorRadius ) &
+					sSearch%neighborhood(i,j) = .TRUE.
+		enddo
+	enddo
 end subroutine
 
 !> @brief Marks duplicate detections and storms at or outside the search domain boundaries for removal.

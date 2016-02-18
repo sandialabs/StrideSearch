@@ -32,8 +32,9 @@ type(StormListNode), pointer :: stormList
 namelist /input/ ncfilename, southernBoundary, northernBoundary, sectorRadius, &
 				 pslThreshold, windThreshold, vortThreshold, outputDir, outputRoot
 
-integer :: i, j, k
-integer :: nstrips
+integer :: i, j, k, ii, jj, kk
+integer :: nstrips, nsectors
+integer :: sectorPlot(181,360)
 			 
 				 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -49,9 +50,9 @@ runAsUnitTest = .FALSE.
 if ( IARGC() < 1 ) then 
 	ncfilename = sampleFile
 	runAsUnitTest = .TRUE.
-	southernBoundary = -80.0
-	northernBoundary = 80.0
-	sectorRadius = 2000.0
+	southernBoundary = -90.0
+	northernBoundary = 90.0
+	sectorRadius = 3000.0
 	pslThreshold = 99000.0
 	vortThreshold = 1.0
 	windThreshold = 20.0
@@ -84,7 +85,8 @@ if ( runAsUnitTest ) then
 	nstrips = size(sectorCenterLats) - 1
 	k = 0
 	do i = 1, nstrips + 1
-		print *, "along latitude line Lat = ", sectorCenterLats(i), ": longitude stride = ", lonStrideReals(i)
+		print *, "along latitude line Lat = ", sectorCenterLats(i), ": longitude stride = ", lonStrideReals(i), &
+			" lonStrideInt = ", lonStrideInts(i)
 		write(6,'(A)', advance='no') "longitudes = "
 		do j = 1, nLonsPerLatLine(i)-1
 			k = k + 1
@@ -95,6 +97,7 @@ if ( runAsUnitTest ) then
 		write(6,'(F8.3)') sectorCenterLons(k)
 	enddo
 	print *, "counted nSectors = ", k
+	nsectors = k
 			  
 	write(outputFile, '(A,A)') trim(outputFileRoot), '.m'
 	open(unit=12, file=trim(outputFile), status='REPLACE', action='WRITE' )
@@ -120,7 +123,53 @@ if ( runAsUnitTest ) then
 			enddo
 		enddo
 		write(12,'(A)') 'centerLons( centerLons < 0 ) = nan;'
+		
+		print *, "NEW SECTION:"
+		
+		k = 0
+		do i = 1, nstrips + 1
+			do j = 1, nLonsPerLatLine(i)
+				k = k + 1
+				call DefineSectorInData( sSearch, ncData, i, k )
+				sectorPlot = 0
+				do ii = 1, size(sSearch%myLatIs)
+					do jj = 1, size(sSearch%myLonJs)
+						if ( sSearch%neighborhood(ii,jj) )then
+							sectorPlot( sSearch%myLatIs(ii), sSearch%myLonJs(jj) ) = 1
+						endif
+					enddo
+				enddo
+				call PlotSector(sectorPlot, k)
+				call FinalizeSearch(sSearch)
+			enddo
+		enddo
+		
 	close(12)
 endif 
+
+contains
+
+subroutine PlotSector( sectorPlot, sectorIndex )
+	integer, intent(in) :: sectorPlot(181,360)
+	integer, intent(in) :: sectorIndex
+	character(len=56) :: filename
+	integer :: i, j 
+	
+	write(filename, '(A,I0.3,A)') 'sectorPlot', sectorIndex, '.m'
+	
+	open(unit=13, file=filename, status='REPLACE',action='WRITE')
+		write(13,'(A)',advance='NO') 'secPlot = ['
+		do i = 1, 180
+			do j = 1, 359
+				write(13, '(I3,A)', advance='NO') sectorPlot(i,j), ','
+			enddo
+			write(13,'(I3,A)') sectorPlot(i,360), ';'
+		enddo
+		do j = 1, 359
+			write(13, '(I3,A)', advance='NO') sectorPlot(181,j), ','
+		enddo
+		write(13,'(I3,A)') sectorPlot(181,360), '];'
+	close(13)
+end subroutine
 
 end program 
