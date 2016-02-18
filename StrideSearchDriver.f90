@@ -54,7 +54,7 @@ if ( IARGC() < 1 ) then
 	northernBoundary = 90.0
 	sectorRadius = 3000.0
 	pslThreshold = 99000.0
-	vortThreshold = 1.0
+	vortThreshold = 0.0
 	windThreshold = 20.0
 	write(outputFileRoot,'(A)') './searchDriverUnitTest'
 	write(outputFile, '(A,A)') trim(outputFileRoot), '.txt'
@@ -98,6 +98,10 @@ if ( runAsUnitTest ) then
 	enddo
 	print *, "counted nSectors = ", k
 	nsectors = k
+	
+	do i = 1, nStrips + 1
+		write(6,*) "nLonsPerLatLine = ", nLonsPerLatLine(i)
+	enddo
 			  
 	write(outputFile, '(A,A)') trim(outputFileRoot), '.m'
 	open(unit=12, file=trim(outputFile), status='REPLACE', action='WRITE' )
@@ -128,6 +132,7 @@ if ( runAsUnitTest ) then
 		
 		k = 0
 		do i = 1, nstrips + 1
+			call AllocateSectorMemory( ssearch, ncData, i )
 			do j = 1, nLonsPerLatLine(i)
 				k = k + 1
 				call DefineSectorInData( sSearch, ncData, i, k )
@@ -140,12 +145,39 @@ if ( runAsUnitTest ) then
 					enddo
 				enddo
 				call PlotSector(sectorPlot, k)
-				call FinalizeSector(sSearch)
+				
 			enddo
+			call FinalizeSector(sSearch)
 		enddo
 		
 	close(12)
+	print *, "END OF UNIT TEST SECTION"
 endif 
+
+
+
+write(outputFile, '(A,A)') trim(outputFileRoot), '.txt'
+open(unit=14, file=outputFile, status='REPLACE',action='WRITE')
+
+do timeIndex = 1, ncData%nTimesteps
+	write(6,'(A,I4,A,I4,A)') "processing time step ", timeIndex, " of ", ncData%nTimesteps, "..."
+	allocate(stormList)
+	
+	call ReadVariablesAtTimestep( ncData, year, month, day, hour, timeIndex )
+		
+	call DoStrideSearch( stormList, sSearch, ncData )
+	
+	call MarkNodesForRemoval( stormList, sectorRadius, southernBoundary, northernBoundary )
+	
+	call RemoveMarkedNodes(stormList)
+	
+	call PrintTSTORMSOutput( stormList, 14, year, month, day, hour )
+	
+	call deleteList(stormList)
+enddo
+
+close(14)
+
 
 contains
 

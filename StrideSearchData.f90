@@ -128,11 +128,11 @@ subroutine ReadVariablesAtTimestep( searchData, year, month, day, hour, timeInde
 	
 	call read_variable_2d( searchData%ncFileID, 'PSL', start, searchData%psl )
 	
-	call read_variable_2d( searchData%ncFileID, 'UBOT', start, work1)
-	call read_variable_2d( searchData%ncFileID, 'VBOT', start, work2)
+	call read_variable_2d( searchData%ncFileID, 'U850', start, work1)
+	call read_variable_2d( searchData%ncFileID, 'V850', start, work2)
 	searchData%wind = sqrt( work1*work1 + work2*work2)
 	
-	call read_variable_2d( searchData%ncFileID, 'VORBOT', start, searchData%vorticity)
+	call read_variable_2d( searchData%ncFileID, 'VOR850', start, searchData%vorticity)
 end subroutine
 
 !> @}

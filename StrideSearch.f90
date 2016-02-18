@@ -13,7 +13,7 @@ use StormListNodeModule
 
 implicit none
 private
-public StrideSearchSector, SearchSetup, DoStrideSearch, FinalizeSector, PrintSearchInfo
+public StrideSearchSector, SearchSetup, DoStrideSearch, AllocateSectorMemory, FinalizeSector, PrintSearchInfo
 public MarkNodesForRemoval, RemoveMarkedNodes, ApplyLandMask, SphereDistance
 public DefineSectorInData
 
@@ -103,7 +103,7 @@ subroutine SearchSetup( sSearch, southernBoundary, northernBoundary, sectorRadiu
 	!	Define sector centers
 	!	
 	stormArcLength = sectorRadius / EARTH_RADIUS 	
-	nStrips = floor( (northernBoundary * DEG_2_RAD - southernBoundary * DEG_2_RAD ) / stormArcLength ) + 1	
+	nStrips = floor( (northernBoundary * DEG_2_RAD - southernBoundary * DEG_2_RAD ) / stormArcLength )
 	latStripWidth = (northernBoundary - southernBoundary) / real(nStrips)
 	latStrideReal = latStripWidth
 	
@@ -212,19 +212,18 @@ subroutine DoStrideSearch( stormList, sSearch, searchData )
 	!
 	kk = 0	
 	do ii = 1, nStrips + 1
+		call AllocateSectorMemory(sSearch, searchData, ii )
 		do jj = 1, nLonsPerLatLine(ii) 
 			kk = kk + 1
-			
-			call DefineSectorInData( sSearch, searchData, ii, kk )
-			
+			call DefineSectorInData( sSearch, searchData, ii, kk )		
 			!
 			!	collect data from sector's neighborhood
 			!
 			sSearch%pslWork = 5.0e20
 			sSearch%windWork = 0.0
 			sSearch%vortWork = 0.0
-			do j = 1, lonIndex
-				do i = 1, latIndex
+			do j = 1, size(sSearch%myLonJs)
+				do i = 1, size(sSearch%myLatIs)
 					if ( sSearch%neighborhood(i,j) ) then
 						sSearch%pslWork(i,j) = searchData%psl( sSearch%myLonJs(j), sSearch%myLatIs(i) )
 						sSearch%windWork(i,j) = searchData%wind( sSearch%myLonJs(j), sSearch%myLatIs(i) )
@@ -233,7 +232,6 @@ subroutine DoStrideSearch( stormList, sSearch, searchData )
 					endif
 				enddo
 			enddo
-			
 			!
 			!	apply storm identification criteria
 			!
@@ -250,8 +248,8 @@ subroutine DoStrideSearch( stormList, sSearch, searchData )
 				stormPsl = minval(sSearch%pslWork)
 				stormVort = maxval(sSearch%vortWork)
 				stormWind = maxval(sSearch%windWork)
-				do j = 1, lonIndex
-					do i = 1, latIndex
+				do j = 1, size(sSearch%myLonJs)
+					do i = 1, size(sSearch%myLatIs)
 						if ( stormPsl == sSearch%pslWork(i,j) ) then
 							stormLon = sSearch%myLons(j)
 							stormLat = sSearch%myLats(i)
@@ -265,11 +263,30 @@ subroutine DoStrideSearch( stormList, sSearch, searchData )
 
 				call AddNodeToList( stormList, tempNodePtr)
 			endif
-			
 		enddo
+		call FinalizeSector(ssearch)
 	enddo
 
 	deallocate(tempNodePtr)
+end subroutine
+
+subroutine AllocateSectorMemory( sSearch, searchData, stripIndex )
+	type(StrideSearchSector), intent(inout) :: sSearch
+	type(StrideSearchData), intent(in) :: searchData
+	integer, intent(in) :: stripIndex
+	!
+	real :: dataRes
+	
+	dataRes = 360.0 / searchData%nLon
+	
+	allocate(sSearch%neighborhood( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
+	allocate(sSearch%pslWork( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
+	allocate(sSearch%windWork( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
+	allocate(sSearch%vortWork( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
+	allocate(sSearch%myLats( 2 * latStrideInt + 1))
+	allocate(sSearch%myLatIs( 2 * latStrideInt + 1))
+	allocate(sSearch%myLons( 2 * lonStrideInts(stripIndex) + 1))
+	allocate(sSearch%myLonJs( 2 * lonStrideInts(stripIndex) + 1))
 end subroutine
 
 subroutine DefineSectorInData( sSearch, searchData, stripIndex, sectorIndex )
@@ -294,14 +311,7 @@ subroutine DefineSectorInData( sSearch, searchData, stripIndex, sectorIndex )
 	!
 	!	define sector's neighborhood
 	!
-	allocate(sSearch%neighborhood( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
-	allocate(sSearch%pslWork( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
-	allocate(sSearch%windWork( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
-	allocate(sSearch%vortWork( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
-	allocate(sSearch%myLats( 2 * latStrideInt + 1))
-	allocate(sSearch%myLatIs( 2 * latStrideInt + 1))
-	allocate(sSearch%myLons( 2 * lonStrideInts(stripIndex) + 1))
-	allocate(sSearch%myLonJs( 2 * lonStrideInts(stripIndex) + 1))
+	
 	
 	sSearch%neighborhood = .FALSE.
 	
