@@ -13,7 +13,7 @@ use StormListNodeModule
 
 implicit none
 private
-public StrideSearchSector, SearchSetup, DoStrideSearch, FinalizeSearch, PrintSearchInfo
+public StrideSearchSector, SearchSetup, DoStrideSearch, FinalizeSector, PrintSearchInfo
 public MarkNodesForRemoval, RemoveMarkedNodes, ApplyLandMask, SphereDistance
 public DefineSectorInData
 
@@ -161,7 +161,7 @@ end subroutine
 !> @brief Deletes memory used for stride search.
 !> This memory was allocated by SearchSetup.
 !> @param sSearch object to be deleted.
-subroutine FinalizeSearch( sSearch )
+subroutine FinalizeSector( sSearch )
 	type(StrideSearchSector), intent(inout) :: sSearch
 	deallocate(sSearch%neighborhood)
 	deallocate(sSearch%pslWork)

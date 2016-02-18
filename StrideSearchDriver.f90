@@ -140,7 +140,7 @@ if ( runAsUnitTest ) then
 					enddo
 				enddo
 				call PlotSector(sectorPlot, k)
-				call FinalizeSearch(sSearch)
+				call FinalizeSector(sSearch)
 			enddo
 		enddo
 		
