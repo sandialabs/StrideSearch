@@ -464,8 +464,12 @@ end subroutine
 pure function SphereDistance(lon1, lat1, lon2, lat2)
 	real :: SphereDistance
 	real, intent(in) :: lon1, lat1, lon2, lat2
-	SphereDistance = EARTH_RADIUS * acos( sin(lat1)*sin(lat2) + cos(lat1)*cos(lat2)*cos(lon2-lon1))
-	!SphereDistance = ( (lon2-lon1)*(lon2-lon1) + (lat2-lat1)*(lat2-lat1) )
+	
+	if ( (abs(lon2 - lon1) < ZERO_TOL ) .AND. (abs(lat2-lat1) < ZERO_TOL ) ) then
+		SphereDistance = 0.0
+	else
+		SphereDistance = EARTH_RADIUS * acos( sin(lat1)*sin(lat2) + cos(lat1)*cos(lat2)*cos(lon2-lon1))
+	endif
 end function
 
 !> @}

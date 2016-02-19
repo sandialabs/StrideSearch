@@ -85,14 +85,30 @@ do timeIndex = 1, ncData%nTimesteps
 	write(6,'(A,I4,A,I4,A)') "processing time step ", timeIndex, " of ", ncData%nTimesteps, "..."
 	
 	call ReadTropicalVariablesAtTimestep( ncData, year, month, day, hour, timeIndex )
+
+	if ( day == 17 .and. hour == 12 ) then
+		print *, " "
+		print *, " MISSING TIMESTEP 0 "
+		print *, " "
+	endif
+	if ( day == 17 .and. hour == 18 ) then
+		print *, " "
+		print *, " MISSING TIMESTEP 1 "
+		print *, " "
+	endif
+	if ( day == 18 .and. hour == 0 ) then
+		print *, " "
+		print *, " MISSING TIMESTEP 2 "
+		print *, " "
+	endif
 		
 	call DoTropicalSearch( tstormList, tSearch, ncData )
 		
-	call MarkTropicalNodesForRemoval( tstormList, tSearch, southernBoundary, northernBoundary)
+!	call MarkTropicalNodesForRemoval( tstormList, tSearch, southernBoundary, northernBoundary)
 		
 	!call ApplyTropicalLandMask( tstormList )
 		
-	call RemoveMarkedTropicalNodes(tstormList)
+!	call RemoveMarkedTropicalNodes(tstormList)
 		
 	!write(6,'(A,I4,A)') " found ", tstormList%listSize, " storms that match the per-timestep spatial criteria."
 	

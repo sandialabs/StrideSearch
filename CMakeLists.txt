@@ -39,15 +39,16 @@ get_filename_component (default_prefix "." ABSOLUTE)
 set (CMAKE_INSTALL_PREFIX ./install CACHE STRING
       "Choose the installation directory; by default it installs in the install directory."
       )
-      
+#set( CMAKE_VERBOSE_MAKEFILE true )      
+
 #      
 # FFLAGS depend on the compiler
 #
 if ( ${CMAKE_Fortran_COMPILER_ID} STREQUAL "GNU")
   # gfortran
   message( "** ** ** Setting gfortran compiler options ** ** **" )
-#   set (CMAKE_Fortran_FLAGS_RELEASE "-O2 -fopenmp ")
-#   set (CMAKE_Fortran_FLAGS_DEBUG   "-O0 -g -fopenmp")
+#  set (CMAKE_Fortran_FLAGS_RELEASE "-O2 -fopenmp ")
+#  set (CMAKE_Fortran_FLAGS_DEBUG   "-O0 -g -fopenmp")
   set (CMAKE_Fortran_FLAGS_RELEASE "-O2 ")
   set (CMAKE_Fortran_FLAGS_DEBUG   "-O0 -g")
 elseif ( ${CMAKE_Fortran_COMPILER_ID} STREQUAL "Intel")
@@ -74,7 +75,7 @@ add_subdirectory(gfdlUtilities)
 #	StrideSearch library
 #
 ADD_LIBRARY( strideSearchLib StormListNode.f90 StrideSearchData.f90 StrideSearch.f90 
-							#TropicalStormListNode.f90 TropicalData.f90 TropicalStrideSearch.f90
+							TropicalStormListNode.f90 TropicalData.f90 TropicalStrideSearch.f90
 							StormTrackData.f90 StormTracks.f90 
 							#PolarLowListNode.f90 PolarData.f90 PolarStrideSearch.f90
 							)
@@ -92,9 +93,9 @@ TARGET_LINK_LIBRARIES( strideSearchDriver.exe strideSearchLib gfdlUtilitiesLib $
 #TARGET_INCLUDE_DIRECTORIES( polarSearch.exe PUBLIC ${PROJECT_BINARY_DIR}/gfdlUtilities ${PROJECT_BINARY_DIR} )
 #TARGET_LINK_LIBRARIES(polarSearch.exe strideSearchLib gfdlUtilitiesLib ${netcdf} ${netcdff} )
 
-#ADD_EXECUTABLE( tropicalSearch.exe TropicalSearchDriver.f90 )
-#TARGET_INCLUDE_DIRECTORIES( tropicalSearch.exe PUBLIC ${PROJECT_BINARY_DIR}/gfdlUtilities ${PROJECT_BINARY_DIR} )
-#TARGET_LINK_LIBRARIES(tropicalSearch.exe strideSearchLib gfdlUtilitiesLib ${netcdf} ${netcdff} )
+ADD_EXECUTABLE( tropicalSearch.exe TropicalSearchDriver.f90 )
+TARGET_INCLUDE_DIRECTORIES( tropicalSearch.exe PUBLIC ${PROJECT_BINARY_DIR}/gfdlUtilities ${PROJECT_BINARY_DIR} )
+TARGET_LINK_LIBRARIES(tropicalSearch.exe strideSearchLib gfdlUtilitiesLib ${netcdf} ${netcdff} )
 
 ADD_EXECUTABLE( trackDriver.exe trackDriver.f90 )
 TARGET_INCLUDE_DIRECTORIES( trackDriver.exe PUBLIC ${PROJECT_BINARY_DIR}/gfdlUtilities ${PROJECT_BINARY_DIR} )
@@ -121,7 +122,7 @@ TARGET_INCLUDE_DIRECTORIES( stormTrackDataTest.exe PUBLIC ${PROJECT_BINARY_DIR}/
 TARGET_LINK_LIBRARIES( stormTrackDataTest.exe strideSearchLib gfdlUtilitiesLib ${netcdf} ${netcdff} )
 ADD_TEST( stormTrackData_unitTest ${PROJECT_BINARY_DIR}/searchDataInput.exe)
 
-install( TARGETS strideSearchLib trackDriver.exe strideSearchDriver.exe #polarSearch.exe tropicalSearch.exe 
+install( TARGETS strideSearchLib trackDriver.exe strideSearchDriver.exe tropicalSearch.exe  #polarSearch.exe 
 		 RUNTIME DESTINATION bin
 		 LIBRARY DESTINATION lib
 		 ARCHIVE DESTINATION lib )

@@ -114,7 +114,6 @@ subroutine DoTropicalSearch( tstormList, tSearch, tData )
 	!	loop over search sector centers 
 	!
 	kk = 0
-
 	do ii = 1, size(sectorCenterLats)
 		call AllocateTropicalSectorMemory(tSearch, tData, ii)
 		
@@ -194,6 +193,35 @@ subroutine DoTropicalSearch( tstormList, tSearch, tData )
 			stormThick = 10000.0
 			thickLon = 0.0
 			thickLat = 0.0
+			
+			if (kk == 1303 ) then
+				print *, "SECTOR 1303"
+				print *, "foundstorm = ", foundStorm
+				print *, "crit1 = ", crit1
+				print *, "crit2 = ", crit2
+				print *, "crit3 = ", crit3
+				print *, "crit4 = ", crit4
+				print *, "stormPSL = ", stormPsl
+				print *, "stormVort = ", stormVort
+				print *, "stormWind = ", stormWind
+				print *, "stormTemp = ", stormTemp
+				if ( (crit1 .and. crit4) .and. .not. crit2 ) then
+					print *, "Sector has valid vortMax with collocated tempMax."
+					print *, "stormLon = ", stormLon, ", stormLat = ", stormLat
+					print *, " vortLon = ", vortLon,  ",  vortLat = ", vortLat
+					print *, "SphereDistance output = ", SphereDistance( stormLon * DEG_2_RAD, stormLat * DEG_2_RAD, &
+								     vortLon * DEG_2_RAD, vortLat * DEG_2_RAD )
+				endif
+				if ( (crit1 .and. crit3) .and. .not. crit2 ) then
+					print *, "Sector has valid vortMax and valid tempExcess"
+					print *, "stormLon = ", stormLon, ", stormLat = ", stormLat
+					print *, " vortLon = ", vortLon,  ",  vortLat = ", vortLat
+					print *, "SphereDistance(psl,vort) output = ", SphereDistance( stormLon * DEG_2_RAD, stormLat * DEG_2_RAD, &
+								     vortLon * DEG_2_RAD, vortLat * DEG_2_RAD )
+					print *, "SphereDistance(psl,temp) output = ", SphereDistance( stormLon * DEG_2_RAD, stormLat * DEG_2_RAD, &
+									 tempLon * DEG_2_RAD, tempLat * DEG_2_RAD )
+				endif
+			endif
 			
 			if ( foundStorm ) then
 				call initializeTropical( tempNode, stormLon, stormLat, stormJ, stormI, stormPsl, stormVort, stormWind, &
