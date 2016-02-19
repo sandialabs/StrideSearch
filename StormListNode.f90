@@ -23,7 +23,7 @@ real, public, parameter :: EARTH_RADIUS = 6371.220 !< Earth's mean radius (km)
 real, public, parameter :: PI = 4.0*atan(1.0) !< pi
 real, public, parameter :: RAD_2_DEG = 180.0/PI !< convert radians to degrees
 real, public, parameter :: DEG_2_RAD = PI/180.0 !< convert degrees to radians
-real, public, parameter :: ZERO_TOL = 1e-6
+real, public, parameter :: ZERO_TOL = 1e-8
 
 !> @class StormListNode
 !> @brief Node data type for linked list. 
