@@ -32,9 +32,9 @@ type(StormListNode), pointer :: stormList
 namelist /input/ ncfilename, southernBoundary, northernBoundary, sectorRadius, &
 				 pslThreshold, windThreshold, vortThreshold, outputDir, outputRoot
 
-integer :: i, j, k, ii, jj, kk
+integer :: i, j, k, ii, jj, kk, nLon, nLat
 integer :: nstrips, nsectors
-integer :: sectorPlot(181,360)
+integer, allocatable :: sectorPlot(:,:)
 			 
 				 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -48,8 +48,8 @@ print *, "Stride Search. Copyright 2016 Sandia Corporation. Under the terms of c
 
 runAsUnitTest = .FALSE.
 if ( IARGC() < 1 ) then 
-	ncfilename = sampleFile
 	runAsUnitTest = .TRUE.
+	ncfilename = sampleFile
 	southernBoundary = -90.0
 	northernBoundary = 90.0
 	sectorRadius = 3000.0
@@ -57,7 +57,6 @@ if ( IARGC() < 1 ) then
 	vortThreshold = 0.0
 	windThreshold = 20.0
 	write(outputFileRoot,'(A)') './searchDriverUnitTest'
-	write(outputFile, '(A,A)') trim(outputFileRoot), '.txt'
 else
 	call GET_COMMAND_ARGUMENT(1, namelistfile)
 	open(unit=12, file=trim(namelistfile), status='OLD', action='READ', iostat=readStat)
@@ -72,11 +71,13 @@ else
 		print *, "windThreshold = ", windThreshold
 	close(12)		
 	write(outputFileRoot,'(A,A,A)') trim(outputDir), '/', trim(outputRoot)
-	write(outputFile,'(A,A)') trim(outputFileRoot), '.txt' 
 endif
 
 call initializeData(ncData, ncfilename)
 call PrintCoordinateInfo(ncData)
+nLon = ncData%nlon
+nLat = ncdata%nLat
+
 
 call SearchSetup( sSearch, southernBoundary, northernBoundary, sectorRadius, &
 				  pslThreshold, vortThreshold, windThreshold, ncData )
@@ -127,9 +128,9 @@ if ( runAsUnitTest ) then
 			enddo
 		enddo
 		write(12,'(A)') 'centerLons( centerLons < 0 ) = nan;'
-		
-		print *, "NEW SECTION:"
-		
+		close(12)
+
+	allocate(sectorPlot(nLat,nLon))		
 		k = 0
 		do i = 1, nstrips + 1
 			call AllocateSectorMemory( ssearch, ncData, i )
@@ -144,17 +145,14 @@ if ( runAsUnitTest ) then
 						endif
 					enddo
 				enddo
+				print *, "k = ", k
 				call PlotSector(sectorPlot, k)
-				
 			enddo
 			call FinalizeSector(sSearch)
 		enddo
-		
-	close(12)
-	print *, "END OF UNIT TEST SECTION"
+	deallocate(sectorPlot)
+	print *, "END OF UNIT TEST ONLY SECTION"
 endif 
-
-
 
 write(outputFile, '(A,A)') trim(outputFileRoot), '.txt'
 open(unit=14, file=outputFile, status='REPLACE',action='WRITE')
@@ -182,25 +180,29 @@ close(14)
 contains
 
 subroutine PlotSector( sectorPlot, sectorIndex )
-	integer, intent(in) :: sectorPlot(181,360)
+	integer, intent(in) :: sectorPlot(:,:)
 	integer, intent(in) :: sectorIndex
 	character(len=56) :: filename
 	integer :: i, j 
+	integer :: nLat, nLon
+	
+	nLat = size(sectorPlot,1)
+	nLon = size(sectorPlot,2)
 	
 	write(filename, '(A,I0.3,A)') 'sectorPlot', sectorIndex, '.m'
 	
 	open(unit=13, file=filename, status='REPLACE',action='WRITE')
 		write(13,'(A)',advance='NO') 'secPlot = ['
-		do i = 1, 180
-			do j = 1, 359
+		do i = 1, nLat-1
+			do j = 1, nLon-1
 				write(13, '(I3,A)', advance='NO') sectorPlot(i,j), ','
 			enddo
-			write(13,'(I3,A)') sectorPlot(i,360), ';'
+			write(13,'(I3,A)') sectorPlot(i,nLon), ';'
 		enddo
-		do j = 1, 359
-			write(13, '(I3,A)', advance='NO') sectorPlot(181,j), ','
+		do j = 1, nLon-1
+			write(13, '(I3,A)', advance='NO') sectorPlot(nLat,j), ','
 		enddo
-		write(13,'(I3,A)') sectorPlot(181,360), '];'
+		write(13,'(I3,A)') sectorPlot(nLat,nLon), '];'
 	close(13)
 end subroutine
 

@@ -198,20 +198,15 @@ subroutine DoStrideSearch( stormList, sSearch, searchData )
 	real :: stormLon, stormLat, stormPsl, stormVort, stormWind
 	type(StormListNode), pointer :: tempNodePtr
 	logical :: foundStorm
-	integer :: nStrips
 	real :: dLambda, dataRes
 	
 	allocate(tempNodePtr)
-	nStrips = size(sectorCenterLats)
-	
-	dLambda = 2.0 * PI / searchData%nLon 
-	dataRes = 360.0 / searchData%nLon
 
 	!
 	! loop over search sector centers
 	!
 	kk = 0	
-	do ii = 1, nStrips + 1
+	do ii = 1, size(sectorCenterLats)
 		call AllocateSectorMemory(sSearch, searchData, ii )
 		do jj = 1, nLonsPerLatLine(ii) 
 			kk = kk + 1
@@ -274,10 +269,6 @@ subroutine AllocateSectorMemory( sSearch, searchData, stripIndex )
 	type(StrideSearchSector), intent(inout) :: sSearch
 	type(StrideSearchData), intent(in) :: searchData
 	integer, intent(in) :: stripIndex
-	!
-	real :: dataRes
-	
-	dataRes = 360.0 / searchData%nLon
 	
 	allocate(sSearch%neighborhood( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
 	allocate(sSearch%pslWork( 2 * latStrideInt + 1, 2 * lonStrideInts(stripIndex) + 1))
@@ -311,8 +302,6 @@ subroutine DefineSectorInData( sSearch, searchData, stripIndex, sectorIndex )
 	!
 	!	define sector's neighborhood
 	!
-	
-	
 	sSearch%neighborhood = .FALSE.
 	
 	sSearch%myLons = 0.0
@@ -320,16 +309,11 @@ subroutine DefineSectorInData( sSearch, searchData, stripIndex, sectorIndex )
 	sSearch%myLats = 0.0
 	sSearch%myLatIs = 0
 	
-!	print *, "latIsPerSector = ", size(sSearch%myLatIs)
-!	print *, "lonJsPerSector = ", size(sSearch%myLonJs)
-	
 	latIndex = 0
 	do i = max( latMinIndex, sSearch%centerLatIndex - latStrideInt ), min (latMaxIndex, sSearch%centerLatIndex + latStrideInt)
 		latIndex = latIndex + 1
 		sSearch%myLats(latIndex) = searchData%lats(i)
 		sSearch%myLatIs(latIndex) = i
-!		print *, "latI = ", i
-!		print *, "centerLonIndex = ", sSearch%centerLonIndex, ", lonStrideInt = ", lonStrideInts(stripIndex)
 		lonIndex = 0
 		if ( sSearch%centerLonIndex - lonStrideInts(stripIndex) < 1 ) then ! sector crosses longitude = 0
 			do j = 1, sSearch%centerLonIndex + lonStrideInts(stripIndex)
@@ -385,22 +369,24 @@ subroutine MarkNodesForRemoval(stormList, distanceTol, southernBoundary, norther
 	current => stormList
 	do while (associated(current))
 		next => current%next
-		if ( current%lat < southernBoundary .OR. current%lat > northernBoundary ) then
-			current%removeThisNode = .TRUE.
-		else
-			query => next
-			do while (associated(query) ) 
-				querynext => query%next
-				if ( SphereDistance( current%lon * DEG_2_RAD, current%lat * DEG_2_RAD, &
-								     query%lon * DEG_2_RAD, query%lat * DEG_2_RAD ) < distanceTol ) then
-					if ( query%psl < current%psl ) then
-						current%removeThisNode = .TRUE.
-					else
-						query%removeThisNode = .TRUE.
-					endif			     
-				endif
-				query => querynext
-			enddo
+		if ( .NOT. current%removeThisNode ) then
+			if ( current%lat < southernBoundary .OR. current%lat > northernBoundary ) then
+				current%removeThisNode = .TRUE.
+			else
+				query => next
+				do while (associated(query) ) 
+					querynext => query%next
+					if ( SphereDistance( current%lon * DEG_2_RAD, current%lat * DEG_2_RAD, &
+										 query%lon * DEG_2_RAD, query%lat * DEG_2_RAD ) < distanceTol ) then
+						if ( query%psl < current%psl ) then
+							current%removeThisNode = .TRUE.
+						else
+							query%removeThisNode = .TRUE.
+						endif			     
+					endif
+					query => querynext
+				enddo
+			endif
 		endif
 		current=>next
 	enddo

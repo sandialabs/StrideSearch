@@ -13,13 +13,15 @@ use TropicalDataModule
 use StormListNodeModule, only : DEG_2_RAD
 use TropicalStormListNodeModule
 
+!use OMP_LIB
+
 implicit none
 private 
-public TropicalStrideSearchSector, TropicalSearchSetup, DoTropicalSearch, FinalizeTropicalSearch, PrintTropicalSearchInfo
+public TropicalStrideSearchSector, TropicalSearchSetup, DoTropicalSearch, FinalizeTropicalSector, PrintTropicalSearchInfo
 public RemoveMarkedTropicalNodes, MarkTropicalNodesForRemoval, ApplyTropicalLandMask, GetLandMask
 
 type, extends(StrideSearchSector) :: TropicalStrideSearchSector
-	real, pointer, dimension(:,:) :: tempWork
+	real, allocatable, dimension(:,:) :: tempWork
 	real :: vortPslDistThreshold
 	real :: tempExcessThreshold
 	real :: tempPslDistThreshold
@@ -56,18 +58,26 @@ subroutine TropicalSearchSetup( tSearch, southernBoundary, northernBoundary, sec
 	
 	call SearchSetup(tSearch%StrideSearchSector, southernBoundary, northernBoundary, sectorRadius, &
 					 pslThreshold, vortThreshold, windThreshold, tData%StrideSearchData)
-	allocate(tSearch%tempWork( 2*maxval(lonStrides) + 1, 2*latStride+1))
 	tSearch%vortPslDistThreshold = vortPslDistThreshold
 	tSearch%tempExcessThreshold = tempExcessThreshold
 	tSearch%tempPslDistThreshold = tempPslDistThreshold
 end subroutine
 
+subroutine AllocateTropicalSectorMemory( tSearch, tData, stripIndex )
+	type(TropicalStrideSearchSector), intent(inout) :: tSearch
+	type(TropicalData), intent(in) :: tData
+	integer, intent(in) :: stripIndex
+	
+	call AllocateSectorMemory(tSearch%StrideSearchSector, tData%StrideSearchData, stripIndex)
+	allocate(tSearch%tempWork( size(tSearch%myLatIs), size(tSearch%myLonJs) ) )
+end subroutine
+
 !> @brief Frees memory used by a TropicalStrideSearch object which is allocated in TropicalSearchSetup.  
 !> @param tSearch object to be deleted
-subroutine FinalizeTropicalSearch( tSearch )
+subroutine FinalizeTropicalSector( tSearch )
 	type(TropicalStrideSearchSector), intent(inout) :: tSearch
 	deallocate(tSearch%tempWork)
-	call FinalizeSearch(tSearch%StrideSearchSector)
+	call FinalizeSector(tSearch%StrideSearchSector)
 end subroutine
 
 !> @brief Prints basic info about a TropicalStrideSearch object to the console
@@ -89,7 +99,7 @@ subroutine DoTropicalSearch( tstormList, tSearch, tData )
 	type(TropicalStrideSearchSector), intent(inout) :: tSearch
 	type(TropicalData), intent(in) :: tData
 	!
-	integer :: i, j, k, ii, jj, lonIndex, latIndex, stormI, stormJ
+	integer :: i, j, k, ii, jj, kk, stormI, stormJ
 	real :: stormLon, stormLat, stormPsl, stormVort, stormWind
 	real :: stormTemp, tempLon, tempLat, stormThick, thickLon, thickLat
 	real :: vortLon, vortLat
@@ -97,117 +107,48 @@ subroutine DoTropicalSearch( tstormList, tSearch, tData )
 	type(TropicalStormListNode), pointer :: tempNode
 	logical :: foundStorm, crit1, crit2, crit3, crit4
 	real :: avgT
-	integer :: maxPtsPerSector, minPtsPerSector
-	
+	integer :: nStrips, tid
+
 	allocate(tempNode)
-	
-	maxPtsPerSector = 0
-	minPtsPerSector = tdata%nLon * tData%nLat
-	
 	!
-	!	loop over search sector centers (defined in TropicalSearchSetup)
+	!	loop over search sector centers 
 	!
-	k = 0 ! latitude strip counter
-	do i = latMinIndex, latMaxIndex, latStride
-		k = k + 1
+	kk = 0
+
+	do ii = 1, size(sectorCenterLats)
+		call AllocateTropicalSectorMemory(tSearch, tData, ii)
 		
-		do j = 1, tData%nLon, lonStrides(k)
-			
+		do jj = 1, nLonsPerLatLine(ii)
+			kk = kk + 1
+			call DefineSectorInData(tSearch%StrideSearchSector, tData%StrideSearchData, ii, kk)
 			!
-			!	define search sector
-			!
-			
-			tSearch%neighborhood = .FALSE.
-			!
-			!		collect latitudes and longitudes near sector center
-			!
-			latIndex = 0
-			do ii = max(latMinIndex, i - latStride ), min(latMaxIndex, i + latStride)
-				latIndex = latIndex + 1
-				tSearch%myLats(latIndex) = tData%lats(ii)
-				tSearch%myLatIs(latIndex) = ii
-			enddo
-			lonIndex = 0
-			if ( j - lonStrides(k) < 1 ) then ! sector crosses longitude = 0.0
-				do jj = 1, j + lonStrides(k)
-					lonIndex = lonIndex + 1
-					tSearch%myLons(lonIndex) = tData%lons(jj)
-					tSearch%myLonJs(lonIndex) = jj
-				enddo
-				do jj = tData%nLon - lonStrides(k), tData%nLon
-					lonIndex = lonIndex + 1
-					tSearch%myLons(lonIndex) = tData%lons(jj)
-					tSearch%myLonJs(lonIndex) = jj
-				enddo
-			elseif( j + lonStrides(k) > tData%nLon ) then ! sector crosses longitude = 360.0
-				do jj = 1, j + lonStrides(k) - tData%nLon
-					lonIndex = lonIndex + 1
-					tSearch%myLons(lonIndex) = tData%lons(jj)
-					tSearch%myLonJs(lonIndex) = jj
-				enddo
-				do jj = j - lonStrides(k), tData%nLon
-					lonIndex = lonIndex + 1
-					tSearch%myLons(lonIndex) = tData%lons(jj)
-					tSearch%myLonJs(lonIndex) = jj
-				enddo
-			else
-				do jj = j - lonStrides(k), j + lonStrides(k)
-					lonIndex = lonIndex + 1
-					tSearch%myLons(lonIndex) = tData%lons(jj)
-					tSearch%myLonJs(lonIndex) = jj
-				enddo
-			endif ! sector crosses longitude = 0,360
-			
-			!
-			!		define sector by geodesic radius
-			!
-			do ii = 1, latIndex
-				do jj = 1, lonIndex
-					if ( SphereDistance( tData%lons(j) * DEG_2_RAD, tData%lats(i) * DEG_2_RAD, &
-										 tSearch%myLons(jj)*DEG_2_RAD, tSearch%myLats(ii)*DEG_2_RAD ) &
-										 < tSearch%sectorRadius ) then
-						tSearch%neighborhood(jj,ii) = .TRUE.
-					endif
-				enddo
-			enddo
-			
-			if ( count(tSearch%neighborhood) > maxPtsPerSector ) then
-				maxPtsPerSector = count(tSearch%neighborhood)
-			endif
-			if ( count(tSearch%neighborhood) < minPtsPerSector ) then
-				minPtsPerSector = count(tSearch%neighborhood)
-			endif
-			
-			!
-			!	collect data from points in sector
+			!	collect data from sector's neighborhood
 			!
 			tSearch%pslWork = 1.0e20
 			tSearch%windWork = 0.0
 			tSearch%vortWork = 0.0
 			tSearch%tempWork = 0.0
-			do ii = 1, latIndex
-				do jj = 1, lonIndex
-					if ( tSearch%neighborhood(jj,ii) ) then
-						tSearch%pslWork(jj,ii) = tData%psl( tSearch%myLonJs(jj), tSearch%myLatIs(ii))
-						tSearch%windWork(jj,ii)= tData%wind(tSearch%myLonJs(jj), tSearch%myLatIs(ii))
-						tSearch%vortWork(jj,ii)= sign(1.0, tSearch%myLats(ii)) * &
-												 tData%vorticity( tSearch%myLonJs(jj), tSearch%myLatIs(ii))
-						tSearch%tempWork(jj,ii)= tData%vertAvgT( tSearch%myLonJs(jj), tSearch%myLatIs(ii))
+			do j = 1, size(tSearch%myLonJs)
+				do i = 1, size(tSearch%myLatIs)
+					if ( tSearch%neighborhood(i,j) ) then
+						tSearch%pslWork(i,j) = tData%psl(tSearch%myLonJs(j), tSearch%myLatIs(i))
+						tSearch%windWork(i,j) = tData%wind(tSearch%myLonJs(j), tSearch%myLatIs(i))
+						tSearch%vortWork(i,j) = sign(1.0, tSearch%myLats(i)) * &
+												tData%vorticity(tSearch%myLonJs(j), tSearch%myLatIs(i))
+						tSearch%tempWork(i,j) = tData%vertAvgT(tSearch%myLonJs(j), tSearch%myLatIs(i))
 					endif
 				enddo
 			enddo
 			
-			
 			!
 			!	apply storm identification criteria
 			!
-			foundStorm = .FALSE.
 			crit1 = .FALSE.
 			crit2 = .FALSE.
 			crit3 = .FALSE.
 			crit4 = .FALSE.
-			if ( maxval(tSearch%vortWork) > tSearch%vortThreshold ) then ! criteria 1
-				
+		
+			if ( maxval(tSearch%vortWork) > tSearch%vortThreshold ) then
 				crit1 = .TRUE.
 				
 				stormPsl = minval(tSearch%pslWork)
@@ -218,48 +159,52 @@ subroutine DoTropicalSearch( tstormList, tSearch, tData )
 				tSearch%tempWork = tSearch%tempWork - avgT
 				stormTemp = maxval(tSearch%tempWork)
 				
-				do ii = 1, latIndex
-					do jj = 1, lonIndex
-						if ( tSearch%pslWork(jj,ii) == stormPsl ) then
-							stormLon = tSearch%myLons(jj)
-							stormJ = tSearch%myLonJs(jj)
-							stormLat = tSearch%myLats(ii)
-							stormI = tSearch%myLatIs(ii)
+				do j = 1, size(tSearch%myLonJs)
+					do i = 1, size(tSearch%myLatIs)
+						if (stormPsl == tSearch%pslWork(i,j) ) then
+							stormLon = tSearch%myLons(j)
+							stormJ = tSearch%myLonJs(j)
+							stormLat = tSearch%myLats(i)
+							stormI = tSearch%myLatIs(i)
 						endif
-						if ( tSearch%vortWork(jj,ii) == stormVort ) then
-							vortLon = tSearch%myLons(jj)
-							vortLat = tSearch%myLats(ii)
+						if ( stormVort == tSearch%vortWork(i,j) ) then
+							vortLon = tSearch%myLons(j)
+							vortLat = tSearch%myLats(i)
 						endif
-						if ( tSearch%tempWork(jj,ii) == stormTemp ) then
-							tempLon = tSearch%myLons(jj)
-							tempLat = tSearch%myLats(ii)
-						endif		
+						if ( stormTemp == tSearch%tempWork(i,j) ) then
+							tempLon = tSearch%myLons(j)
+							tempLat = tSearch%myLats(i)
+						endif
 					enddo
 				enddo
 				
-				if ( SphereDistance( stormLon*DEG_2_RAD, stormLat*DEG_2_RAD, vortLon*DEG_2_RAD, vortLat*DEG_2_RAD ) &
-					 < tSearch%vortPslDistThreshold ) crit2 = .TRUE.
+				if ( SphereDistance( stormLon * DEG_2_RAD, stormLat * DEG_2_RAD, &
+								     vortLon * DEG_2_RAD, vortLat * DEG_2_RAD ) < tSearch%vortPslDistThreshold ) &
+					crit2 = .TRUE.
 				if ( stormTemp > tSearch%tempExcessThreshold ) crit3 = .TRUE.
-				if ( SphereDistance( stormLon*DEG_2_RAD, stormLat*DEG_2_RAD, tempLon*DEG_2_RAD, tempLat*DEG_2_RAD ) &
-					 < tSearch%tempPslDistThreshold ) crit4 = .TRUE.
-			endif ! criteria 1
+				if ( SphereDistance( stormLon * DEG_2_RAD, stormLat * DEG_2_RAD, &
+									 tempLon * DEG_2_RAD, tempLat * DEG_2_RAD ) < tSearch%tempPslDistThreshold ) &
+					crit4 = .TRUE.
+			endif			
 			
 			foundStorm = ( ( crit1 .AND. crit2) .AND. ( crit3 .AND. crit4) )
 			hasWarmCore = ( crit3 .AND. crit4 )
-			! thickness criteria not used currently
+			! thickness criteria not used currently, but is required by output format
 			hasThickness = .TRUE.
 			stormThick = 10000.0
 			thickLon = 0.0
 			thickLat = 0.0
+			
 			if ( foundStorm ) then
 				call initializeTropical( tempNode, stormLon, stormLat, stormJ, stormI, stormPsl, stormVort, stormWind, &
 										vortLon, vortLat, stormTemp, tempLon, tempLat, hasWarmCore, stormThick, &
 										thickLon, thickLat, hasThickness )
 				call AddTropicalNodeToList( tstormList, tempNode )
-			endif! foundStorm
-		enddo!j
-	enddo! i
-	!print *, "maxPtsPerSector = ", maxPtsPerSector, ", minPtsPerSector = ", minPtsPerSector
+			endif
+		enddo
+		
+		call FinalizeTropicalSector(tSearch)
+	enddo
 	deallocate(tempNode)
 end subroutine
 
@@ -277,22 +222,30 @@ subroutine MarkTropicalNodesForRemoval( stormList, tSearch, southernBoundary, no
 	current => stormList
 	do while (associated(current) )
 		next => current%nextTropical
-		if ( current%lat <= southernBoundary .OR. current%lat >= northernBoundary ) then
-			current%removeThisNode = .TRUE.
-		else
-			query => next
-			do while ( associated( query ) ) 
-				querynext => query%nextTropical
-				if ( SphereDistance( current%lon*DEG_2_RAD, current%lat*DEG_2_RAD, &
-									 query%lon*DEG_2_RAD, query%lat*DEG_2_RAD ) < tSearch%sectorRadius ) then
-					if ( query%psl < current%psl ) then
-						current%removeThisNode = .TRUE.
-					else
-						query%removeThisNode = .TRUE.				 
+		if ( .NOT. current%removeThisNode ) then
+			if ( current%lat <= southernBoundary .OR. current%lat >= northernBoundary ) then
+				current%removeThisNode = .TRUE.
+			else
+				query => next
+				do while ( associated( query ) ) 
+					querynext => query%nextTropical
+					if ( SphereDistance( current%lon*DEG_2_RAD, current%lat*DEG_2_RAD, &
+										 query%lon*DEG_2_RAD, query%lat*DEG_2_RAD ) < tSearch%sectorRadius ) then
+						if ( query%wind > current%wind ) then
+							current%removeThisNode = .TRUE.
+							query%psl = min( current%psl, query%psl)
+							query%vort = max( current%vort, query%vort)
+							query%vertAvgT = max(current%vertAvgT, query%vertAvgT)
+						else
+							query%removeThisNode = .TRUE.				 
+							current%psl = min( current%psl, query%psl)
+							current%vort = max( current%vort, query%vort)
+							current%vertAvgT = max(current%vertAvgT, query%vertAvgT)
+						endif
 					endif
-				endif
-				query => querynext
-			enddo
+					query => querynext
+				enddo
+			endif
 		endif
 		current => next
 	enddo
@@ -365,15 +318,9 @@ pure function ArithmeticAverageTemp( tSearch )
 	real :: ArithmeticAverageTemp
 	type(TropicalStrideSearchSector), intent(in) :: tSearch
 	!
-	integer :: ii, jj
-	real :: sum
-	sum = 0.0
-	do ii = 1, size(tSearch%myLatIs)
-		do jj = 1, size(tSearch%myLonJs)
-			if ( tSearch%neighborhood(jj,ii) ) sum = sum + tSearch%tempWork(jj,ii)
-		enddo
-	enddo
-	ArithmeticAverageTemp = sum / count(tSearch%neighborhood)
+	real :: tsum
+	tsum = sum( tSearch%tempWork, MASK=tSearch%neighborhood)	
+	ArithmeticAverageTemp = tsum / count(tSearch%neighborhood)
 end function
 
 !> @brief Returns an integer array used to define land masks

@@ -78,6 +78,7 @@ call PrintTropicalSearchInfo( tSearch )
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !	search each timestep
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 do timeIndex = 1, ncData%nTimesteps
 	allocate(tstormList)
 	if ( mod(timeIndex, 40) == 0 ) &
@@ -100,8 +101,6 @@ do timeIndex = 1, ncData%nTimesteps
 	call deleteTropicalList(tstormList)
 enddo
 
-
-call FinalizeTropicalSearch(tSearch)
 close(14)
 call cpu_time(programTimerEnd)
 write(6,*) "**** PROGRAM COMPLETE ***** elapsed time = ", (programTimerEnd - programTimerStart), " seconds."
