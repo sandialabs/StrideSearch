@@ -74,7 +74,6 @@ call PrintCoordinateInfo( ncData )
 
 call PolarSearchSetup( sSearch, southernBoundary, northernBoundary, sectorRadius, &
 				  pslThreshold, vortThreshold, windThreshold, airSeaTempThreshold, vortDistThreshold, iceThreshold, ncData )
-!call PrintSearchInfo(sSearch)				  
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !	search each timestep
@@ -104,7 +103,6 @@ enddo
 !	clean up
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-call FinalizePolarSearch(sSearch)
 close(14)
 
 !programTimerEnd = OMP_GET_WTIME()

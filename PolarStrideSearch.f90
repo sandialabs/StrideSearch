@@ -14,7 +14,7 @@ use StrideSearchModule
 implicit none
 
 private
-public PolarStrideSearchSector, PolarSearchSetup, DoPolarSearch, FinalizePolarSearch
+public PolarStrideSearchSector, PolarSearchSetup, DoPolarSearch, FinalizePolarSearchSector
 public RemoveMarkedPolarNodes, MarkPolarNodesForRemoval
 
 !> @class PolarStrideSearch
@@ -51,20 +51,28 @@ subroutine PolarSearchSetup( pSearch, southernBoundary, northernBoundary, sector
 	
 	call SearchSetup( pSearch%StrideSearchSector, southernBoundary, northernBoundary, sectorRadius, &
 					  pslThreshold, vortThreshold, windThreshold, pData%StrideSearchData )
-	allocate( pSearch%tempWork( 2*maxval(lonStrides) + 1, 2*latStride + 1) )
-	allocate( pSearch%iceWork( 2*maxval(lonStrides) + 1, 2*latStride + 1) )
 	pSearch%coldAirThreshold = coldAirThreshold
 	pSearch%vortPslDistThreshold = vortPslDistThreshold
 	pSearch%iceFracThreshold = iceThreshold
 end subroutine
 
+subroutine AllocatePolarSectorMemory( pSearch, pData, stripIndex )
+	type(PolarStrideSearchSector), intent(inout) :: pSearch
+	type(PolarData), intent(in) :: pData
+	integer, intent(in) :: stripIndex
+	
+	call AllocateSectorMemory(pSearch%StrideSearchSector, pData%StrideSearchData, stripIndex)
+	allocate(pSearch%tempWork( size(pSearch%myLatIs), size(pSearch%myLonJs)) )
+	allocate(pSearch%iceWork( size(pSearch%myLatIs), size(pSearch%myLonJs)) )
+end subroutine
+
 !> @brief Frees memory used by a PolarStrideSearch object. This memory was initialized by PolarSearchSetup
 !> @param pSearch
-subroutine FinalizePolarSearch( pSearch )
+subroutine FinalizePolarSearchSector( pSearch )
 	type(PolarStrideSearchSector), intent(inout) :: pSearch
 	deallocate(pSearch%tempWork)
 	deallocate(pSearch%iceWork)
-	call FinalizeSearch(pSearch%StrideSearchSector)
+	call FinalizeSector(pSearch%StrideSearchSector)
 end subroutine
 
 !> @brief Performs a Stride Search of polar domains.
@@ -76,7 +84,7 @@ subroutine DoPolarSearch( pstormList, pSearch, pData )
 	type(PolarStrideSearchSector), intent(inout) :: pSearch
 	type(PolarData), intent(in) :: pData
 	!
-	integer :: i, j, k, ii, jj, lonIndex, latINdex, stormI, stormJ
+	integer :: i, j, k, ii, jj, kk, lonIndex, latINdex, stormI, stormJ
 	real :: stormLon, stormLat, stormPsl, stormVort, stormWind
 	real :: stormSSTMax, stormTempDiff, vortLon, vortLat
 	type(PolarLowListNode), pointer :: tempNode
@@ -86,86 +94,33 @@ subroutine DoPolarSearch( pstormList, pSearch, pData )
 	!
 	!	loop over search sectors
 	!
-	k = 0 ! latitude strip counter
-	do i = latMinIndex, latMaxIndex, latStride
-		k = k + 1
-		do j = 1, pData%nLon, lonStrides(k)
+	kk = 0
+	do ii = 1, size(sectorCenterLats)
+		call AllocatePolarSectorMemory(pSearch, pData, ii)
+		do jj = 1, nLonsPerLatLine(ii)
+			kk = kk + 1
+			call DefineSectorInData(pSearch%StrideSearchSector, pData%StrideSearchData, ii, kk)
 			!
-			! define search sector
-			!
-			pSearch%neighborhood = .FALSE.
-			
-			latINdex = 0
-			do ii = max( latMinIndex, i - latStride), min(latMaxIndex, i + latStride )
-				latINdex = latINdex + 1
-				pSearch%mylats(latINdex) = pData%lats(ii)
-				pSearch%myLatIs(latIndex) = ii
-			enddo
-			
-			lonIndex = 0
-			if ( j - lonStrides(k) < 1 ) then ! sector crosses longitude = 0.0
-				do jj = 1, j + lonStrides(k)
-					lonIndex = lonIndex + 1
-					pSearch%myLons(lonIndex) = pData%lons(jj)
-					pSearch%myLonJs(lonIndex) = jj
-				enddo
-				do jj = pData%nLon - lonStrides(k), pData%nLon
-					lonIndex = lonIndex + 1
-					pSearch%myLons(lonIndex) = pData%lons(jj)
-					pSearch%myLonJs(lonIndex) = jj
-				enddo
-			elseif ( j + lonStrides(k) > pData%nLon ) then ! sector crosses longitude = 360.0
-				do jj = 1, j + lonStrides(k) - pData%nLon
-					lonIndex = lonIndex + 1
-					pSearch%myLons(lonIndex) = pData%lons(jj)
-					pSearch%myLonJs(lonIndex) = jj
-				enddo
-				do jj = j - lonStrides(k), pData%nLon
-					lonIndex = lonIndex + 1
-					pSearch%myLons(lonIndex) = pData%lons(jj)
-					pSearch%myLonJs(lonIndex) = jj
-				enddo
-			else ! interior sector
-				do jj = j - lonStrides(k), j + lonStrides(k)
-					lonIndex = lonIndex + 1
-					pSearch%myLons(lonIndex) = pData%lons(jj)
-					pSearch%myLonJs(lonIndex) = jj
-				enddo
-			endif ! sector crosses longitude branch cut
-			
-			!
-			!	define sector by geodesic radius
-			!
-			do ii = 1, latIndex
-				do jj = 1, lonIndex
-					if ( SphereDistance( pData%lons(j) * DEG_2_RAD, pData%lats(i) * DEG_2_RAD, &
-							pSearch%myLons(jj) * DEG_2_RAD, pSearch%myLats(ii) * DEG_2_RAD ) < pSearch%sectorRadius ) then
-						pSearch%neighborhood(jj,ii) = .TRUE.
-					endif
-				enddo
-			enddo
-			
-			!
-			!	collect data from points in sector
+			!	collect data from sector's neighborhood
 			!
 			pSearch%pslWork = 1.0e20
 			pSearch%windWork = 0.0
 			pSearch%vortWork = 0.0
 			pSearch%tempWork = 1.0e20
-			pSearch%iceWork = -1.0
-			do ii = 1, latIndex
-				do jj = 1, lonIndex
-					pSearch%pslWork(jj,ii) = pData%psl( pSearch%myLonJs(jj), pSearch%myLatIs(ii) )
-					pSearch%windWork(jj,ii)= pData%wind( pSearch%myLonJs(jj), pSearch%myLatIs(ii) )
-					pSearch%vortWork(jj,ii)= sign(1.0, pSearch%myLats(ii) ) * pData%vorticity( pSearch%myLonJs(jj), pSearch%myLatIs(ii) )
-					pSearch%tempWork(jj,ii)= pData%theta700( pSearch%myLonJs(jj), pSearch%myLatIs(ii) ) - &
-											 pData%sst( pSearch%myLonJs(jj), pSearch%myLatIs(ii) )
-					pSearch%iceWork(jj,ii) = pData%iceFrac( pSearch%myLonJs(jj), pSearch%myLatIs(ii) )
+			pSearch%iceWork = 100.0
+			do j = 1, size(pSearch%myLonJs)
+				do i = 1, size(pSearch%myLatIs)
+					pSearch%pslWork(i,j)  = pData%psl( pSearch%myLonJs(j), pSearch%myLatIs(i))
+					pSearch%windWork(i,j) = pData%wind( pSearch%myLonJs(j), pSearch%myLatIs(i))
+					pSearch%vortWork(i,j) = sign(1.0, pSearch%myLats(i)) * &
+											pData%vorticity( pSearch%myLonJs(j), pSearch%myLatIs(i))
+					pSearch%tempWork(i,j) = pData%theta700( pSearch%myLonJs(j), pSearch%myLatIs(i)) - &
+											pData%sst( pSearch%myLonJs(j), pSearch%myLatIs(i))
+					pSearch%iceWork(i,j)  = pData%iceFrac( pSearch%myLonJs(j), pSearch%myLatIs(i))
 				enddo
 			enddo
-			
 			!
-			! 	apply storm identification criteria
+			!	apply storm identification criteria
 			!
 			foundStorm = .FALSE.
 			crit1 = .FALSE.
@@ -173,61 +128,59 @@ subroutine DoPolarSearch( pstormList, pSearch, pData )
 			crit3 = .FALSE.
 			crit4 = .FALSE.
 			crit5 = .FALSE.
-			
 			if ( minval(pSearch%pslWork) < pSearch%pslThreshold ) then
 				crit1 = .TRUE.
 				stormPsl = minval(pSearch%pslWork)
-				
-				do ii = 1, latIndex
-					do jj = 1, lonIndex
-						if ( pSearch%pslWork(jj,ii) == stormPsl ) then
-							stormLon = pSearch%myLons(jj)
-							stormLat = pSearch%myLats(ii)
-							stormJ = pSearch%myLonJs(jj)
-							stormI = pSearch%myLatIs(ii)
+				do j = 1, size(pSearch%myLonJs)
+					do i = 1, size(pSearch%myLatIs)
+						if ( pSearch%pslWork(i,j) == stormPSL ) then
+							stormLon = pSearch%myLons(j)
+							stormLat = pSearch%myLats(i)
+							stormJ = pSearch%myLonJs(j)
+							stormI = pSearcH%myLatIs(i)
 						endif
 					enddo
 				enddo
 				
-				if ( minval( pSearch%tempWork) < pSearch%coldAirThreshold ) then
+				if ( minval(pSearch%tempWork) < pSearch%coldAirThreshold ) then
 					crit2 = .TRUE.
 					stormTempDiff = minval(pSearch%tempWork)
-				endif! crit2
+				endif	
 				
 				if ( maxval(pSearch%vortWork) > pSearch%vortThreshold ) then
 					crit3 = .TRUE.
-					stormVort = maxval(pSearcH%vortWork) 
-					do ii = 1, latIndex
-						do jj = 1, lonIndex
-							if ( pSearch%vortWork(jj,ii) == stormVort ) then
-								vortLon = pSearch%myLons(jj)
-								vortLat = pSearch%myLats(ii)
+					stormVort = maxval(pSearch%vortWork)
+					do j = 1, size(pSearch%myLonJs)
+						do i = 1, size(pSearch%myLatIs)
+							if ( pSearch%vortWork(i,j) == stormVort ) then
+								vortLon = pSearch%myLons(j)
+								vortLat = pSearch%myLats(i)
 							endif
 						enddo
 					enddo
 					
-					if ( SphereDistance( stormLon * DEG_2_RAD, stormLat * DEG_2_RAD, vortLon * DEG_2_RAD, vortLat * DEG_2_RAD ) &
-						< pSearch%vortPslDistThreshold ) then
+					if ( SphereDistance( stormLon * DEG_2_RAD, stormLat * DEG_2_RAD, &
+										 vortLon * DEG_2_RAD, vortLat * DEG_2_RAD ) < pSearch%vortPslDistThreshold ) then
 						crit4 = .TRUE.
-					endif ! crit4
-				endif! crit3
+					endif
+				endif
 				
 				if ( minval(pSearch%iceWork) <= pSearch%iceFracThreshold ) then
 					crit5 = .TRUE.
-				endif! crit5
+				endif
 				
-			endif ! crit1
-			
-			foundStorm =  ( ( crit1 .and. crit2) .and. (crit3 .and. crit4 )) .and. crit5
-			stormWind = maxval(pSearch%windWork)
-			if ( foundStorm ) then
-				call initializePolar( tempNode, stormLon, stormLat, stormJ, stormI, stormPsl, stormVort, stormWind, &
-					 vortLon, vortLat, stormTempDiff )
+				foundStorm = ( (crit1 .and. crit2) .and. (crit3 .and. crit4)) .and. crit5
+				if ( foundStorm ) then
+					stormWind = maxval( pSearch%windWork )
+					call InitializePolar( tempNode, stormLon, stormLat, stormJ, stormI, stormPsl, stormVort, stormWind, &
+										  vortLon, vortLat, stormTempDiff )
+					call AddPolarNodeToList( pstormList, tempNode )
+				endif
 				
-				call AddPolarNodeToList( pstormList, tempNode)
-			endif!foundStorm
-		enddo ! j
-	enddo!i
+			endif
+		enddo
+		call FinalizePolarSearchSector(pSearch)
+	enddo
 	deallocate(tempNode)
 end subroutine
 
@@ -245,22 +198,24 @@ subroutine MarkPolarNodesForRemoval( pstorms, pSearch, southernBoundary, norther
 	current => pstorms
 	do while ( associated(current) )
 		next => current%nextPolar
-		if ( current%lat <= southernBoundary .OR. current%lat >= northernBoundary ) then	
-			current%removeThisNode = .TRUE.
-		else
-			query => next
-			do while ( associated( query ) )
-				querynext => query%nextPolar
-				if ( SphereDistance( current%lon * DEG_2_RAD, current%lat * DEG_2_RAD, &
-							query%lon * DEG_2_RAD, query%lat * DEG_2_RAD ) < pSearch%sectorRadius ) then
-					if ( query%psl < current%psl ) then
-						current%removeThisNode = .TRUE.
-					else
-						query%removeThisNode = .TRUE.
+		if ( .NOT. current%removeThisNode ) then
+			if ( current%lat <= southernBoundary .OR. current%lat >= northernBoundary ) then	
+				current%removeThisNode = .TRUE.
+			else
+				query => next
+				do while ( associated( query ) )
+					querynext => query%nextPolar
+					if ( SphereDistance( current%lon * DEG_2_RAD, current%lat * DEG_2_RAD, &
+								query%lon * DEG_2_RAD, query%lat * DEG_2_RAD ) < pSearch%sectorRadius ) then
+						if ( query%psl < current%psl ) then
+							current%removeThisNode = .TRUE.
+						else
+							query%removeThisNode = .TRUE.
+						endif
 					endif
-				endif
-				query => querynext
-			enddo
+					query => querynext
+				enddo
+			endif
 		endif
 		current => next
 	enddo

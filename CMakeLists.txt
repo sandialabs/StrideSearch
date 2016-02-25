@@ -77,7 +77,7 @@ add_subdirectory(gfdlUtilities)
 ADD_LIBRARY( strideSearchLib StormListNode.f90 StrideSearchData.f90 StrideSearch.f90 
 							TropicalStormListNode.f90 TropicalData.f90 TropicalStrideSearch.f90
 							StormTrackData.f90 StormTracks.f90 
-							#PolarLowListNode.f90 PolarData.f90 PolarStrideSearch.f90
+							PolarLowListNode.f90 PolarData.f90 PolarStrideSearch.f90
 							)
 TARGET_INCLUDE_DIRECTORIES( strideSearchLib PUBLIC ${PROJECT_BINARY_DIR}/gfdlUtilities  )
 TARGET_LINK_LIBRARIES(strideSearchLib  gfdlUtilitiesLib ${netcdf} ${netcdff} )
@@ -89,9 +89,9 @@ ADD_EXECUTABLE( strideSearchDriver.exe StrideSearchDriver.f90 )
 TARGET_INCLUDE_DIRECTORIES( strideSearchDriver.exe PUBLIC ${PROJECT_BINARY_DIR}/gfdlUtilities ${PROJECT_BINARY_DIR} )
 TARGET_LINK_LIBRARIES( strideSearchDriver.exe strideSearchLib gfdlUtilitiesLib ${netcdf} ${netcdff} )
 
-#ADD_EXECUTABLE( polarSearch.exe PolarSearch.f90 )
-#TARGET_INCLUDE_DIRECTORIES( polarSearch.exe PUBLIC ${PROJECT_BINARY_DIR}/gfdlUtilities ${PROJECT_BINARY_DIR} )
-#TARGET_LINK_LIBRARIES(polarSearch.exe strideSearchLib gfdlUtilitiesLib ${netcdf} ${netcdff} )
+ADD_EXECUTABLE( polarSearchDriver.exe PolarSearchDriver.f90 )
+TARGET_INCLUDE_DIRECTORIES( polarSearchDriver.exe PUBLIC ${PROJECT_BINARY_DIR}/gfdlUtilities ${PROJECT_BINARY_DIR} )
+TARGET_LINK_LIBRARIES(polarSearchDriver.exe strideSearchLib gfdlUtilitiesLib ${netcdf} ${netcdff} )
 
 ADD_EXECUTABLE( tropicalSearch.exe TropicalSearchDriver.f90 )
 TARGET_INCLUDE_DIRECTORIES( tropicalSearch.exe PUBLIC ${PROJECT_BINARY_DIR}/gfdlUtilities ${PROJECT_BINARY_DIR} )
@@ -122,7 +122,7 @@ TARGET_INCLUDE_DIRECTORIES( stormTrackDataTest.exe PUBLIC ${PROJECT_BINARY_DIR}/
 TARGET_LINK_LIBRARIES( stormTrackDataTest.exe strideSearchLib gfdlUtilitiesLib ${netcdf} ${netcdff} )
 ADD_TEST( stormTrackData_unitTest ${PROJECT_BINARY_DIR}/searchDataInput.exe)
 
-install( TARGETS strideSearchLib trackDriver.exe strideSearchDriver.exe tropicalSearch.exe  #polarSearch.exe 
+install( TARGETS strideSearchLib trackDriver.exe strideSearchDriver.exe tropicalSearch.exe  polarSearchDriver.exe 
 		 RUNTIME DESTINATION bin
 		 LIBRARY DESTINATION lib
 		 ARCHIVE DESTINATION lib )

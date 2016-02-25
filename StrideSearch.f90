@@ -156,6 +156,8 @@ subroutine SearchSetup( sSearch, southernBoundary, northernBoundary, sectorRadiu
 	enddo
 	
 	print *, "StrideSearch::SearchSetup complete : ", nSectors, " search sectors defined."
+	print *, "          LatStrideInt = ", latStrideInt
+	print *, "     max(LonStrideInt) = ", maxval(lonStrideInts)
 end subroutine
 
 !> @brief Deletes memory used for stride search.
