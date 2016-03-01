@@ -1,5 +1,5 @@
 program PolarSearch
-!> @file PolarSearch.f90
+!> @file PolarSearchDriver.f90
 !> @brief Driver program for a StrideSearch of polar latitudes.
 !!
 !> @author Peter Bosler, SNL

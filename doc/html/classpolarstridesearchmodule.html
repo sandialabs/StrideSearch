@@ -94,6 +94,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Data Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="modulepolarstridesearchmodule-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">polarstridesearchmodule Module Reference</div>  </div>
@@ -105,7 +106,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Types</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpolarstridesearchmodule_1_1polarstridesearch.html">polarstridesearch</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpolarstridesearchmodule_1_1polarstridesearchsector.html">polarstridesearchsector</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -113,9 +114,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ga982ffa60727a9773a94b9c5eb5285f27"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga982ffa60727a9773a94b9c5eb5285f27">polarsearchsetup</a> (pSearch, southernBoundary, northernBoundary, sectorRadius, pslThreshold, vortThreshold, windThreshold, coldAirThreshold, vortPslDistThreshold, iceThreshold, pData)</td></tr>
 <tr class="memdesc:ga982ffa60727a9773a94b9c5eb5285f27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the sectors for a stride search of polar latitudes. Allocates memory for each sector.  <a href="group___polar_stride_search.html#ga982ffa60727a9773a94b9c5eb5285f27">More...</a><br /></td></tr>
 <tr class="separator:ga982ffa60727a9773a94b9c5eb5285f27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad75e6ad762b67c160af14f7c1acb7cc9"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#gad75e6ad762b67c160af14f7c1acb7cc9">finalizepolarsearch</a> (pSearch)</td></tr>
-<tr class="memdesc:gad75e6ad762b67c160af14f7c1acb7cc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees memory used by a <a class="el" href="class_polar_stride_search.html" title="Container for local data sets (one sector). Provides a workspace for spatial search. ">PolarStrideSearch</a> object. This memory was initialized by PolarSearchSetup.  <a href="group___polar_stride_search.html#gad75e6ad762b67c160af14f7c1acb7cc9">More...</a><br /></td></tr>
-<tr class="separator:gad75e6ad762b67c160af14f7c1acb7cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga68cd73001ffe82403593a6e0577c9b3b"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga68cd73001ffe82403593a6e0577c9b3b">finalizepolarsearchsector</a> (pSearch)</td></tr>
+<tr class="memdesc:ga68cd73001ffe82403593a6e0577c9b3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees memory used by a <a class="el" href="class_polar_stride_search.html" title="Container for local data sets (one sector). Provides a workspace for spatial search. ">PolarStrideSearch</a> object. This memory was initialized by PolarSearchSetup.  <a href="group___polar_stride_search.html#ga68cd73001ffe82403593a6e0577c9b3b">More...</a><br /></td></tr>
+<tr class="separator:ga68cd73001ffe82403593a6e0577c9b3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga18188442ea616ca7a527ef2109c1c605"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga18188442ea616ca7a527ef2109c1c605">dopolarsearch</a> (pstormList, pSearch, pData)</td></tr>
 <tr class="memdesc:ga18188442ea616ca7a527ef2109c1c605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a Stride Search of polar domains.  <a href="group___polar_stride_search.html#ga18188442ea616ca7a527ef2109c1c605">More...</a><br /></td></tr>
 <tr class="separator:ga18188442ea616ca7a527ef2109c1c605"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,6 +126,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ga85ec6ed4f84581ef6038430207fe371b"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga85ec6ed4f84581ef6038430207fe371b">removemarkedpolarnodes</a> (pstorms)</td></tr>
 <tr class="memdesc:ga85ec6ed4f84581ef6038430207fe371b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes nodes marked by MarkPolarNodesForRemoval from the linked list.  <a href="group___polar_stride_search.html#ga85ec6ed4f84581ef6038430207fe371b">More...</a><br /></td></tr>
 <tr class="separator:ga85ec6ed4f84581ef6038430207fe371b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:gac9bb1c6398e25622f4de0b1c548de51c"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#gac9bb1c6398e25622f4de0b1c548de51c">allocatepolarsectormemory</a> (pSearch, pData, stripIndex)</td></tr>
+<tr class="separator:gac9bb1c6398e25622f4de0b1c548de51c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this module was generated from the following file:<ul>
 <li><a class="el" href="_polar_stride_search_8f90_source.html">PolarStrideSearch.f90</a></li>
@@ -132,7 +138,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 28 2016 11:43:42 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Mar 1 2016 08:52:33 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

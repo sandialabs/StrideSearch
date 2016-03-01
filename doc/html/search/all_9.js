@@ -5,7 +5,8 @@ var searchData=
   ['latmaxindex',['latmaxindex',['../group___stride_search.html#gae8eff4c26645ad436366ee78645f864a',1,'stridesearchmodule']]],
   ['latminindex',['latminindex',['../group___stride_search.html#gaeb1127d963c3fc51736e308b6d7aa484',1,'stridesearchmodule']]],
   ['lats',['lats',['../group___stride_search_data.html#ga43efa818268929d80ea08152e941312c',1,'stridesearchdatamodule::stridesearchdata']]],
-  ['latstride',['latstride',['../group___stride_search.html#ga35adb66d8e7592726939b4f8ac81c3d9',1,'stridesearchmodule']]],
+  ['latstrideint',['latstrideint',['../group___stride_search.html#gadcbede98833dbac4d8fd02fef6d7addd',1,'stridesearchmodule']]],
+  ['latstridereal',['latstridereal',['../group___stride_search.html#gaf32d8d71feddadf7ee057a7cfeeac738',1,'stridesearchmodule']]],
   ['leap_5fyear',['leap_year',['../classtime__manager__mod.html#a9ece89a2faf9b6a611cb20e9527c9a07',1,'time_manager_mod']]],
   ['leap_5fyear_5fgregorian',['leap_year_gregorian',['../classtime__manager__mod.html#a9102d4b35e853b023e374840887ebbeb',1,'time_manager_mod']]],
   ['leap_5fyear_5fjulian',['leap_year_julian',['../classtime__manager__mod.html#afda66a67a35d2ff960258e9441b0cfdf',1,'time_manager_mod']]],
@@ -20,5 +21,6 @@ var searchData=
   ['lon',['lon',['../group___storm_list_node.html#gae52420d25f27743fe28fd3238cc3d429',1,'stormlistnodemodule::stormlistnode']]],
   ['lonindex',['lonindex',['../group___storm_list_node.html#gad5d8bd21384d9f9ae287fe896d2b7311',1,'stormlistnodemodule::stormlistnode']]],
   ['lons',['lons',['../group___stride_search_data.html#ga618133e34ee4acb482fc0779c7fe8355',1,'stridesearchdatamodule::stridesearchdata']]],
-  ['lonstrides',['lonstrides',['../classstridesearchmodule.html#adb27fa2dad18b59161381aa38f80c334',1,'stridesearchmodule']]]
+  ['lonstrideints',['lonstrideints',['../group___stride_search.html#ga52d72411b4da27e0c1707c300ad2a4bd',1,'stridesearchmodule']]],
+  ['lonstridereals',['lonstridereals',['../group___stride_search.html#ga2b3fedd6ee56f7df51d66c9231e812db',1,'stridesearchmodule']]]
 ];

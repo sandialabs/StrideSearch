@@ -92,14 +92,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Extends the <a class="el" href="class_stride_search.html" title="Container for small sets of working data (enough to contain the largest search sector), used to identify storms. Provides a workspace for spatial search. ">StrideSearch</a> data type to polar low detection.  
+<p>Extends the StrideSearch data type to polar low detection.  
 <a href="#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>Extends the <a class="el" href="class_stride_search.html" title="Container for small sets of working data (enough to contain the largest search sector), used to identify storms. Provides a workspace for spatial search. ">StrideSearch</a> data type to polar low detection. </p>
+<p>Extends the StrideSearch data type to polar low detection. </p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Types</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpolarstridesearchmodule_1_1polarstridesearch.html">polarstridesearchmodule::polarstridesearch</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpolarstridesearchmodule_1_1polarstridesearchsector.html">polarstridesearchmodule::polarstridesearchsector</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -107,9 +107,11 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:ga982ffa60727a9773a94b9c5eb5285f27"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga982ffa60727a9773a94b9c5eb5285f27">polarstridesearchmodule::polarsearchsetup</a> (pSearch, southernBoundary, northernBoundary, sectorRadius, pslThreshold, vortThreshold, windThreshold, coldAirThreshold, vortPslDistThreshold, iceThreshold, pData)</td></tr>
 <tr class="memdesc:ga982ffa60727a9773a94b9c5eb5285f27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the sectors for a stride search of polar latitudes. Allocates memory for each sector.  <a href="#ga982ffa60727a9773a94b9c5eb5285f27">More...</a><br /></td></tr>
 <tr class="separator:ga982ffa60727a9773a94b9c5eb5285f27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad75e6ad762b67c160af14f7c1acb7cc9"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#gad75e6ad762b67c160af14f7c1acb7cc9">polarstridesearchmodule::finalizepolarsearch</a> (pSearch)</td></tr>
-<tr class="memdesc:gad75e6ad762b67c160af14f7c1acb7cc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees memory used by a <a class="el" href="class_polar_stride_search.html" title="Container for local data sets (one sector). Provides a workspace for spatial search. ">PolarStrideSearch</a> object. This memory was initialized by PolarSearchSetup.  <a href="#gad75e6ad762b67c160af14f7c1acb7cc9">More...</a><br /></td></tr>
-<tr class="separator:gad75e6ad762b67c160af14f7c1acb7cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac9bb1c6398e25622f4de0b1c548de51c"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#gac9bb1c6398e25622f4de0b1c548de51c">polarstridesearchmodule::allocatepolarsectormemory</a> (pSearch, pData, stripIndex)</td></tr>
+<tr class="separator:gac9bb1c6398e25622f4de0b1c548de51c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga68cd73001ffe82403593a6e0577c9b3b"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga68cd73001ffe82403593a6e0577c9b3b">polarstridesearchmodule::finalizepolarsearchsector</a> (pSearch)</td></tr>
+<tr class="memdesc:ga68cd73001ffe82403593a6e0577c9b3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees memory used by a <a class="el" href="class_polar_stride_search.html" title="Container for local data sets (one sector). Provides a workspace for spatial search. ">PolarStrideSearch</a> object. This memory was initialized by PolarSearchSetup.  <a href="#ga68cd73001ffe82403593a6e0577c9b3b">More...</a><br /></td></tr>
+<tr class="separator:ga68cd73001ffe82403593a6e0577c9b3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga18188442ea616ca7a527ef2109c1c605"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga18188442ea616ca7a527ef2109c1c605">polarstridesearchmodule::dopolarsearch</a> (pstormList, pSearch, pData)</td></tr>
 <tr class="memdesc:ga18188442ea616ca7a527ef2109c1c605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a Stride Search of polar domains.  <a href="#ga18188442ea616ca7a527ef2109c1c605">More...</a><br /></td></tr>
 <tr class="separator:ga18188442ea616ca7a527ef2109c1c605"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -122,18 +124,69 @@ Functions/Subroutines</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ga59f9c47128193a5899b46ef6b733fb3f"><td class="memItemLeft" align="right" valign="top">real, dimension(:,:), pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga59f9c47128193a5899b46ef6b733fb3f">polarstridesearchmodule::polarstridesearch::tempwork</a></td></tr>
-<tr class="separator:ga59f9c47128193a5899b46ef6b733fb3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga587cf496d1070849c71c958d3103da52"><td class="memItemLeft" align="right" valign="top">real, dimension(:,:), pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga587cf496d1070849c71c958d3103da52">polarstridesearchmodule::polarstridesearch::icework</a></td></tr>
-<tr class="separator:ga587cf496d1070849c71c958d3103da52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa399df0926abb2237734348630a84fdc"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#gaa399df0926abb2237734348630a84fdc">polarstridesearchmodule::polarstridesearch::coldairthreshold</a></td></tr>
-<tr class="separator:gaa399df0926abb2237734348630a84fdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaab7e5965d382202050ef0b90395d4f58"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#gaab7e5965d382202050ef0b90395d4f58">polarstridesearchmodule::polarstridesearch::vortpsldistthreshold</a></td></tr>
-<tr class="separator:gaab7e5965d382202050ef0b90395d4f58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga57e752719c59b31a57902946b617cfcc"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga57e752719c59b31a57902946b617cfcc">polarstridesearchmodule::polarstridesearch::icefracthreshold</a></td></tr>
-<tr class="separator:ga57e752719c59b31a57902946b617cfcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacb16be1caeff8fc6ad7cb7b0370db8b0"><td class="memItemLeft" align="right" valign="top">real, dimension(:,:), pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#gacb16be1caeff8fc6ad7cb7b0370db8b0">polarstridesearchmodule::polarstridesearchsector::tempwork</a></td></tr>
+<tr class="separator:gacb16be1caeff8fc6ad7cb7b0370db8b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7803ecd287a814d1425c32ec697c995a"><td class="memItemLeft" align="right" valign="top">real, dimension(:,:), pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga7803ecd287a814d1425c32ec697c995a">polarstridesearchmodule::polarstridesearchsector::icework</a></td></tr>
+<tr class="separator:ga7803ecd287a814d1425c32ec697c995a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7d7e2644deb7d6b70fca81449b653928"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga7d7e2644deb7d6b70fca81449b653928">polarstridesearchmodule::polarstridesearchsector::coldairthreshold</a></td></tr>
+<tr class="separator:ga7d7e2644deb7d6b70fca81449b653928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4cf4e8ea1a10f21fffe57f531859eac7"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga4cf4e8ea1a10f21fffe57f531859eac7">polarstridesearchmodule::polarstridesearchsector::vortpsldistthreshold</a></td></tr>
+<tr class="separator:ga4cf4e8ea1a10f21fffe57f531859eac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9b56629198d334f14bf8160de18319c7"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___polar_stride_search.html#ga9b56629198d334f14bf8160de18319c7">polarstridesearchmodule::polarstridesearchsector::icefracthreshold</a></td></tr>
+<tr class="separator:ga9b56629198d334f14bf8160de18319c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a class="anchor" id="gac9bb1c6398e25622f4de0b1c548de51c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine polarstridesearchmodule::allocatepolarsectormemory </td>
+          <td>(</td>
+          <td class="paramtype">type(<a class="el" href="structpolarstridesearchmodule_1_1polarstridesearchsector.html">polarstridesearchsector</a>), intent(inout)&#160;</td>
+          <td class="paramname"><em>pSearch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">type(polardata), intent(in)&#160;</td>
+          <td class="paramname"><em>pData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>stripIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="_polar_stride_search_8f90_source.html#l00059">59</a> of file <a class="el" href="_polar_stride_search_8f90_source.html">PolarStrideSearch.f90</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___polar_stride_search_gac9bb1c6398e25622f4de0b1c548de51c_cgraph.png" border="0" usemap="#group___polar_stride_search_gac9bb1c6398e25622f4de0b1c548de51c_cgraph" alt=""/></div>
+<map name="group___polar_stride_search_gac9bb1c6398e25622f4de0b1c548de51c_cgraph" id="group___polar_stride_search_gac9bb1c6398e25622f4de0b1c548de51c_cgraph">
+<area shape="rect" id="node2" href="group___stride_search.html#gaf422dcacc22c11ec7d843c1fbb0f97d4" title="Allocates memory for storing data from a search sector along a latitude line. " alt="" coords="243,5,403,47"/></map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="ga18188442ea616ca7a527ef2109c1c605"></a>
 <div class="memitem">
 <div class="memproto">
@@ -147,7 +200,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">type(<a class="el" href="structpolarstridesearchmodule_1_1polarstridesearch.html">polarstridesearch</a>), intent(inout)&#160;</td>
+          <td class="paramtype">type(<a class="el" href="structpolarstridesearchmodule_1_1polarstridesearchsector.html">polarstridesearchsector</a>), intent(inout)&#160;</td>
           <td class="paramname"><em>pSearch</em>, </td>
         </tr>
         <tr>
@@ -174,27 +227,27 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_polar_stride_search_8f90_source.html#l00074">74</a> of file <a class="el" href="_polar_stride_search_8f90_source.html">PolarStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_polar_stride_search_8f90_source.html#l00082">82</a> of file <a class="el" href="_polar_stride_search_8f90_source.html">PolarStrideSearch.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group___polar_stride_search_ga18188442ea616ca7a527ef2109c1c605_cgraph.png" border="0" usemap="#group___polar_stride_search_ga18188442ea616ca7a527ef2109c1c605_cgraph" alt=""/></div>
 <map name="group___polar_stride_search_ga18188442ea616ca7a527ef2109c1c605_cgraph" id="group___polar_stride_search_ga18188442ea616ca7a527ef2109c1c605_cgraph">
-<area shape="rect" id="node2" href="group___stride_search.html#gafebdd427f47c0270a4b8fa4e49eac704" title="Determines the great&#45;circle distance between points on an Earth&#45;sized sphere. " alt="" coords="257,5,395,47"/><area shape="rect" id="node3" href="group___polar_low_list_node.html#ga8f8080faafc00cd90a983571b0309bc0" title="polarlowlistnodemodule\l::polarlowlistnode::initializepolar" alt="" coords="221,71,431,112"/><area shape="rect" id="node4" href="group___polar_low_list_node.html#ga65d3ac87a01638a62282284926fb98f9" title="Adds a PolarLowListNode to a list. " alt="" coords="245,136,407,177"/><area shape="rect" id="node5" href="group___polar_low_list_node.html#ga8c79fcf65a4c7484ac30f70a7ade8c41" title="copies data from one PolarLowListNode to another. " alt="" coords="479,136,640,177"/><area shape="rect" id="node6" href="group___storm_list_node.html#ga9b34aa8100d47395af8f1c72969bf8aa" title="Copies a StormListNode. " alt="" coords="688,136,833,177"/></map>
+<area shape="rect" id="node2" href="group___polar_stride_search.html#gac9bb1c6398e25622f4de0b1c548de51c" title="polarstridesearchmodule\l::allocatepolarsectormemory" alt="" coords="231,5,421,47"/><area shape="rect" id="node4" href="group___stride_search.html#ga45e23c227cc33035e298027965d11f6b" title="Defines a search sector relative to a stridesearchdatamodule::stridesearchdata object. Collects indices and locations of grid points within the sector. " alt="" coords="257,71,395,112"/><area shape="rect" id="node5" href="group___stride_search.html#gafebdd427f47c0270a4b8fa4e49eac704" title="Determines the great&#45;circle distance between points on an Earth&#45;sized sphere. " alt="" coords="490,100,629,141"/><area shape="rect" id="node6" href="group___polar_low_list_node.html#ga8f8080faafc00cd90a983571b0309bc0" title="polarlowlistnodemodule\l::polarlowlistnode::initializepolar" alt="" coords="221,188,431,229"/><area shape="rect" id="node7" href="group___polar_low_list_node.html#ga65d3ac87a01638a62282284926fb98f9" title="Adds a PolarLowListNode to a list. " alt="" coords="245,253,407,295"/><area shape="rect" id="node10" href="group___polar_stride_search.html#ga68cd73001ffe82403593a6e0577c9b3b" title="Frees memory used by a PolarStrideSearch object. This memory was initialized by PolarSearchSetup. " alt="" coords="237,319,415,360"/><area shape="rect" id="node3" href="group___stride_search.html#gaf422dcacc22c11ec7d843c1fbb0f97d4" title="Allocates memory for storing data from a search sector along a latitude line. " alt="" coords="479,5,639,47"/><area shape="rect" id="node8" href="group___polar_low_list_node.html#ga8c79fcf65a4c7484ac30f70a7ade8c41" title="copies data from one PolarLowListNode to another. " alt="" coords="479,253,640,295"/><area shape="rect" id="node9" href="group___storm_list_node.html#ga9b34aa8100d47395af8f1c72969bf8aa" title="Copies a StormListNode. " alt="" coords="688,253,833,295"/><area shape="rect" id="node11" href="group___stride_search.html#ga9e6db5f72b70d624376b04e2df001c12" title="Deletes memory used for stride search. This memory was allocated by SearchSetup. " alt="" coords="490,319,629,360"/></map>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="gad75e6ad762b67c160af14f7c1acb7cc9"></a>
+<a class="anchor" id="ga68cd73001ffe82403593a6e0577c9b3b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">subroutine, public polarstridesearchmodule::finalizepolarsearch </td>
+          <td class="memname">subroutine, public polarstridesearchmodule::finalizepolarsearchsector </td>
           <td>(</td>
-          <td class="paramtype">type(<a class="el" href="structpolarstridesearchmodule_1_1polarstridesearch.html">polarstridesearch</a>), intent(inout)&#160;</td>
+          <td class="paramtype">type(<a class="el" href="structpolarstridesearchmodule_1_1polarstridesearchsector.html">polarstridesearchsector</a>), intent(inout)&#160;</td>
           <td class="paramname"><em>pSearch</em></td><td>)</td>
           <td></td>
         </tr>
@@ -209,14 +262,14 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_polar_stride_search_8f90_source.html#l00063">63</a> of file <a class="el" href="_polar_stride_search_8f90_source.html">PolarStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_polar_stride_search_8f90_source.html#l00071">71</a> of file <a class="el" href="_polar_stride_search_8f90_source.html">PolarStrideSearch.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="group___polar_stride_search_gad75e6ad762b67c160af14f7c1acb7cc9_cgraph.png" border="0" usemap="#group___polar_stride_search_gad75e6ad762b67c160af14f7c1acb7cc9_cgraph" alt=""/></div>
-<map name="group___polar_stride_search_gad75e6ad762b67c160af14f7c1acb7cc9_cgraph" id="group___polar_stride_search_gad75e6ad762b67c160af14f7c1acb7cc9_cgraph">
-<area shape="rect" id="node2" href="group___stride_search.html#ga0dcfda73ec73fbe4b2b4eba86f39f462" title="Deletes memory used for stride search. This memory was allocated by SearchSetup. " alt="" coords="221,5,360,47"/></map>
+<div class="center"><img src="group___polar_stride_search_ga68cd73001ffe82403593a6e0577c9b3b_cgraph.png" border="0" usemap="#group___polar_stride_search_ga68cd73001ffe82403593a6e0577c9b3b_cgraph" alt=""/></div>
+<map name="group___polar_stride_search_ga68cd73001ffe82403593a6e0577c9b3b_cgraph" id="group___polar_stride_search_ga68cd73001ffe82403593a6e0577c9b3b_cgraph">
+<area shape="rect" id="node2" href="group___stride_search.html#ga9e6db5f72b70d624376b04e2df001c12" title="Deletes memory used for stride search. This memory was allocated by SearchSetup. " alt="" coords="231,5,369,47"/></map>
 </div>
 </p>
 
@@ -235,7 +288,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">type(<a class="el" href="structpolarstridesearchmodule_1_1polarstridesearch.html">polarstridesearch</a>), intent(in)&#160;</td>
+          <td class="paramtype">type(<a class="el" href="structpolarstridesearchmodule_1_1polarstridesearchsector.html">polarstridesearchsector</a>), intent(in)&#160;</td>
           <td class="paramname"><em>pSearch</em>, </td>
         </tr>
         <tr>
@@ -269,7 +322,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_polar_stride_search_8f90_source.html#l00239">239</a> of file <a class="el" href="_polar_stride_search_8f90_source.html">PolarStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_polar_stride_search_8f90_source.html#l00192">192</a> of file <a class="el" href="_polar_stride_search_8f90_source.html">PolarStrideSearch.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -289,7 +342,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="memname">subroutine, public polarstridesearchmodule::polarsearchsetup </td>
           <td>(</td>
-          <td class="paramtype">type(<a class="el" href="structpolarstridesearchmodule_1_1polarstridesearch.html">polarstridesearch</a>), intent(out)&#160;</td>
+          <td class="paramtype">type(<a class="el" href="structpolarstridesearchmodule_1_1polarstridesearchsector.html">polarstridesearchsector</a>), intent(out)&#160;</td>
           <td class="paramname"><em>pSearch</em>, </td>
         </tr>
         <tr>
@@ -413,7 +466,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_polar_stride_search_8f90_source.html#l00271">271</a> of file <a class="el" href="_polar_stride_search_8f90_source.html">PolarStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_polar_stride_search_8f90_source.html#l00226">226</a> of file <a class="el" href="_polar_stride_search_8f90_source.html">PolarStrideSearch.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -427,7 +480,7 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a class="anchor" id="gaa399df0926abb2237734348630a84fdc"></a>
+<a class="anchor" id="ga7d7e2644deb7d6b70fca81449b653928"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -435,7 +488,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real polarstridesearchmodule::polarstridesearch::coldairthreshold</td>
+          <td class="memname">real polarstridesearchmodule::polarstridesearchsector::coldairthreshold</td>
         </tr>
       </table>
   </td>
@@ -449,7 +502,7 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="ga57e752719c59b31a57902946b617cfcc"></a>
+<a class="anchor" id="ga9b56629198d334f14bf8160de18319c7"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -457,7 +510,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real polarstridesearchmodule::polarstridesearch::icefracthreshold</td>
+          <td class="memname">real polarstridesearchmodule::polarstridesearchsector::icefracthreshold</td>
         </tr>
       </table>
   </td>
@@ -471,7 +524,7 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="ga587cf496d1070849c71c958d3103da52"></a>
+<a class="anchor" id="ga7803ecd287a814d1425c32ec697c995a"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -479,7 +532,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real, dimension(:,:), pointer polarstridesearchmodule::polarstridesearch::icework</td>
+          <td class="memname">real, dimension(:,:), pointer polarstridesearchmodule::polarstridesearchsector::icework</td>
         </tr>
       </table>
   </td>
@@ -493,7 +546,7 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="ga59f9c47128193a5899b46ef6b733fb3f"></a>
+<a class="anchor" id="gacb16be1caeff8fc6ad7cb7b0370db8b0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -501,7 +554,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real, dimension(:,:), pointer polarstridesearchmodule::polarstridesearch::tempwork</td>
+          <td class="memname">real, dimension(:,:), pointer polarstridesearchmodule::polarstridesearchsector::tempwork</td>
         </tr>
       </table>
   </td>
@@ -515,7 +568,7 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="gaab7e5965d382202050ef0b90395d4f58"></a>
+<a class="anchor" id="ga4cf4e8ea1a10f21fffe57f531859eac7"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -523,7 +576,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real polarstridesearchmodule::polarstridesearch::vortpsldistthreshold</td>
+          <td class="memname">real polarstridesearchmodule::polarstridesearchsector::vortpsldistthreshold</td>
         </tr>
       </table>
   </td>
@@ -540,7 +593,7 @@ Here is the call graph for this function:</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 28 2016 11:43:42 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Mar 1 2016 08:52:33 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

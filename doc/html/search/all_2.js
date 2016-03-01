@@ -21,6 +21,7 @@ var searchData=
   ['decrement_5fno_5fleap',['decrement_no_leap',['../classtime__manager__mod.html#a476b10d536ec702104cc5d6a13ba0648',1,'time_manager_mod']]],
   ['decrement_5fthirty',['decrement_thirty',['../classtime__manager__mod.html#acc590ee22b4b4b0a01b20777f60d2c10',1,'time_manager_mod']]],
   ['decrement_5ftime',['decrement_time',['../classtime__manager__mod.html#a3569323c51bacaf4139ec50da35a96fc',1,'time_manager_mod']]],
+  ['definesectorindata',['definesectorindata',['../group___stride_search.html#ga45e23c227cc33035e298027965d11f6b',1,'stridesearchmodule']]],
   ['deg_5f2_5frad',['deg_2_rad',['../group___storm_list_node.html#gab804e980acfaddc8dd2f2553e94aec9a',1,'stormlistnodemodule']]],
   ['deletedata',['deletedata',['../group___stride_search_data.html#ga4f26bafe3834ce18283d5dea5378984c',1,'stridesearchdatamodule']]],
   ['deletedatedlist',['deletedatedlist',['../group___storm_track_data.html#ga5034fbdb010a318d2345684eeea91447',1,'stormtrackdatamodule']]],

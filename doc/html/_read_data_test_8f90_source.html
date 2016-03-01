@@ -108,7 +108,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;call <a class="code" href="group___stride_search_data.html#gac94efcee03125a902bc9df4259d7fcc2">initializedata</a>(ncdata, samplefile)</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;call <a class="code" href="group___stride_search_data.html#ga076b8f29b78c6b1919197e37f286e45b">printcoordinateinfo</a>(ncdata)</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keywordflow">do</span> k = 1, ncdata%nTimesteps</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keywordflow">do</span> k = 1, 10</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    call <a class="code" href="group___stride_search_data.html#ga32259603842f03df663a717e02361000">readvariablesattimestep</a>( ncdata, year, month, day, hour, k )</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    print *, <span class="stringliteral">&quot;year = &quot;</span>, year, <span class="stringliteral">&quot;, month = &quot;</span>, month, <span class="stringliteral">&quot;, day = &quot;</span>, day, <span class="stringliteral">&quot;, hour = &quot;</span>, hour</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    call <a class="code" href="group___stride_search_data.html#gaab104fcc77947c6bd81f9e6460166c17">printvariableinfo</a>(ncdata)</div>
@@ -128,7 +128,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 28 2016 11:43:42 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Mar 1 2016 08:52:33 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

@@ -267,6 +267,10 @@ subroutine DoStrideSearch( stormList, sSearch, searchData )
 	deallocate(tempNodePtr)
 end subroutine
 
+!> @brief Allocates memory for storing data from a search sector along a latitude line.
+!> @param sSearch search sector to be allocated
+!> @param searchData @ref stridesearchdatamodule::stridesearchdata object
+!> @param stripIndex index of latitude strip
 subroutine AllocateSectorMemory( sSearch, searchData, stripIndex )
 	type(StrideSearchSector), intent(inout) :: sSearch
 	type(StrideSearchData), intent(in) :: searchData
@@ -282,6 +286,12 @@ subroutine AllocateSectorMemory( sSearch, searchData, stripIndex )
 	allocate(sSearch%myLonJs( 2 * lonStrideInts(stripIndex) + 1))
 end subroutine
 
+!> @brief Defines a search sector relative to a @ref stridesearchdatamodule::stridesearchdata object.  Collects indices and locations of grid points 
+!> within the sector.
+!> @param sSearch search sector to be defined
+!> @param searchData data to be searched
+!> @param stripIndex of this sector
+!> @param sectorIndex of this sector
 subroutine DefineSectorInData( sSearch, searchData, stripIndex, sectorIndex )
 	type(StrideSearchSector), intent(inout) :: sSearch
 	type(StrideSearchData), intent(in) :: searchData

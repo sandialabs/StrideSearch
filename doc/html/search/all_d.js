@@ -1,6 +1,7 @@
 var searchData=
 [
   ['pi',['pi',['../group___storm_list_node.html#ga2026f54aa94a51d065460921d6a7659e',1,'stormlistnodemodule']]],
+  ['plotsector',['plotsector',['../_stride_search_driver_8f90.html#a259be1a5bf8c4214b895f6b56b9e836f',1,'StrideSearchDriver.f90']]],
   ['polardata',['PolarData',['../class_polar_data.html',1,'PolarData'],['../group___polar_data.html',1,'(Global Namespace)']]],
   ['polardata',['polardata',['../structpolardatamodule_1_1polardata.html',1,'polardatamodule']]],
   ['polardata_2ef90',['PolarData.f90',['../_polar_data_8f90.html',1,'']]],
@@ -9,13 +10,13 @@ var searchData=
   ['polarlowlistnode',['polarlowlistnode',['../structpolarlowlistnodemodule_1_1polarlowlistnode.html',1,'polarlowlistnodemodule']]],
   ['polarlowlistnode_2ef90',['PolarLowListNode.f90',['../_polar_low_list_node_8f90.html',1,'']]],
   ['polarlowlistnodemodule',['polarlowlistnodemodule',['../classpolarlowlistnodemodule.html',1,'']]],
-  ['polarsearch',['polarsearch',['../_polar_search_8f90.html#aa085676eaa94ce60438fd45f8ffe6ccc',1,'PolarSearch.f90']]],
-  ['polarsearch_2ef90',['PolarSearch.f90',['../_polar_search_8f90.html',1,'']]],
+  ['polarsearch',['polarsearch',['../_polar_search_driver_8f90.html#aa085676eaa94ce60438fd45f8ffe6ccc',1,'PolarSearchDriver.f90']]],
+  ['polarsearchdriver_2ef90',['PolarSearchDriver.f90',['../_polar_search_driver_8f90.html',1,'']]],
   ['polarsearchsetup',['polarsearchsetup',['../group___polar_stride_search.html#ga982ffa60727a9773a94b9c5eb5285f27',1,'polarstridesearchmodule']]],
-  ['polarstridesearch',['polarstridesearch',['../structpolarstridesearchmodule_1_1polarstridesearch.html',1,'polarstridesearchmodule']]],
   ['polarstridesearch',['PolarStrideSearch',['../class_polar_stride_search.html',1,'PolarStrideSearch'],['../group___polar_stride_search.html',1,'(Global Namespace)']]],
   ['polarstridesearch_2ef90',['PolarStrideSearch.f90',['../_polar_stride_search_8f90.html',1,'']]],
   ['polarstridesearchmodule',['polarstridesearchmodule',['../classpolarstridesearchmodule.html',1,'']]],
+  ['polarstridesearchsector',['polarstridesearchsector',['../structpolarstridesearchmodule_1_1polarstridesearchsector.html',1,'polarstridesearchmodule']]],
   ['print_5fversion_5fnumber',['print_version_number',['../classutilities__mod.html#aaaeecd45a7428924977f3db80053f1f8',1,'utilities_mod']]],
   ['printcoordinateinfo',['printcoordinateinfo',['../group___stride_search_data.html#ga076b8f29b78c6b1919197e37f286e45b',1,'stridesearchdatamodule']]],
   ['printpolardatainfo',['printpolardatainfo',['../group___polar_data.html#ga5fa63099896b3290a67196eb8f89e7f9',1,'polardatamodule']]],
@@ -32,6 +33,6 @@ var searchData=
   ['printtstormsoutput',['printtstormsoutput',['../group___storm_list_node.html#ga33c0687b0581ce7146e2600c50de1fb6',1,'stormlistnodemodule']]],
   ['printvariableinfo',['printvariableinfo',['../group___stride_search_data.html#gaab104fcc77947c6bd81f9e6460166c17',1,'stridesearchdatamodule']]],
   ['psl',['psl',['../group___storm_list_node.html#ga7c536217c4387f8ed620f01222182310',1,'stormlistnodemodule::stormlistnode::psl()'],['../group___stride_search_data.html#gac9699fd149adcc108d67637973ee3cc1',1,'stridesearchdatamodule::stridesearchdata::psl()']]],
-  ['pslthreshold',['pslthreshold',['../group___stride_search.html#ga5ad0ba47c841f4a89892482c6ef4d8a7',1,'stridesearchmodule::stridesearch']]],
-  ['pslwork',['pslwork',['../group___stride_search.html#gaaca200cbf9cd6cbf06e4e99e87b18180',1,'stridesearchmodule::stridesearch']]]
+  ['pslthreshold',['pslthreshold',['../group___stride_search.html#ga3046d4e5fdeb90d936c0dac31854fcab',1,'stridesearchmodule::stridesearchsector']]],
+  ['pslwork',['pslwork',['../group___stride_search.html#ga28c6337451872e41426d640996817d6c',1,'stridesearchmodule::stridesearchsector']]]
 ];

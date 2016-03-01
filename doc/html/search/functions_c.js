@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['polarsearch',['polarsearch',['../_polar_search_8f90.html#aa085676eaa94ce60438fd45f8ffe6ccc',1,'PolarSearch.f90']]],
+  ['plotsector',['plotsector',['../_stride_search_driver_8f90.html#a259be1a5bf8c4214b895f6b56b9e836f',1,'StrideSearchDriver.f90']]],
+  ['polarsearch',['polarsearch',['../_polar_search_driver_8f90.html#aa085676eaa94ce60438fd45f8ffe6ccc',1,'PolarSearchDriver.f90']]],
   ['polarsearchsetup',['polarsearchsetup',['../group___polar_stride_search.html#ga982ffa60727a9773a94b9c5eb5285f27',1,'polarstridesearchmodule']]],
   ['print_5fversion_5fnumber',['print_version_number',['../classutilities__mod.html#aaaeecd45a7428924977f3db80053f1f8',1,'utilities_mod']]],
   ['printcoordinateinfo',['printcoordinateinfo',['../group___stride_search_data.html#ga076b8f29b78c6b1919197e37f286e45b',1,'stridesearchdatamodule']]],

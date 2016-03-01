@@ -11,8 +11,8 @@ var searchData=
   ['maxwind',['maxwind',['../group___track_list_node.html#ga0fb2c399830b0926c1a74dc3188d8e05',1,'trackmodule::tracklistnode']]],
   ['minpsl',['minpsl',['../group___track_list_node.html#ga562ff9c78ce5b6e32552fb14c54d5d58',1,'trackmodule::tracklistnode']]],
   ['month_5fname',['month_name',['../classtime__manager__mod.html#aab287095b1c4324697bcf2278512ede0',1,'time_manager_mod']]],
-  ['mylatis',['mylatis',['../group___stride_search.html#ga35000634282146c6253b95abc9126385',1,'stridesearchmodule::stridesearch']]],
-  ['mylats',['mylats',['../group___stride_search.html#gaf70089d98e0a153baa8df078657191a9',1,'stridesearchmodule::stridesearch']]],
-  ['mylonjs',['mylonjs',['../group___stride_search.html#ga82de959bd43c6889325f3094f6e4796b',1,'stridesearchmodule::stridesearch']]],
-  ['mylons',['mylons',['../group___stride_search.html#ga300fd7182dbcc6f848460106e2701a48',1,'stridesearchmodule::stridesearch']]]
+  ['mylatis',['mylatis',['../group___stride_search.html#ga7899f1664148dc9332017063758a8e7e',1,'stridesearchmodule::stridesearchsector']]],
+  ['mylats',['mylats',['../group___stride_search.html#ga1d66cbd3a19225a3658985689b0d8b9e',1,'stridesearchmodule::stridesearchsector']]],
+  ['mylonjs',['mylonjs',['../group___stride_search.html#gaf9640d5a39688c0a2d86a44db74cedf2',1,'stridesearchmodule::stridesearchsector']]],
+  ['mylons',['mylons',['../group___stride_search.html#gaeef1ae646acd37d9038b00ff6afcc945',1,'stridesearchmodule::stridesearchsector']]]
 ];

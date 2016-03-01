@@ -101,9 +101,11 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:gab2e7342eacabdc93442e31fb41529cf5"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#gab2e7342eacabdc93442e31fb41529cf5">tropicalstridesearchmodule::tropicalsearchsetup</a> (tSearch, southernBoundary, northernBoundary, sectorRadius, pslThreshold, vortThreshold, windThreshold, vortPslDistThreshold, tempExcessThreshold, tempPslDistThreshold, tData)</td></tr>
 <tr class="memdesc:gab2e7342eacabdc93442e31fb41529cf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines search sectors based on sectorRadius, links sectors to data.  <a href="#gab2e7342eacabdc93442e31fb41529cf5">More...</a><br /></td></tr>
 <tr class="separator:gab2e7342eacabdc93442e31fb41529cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3000490e5603b705d7608c8fb5f74238"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga3000490e5603b705d7608c8fb5f74238">tropicalstridesearchmodule::finalizetropicalsearch</a> (tSearch)</td></tr>
-<tr class="memdesc:ga3000490e5603b705d7608c8fb5f74238"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees memory used by a TropicalStrideSearch object which is allocated in TropicalSearchSetup.  <a href="#ga3000490e5603b705d7608c8fb5f74238">More...</a><br /></td></tr>
-<tr class="separator:ga3000490e5603b705d7608c8fb5f74238"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2e0dad1d73a049e43295ad591942a8c1"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga2e0dad1d73a049e43295ad591942a8c1">tropicalstridesearchmodule::allocatetropicalsectormemory</a> (tSearch, tData, stripIndex)</td></tr>
+<tr class="separator:ga2e0dad1d73a049e43295ad591942a8c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac5881170f6337bb03dfec753ba50dea2"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#gac5881170f6337bb03dfec753ba50dea2">tropicalstridesearchmodule::finalizetropicalsector</a> (tSearch)</td></tr>
+<tr class="memdesc:gac5881170f6337bb03dfec753ba50dea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees memory used by a TropicalStrideSearch object which is allocated in TropicalSearchSetup.  <a href="#gac5881170f6337bb03dfec753ba50dea2">More...</a><br /></td></tr>
+<tr class="separator:gac5881170f6337bb03dfec753ba50dea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga42d787f2ba8ccd799223975496cb09bd"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga42d787f2ba8ccd799223975496cb09bd">tropicalstridesearchmodule::printtropicalsearchinfo</a> (tSearch)</td></tr>
 <tr class="memdesc:ga42d787f2ba8ccd799223975496cb09bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints basic info about a TropicalStrideSearch object to the console.  <a href="#ga42d787f2ba8ccd799223975496cb09bd">More...</a><br /></td></tr>
 <tr class="separator:ga42d787f2ba8ccd799223975496cb09bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -122,6 +124,9 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:ga8060d79a4dbe008b4b4a19783ac61d34"><td class="memItemLeft" align="right" valign="top">pure real function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga8060d79a4dbe008b4b4a19783ac61d34">tropicalstridesearchmodule::arithmeticaveragetemp</a> (tSearch)</td></tr>
 <tr class="memdesc:ga8060d79a4dbe008b4b4a19783ac61d34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes an arithemetic average of a sector's vertically averaged temperature.  <a href="#ga8060d79a4dbe008b4b4a19783ac61d34">More...</a><br /></td></tr>
 <tr class="separator:ga8060d79a4dbe008b4b4a19783ac61d34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa57f1517146066fdcac6296ce2d7ba3e"><td class="memItemLeft" align="right" valign="top">pure real function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#gaa57f1517146066fdcac6296ce2d7ba3e">tropicalstridesearchmodule::spatialaveragetemp</a> (tSearch, dataRes)</td></tr>
+<tr class="memdesc:gaa57f1517146066fdcac6296ce2d7ba3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a spatial average of a sector's vertically averaged temperature by approximation with midpoint rule quadrature.  <a href="#gaa57f1517146066fdcac6296ce2d7ba3e">More...</a><br /></td></tr>
+<tr class="separator:gaa57f1517146066fdcac6296ce2d7ba3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1cc286cbe629991112ed94e24a12e5a7"><td class="memItemLeft" align="right" valign="top">real function, dimension(360, <br class="typebreak" />
 180), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga1cc286cbe629991112ed94e24a12e5a7">tropicalstridesearchmodule::getlandmask</a> ()</td></tr>
 <tr class="memdesc:ga1cc286cbe629991112ed94e24a12e5a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an integer array used to define land masks.  <a href="#ga1cc286cbe629991112ed94e24a12e5a7">More...</a><br /></td></tr>
@@ -129,16 +134,67 @@ Functions/Subroutines</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ga5c9b7055d7356c33a0b48d42cf49cc9b"><td class="memItemLeft" align="right" valign="top">real, dimension(:,:), pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga5c9b7055d7356c33a0b48d42cf49cc9b">tropicalstridesearchmodule::tropicalstridesearch::tempwork</a></td></tr>
-<tr class="separator:ga5c9b7055d7356c33a0b48d42cf49cc9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae534d24cf0be0b4bac508c8dd5ffb9bc"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#gae534d24cf0be0b4bac508c8dd5ffb9bc">tropicalstridesearchmodule::tropicalstridesearch::vortpsldistthreshold</a></td></tr>
-<tr class="separator:gae534d24cf0be0b4bac508c8dd5ffb9bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga858cfb5b0f6c3b9ae2fc017f4b81517c"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga858cfb5b0f6c3b9ae2fc017f4b81517c">tropicalstridesearchmodule::tropicalstridesearch::tempexcessthreshold</a></td></tr>
-<tr class="separator:ga858cfb5b0f6c3b9ae2fc017f4b81517c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga524779fa86fdbc85fe9d5d8947cde998"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga524779fa86fdbc85fe9d5d8947cde998">tropicalstridesearchmodule::tropicalstridesearch::temppsldistthreshold</a></td></tr>
-<tr class="separator:ga524779fa86fdbc85fe9d5d8947cde998"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga52d1600362739f7542a58b4089a59deb"><td class="memItemLeft" align="right" valign="top">real, dimension(:,:), allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga52d1600362739f7542a58b4089a59deb">tropicalstridesearchmodule::tropicalstridesearchsector::tempwork</a></td></tr>
+<tr class="separator:ga52d1600362739f7542a58b4089a59deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6aabfb107d014f3ddacb60917ebb10b0"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga6aabfb107d014f3ddacb60917ebb10b0">tropicalstridesearchmodule::tropicalstridesearchsector::vortpsldistthreshold</a></td></tr>
+<tr class="separator:ga6aabfb107d014f3ddacb60917ebb10b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaeebdee7191b5a896d8adbc2e07c46fd7"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#gaeebdee7191b5a896d8adbc2e07c46fd7">tropicalstridesearchmodule::tropicalstridesearchsector::tempexcessthreshold</a></td></tr>
+<tr class="separator:gaeebdee7191b5a896d8adbc2e07c46fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabf8464f4bca021c9a14447edf13263df"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#gabf8464f4bca021c9a14447edf13263df">tropicalstridesearchmodule::tropicalstridesearchsector::temppsldistthreshold</a></td></tr>
+<tr class="separator:gabf8464f4bca021c9a14447edf13263df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a class="anchor" id="ga2e0dad1d73a049e43295ad591942a8c1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine tropicalstridesearchmodule::allocatetropicalsectormemory </td>
+          <td>(</td>
+          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearchsector.html">tropicalstridesearchsector</a>), intent(inout)&#160;</td>
+          <td class="paramname"><em>tSearch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">type(tropicaldata), intent(in)&#160;</td>
+          <td class="paramname"><em>tData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>stripIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00066">66</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___tropical_stride_search_ga2e0dad1d73a049e43295ad591942a8c1_cgraph.png" border="0" usemap="#group___tropical_stride_search_ga2e0dad1d73a049e43295ad591942a8c1_cgraph" alt=""/></div>
+<map name="group___tropical_stride_search_ga2e0dad1d73a049e43295ad591942a8c1_cgraph" id="group___tropical_stride_search_ga2e0dad1d73a049e43295ad591942a8c1_cgraph">
+<area shape="rect" id="node2" href="group___stride_search.html#gaf422dcacc22c11ec7d843c1fbb0f97d4" title="Allocates memory for storing data from a search sector along a latitude line. " alt="" coords="256,5,416,47"/></map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="ga51dc8c668305a1f4d87007cc1ea8e6f2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -162,7 +218,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00320">320</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00275">275</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
 
 </div>
 </div>
@@ -176,7 +232,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">pure real function tropicalstridesearchmodule::arithmeticaveragetemp </td>
           <td>(</td>
-          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearch.html">tropicalstridesearch</a>), intent(in)&#160;</td>
+          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearchsector.html">tropicalstridesearchsector</a>), intent(in)&#160;</td>
           <td class="paramname"><em>tSearch</em></td><td>)</td>
           <td></td>
         </tr>
@@ -197,7 +253,7 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>ArithmeticAverageTemp </dd></dl>
 
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00364">364</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00319">319</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
 
 </div>
 </div>
@@ -214,7 +270,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearch.html">tropicalstridesearch</a>), intent(inout)&#160;</td>
+          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearchsector.html">tropicalstridesearchsector</a>), intent(inout)&#160;</td>
           <td class="paramname"><em>tSearch</em>, </td>
         </tr>
         <tr>
@@ -241,27 +297,27 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00087">87</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00097">97</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group___tropical_stride_search_ga4748afb2fe36e580b60d270085ca562f_cgraph.png" border="0" usemap="#group___tropical_stride_search_ga4748afb2fe36e580b60d270085ca562f_cgraph" alt=""/></div>
 <map name="group___tropical_stride_search_ga4748afb2fe36e580b60d270085ca562f_cgraph" id="group___tropical_stride_search_ga4748afb2fe36e580b60d270085ca562f_cgraph">
-<area shape="rect" id="node2" href="group___stride_search.html#gafebdd427f47c0270a4b8fa4e49eac704" title="Determines the great&#45;circle distance between points on an Earth&#45;sized sphere. " alt="" coords="259,5,398,47"/><area shape="rect" id="node3" href="group___tropical_stride_search.html#ga8060d79a4dbe008b4b4a19783ac61d34" title="Computes an arithemetic average of a sector&#39;s vertically averaged temperature. " alt="" coords="238,71,419,112"/><area shape="rect" id="node4" href="group___tropical_storm_list_node.html#gaf65f5bb5ff4a294b72fa70f4722353a0" title="tropicalstormlistnodemodule\l::tropicalstormlistnode\l::initializetropical" alt="" coords="235,137,423,193"/><area shape="rect" id="node5" href="group___tropical_storm_list_node.html#gac5875fac07312f3c6fdc18cc43eedcd7" title="Adds a node to a linked list. The new node must be initialized with initializeTropical subroutine..." alt="" coords="235,217,423,259"/><area shape="rect" id="node6" href="group___tropical_storm_list_node.html#ga6f1fc55ce58f8c757a8abb703e305d14" title="Copies a TropicalStormListNode. " alt="" coords="471,217,659,259"/><area shape="rect" id="node7" href="group___storm_list_node.html#ga9b34aa8100d47395af8f1c72969bf8aa" title="Copies a StormListNode. " alt="" coords="707,217,852,259"/></map>
+<area shape="rect" id="node2" href="group___tropical_stride_search.html#ga2e0dad1d73a049e43295ad591942a8c1" title="tropicalstridesearchmodule\l::allocatetropicalsectormemory" alt="" coords="235,5,437,47"/><area shape="rect" id="node4" href="group___stride_search.html#ga45e23c227cc33035e298027965d11f6b" title="Defines a search sector relative to a stridesearchdatamodule::stridesearchdata object. Collects indices and locations of grid points within the sector. " alt="" coords="267,71,405,112"/><area shape="rect" id="node5" href="group___stride_search.html#gafebdd427f47c0270a4b8fa4e49eac704" title="Determines the great&#45;circle distance between points on an Earth&#45;sized sphere. " alt="" coords="510,100,649,141"/><area shape="rect" id="node6" href="group___tropical_stride_search.html#gaa57f1517146066fdcac6296ce2d7ba3e" title="Computes a spatial average of a sector&#39;s vertically averaged temperature by approximation with midpoi..." alt="" coords="245,188,427,229"/><area shape="rect" id="node7" href="group___tropical_storm_list_node.html#gaf65f5bb5ff4a294b72fa70f4722353a0" title="tropicalstormlistnodemodule\l::tropicalstormlistnode\l::initializetropical" alt="" coords="242,254,430,310"/><area shape="rect" id="node8" href="group___tropical_storm_list_node.html#gac5875fac07312f3c6fdc18cc43eedcd7" title="Adds a node to a linked list. The new node must be initialized with initializeTropical subroutine..." alt="" coords="242,335,430,376"/><area shape="rect" id="node11" href="group___tropical_stride_search.html#gac5881170f6337bb03dfec753ba50dea2" title="Frees memory used by a TropicalStrideSearch object which is allocated in TropicalSearchSetup. " alt="" coords="245,400,427,441"/><area shape="rect" id="node3" href="group___stride_search.html#gaf422dcacc22c11ec7d843c1fbb0f97d4" title="Allocates memory for storing data from a search sector along a latitude line. " alt="" coords="499,5,659,47"/><area shape="rect" id="node9" href="group___tropical_storm_list_node.html#ga6f1fc55ce58f8c757a8abb703e305d14" title="Copies a TropicalStormListNode. " alt="" coords="485,335,673,376"/><area shape="rect" id="node10" href="group___storm_list_node.html#ga9b34aa8100d47395af8f1c72969bf8aa" title="Copies a StormListNode. " alt="" coords="721,335,867,376"/><area shape="rect" id="node12" href="group___stride_search.html#ga9e6db5f72b70d624376b04e2df001c12" title="Deletes memory used for stride search. This memory was allocated by SearchSetup. " alt="" coords="510,400,649,441"/></map>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="ga3000490e5603b705d7608c8fb5f74238"></a>
+<a class="anchor" id="gac5881170f6337bb03dfec753ba50dea2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">subroutine, public tropicalstridesearchmodule::finalizetropicalsearch </td>
+          <td class="memname">subroutine, public tropicalstridesearchmodule::finalizetropicalsector </td>
           <td>(</td>
-          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearch.html">tropicalstridesearch</a>), intent(inout)&#160;</td>
+          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearchsector.html">tropicalstridesearchsector</a>), intent(inout)&#160;</td>
           <td class="paramname"><em>tSearch</em></td><td>)</td>
           <td></td>
         </tr>
@@ -276,14 +332,14 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00067">67</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00077">77</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="group___tropical_stride_search_ga3000490e5603b705d7608c8fb5f74238_cgraph.png" border="0" usemap="#group___tropical_stride_search_ga3000490e5603b705d7608c8fb5f74238_cgraph" alt=""/></div>
-<map name="group___tropical_stride_search_ga3000490e5603b705d7608c8fb5f74238_cgraph" id="group___tropical_stride_search_ga3000490e5603b705d7608c8fb5f74238_cgraph">
-<area shape="rect" id="node2" href="group___stride_search.html#ga0dcfda73ec73fbe4b2b4eba86f39f462" title="Deletes memory used for stride search. This memory was allocated by SearchSetup. " alt="" coords="235,5,373,47"/></map>
+<div class="center"><img src="group___tropical_stride_search_gac5881170f6337bb03dfec753ba50dea2_cgraph.png" border="0" usemap="#group___tropical_stride_search_gac5881170f6337bb03dfec753ba50dea2_cgraph" alt=""/></div>
+<map name="group___tropical_stride_search_gac5881170f6337bb03dfec753ba50dea2_cgraph" id="group___tropical_stride_search_gac5881170f6337bb03dfec753ba50dea2_cgraph">
+<area shape="rect" id="node2" href="group___stride_search.html#ga9e6db5f72b70d624376b04e2df001c12" title="Deletes memory used for stride search. This memory was allocated by SearchSetup. " alt="" coords="235,5,373,47"/></map>
 </div>
 </p>
 
@@ -304,7 +360,7 @@ Here is the call graph for this function:</div>
 
 <p>Returns an integer array used to define land masks. </p>
 
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00380">380</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00355">355</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
 
 </div>
 </div>
@@ -321,7 +377,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearch.html">tropicalstridesearch</a>), intent(in)&#160;</td>
+          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearchsector.html">tropicalstridesearchsector</a>), intent(in)&#160;</td>
           <td class="paramname"><em>tSearch</em>, </td>
         </tr>
         <tr>
@@ -355,7 +411,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00271">271</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00218">218</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -375,7 +431,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="memname">subroutine, public tropicalstridesearchmodule::printtropicalsearchinfo </td>
           <td>(</td>
-          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearch.html">tropicalstridesearch</a>), intent(in)&#160;</td>
+          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearchsector.html">tropicalstridesearchsector</a>), intent(in)&#160;</td>
           <td class="paramname"><em>tSearch</em></td><td>)</td>
           <td></td>
         </tr>
@@ -390,7 +446,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00075">75</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00085">85</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -425,7 +481,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00303">303</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00258">258</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -438,6 +494,52 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a class="anchor" id="gaa57f1517146066fdcac6296ce2d7ba3e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">pure real function tropicalstridesearchmodule::spatialaveragetemp </td>
+          <td>(</td>
+          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearchsector.html">tropicalstridesearchsector</a>), intent(in)&#160;</td>
+          <td class="paramname"><em>tSearch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real, intent(in)&#160;</td>
+          <td class="paramname"><em>dataRes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes a spatial average of a sector's vertically averaged temperature by approximation with midpoint rule quadrature. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tSearch</td><td>sector that contains data to be averaged </td></tr>
+    <tr><td class="paramname">dataRes</td><td>resolution of the data in degrees </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>AvgT \( = \frac{sum_{K_{IJ}} \overline{T}(\lambda_j,theta_i)\cos\theta_i \Delta\lambda } { \sum_{K_{IJ}} \cos\theta_i\Delta\lambda\) </dd></dl>
+
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00333">333</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="gab2e7342eacabdc93442e31fb41529cf5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -445,7 +547,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="memname">subroutine, public tropicalstridesearchmodule::tropicalsearchsetup </td>
           <td>(</td>
-          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearch.html">tropicalstridesearch</a>), intent(out)&#160;</td>
+          <td class="paramtype">type(<a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearchsector.html">tropicalstridesearchsector</a>), intent(out)&#160;</td>
           <td class="paramname"><em>tSearch</em>, </td>
         </tr>
         <tr>
@@ -519,7 +621,7 @@ Here is the call graph for this function:</div>
 <p>Defines search sectors based on sectorRadius, links sectors to data. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">tSearch</td><td><a class="el" href="class_stride_search.html" title="Container for small sets of working data (enough to contain the largest search sector), used to identify storms. Provides a workspace for spatial search. ">StrideSearch</a> object defined by this subroutine </td></tr>
+    <tr><td class="paramname">tSearch</td><td>StrideSearch object defined by this subroutine </td></tr>
     <tr><td class="paramname">southernBoundary</td><td>southernmost latitude (in degrees_north) of search domain </td></tr>
     <tr><td class="paramname">northernBoundary</td><td>northernmost latitude (in degrees_north) of search domain </td></tr>
     <tr><td class="paramname">sectorRadius</td><td>spatial scale of a typical storm (in km); a maximum of 1 storm will be found in any spherical circle with geodesic radius = sectorRadius </td></tr>
@@ -534,7 +636,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00047">47</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00049">49</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -548,7 +650,7 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a class="anchor" id="ga858cfb5b0f6c3b9ae2fc017f4b81517c"></a>
+<a class="anchor" id="gaeebdee7191b5a896d8adbc2e07c46fd7"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -556,7 +658,51 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real tropicalstridesearchmodule::tropicalstridesearch::tempexcessthreshold</td>
+          <td class="memname">real tropicalstridesearchmodule::tropicalstridesearchsector::tempexcessthreshold</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00026">26</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="gabf8464f4bca021c9a14447edf13263df"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real tropicalstridesearchmodule::tropicalstridesearchsector::temppsldistthreshold</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00027">27</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga52d1600362739f7542a58b4089a59deb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real, dimension(:,:), allocatable tropicalstridesearchmodule::tropicalstridesearchsector::tempwork</td>
         </tr>
       </table>
   </td>
@@ -570,7 +716,7 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="ga524779fa86fdbc85fe9d5d8947cde998"></a>
+<a class="anchor" id="ga6aabfb107d014f3ddacb60917ebb10b0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -578,7 +724,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real tropicalstridesearchmodule::tropicalstridesearch::temppsldistthreshold</td>
+          <td class="memname">real tropicalstridesearchmodule::tropicalstridesearchsector::vortpsldistthreshold</td>
         </tr>
       </table>
   </td>
@@ -592,54 +738,10 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="ga5c9b7055d7356c33a0b48d42cf49cc9b"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">real, dimension(:,:), pointer tropicalstridesearchmodule::tropicalstridesearch::tempwork</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00022">22</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="gae534d24cf0be0b4bac508c8dd5ffb9bc"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">real tropicalstridesearchmodule::tropicalstridesearch::vortpsldistthreshold</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_tropical_stride_search_8f90_source.html#l00023">23</a> of file <a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 28 2016 11:43:42 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Mar 1 2016 08:52:33 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

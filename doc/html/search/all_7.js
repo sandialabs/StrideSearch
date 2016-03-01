@@ -1,8 +1,8 @@
 var searchData=
 [
   ['icefrac',['icefrac',['../group___polar_data.html#ga6302c53bfbe2b4d5f055c50c371e1fa6',1,'polardatamodule::polardata']]],
-  ['icefracthreshold',['icefracthreshold',['../group___polar_stride_search.html#ga57e752719c59b31a57902946b617cfcc',1,'polarstridesearchmodule::polarstridesearch']]],
-  ['icework',['icework',['../group___polar_stride_search.html#ga587cf496d1070849c71c958d3103da52',1,'polarstridesearchmodule::polarstridesearch']]],
+  ['icefracthreshold',['icefracthreshold',['../group___polar_stride_search.html#ga9b56629198d334f14bf8160de18319c7',1,'polarstridesearchmodule::polarstridesearchsector']]],
+  ['icework',['icework',['../group___polar_stride_search.html#ga7803ecd287a814d1425c32ec697c995a',1,'polarstridesearchmodule::polarstridesearchsector']]],
   ['increment_5fdate',['increment_date',['../classget__date__mod.html#a47054bc99d8553dae9e300a0dda00afb',1,'get_date_mod::increment_date()'],['../classtime__manager__mod.html#a516889666438acae3c0fd11bfba4e3a7',1,'time_manager_mod::increment_date()']]],
   ['increment_5fgregorian',['increment_gregorian',['../classtime__manager__mod.html#ade70317b7de0d193fbd4c0f5433f98c1',1,'time_manager_mod']]],
   ['increment_5fjulian',['increment_julian',['../classtime__manager__mod.html#aa61078c7e0e8b4b10bc1c2ffaea8baa9',1,'time_manager_mod']]],

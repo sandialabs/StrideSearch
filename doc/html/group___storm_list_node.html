@@ -92,10 +92,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Defines the linked-list data structure used by <a class="el" href="class_stride_search.html" title="Container for small sets of working data (enough to contain the largest search sector), used to identify storms. Provides a workspace for spatial search. ">StrideSearch</a> to keep track of found storms. This type may be modified (or subclassed, with Fortran 2003) to carry different data for use with different meteorological applications.  
+<p>Defines the linked-list data structure used by StrideSearch to keep track of found storms. This type may be modified (or subclassed, with Fortran 2003) to carry different data for use with different meteorological applications.  
 <a href="#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>Defines the linked-list data structure used by <a class="el" href="class_stride_search.html" title="Container for small sets of working data (enough to contain the largest search sector), used to identify storms. Provides a workspace for spatial search. ">StrideSearch</a> to keep track of found storms. This type may be modified (or subclassed, with Fortran 2003) to carry different data for use with different meteorological applications. </p>
+<p>Defines the linked-list data structure used by StrideSearch to keep track of found storms. This type may be modified (or subclassed, with Fortran 2003) to carry different data for use with different meteorological applications. </p>
 <p><a class="el" href="class_storm_list_node.html" title="Node data type for linked list. Provides a basic extensible class for tracking storms using linked li...">StormListNode</a> procedures are divided into 2 categories: Node procedures that work on one or two nodes directly, and list procedures that work with node pointers. </p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -151,6 +151,8 @@ Variables</h2></td></tr>
 <tr class="memitem:gab804e980acfaddc8dd2f2553e94aec9a"><td class="memItemLeft" align="right" valign="top">real, parameter, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___storm_list_node.html#gab804e980acfaddc8dd2f2553e94aec9a">stormlistnodemodule::deg_2_rad</a> = PI/180.0</td></tr>
 <tr class="memdesc:gab804e980acfaddc8dd2f2553e94aec9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">convert degrees to radians  <a href="#gab804e980acfaddc8dd2f2553e94aec9a">More...</a><br /></td></tr>
 <tr class="separator:gab804e980acfaddc8dd2f2553e94aec9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3cc9fbde9e179a73453cbf5e30c79021"><td class="memItemLeft" align="right" valign="top">real, parameter, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___storm_list_node.html#ga3cc9fbde9e179a73453cbf5e30c79021">stormlistnodemodule::zero_tol</a> = 1e-8</td></tr>
+<tr class="separator:ga3cc9fbde9e179a73453cbf5e30c79021"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae52420d25f27743fe28fd3238cc3d429"><td class="memItemLeft" align="right" valign="top">real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___storm_list_node.html#gae52420d25f27743fe28fd3238cc3d429">stormlistnodemodule::stormlistnode::lon</a> = 0.0</td></tr>
 <tr class="memdesc:gae52420d25f27743fe28fd3238cc3d429"><td class="mdescLeft">&#160;</td><td class="mdescRight">degrees east  <a href="#gae52420d25f27743fe28fd3238cc3d429">More...</a><br /></td></tr>
 <tr class="separator:gae52420d25f27743fe28fd3238cc3d429"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -213,7 +215,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00114">114</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00115">115</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -259,7 +261,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00091">91</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00092">92</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -285,7 +287,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00206">206</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00207">207</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -364,7 +366,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00066">66</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00067">67</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -381,7 +383,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00047">47</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00048">48</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -418,7 +420,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00218">218</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00219">219</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -455,7 +457,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00244">244</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00245">245</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -520,7 +522,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00277">277</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00278">278</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -557,7 +559,7 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00140">140</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00141">141</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -585,7 +587,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00304">304</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00305">305</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -642,7 +644,7 @@ Here is the call graph for this function:</div>
 
 <p>degrees north </p>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00035">35</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00036">36</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -666,7 +668,7 @@ Here is the call graph for this function:</div>
 
 <p>index of latitude in data file latitude vector </p>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00037">37</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00038">38</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -688,7 +690,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00041">41</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00042">42</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -712,7 +714,7 @@ Here is the call graph for this function:</div>
 
 <p>degrees east </p>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00034">34</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00035">35</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -736,7 +738,7 @@ Here is the call graph for this function:</div>
 
 <p>index of longitude in data file longitude vector </p>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00036">36</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00037">37</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -758,7 +760,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00043">43</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00044">44</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -798,7 +800,7 @@ Here is the call graph for this function:</div>
 
 <p>sea level pressure min (hPa or Pa) </p>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00039">39</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00040">40</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -836,7 +838,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00042">42</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00043">43</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -860,7 +862,7 @@ Here is the call graph for this function:</div>
 
 <p>cyclonic vorticity max (1/s) </p>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00038">38</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00039">39</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
@@ -884,14 +886,28 @@ Here is the call graph for this function:</div>
 
 <p>surface or 850 hPa wind speed max (m/s) </p>
 
-<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00040">40</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00041">41</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ga3cc9fbde9e179a73453cbf5e30c79021"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real, parameter, public stormlistnodemodule::zero_tol = 1e-8</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="_storm_list_node_8f90_source.html#l00026">26</a> of file <a class="el" href="_storm_list_node_8f90_source.html">StormListNode.f90</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 28 2016 11:43:42 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Mar 1 2016 08:52:33 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

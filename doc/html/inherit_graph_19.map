@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structstridesearchmodule_1_1stridesearch.html" title="stridesearchmodule\l::stridesearch" alt="" coords="5,5,144,47"/>
+<area shape="rect" id="node1" href="$class_stride_search_sector.html" title="Container for small sets of working data (enough to contain the largest search sector), used to identify storms. Provides a workspace for spatial search. " alt="" coords="5,46,143,73"/>
+<area shape="rect" id="node2" href="$structpolarstridesearchmodule_1_1polarstridesearchsector.html" title="polarstridesearchmodule\l::polarstridesearchsector" alt="" coords="197,5,365,47"/>
+<area shape="rect" id="node3" href="$structtropicalstridesearchmodule_1_1tropicalstridesearchsector.html" title="tropicalstridesearchmodule\l::tropicalstridesearchsector" alt="" coords="191,71,372,112"/>
 </map>

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['ncfileid',['ncfileid',['../group___stride_search_data.html#ga58092194c1104032aec55366f72e006b',1,'stridesearchdatamodule::stridesearchdata']]],
-  ['neighborhood',['neighborhood',['../group___stride_search.html#ga975f10fad31911e7f6489550725f3240',1,'stridesearchmodule::stridesearch']]],
+  ['neighborhood',['neighborhood',['../group___stride_search.html#gaaa319108495374e186b4705a9783589b',1,'stridesearchmodule::stridesearchsector']]],
   ['netcdfutilities',['netcdfUtilities',['../group__netcdf_utilities.html',1,'']]],
   ['netcdfutilities_2ef90',['netcdfUtilities.f90',['../netcdf_utilities_8f90.html',1,'']]],
   ['netcdfutilitiesmodule',['netcdfutilitiesmodule',['../classnetcdfutilitiesmodule.html',1,'']]],
@@ -12,6 +12,7 @@ var searchData=
   ['nexttropical',['nexttropical',['../group___tropical_storm_list_node.html#gaef94c668644f5a42a753d49d4c9397ed',1,'tropicalstormlistnodemodule::tropicalstormlistnode']]],
   ['nlat',['nlat',['../group___stride_search_data.html#ga49b7dbd5aaefc70392bbf62a3a54f94f',1,'stridesearchdatamodule::stridesearchdata']]],
   ['nlon',['nlon',['../group___stride_search_data.html#gae12abe67d474599aea9fa2474e77bc48',1,'stridesearchdatamodule::stridesearchdata']]],
+  ['nlonsperlatline',['nlonsperlatline',['../group___stride_search.html#gabee1964a7db2b3da899b1ffd7dd2dcae',1,'stridesearchmodule']]],
   ['nml_5ferror_5fcodes',['nml_error_codes',['../classutilities__mod.html#ad46f1e3c92982d1a3d700a411571aec4',1,'utilities_mod']]],
   ['nml_5ferror_5finit',['nml_error_init',['../classutilities__mod.html#a7ff2ad6fbfbc9e2f011805dc2368fe0d',1,'utilities_mod']]],
   ['no_5fcalendar',['no_calendar',['../classtime__manager__mod.html#ada6e4483334e9499b8987ad83930d053',1,'time_manager_mod']]],

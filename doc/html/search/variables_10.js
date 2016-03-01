@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['tempexcessthreshold',['tempexcessthreshold',['../group___tropical_stride_search.html#ga858cfb5b0f6c3b9ae2fc017f4b81517c',1,'tropicalstridesearchmodule::tropicalstridesearch']]],
+  ['tempexcessthreshold',['tempexcessthreshold',['../group___tropical_stride_search.html#gaeebdee7191b5a896d8adbc2e07c46fd7',1,'tropicalstridesearchmodule::tropicalstridesearchsector']]],
   ['templat',['templat',['../group___tropical_storm_list_node.html#ga80598b2ec142d8af1d2b94d1c72d083a',1,'tropicalstormlistnodemodule::tropicalstormlistnode']]],
   ['templon',['templon',['../group___tropical_storm_list_node.html#gae3bfc93c6d4babb00223def1a572153a',1,'tropicalstormlistnodemodule::tropicalstormlistnode']]],
-  ['temppsldistthreshold',['temppsldistthreshold',['../group___tropical_stride_search.html#ga524779fa86fdbc85fe9d5d8947cde998',1,'tropicalstridesearchmodule::tropicalstridesearch']]],
-  ['tempwork',['tempwork',['../group___polar_stride_search.html#ga59f9c47128193a5899b46ef6b733fb3f',1,'polarstridesearchmodule::polarstridesearch::tempwork()'],['../group___tropical_stride_search.html#ga5c9b7055d7356c33a0b48d42cf49cc9b',1,'tropicalstridesearchmodule::tropicalstridesearch::tempwork()']]],
+  ['temppsldistthreshold',['temppsldistthreshold',['../group___tropical_stride_search.html#gabf8464f4bca021c9a14447edf13263df',1,'tropicalstridesearchmodule::tropicalstridesearchsector']]],
+  ['tempwork',['tempwork',['../group___polar_stride_search.html#gacb16be1caeff8fc6ad7cb7b0370db8b0',1,'polarstridesearchmodule::polarstridesearchsector::tempwork()'],['../group___tropical_stride_search.html#ga52d1600362739f7542a58b4089a59deb',1,'tropicalstridesearchmodule::tropicalstridesearchsector::tempwork()']]],
   ['theta700',['theta700',['../group___polar_data.html#gabc3b36e3958d89a0905e4be74167152c',1,'polardatamodule::polardata']]],
   ['thicklat',['thicklat',['../group___tropical_storm_list_node.html#ga5356dd8371161df0b448296eb021fba8',1,'tropicalstormlistnodemodule::tropicalstormlistnode']]],
   ['thicklon',['thicklon',['../group___tropical_storm_list_node.html#ga632da3030b9fe98e8813a86b15b58f33',1,'tropicalstormlistnodemodule::tropicalstormlistnode']]],

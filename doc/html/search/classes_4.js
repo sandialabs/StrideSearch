@@ -6,7 +6,7 @@ var searchData=
   ['polarlowlistnode',['PolarLowListNode',['../class_polar_low_list_node.html',1,'']]],
   ['polarlowlistnode',['polarlowlistnode',['../structpolarlowlistnodemodule_1_1polarlowlistnode.html',1,'polarlowlistnodemodule']]],
   ['polarlowlistnodemodule',['polarlowlistnodemodule',['../classpolarlowlistnodemodule.html',1,'']]],
-  ['polarstridesearch',['polarstridesearch',['../structpolarstridesearchmodule_1_1polarstridesearch.html',1,'polarstridesearchmodule']]],
   ['polarstridesearch',['PolarStrideSearch',['../class_polar_stride_search.html',1,'']]],
-  ['polarstridesearchmodule',['polarstridesearchmodule',['../classpolarstridesearchmodule.html',1,'']]]
+  ['polarstridesearchmodule',['polarstridesearchmodule',['../classpolarstridesearchmodule.html',1,'']]],
+  ['polarstridesearchsector',['polarstridesearchsector',['../structpolarstridesearchmodule_1_1polarstridesearchsector.html',1,'polarstridesearchmodule']]]
 ];

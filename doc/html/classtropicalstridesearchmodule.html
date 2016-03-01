@@ -106,7 +106,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Types</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearch.html">tropicalstridesearch</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtropicalstridesearchmodule_1_1tropicalstridesearchsector.html">tropicalstridesearchsector</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -114,9 +114,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:gab2e7342eacabdc93442e31fb41529cf5"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#gab2e7342eacabdc93442e31fb41529cf5">tropicalsearchsetup</a> (tSearch, southernBoundary, northernBoundary, sectorRadius, pslThreshold, vortThreshold, windThreshold, vortPslDistThreshold, tempExcessThreshold, tempPslDistThreshold, tData)</td></tr>
 <tr class="memdesc:gab2e7342eacabdc93442e31fb41529cf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines search sectors based on sectorRadius, links sectors to data.  <a href="group___tropical_stride_search.html#gab2e7342eacabdc93442e31fb41529cf5">More...</a><br /></td></tr>
 <tr class="separator:gab2e7342eacabdc93442e31fb41529cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3000490e5603b705d7608c8fb5f74238"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga3000490e5603b705d7608c8fb5f74238">finalizetropicalsearch</a> (tSearch)</td></tr>
-<tr class="memdesc:ga3000490e5603b705d7608c8fb5f74238"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees memory used by a TropicalStrideSearch object which is allocated in TropicalSearchSetup.  <a href="group___tropical_stride_search.html#ga3000490e5603b705d7608c8fb5f74238">More...</a><br /></td></tr>
-<tr class="separator:ga3000490e5603b705d7608c8fb5f74238"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac5881170f6337bb03dfec753ba50dea2"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#gac5881170f6337bb03dfec753ba50dea2">finalizetropicalsector</a> (tSearch)</td></tr>
+<tr class="memdesc:gac5881170f6337bb03dfec753ba50dea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees memory used by a TropicalStrideSearch object which is allocated in TropicalSearchSetup.  <a href="group___tropical_stride_search.html#gac5881170f6337bb03dfec753ba50dea2">More...</a><br /></td></tr>
+<tr class="separator:gac5881170f6337bb03dfec753ba50dea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga42d787f2ba8ccd799223975496cb09bd"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga42d787f2ba8ccd799223975496cb09bd">printtropicalsearchinfo</a> (tSearch)</td></tr>
 <tr class="memdesc:ga42d787f2ba8ccd799223975496cb09bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints basic info about a TropicalStrideSearch object to the console.  <a href="group___tropical_stride_search.html#ga42d787f2ba8ccd799223975496cb09bd">More...</a><br /></td></tr>
 <tr class="separator:ga42d787f2ba8ccd799223975496cb09bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,9 +139,14 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:ga2e0dad1d73a049e43295ad591942a8c1"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga2e0dad1d73a049e43295ad591942a8c1">allocatetropicalsectormemory</a> (tSearch, tData, stripIndex)</td></tr>
+<tr class="separator:ga2e0dad1d73a049e43295ad591942a8c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8060d79a4dbe008b4b4a19783ac61d34"><td class="memItemLeft" align="right" valign="top">pure real function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#ga8060d79a4dbe008b4b4a19783ac61d34">arithmeticaveragetemp</a> (tSearch)</td></tr>
 <tr class="memdesc:ga8060d79a4dbe008b4b4a19783ac61d34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes an arithemetic average of a sector's vertically averaged temperature.  <a href="group___tropical_stride_search.html#ga8060d79a4dbe008b4b4a19783ac61d34">More...</a><br /></td></tr>
 <tr class="separator:ga8060d79a4dbe008b4b4a19783ac61d34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa57f1517146066fdcac6296ce2d7ba3e"><td class="memItemLeft" align="right" valign="top">pure real function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___tropical_stride_search.html#gaa57f1517146066fdcac6296ce2d7ba3e">spatialaveragetemp</a> (tSearch, dataRes)</td></tr>
+<tr class="memdesc:gaa57f1517146066fdcac6296ce2d7ba3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a spatial average of a sector's vertically averaged temperature by approximation with midpoint rule quadrature.  <a href="group___tropical_stride_search.html#gaa57f1517146066fdcac6296ce2d7ba3e">More...</a><br /></td></tr>
+<tr class="separator:gaa57f1517146066fdcac6296ce2d7ba3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this module was generated from the following file:<ul>
 <li><a class="el" href="_tropical_stride_search_8f90_source.html">TropicalStrideSearch.f90</a></li>
@@ -149,7 +154,7 @@ Private Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 28 2016 11:43:42 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Mar 1 2016 08:52:34 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

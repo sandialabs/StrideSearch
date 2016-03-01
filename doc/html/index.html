@@ -148,16 +148,16 @@ This build script assumes they are installed to the same location.</p>
 <p>After running the configure script, build the project with </p><pre class="fragment">make
 </pre><p>Then install it with </p><pre class="fragment">make install
 </pre><h1>Software / algorithm design </h1>
-<p>The fundamental data structure in the <a class="el" href="class_stride_search.html" title="Container for small sets of working data (enough to contain the largest search sector), used to identify storms. Provides a workspace for spatial search. ">StrideSearch</a> software is a linked-list e.g. <a class="el" href="group___storm_list_node.html">StormListNode</a>, <a class="el" href="group___track_list_node.html">TrackListNode</a>. <br />
+<p>The fundamental data structure in the StrideSearch software is a linked-list e.g. <a class="el" href="group___storm_list_node.html">StormListNode</a>, <a class="el" href="group___track_list_node.html">TrackListNode</a>. <br />
 We do not know in advance how many storms will be detected per timestep, or how many storm tracks may be built from one dataset. <br />
 Linked-lists handled these unknowns using dynamic memory allocation; each time a new storm or new track is found, the software allocates memory for that storm and saves its information to that newly allocated memory. <br />
-The basic structure of the linked-lists used by <a class="el" href="class_stride_search.html" title="Container for small sets of working data (enough to contain the largest search sector), used to identify storms. Provides a workspace for spatial search. ">StrideSearch</a> is </p><pre class="fragment">type ListNode
+The basic structure of the linked-lists used by StrideSearch is </p><pre class="fragment">type ListNode
     real :: aStormDatum
     integer :: anotherStormDatum
 
     type(ListNode), pointer :: nextNode
 end type
-</pre><p>Users may alter the data items of a list node (<a class="el" href="class_stride_search.html" title="Container for small sets of working data (enough to contain the largest search sector), used to identify storms. Provides a workspace for spatial search. ">StrideSearch</a> has an example of this: compare <a class="el" href="group___storm_list_node.html">StormListNode</a> to <a class="el" href="group___tropical_storm_list_node.html">TropicalStormListNode</a>). <br />
+</pre><p>Users may alter the data items of a list node (StrideSearch has an example of this: compare <a class="el" href="group___storm_list_node.html">StormListNode</a> to <a class="el" href="group___tropical_storm_list_node.html">TropicalStormListNode</a>). <br />
 The pointer <code>nextNode</code> is the means of constructing and traversing a list. <br />
 It points to the location in memory of the next node or, if it is the end of the list, it is a null pointer. <br />
 Both the spatial search algorithm (<a class="el" href="group___stride_search.html">StrideSearch</a> ) and the temporal correlation algorithm (<a class="el" href="group___track_list_node.html">TrackListNode</a>) use this basic data structure.</p>
@@ -174,7 +174,7 @@ enddo
 <p>This basic data structure is applied to each application. Each application has three files (and three data types) associated with it.</p><ol type="1">
 <li>A data file. <a class="el" href="class_stride_search_data.html" title="Container class for data read from a netcdf file. ">StrideSearchData</a> provides the basic data container for netcdf data to be searched. This data type may be extended to facilitate other applications. Examples are provided by <a class="el" href="class_tropical_data.html" title="Extends StrideSearchData to tropical cylcone applications. ">TropicalData</a> and <a class="el" href="class_polar_data.html" title="Container for netcdf data read from file. ">PolarData</a>.</li>
 <li>A storm list node. The linked list of storms per-timestep that will be output by the search algorithm. The basic type is given by <a class="el" href="class_storm_list_node.html" title="Node data type for linked list. Provides a basic extensible class for tracking storms using linked li...">StormListNode</a>, and example extensions may be found in <a class="el" href="class_tropical_storm_list_node.html" title="Linked list node for tropical storm detection. ">TropicalStormListNode</a> and <a class="el" href="class_polar_low_list_node.html" title="Extends the basic StormListNode to include data relevant to polar low identification. ">PolarLowListNode</a>.</li>
-<li>A driver program. Examples are given by <a class="el" href="_polar_search_8f90.html" title="Driver program for a StrideSearch of polar latitudes. ">PolarSearch.f90</a> and <a class="el" href="_tropical_search_driver_8f90.html" title="Driver program for spatial searches for tropical storms. Demonstrates TropicalStormListNode, TropicalData, and TropicalStrideSearch. ">TropicalSearchDriver.f90</a>.</li>
+<li>A driver program. Examples are given by PolarSearch.f90 and <a class="el" href="_tropical_search_driver_8f90.html" title="Driver program for spatial searches for tropical storms. Demonstrates TropicalStormListNode, TropicalData, and TropicalStrideSearch. ">TropicalSearchDriver.f90</a>.</li>
 </ol>
 <h1>Use </h1>
 <p>Users may extend the basic <a class="el" href="group___storm_list_node.html">StormListNode</a> data type following the example of <a class="el" href="group___tropical_storm_list_node.html">TropicalStormListNode</a> to an application of their choosing. <br />
@@ -193,7 +193,7 @@ An example of each of these extensions of the basic Stride Search data types and
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 28 2016 11:43:43 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Mar 1 2016 08:52:34 for StrideSearch by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

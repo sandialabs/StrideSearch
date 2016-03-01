@@ -11,7 +11,9 @@ var searchData=
   ['set_5fdate_5fno_5fleap',['set_date_no_leap',['../classtime__manager__mod.html#ac7ce396f6f67f64d717ea1b7b353e64b',1,'time_manager_mod']]],
   ['set_5fdate_5fthirty',['set_date_thirty',['../classtime__manager__mod.html#a2a74fe391f0b15f16a7db3cf6f9f24d1',1,'time_manager_mod']]],
   ['set_5ftime',['set_time',['../classtime__manager__mod.html#a49d0e8625bf9d4526a982406e7cd5415',1,'time_manager_mod']]],
+  ['spatialaveragetemp',['spatialaveragetemp',['../group___tropical_stride_search.html#gaa57f1517146066fdcac6296ce2d7ba3e',1,'tropicalstridesearchmodule']]],
   ['spheredistance',['spheredistance',['../group___stride_search.html#gafebdd427f47c0270a4b8fa4e49eac704',1,'stridesearchmodule']]],
   ['stormlisttester',['stormlisttester',['../_storm_list_tester_8f90.html#a34a5c830638c6b93fa598c69f6060c8e',1,'StormListTester.f90']]],
-  ['stormtrackdatatest',['stormtrackdatatest',['../_track_data_test_8f90.html#aae0ce8bccd2c1a41bab453bbdccae9c8',1,'TrackDataTest.f90']]]
+  ['stormtrackdatatest',['stormtrackdatatest',['../_track_data_test_8f90.html#aae0ce8bccd2c1a41bab453bbdccae9c8',1,'TrackDataTest.f90']]],
+  ['stridesearchdriver',['stridesearchdriver',['../_stride_search_driver_8f90.html#ad089bbd9a4dfc3b6a69d60900dd49a7e',1,'StrideSearchDriver.f90']]]
 ];
