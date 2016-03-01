@@ -108,7 +108,9 @@ subroutine DoTropicalSearch( tstormList, tSearch, tData )
 	logical :: foundStorm, crit1, crit2, crit3, crit4
 	real :: avgT
 	integer :: nStrips, tid
+	real :: dataRes
 
+	dataRes = 360.0 / tData%nLon
 	allocate(tempNode)
 	!
 	!	loop over search sector centers 
@@ -154,7 +156,8 @@ subroutine DoTropicalSearch( tstormList, tSearch, tData )
 				stormVort = maxval(tSearch%vortWork)
 				stormWind = maxval(tSearch%windWork)
 				
-				avgT = ArithmeticAverageTemp(tSearch)
+				!avgT = ArithmeticAverageTemp(tSearch)
+				avgT = SpatialAverageTemp(tSearch, dataRes)
 				tSearch%tempWork = tSearch%tempWork - avgT
 				stormTemp = maxval(tSearch%tempWork)
 				
@@ -320,6 +323,32 @@ pure function ArithmeticAverageTemp( tSearch )
 	real :: tsum
 	tsum = sum( tSearch%tempWork, MASK=tSearch%neighborhood)	
 	ArithmeticAverageTemp = tsum / count(tSearch%neighborhood)
+end function
+
+!> @brief Computes a spatial average of a sector's vertically averaged temperature by approximation 
+!> with midpoint rule quadrature.
+!> @param tSearch sector that contains data to be averaged
+!> @param dataRes resolution of the data in degrees
+!> @return AvgT @f$ = \frac{sum_{K_{IJ}} \overline{T}(\lambda_j,theta_i)\cos\theta_i \Delta\lambda } { \sum_{K_{IJ}} \cos\theta_i\Delta\lambda@f$
+pure function SpatialAverageTemp( tSearch, dataRes )
+	real :: SpatialAverageTemp
+	type(TropicalStrideSearchSector), intent(in) :: tSearch
+	real, intent(in) :: dataRes
+	!
+	real :: area
+	real :: tsum
+	integer :: i, j
+	
+	area = 0.0
+	tsum = 0.0
+	do j = 1, size(tSearch%myLonJs)
+		do i = 1, size(tSearch%myLatIs)
+			if ( tSearch%neighborhood(i,j) ) then
+				area = area + cos( tSearch%myLats(i) * DEG_2_RAD ) * dataRes * DEG_2_RAD
+				tsum = tsum + tSearch%tempWork(i,j) * cos( tSearch%myLats(i) * DEG_2_RAD ) * dataRes * DEG_2_RAD
+			endif
+		enddo
+	enddo
 end function
 
 !> @brief Returns an integer array used to define land masks

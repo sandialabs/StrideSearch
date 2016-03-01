@@ -11,7 +11,7 @@ module TrackModule
 !! @{
 use StormListNodeModule, only : DEG_2_RAD, SameLocation
 use StrideSearchModule, only : SphereDistance
-!use TropicalStrideSearchModule, only : GetLandMask
+use TropicalStrideSearchModule, only : GetLandMask
 use StormTrackDataModule
 
 implicit none
@@ -413,32 +413,32 @@ subroutine MarkStormsOverLand( trackList )
 	integer, dimension(360,180) :: mask
 	real :: dLon, dLat, lon0, lat0, origLon, origLat
 	integer :: i, j, counter
-!	mask = GetLandMask()
-!
-!	lon0 = 0.0
-!	dLon = 1.0
-!	
-!	lat0 = -89.5	
-!	dLat = 1.0
-!	
-!	current => trackList
-!	counter = 0
-!	do while ( associated(current) ) 
-!		origLon = current%trackLons(1)
-!		origLat = current%trackLats(1)
-!		j = ( origLat - lat0 ) + 1.5
-!		i = ( origLon - lon0 ) + 1.5
-!		if ( i == 0 ) i = 360
-!		if ( i > 360 ) i = i - 360
-!		if ( mask(i,j) /= 0 ) then 
-!			current%originOverWater = .FALSE.
-!			counter = counter + 1
-!		endif
-!		current => current%nextTrack
-!	enddo
-!	
-!	print *, counter, " of ", trackList%nTracks, " storms originate over land."
-!		
+	mask = GetLandMask()
+
+	lon0 = 0.0
+	dLon = 1.0
+	
+	lat0 = -89.5	
+	dLat = 1.0
+	
+	current => trackList
+	counter = 0
+	do while ( associated(current) ) 
+		origLon = current%trackLons(1)
+		origLat = current%trackLats(1)
+		j = ( origLat - lat0 ) + 1.5
+		i = ( origLon - lon0 ) + 1.5
+		if ( i == 0 ) i = 360
+		if ( i > 360 ) i = i - 360
+		if ( mask(i,j) /= 0 ) then 
+			current%originOverWater = .FALSE.
+			counter = counter + 1
+		endif
+		current => current%nextTrack
+	enddo
+	
+	print *, counter, " of ", trackList%nTracks, " storms originate over land."
+		
 end subroutine
 
 !> @brief Given a storm's maximum wind speed, returns the hurricane category.
