@@ -8,27 +8,6 @@ from math import floor, ceil, radians, degrees, cos, pi
 """Earth mean sea level radius in kilometers"""
 earthRadius_km = 6371.220
 
-#class Sector(object):
-#    __metaclass__ = ABCMeta
-#    
-#    def __init__(self, lat, lon, radius_km):
-#        self.lat = lat
-#        self.lon = lon
-#        self.radius = radius_km
-#    def __repr__(self):
-#        return "<%s: lat = %s, lon = %s, radius = %s>"%(self.__class__.__name__, self.lat, self.lon, self.radius)
-#        
-#    @abstractmethod 
-#    def registerDataPoints(self):
-#        pass
-#
-#class UnifLatLonSector(Sector):
-#    def registerDataPoints(self, latVals, latInds, lonVals, lonInds):
-#        self.latVals = latVals
-#        self.latInds = latInds
-#        self.lonVals = lonVals
-#        self.lonInds = lonInds
-
 class SectorList(object):
     """
     SectorList contain the sector centers defined by the Stride Search algorithm.
