@@ -9,7 +9,7 @@ from glob import glob
 from os import chdir
 from SectorList import SectorListLatLon
 from Data import LatLonSearchData
-from Event import Event, print_copyright
+from Event import Event, print_copyright, consolidateEventList
 from IdentCriteria import MaxCriterion, MinCriterion
 
 print_copyright()
@@ -21,17 +21,19 @@ dataPath = "/Users/pabosle/Desktop/dataTemp"
 #
 #   USER: DEFINE SEARCH REGION, EVENT RADIUS
 #
-southBnd = -90.0
-northBnd = 90.0
-westBnd = 0.0
-eastBnd = 360.0
-radius = 1000.0
+southBnd = 50.0
+northBnd = 60.0
+westBnd = 150.0
+eastBnd = 160.0
+radius = 250.0
 
 #
 #   USER: DEFINE IDENTIFICATION CRITERIA
 #
-criteria = [MaxCriterion('VORBOT', 1.0e-4), MinCriterion('PSL', 990.0)]
-
+criteria = [MaxCriterion('VORBOT', 3.0e-4), MinCriterion('PSL', 99000.0)]
+print 'identification criteria set:'
+for crit in criteria:
+    crit.printData()
 
 #
 #   Get list of all netCDF files to search
@@ -43,6 +45,8 @@ ncFiles = glob("*.nc")
 #   Build search sectors
 #
 sl = SectorListLatLon(southBnd, northBnd, westBnd, eastBnd, radius)
+print 'sector list built:'
+sl.printData()
 #
 #   Setup input data readers
 #
@@ -62,13 +66,15 @@ L = []
 #   Loop over files (NOTE: this loop is embarassingly parallel)
 #
 for dfile in ncFiles:
-    print '...reading file: %s'%(dfile)
+    print 'reading file: %s ...'%(dfile)
     ssdata.updateSourceFile(dfile)
     ssdata.initTime()
+    ssdata.printData()
     #
     #   Loop over time steps (NOTE: this loop is embarassingly parallel)
     #
-    for time_ind in range(ssdata.nTimesteps):
+    for time_ind in range(2):
+        evList = []
         ssdata.loadFileDataForCriteriaAtTimestep(criteria, time_ind)
         #
         #   Loop over sectors (NOTE: this loop is embarassingly parallel)
@@ -78,10 +84,16 @@ for dfile in ncFiles:
             sec = sl.findSectorInData(k, ssdata)
             for crit in criteria:
                 wspc = ssdata.getSectorWorkingDataForCriterion(crit, sec)
-
+                if crit.evaluate(sec, wspc):
+                    evList.append(crit.returnEvent(sec, wspc, ssdata.datetimes[time_ind]))
+        el = consolidateEventList(evList, radius)
+        L = L + el
                 
-                
-                    
+print "found " + str(len(L)) + " events matching criteria."     
+           
+if len(L) <= 20:
+    for ev in L:
+        ev.printData()
 
 if __name__ == "__main__":
     print sl

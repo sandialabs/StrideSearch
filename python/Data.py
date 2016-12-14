@@ -32,6 +32,7 @@ class SearchData(object):
         Need to update for other variable names, e.g., "time_whole" for Aeras
         """
         self.time = self.dfile.variables['time'][:]
+        self.datetimes = [datetime(1,10,1,0) + timedelta(days = t) for t in self.time]
         self.nTimesteps = len(self.time)
     
     def updateSourceFile(self, fname):
@@ -51,6 +52,10 @@ class SearchData(object):
                     print 'WARNING: variable ', crit.varname, ' not found in data file.'
                 else:
                     self.vardata[var] = self.dfile.variables[var][time_index][:][:]
+    
+    def printData(self):
+         print '\tfile start date = ', self.datetimes[0]
+         print '\tfile end date = ', self.datetimes[-1]
                
     def __repr__(self):
         return "<%s: filename = %s>" \
@@ -73,7 +78,7 @@ class LatLonSearchData(SearchData):
         self.lons = self.dfile.variables['lon'][:]
         self.nLat = len(self.lats)
         self.nLon = len(self.lons)
-        self.datetimes = [datetime(1,10,1,0) + timedelta(days = t) for t in self.time]
+        
      
     def getGridDescription(self):
         return [self.nLat, self.nLon]

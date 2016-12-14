@@ -102,6 +102,12 @@ class SectorList(object):
     def __repr__(self):
         return "<%s: southBoundary = %s, northBoundary= %s, westBoundary = %s, eastBoundary = %s, radius = %s>" \
         %(self.__class__.__name__, self.southBnd, self.northBnd, self.westBnd, self.eastBnd, self.radius)
+    
+    def printData(self):
+        print '\tsearch region southwest corner = ' + str((self.southBnd, self.westBnd))
+        print '\tsearch region northeast corner = ' + str((self.northBnd, self.eastBnd))
+        print '\tevent radius = ' + str(self.radius)
+        print '\ttotal number of sectors = ' + str(self.nSectors)
 
 class SectorListLatLon(SectorList):
     def setupSectorsForData(self, gridDesc):
