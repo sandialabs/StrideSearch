@@ -1,3 +1,3 @@
 
 
-__all__ = ['Event', 'IdentCriteria']
+__all__ = ['Event', 'IdentCriteria', 'Data', 'SectorList']
