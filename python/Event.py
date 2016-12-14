@@ -22,19 +22,13 @@ class Event(object):
     An Event is a storm or other relevant event to a user of this software.
     At a minimum, an Event has a date and location that correspond to a data index.
     """
-    def __init__(self, desc, lat, lon, year, month, day, hour, dataIndex = None):
+    def __init__(self, desc, latLon, dtime, dataIndex = None, vals = None):
         self.desc = desc
-        self.lat = lat
-        self.lon = lon
-        self.datetime = datetime(year, month, day, hour);
+        self.latLon = latLon
+        self.datetime = dtime;
         self.dataIndex = dataIndex
-        
-    def latlon(self):
-        """
-        Get the (lat, lon) tuple of an Event.
-        """
-        return (self.lat, self.lon)
-    
+        self.vals = vals
+          
     def __repr__(self):
         return "Event({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7})".format(repr(self.desc), repr(self.lat), repr(self.lon), 
             repr(self.datetime.year), repr(self.datetime.month), repr(self.datetime.day), 
@@ -44,7 +38,7 @@ class Event(object):
                                     
 if __name__ == "__main__":
     print_copyright()
-    ev = Event('unitTest', 45.0, 0.0, 2016, 12, 8, 13)
+    ev = Event('unitTest', (45.0, 0.0), 2016, 12, 8, 13)
     print "ev.latlon() = ", ev.latlon()  
     print ev
 

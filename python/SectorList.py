@@ -24,6 +24,11 @@ def sphereDistance(lat1, lon1, lat2, lon2):
 
 class Sector(object):
     """
+    Sectors are the units of work in Stride Search.
+    Each Sector is defined by its center (lat, lon), its radius (km), its latStride and lonStride, as well
+    as the data points/indices that are contained within the sector's geographic boundaries.
+    
+    Sectors may be constructed by the SectorList::findSectorInData function.
     """
     __metaclass__ = ABCMeta
     def __init__(self, centerLat, centerLon, radius, latStride, lonStride, dataPoints, dataPointIndices):
@@ -49,7 +54,7 @@ class SectorList(object):
     Latitudes in [-90.0, 90.0], Longitudes in [0.0, 360.0].
     radius_km is the Event radius for a particular search application.
     """
-    __metaclass = ABCMeta
+    __metaclass__ = ABCMeta
     
     def __init__(self, southBnd, northBnd, westBnd, eastBnd, radius_km):
         self.southBnd = southBnd

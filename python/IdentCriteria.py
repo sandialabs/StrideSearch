@@ -4,10 +4,15 @@ Implementations for basic criteria are included.
 """
 from Event import Event, print_copyright
 from abc import ABCMeta, abstractmethod
-from numpy import amax, amin, ones, mean
+from numpy import amax, amin, ones, mean, argmax, argmin
 from SectorList import Sector
+from datetime import datetime
 
 class Criterion(object):
+"""
+Each criterion will be evaluated once for each sector, during each time step.
+If an evaluation returns True, then the Criterion can return the corresponding Event.
+"""
     __metaclass__ = ABCMeta
     
     def __init__(self, varname, threshold):
@@ -23,7 +28,7 @@ class Criterion(object):
         return "<%s: varname = %s, threshold = %s>"%(self.__class__.__name__, self.varnames[0], self.threshold)
     
     @abstractmethod        
-    def evaluate(self, data, sector, workspace):
+    def evaluate(self, sector, workspace):
         pass
       
     @abstractmethod
@@ -35,14 +40,18 @@ class MaxCriterion(Criterion):
     Maximum value criterion.  Returns True if the maximum value of the data 
     meets or exceeds the threshold
     """
-    def evaluate(self, data, sector, workspace):
-        if amax(data.ravel(), axis=0) >= self.threshold:
+    def evaluate(self, sector, workspace):
+        if amax(workspace[self.varnames[0]], axis=0) >= self.threshold:
             return True
         else:
             return False
             
-    def returnEvent(self, data, sector, workspace):
-        pass
+    def returnEvent(self, sector, workspace, dtime):
+    	val = amax(workspace[self.varnames[0]])
+        ind = argmax(workspace[self.varnames[0]])
+        vals = {varnames[0] : maxval}
+        desc = varnames[0] + " max"
+        return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
 
                                                         
 class MinCriterion(Criterion):
@@ -50,13 +59,13 @@ class MinCriterion(Criterion):
     Minimum value criterion.  Returns True if the minimum value of the data meets 
     or falls below the threshold.
     """
-    def evaluate(self, data):
+    def evaluate(self, sector, workspace):
         if amin(data.ravel(), axis=0) < self.threshold:
             return True
         else:
             return False
             
-    def returnEvent(self, data, sector):
+    def returnEvent(self, sector, workspace):
         pass
  
 
@@ -67,12 +76,12 @@ class MaxAverageCriterion(Criterion):
     
     NOTE: The average computed here is an arithmetic average, not a spatial average.
     """ 
-    def evaluate(self, data):
+    def evaluate(self, sector, workspace):
         if mean(data.ravel(), axis=0) >= self.threshold:
             return True
         else:
             return False
-    def returnEvent(self, data, sector):
+    def returnEvent(self, sector, workspace):
         pass
   
 
@@ -83,12 +92,12 @@ class VariationExcessCriterion(Criterion):
     
     NOTE: The average computed here is an arithmetic average, not a spatial average.
     """                        
-    def evaluate(self, data):
+    def evaluate(self, sector, workspace):
         if amax(data.ravel(), axis=0) - mean(data.ravel(), axis=0) >= self.threshold:
             return True
         else:
             return False
-    def returnEvent(self, data, sector):
+    def returnEvent(self, sector, workspace):
         pass
         
    
@@ -101,7 +110,7 @@ class DifferenceCriterion(Criterion):
     Difference criterion. Returns True if the maximum element-wise value of the 
     difference data1 - data2 meets or exceeds the threshold.
     """
-    def evaluate(self, data1, data2):
+    def evaluate(self, sector, workspace):
         if amax(data1.ravel() - data2.ravel(), axis=0) >= self.threshold:
             return True
         else:
@@ -111,7 +120,7 @@ class DifferenceCriterion(Criterion):
        return "<%s: varname = %s, varname2 = %s, threshold = %s>"%(self.__class__.__name__, 
         self.varnames[0], self.varnames[1], self.threshold)       
     
-    def returnEvent(self, data, sector):
+    def returnEvent(self, sector, workspace):
         pass 
         
                    
