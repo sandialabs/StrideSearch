@@ -33,7 +33,7 @@ radius = 400.0
 #
 #   USER: DEFINE IDENTIFICATION CRITERIA
 #
-spcCrit = [MaxCriterion('VORBOT', 4.5e-4), MinCriterion('PSL', 96000.0)]
+spcCrit = [MaxCriterion('VORBOT', 5.5e-4), MinCriterion('PSL', 98000.0)]
 minDuration = 24.0 # hours
 maxSpeed = 15.0 # m/s
 print 'identification spcCrit set:'
@@ -101,9 +101,8 @@ for dfile in ncFiles:
     #   Loop over time steps (NOTE: this loop is embarassingly parallel)
     #
     for time_ind in range(2):
-        evList = EventList([])
+        evList = EventList([]) # must be re-initialized with an empty list!
         ssdata.loadFileDataForCriteriaAtTimestep(spcCrit, time_ind)
-#         print "data for datetime ", ssdata.datetimes[time_ind], " loaded."
         dt = ssdata.datetimes[time_ind]
         #
         #   Loop over sectors (NOTE: this loop is embarassingly parallel)
@@ -114,17 +113,9 @@ for dfile in ncFiles:
             for crit in spcCrit:
                 wspc = ssdata.getSectorWorkingDataForCriterion(crit, sec)
                 if crit.evaluate(sec, wspc):
-#                     print "dt in = ", dt
                     ev = crit.returnEvent(sec, wspc, dt)
-#                     ev.printData()
                     evList.addEvent(ev)
-#                     print "dt out = ", ev.datetime
-#         print "***** time_ind = ", time_ind, " *****"
-#         evList.printData()
-#         print "==================="
         evList.removeDuplicates(radius)
-#         evList.printData()
-#         print "********************"
         evList.consolidateRelated(radius)
         L.extend(evList)
          
@@ -133,9 +124,9 @@ print "\tfound " + str(len(L)) + " events matching spcCrit."
            
 if outputSpatialSearch:
     if len(L) <= 20:
-        for ev in L:
-            ev.printData()
+        L.printData()
     else:
+    	# write to file (TODO)
         pass
         
 #

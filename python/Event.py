@@ -8,7 +8,7 @@ software.
 @author: Peter A. Bosler
 """
 from datetime import datetime
-from math import cos, sin, acos, radians
+from math import cos, sin, acos, radians, pi
 
 def print_copyright():
     """Prints Stride Search copyright information"""
@@ -65,7 +65,27 @@ class EventList(object):
                 tt.append(ev.desc)
         return tt
     
+    def maxSeparationDistance(self):
+        d = 0.0
+        for i, ev in enumerate(self.events):
+            for j in range(i+1, len(self.events)):
+                d2 = ev.dist(self.events[j])
+                if d2 > d:
+                    d = d2
+        return d
+    
+    def minSeparationDistance(self):
+        d = 2.0 * pi * earthRadius_km
+        for i, ev in enumerate(self.events):
+            for j in range(i+1, len(self.events)):
+                d2 = ev.dist(self.events[j])
+                if d2 < d:
+                    d = d2
+        return d
+    
     def printData(self):
+        print "Event list data:"
+#         print "\tmin sep. dist = ", self.minSeparationDistance(), ", max sep. dist = ", self.maxSeparationDistance()
         for ev in self.events:
             ev.printData()
     
@@ -159,6 +179,7 @@ class Event(object):
             print '\t', att, ':', getattr(self, att)
         if len(self.related) > 0:
             print '\trelated events:'
+            print "\tmax separtion = %g5 km"%(self.separationDistance())
         for ev in self.related:
             for att in ['desc', 'latLon', 'datetime', 'dataIndex', 'vals']:
                 print '\t\t', att, ':', getattr(ev, att)
@@ -184,6 +205,14 @@ class Event(object):
                 return self.vals['min'] < other.vals['min']
         else:
             raise TypeError("Event comparison ERROR: type mismatch")
+    
+    def separationDistance(self):
+        d = 0.0
+        for ev in self.related:
+            d2 = self.dist(ev)
+            if d2 > d:
+                d = d2
+        return d
     
     def isDuplicate(self, other):
         """Equivalent events have the exact same datetime and data point values."""
