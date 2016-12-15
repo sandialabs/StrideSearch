@@ -49,7 +49,7 @@ class MaxCriterion(Criterion):
     def returnEvent(self, sector, workspace, dtime):
         val = amax(workspace[self.varnames[0]])
         ind = argmax(workspace[self.varnames[0]])
-        vals = {self.varnames[0] : val}
+        vals = {'max' : val}
         desc = self.varnames[0] + " max"
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
 
@@ -66,7 +66,7 @@ class MinCriterion(Criterion):
     def returnEvent(self, sector, workspace, dtime):
         val = amin(workspace[self.varnames[0]])
         ind = argmin(workspace[self.varnames[0]])
-        vals = {self.varnames[0] : val}
+        vals = {'min' : val}
         desc = self.varnames[0] + ' min'
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
  
@@ -84,7 +84,7 @@ class MaxAverageCriterion(Criterion):
     def returnEvent(self, sector, workspace, dtime):
         val = amax(mean(workspace[self.varnames[0]]))
         ind = argmax(mean(workspace[self.varnames[0]]))
-        vals = {self.varnames[0] : val}
+        vals = {'max' : val}
         desc = 'max avg(' + self.varnames[0] + ')'
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
         
@@ -101,7 +101,7 @@ class VariationExcessCriterion(Criterion):
     def returnEvent(self, sector, workspace):
         val = amax(workspace[self.varnames[0]] - mean(workspace[self.varnames[0]]))
         ind = argmax(workspace[self.varnames[0]] - mean(workspace[self.varnames[0]]))
-        vals = {'var(' + self.varnames[0] + ')' : val}
+        vals = {'max' : val}
         desc = 'max var(' + self.varnames[0] + ')'
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
 
@@ -127,9 +127,20 @@ class DifferenceCriterion(Criterion):
     def returnEvent(self, sector, workspace, dtime):
         val = amax(workspace[self.varnames[0]] - workspace[self.varnames[1]])
         ind = argmax(workspace[self.varnames[0]] - workspace[self.varnames[1]])
-        vals = { 'diff(' + self.varnames[0] + ',' + self.varnames[1] + ')' : val}
+        vals = { 'max' : val}
         desc = 'max(' + self.varnames[0] + ' - ' + self.varnames[1] + ')'
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)         
+ 
+class TimeCriteria(object):
+    """
+    Class to encapsulate time-related (rather than space-related) identification criteria.
+    """ 
+    def __init__(self, minDuration, maxSpeed):
+        """
+        Initializes the basic TimeCriteria class with minimum duration in hours and maximum Event speed in meters per second."
+        """
+        self.minDuration = minDuration
+        self.maxSpeed = maxSpeed
         
 if __name__ == "__main__":
     print_copyright()

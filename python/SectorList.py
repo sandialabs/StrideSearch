@@ -1,26 +1,10 @@
 """
 Stride Search Sectors module.
 """
-from Event import Event, print_copyright
+from Event import Event, print_copyright, sphereDistance, earthRadius_km
 from abc import ABCMeta, abstractmethod
 from math import floor, ceil, radians, degrees, cos, sin, acos, pi
 from numpy import zeros, shape
-
-
-earthRadius_km = 6371.220
-
-def sphereDistance(lat1, lon1, lat2, lon2):
-    """
-    Returns the great circle distance between two points on an earth-sized sphere.
-    Assumes input is given in degrees.
-    """
-    __ZERO_TOL = 2.0e-14
-    if abs(lat2 - lat1) < __ZERO_TOL and abs(lon2 - lon1) < __ZERO_TOL:
-        return 0.0
-    else:
-        arclen = acos(sin(radians(lat1)) * sin(radians(lat2)) +
-            cos(radians(lat1)) * cos(radians(lat2)) * cos(radians(lon2) - radians(lon1)))
-        return earthRadius_km * arclen
 
 class Sector(object):
     """
@@ -113,7 +97,6 @@ class SectorListLatLon(SectorList):
     def setupSectorsForData(self, gridDesc):
         self.nLat = gridDesc[0]
         self.nLon = gridDesc[1]
-        print "nLat = ", self.nLat, " nLon = ", self.nLon
         self.dLambda = 2.0 * pi / self.nLon
         self.dataRes = 360.0 / self.nLon
         self.latMinIndex = int(floor((self.southBnd + 90.0) / self.dataRes))
