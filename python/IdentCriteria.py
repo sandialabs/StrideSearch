@@ -4,7 +4,7 @@ Implementations for basic criteria are included.
 """
 from Event import Event, print_copyright
 from abc import ABCMeta, abstractmethod
-from numpy import amax, amin, ones, mean, argmax, argmin, array, linspace, concatenate
+from numpy import amax, amin, ones, mean, argmax, argmin, array, linspace, concatenate, sign, multiply
 from SectorList import Sector
 from datetime import datetime
 
@@ -21,7 +21,13 @@ class Criterion(object):
     
     def addVariableName(self, varname):
         self.varnames.append(varname)    
-                
+    
+    def infoString(self):
+    	return self.returnEventType() + ", threshold = " + str(self.threshold)
+    
+    def printInfo(self):
+        print self.infoString()
+        	                
     def __repr__(self):
         return "<%s: varname = %s, threshold = %s>"%(self.__class__.__name__, self.varnames[0], self.threshold)
     
@@ -37,9 +43,7 @@ class Criterion(object):
     def returnEventType(self):
         pass
    
-    def printData(self):
-    	for att in ['varnames', 'threshold']:
-    		print '\t', att, ':', getattr(self, att)
+    
     
 class MaxCriterion(Criterion):
     """ 
@@ -59,7 +63,25 @@ class MaxCriterion(Criterion):
         desc = self.returnEventType()
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
 
-                                                        
+class MaxSignedCriterion(Criterion):
+    """
+    Maximum value (with sign matching across the equator) criterion.
+    """
+    def evaluate(self, sector, workspace):
+        self.latSigns = array([sign([ll[0] for ll in sector.dataPoints])])
+        return amax(multiply(self.latSigns, workspace[self.varnames[0]])) >= self.threshold
+    
+    def returnEventType(self):
+        return "max(sign(lat) * " + self.varnames[0] + ")"
+    
+    def returnEvent(self, sector, workspace, dtime):
+        val = amax(multiply(self.latSigns, workspace[self.varnames[0]]))
+        ind = argmax(multiply(self.latSigns, workspace[self.varnames[0]]))
+        vals = {'signed max' : val}
+        desc = self.returnEventType()
+        return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
+        
+                                                             
 class MinCriterion(Criterion):
     """ 
     Minimum value criterion.  Returns True if the minimum value of the data meets 
@@ -112,7 +134,7 @@ class VariationExcessCriterion(Criterion):
     def returnEventType(self):
         return "maxVar(" + self.varnames[0] + ")"
 
-    def returnEvent(self, sector, workspace):
+    def returnEvent(self, sector, workspace, dtime):
         val = amax(workspace[self.varnames[0]] - mean(workspace[self.varnames[0]]))
         ind = argmax(workspace[self.varnames[0]] - mean(workspace[self.varnames[0]]))
         vals = {'max var' : val}
@@ -147,6 +169,55 @@ class DifferenceCriterion(Criterion):
         vals = { 'max diff' : val}
         desc = self.returnEventType()
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)         
+
+class CollocationCriterion(Criterion):
+    """
+    Must be applied to an event list after consolidateRelated has been called.
+    """
+    def __init__(self, evType1, evType2, threshold):
+        Criterion.__init__(self, evType1, threshold)
+        self.addVariableName(evType2)
+        
+    def evaluate(self, event):
+        descList = [event.desc]
+        for relEv in event.related:
+            descList.append(relEv.desc)
+        if self.varnames[0] not in descList or self.varnames[1] not in descList:
+            return False
+        else:
+            if event.desc == self.varnames[0]:
+                self.evA = event
+                for relEv in event.related:
+                    if relEv.desc == self.varnames[1]:
+                        self.evB = relEv
+            elif event.desc == self.varnames[1]:
+                self.evA = event
+                for relEv in event.related:
+                    if relEv.desc == self.varnames[0]:
+                        self.evB = relEv
+            else:
+                for ev in event.related:
+                    if ev.desc == self.varnames[0]:
+                        self.evA = ev
+                    elif ev.desc == self.varnames[1]:
+                        self.evB = ev
+            return self.evA.isNear(self.evB, self.threshold)
+            
+    def __repr__(self):
+        return "<%s: evType1 = %s, evType2 = %s, threshold = %s>"%(self.__class__.__name__, 
+        self.varnames[0], self.varnames[1], self.threshold) 
+    
+    def returnEventType(self):
+        return "colloc(" + self.varnames[0] + ", " + self.varnames[1] + ")"
+
+    def returnEvent(self,  dtime):
+        val = self.evA.dist(self.evB)
+        locs = [evA.dataPoints, evB.dataPoints]
+        ind = [evA.dataPointIndices, evB.dataPointIndices]
+        vals = {'dist' : val}
+        desc = self.returnEventType()
+        return Event(desc, locs, dtime, ind, vals)
+
  
 class TimeCriteria(object):
     """
@@ -158,6 +229,15 @@ class TimeCriteria(object):
         """
         self.minDuration = minDuration
         self.maxSpeed = maxSpeed
+    
+    def infoString(self):
+        str1 = ""
+        for att in ['minDuration', 'maxSpeed']:
+            str1 += '\t' + att + ':' + str(getattr(self, att)) + "\n"
+        return str1
+    
+    def printInfo(self):
+        print self.infoString()
         
 if __name__ == "__main__":
     print_copyright()
@@ -165,7 +245,7 @@ if __name__ == "__main__":
     c = MaxCriterion("vorticity", 1.0E-4)
     print 'MaxCriterion created.'
     print(c)
-    c.printData()
+    print c.printInfo()
     # Test evaluate
     rn = datetime.now()
     testDt = datetime(rn.year, rn.month, rn.day, rn.hour)
@@ -182,16 +262,16 @@ if __name__ == "__main__":
     print 'max criterion evaluate result = ', c.evaluate(testSector, maxWorkspace)
     maxEv = c.returnEvent(testSector, maxWorkspace, testDt)
     print 'max criterion returned event = ', maxEv
-    maxEv.printData()
+    maxEv.printInfo()
     
     diffWorkspace = {'a' : linspace(0.0, 50.0, len(secDataPts)), 'b' : linspace(50.0, 100.0, len(secDataPts))}
     cd = DifferenceCriterion("b","a", 1.0)
     print 'DifferenceCriterion created.'
     print cd
-    cd.printData()
+    cd.printInfo()
     print 'DifferenceCriterion evaluate result = ', cd.evaluate(testSector, diffWorkspace)
     diffEv = cd.returnEvent(testSector, diffWorkspace, testDt)
     print 'Difference criterion returned event = ', diffEv
-    diffEv.printData()
+    diffEv.printInfo()
         
                         

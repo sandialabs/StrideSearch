@@ -3,7 +3,8 @@
 from Event import Event, sphereDistance, print_copyright 
 from datetime import timedelta
 from IdentCriteria import TimeCriteria
-from numpy import shape
+from pandas import DataFrame, Series
+from numpy import nan, shape, array
 
 mpsToKph = 3.6
 
@@ -26,12 +27,15 @@ class Track(object):
     def isEmpty(self):
         return len(self.events) == 0
     
-    def printData(self):
-        print "track data: len = ", len(self)
+    def infoString(self):
+        str1 = "track data: len = " + str(len(self)) + "\n"
         for ev in self.events:
-            ev.printData()
-        print "-----------"
-    
+            str1 += ev.printInfo() + "\n-----------\n"
+        return str1
+        
+    def printInfo(self):
+        print self.infoString()
+
     def startDate(self):
         return self.events[0].datetime
     
@@ -41,6 +45,31 @@ class Track(object):
     def duration(self):
         return self.endDate() - self.startDate()
 
+    def getEventTypes(self):
+        tlist = []
+        for ev in self.events:
+            if ev.desc not in tlist:
+                tlist.append(ev.desc)
+            for relEv in ev.related:
+                if relEv.desc not in tlist:
+                    tlist.append(relEv.desc)
+        return tlist
+        
+    
+    def getDataFrame(self):
+        dts = [ev.datetime for ev in self.events]
+        lls = [ev.latLon for ev in self.events]
+        typelist = self.getEventTypes()
+        trackData = { tt : Series(nan, index = dts) for tt in typelist}
+        trackData["lat-lon"] = Series(lls, index=dts)
+        for evInd, ev in enumerate(self.events):
+            unpck = ev.unpackRelated()
+            for unpackedEv in unpck:
+                key = unpackedEv.vals.keys()[0]
+                trackData[unpackedEv.desc][dts[evInd]] = unpackedEv.vals[key]
+        return DataFrame(trackData)    
+            
+            
 class TrackList(object):
     """
     TrackList container that also constructs each Track.
@@ -59,7 +88,7 @@ class TrackList(object):
     def __len__(self):
         return len(self.tracks)
     
-    def printData(self):
+    def infoString(self):
         maxLen = len(self.tracks[0])
         minLen = len(self.tracks[0])
         for track in self.tracks:
@@ -68,20 +97,28 @@ class TrackList(object):
             if len(track) < minLen:
                 minLin = len(track)
                 
-        print "TrackList summary: list length = ", len(self), ": max track len = ", \
-            maxLen, ", min track len = ", minLen
+        str1 =  "TrackList summary: list length = " + str(len(self)) + ": max track len = " + \
+            str(maxLen) + ", min track len = " + str(minLen) + "\n"
         for track in self.tracks:
             lls = {}
             for ev in track.events:
                 lls[ev.datetime] = ev.latLon
-            print lls
+            str1 += str(lls) + "\n.................\n"
+    
+    def printInfo(self):
+        print self.infoString()
+    
+    def getDataFrameList(self):
+        dfl = []
+        for trk in self.tracks:
+            dfl.append(trk.getDataFrame())
     
     def buildTracksFromSpatialResults(self, listOfEventLists):
         """
         This method assumes that the EventLists in listOfEventLists are listed in 
         ascending time-step order.
         """
-        alreadyUsed = [ [False for ev in el] for el in listOfEventLists]
+        alreadyUsed = array([ [False for ev in el] for el in listOfEventLists], dtype = bool)
         trackCounter = 0
         for dtInd, evList in enumerate(listOfEventLists):
             for evInd, ev in enumerate(evList):
@@ -118,7 +155,13 @@ class TrackList(object):
                             # one successor found -- it's the next leg of the track
                             possibleTrack.addEventToTrack(candidates[candidates.keys()[0]])
                             currentEv = candidates[candidates.keys()[0]]
-                            alreadyUsed[tInd+1][candidates.keys()[0]] = True
+                            try:
+                                alreadyUsed[tInd+1][candidates.keys()[0]] = True
+                            except IndexError:
+                                print "TrackBuild ERROR : index ", (tInd + 1, candidates.keys()[0])
+                                print "shape(listOfEventLists) = ", shape(listOfEventLists)
+                                print "shape(alreadyUsed) = ", shape(alreadyUsed)
+                                print "other indices: dtInd = ", dtInd, ", evInd = ", evInd
                         else:
                             # multiple successors found; choose closest one
                             d = currentEv.dist(candidates[candidates.keys()[0]])

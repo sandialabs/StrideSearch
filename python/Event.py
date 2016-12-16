@@ -8,7 +8,7 @@ software.
 @author: Peter A. Bosler
 """
 from datetime import datetime
-from math import cos, sin, acos, radians, pi
+from math import cos, sin, atan2, radians, pi, sqrt
 
 def print_copyright():
     """Prints Stride Search copyright information"""
@@ -34,13 +34,27 @@ def sphereDistance(lat1, lon1, lat2, lon2):
     Returns the great circle distance between two points on an earth-sized sphere.
     Assumes input is given in degrees.
     """
-    __ZERO_TOL = 2.0e-14
+    __ZERO_TOL = 2.0e-9
     if abs(lat2 - lat1) < __ZERO_TOL and abs(lon2 - lon1) < __ZERO_TOL:
-        return 0.0
+            return 0.0
     else:
-        arclen = acos(sin(radians(lat1)) * sin(radians(lat2)) +
-            cos(radians(lat1)) * cos(radians(lat2)) * cos(radians(lon2) - radians(lon1)))
-        return earthRadius_km * arclen 
+        xa = cos(radians(lat1)) * cos(radians(lon1))
+        ya = cos(radians(lat1)) * sin(radians(lon1))
+        za = sin(radians(lat1))
+        xb = cos(radians(lat2)) * cos(radians(lon2))
+        yb = cos(radians(lat2)) * sin(radians(lon2))
+        zb = sin(radians(lat2))
+        
+        cp1 = ya * zb - yb * za
+        cp2 = xb * za - xa * zb
+        cp3 = xa * yb - xb * ya
+            
+        cpnorm = sqrt(cp1 * cp1 + cp2 * cp2 + cp3 * cp3)
+        
+        dp = xa * xb + ya * yb + za * zb
+        
+        arclen = atan2(cpnorm, dp)
+        return earthRadius_km * arclen
 
 class EventList(object):
     def __init__(self, evList = []):
@@ -63,6 +77,9 @@ class EventList(object):
         for ev in self.events:
             if ev.desc not in tt:
                 tt.append(ev.desc)
+            for relEv in ev.related:
+                if relEv.desc not in tt:
+                    tt.append(relEv.desc)
         return tt
     
     def maxSeparationDistance(self):
@@ -83,11 +100,14 @@ class EventList(object):
                     d = d2
         return d
     
-    def printData(self):
-        print "Event list data:"
-#         print "\tmin sep. dist = ", self.minSeparationDistance(), ", max sep. dist = ", self.maxSeparationDistance()
+    def infoString(self):
+        str1 = "Event list data:\n"
         for ev in self.events:
-            ev.printData()
+            str1 += ev.infoString()
+        return str1
+        
+    def printInfo(self):
+        print self.infoString()
     
     def removeDuplicates(self, radius):
         """
@@ -154,10 +174,14 @@ class EventList(object):
                 newevents.append(ev)
         self.events = newevents     
       
-    def requireCollocation(self, nRelated):
+    def requireCollocation(self, collocCriteria):
         newevents = []
         for ev in self.events:
-            if 1 + len(ev.related) >= nRelated:
+            collCount = 0
+            for crit in collocCriteria:
+                if crit.evaluate(ev):
+                    collCount += 1
+            if collCount == len(collocCriteria):
                 newevents.append(ev)
         self.events = newevents
                 
@@ -179,18 +203,29 @@ class Event(object):
         return "Event({0}, {1}, {2}, {3}, {4})".format(repr(self.desc), repr(self.latLon),
              repr(self.datetime), repr(self.dataIndex), repr(self.vals))
      
-    def printData(self):
-        print "Event record:"
+    def infoString(self):
+        str1 = "Event record:\n"
         for att in ['desc', 'latLon', 'datetime', 'dataIndex', 'vals']:
-            print '\t', att, ':', getattr(self, att)
+            str1 += '\t' + att + ':' + str(getattr(self, att)) + "\n"
         if len(self.related) > 0:
-            print '\trelated events:'
-            print "\tmax separtion = %g5 km"%(self.separationDistance())
+            str1 += '\trelated events:\n'
+            str1 += "\tmax separtion = %g5 km\n"%(self.separationDistance()) 
         for ev in self.related:
             for att in ['desc', 'latLon', 'datetime', 'dataIndex', 'vals']:
-                print '\t\t', att, ':', getattr(ev, att)
-            print '\t\t----------'
-        print '----------'
+                str1 += '\t\t' + att + ':' + str(getattr(ev, att)) + "\n"
+            str1 += '\t\t----------'
+        str1 += '----------'
+        return str1
+    
+    def unpackRelated(self):
+        elist = [Event(self.desc, self.latLon, self.datetime, self.dataIndex, self.vals)]
+        for relEv in self.related:
+            elist.append(relEv)
+        return EventList(elist)
+        
+    
+    def printInfo(self):
+        print self.infoString()
         
     def sameType(self, other):
         return self.desc == other.desc
@@ -273,20 +308,20 @@ if __name__ == "__main__":
     print "ev1 :"   
     evPSL1 = Event('PSL min', ll1, dtin, inds1, val1)
     print evPSL1
-    evPSL1.printData()
+    print evPSL1.infoString()
     
     evPSL2 = Event('PSL min', ll2, dtin, inds2, val2)
 #     print "ev2 : "
-#     evPSL2.printData()
+#     evPSL2.printInfo()
     
     evVor1 = Event('Vort. max', ll3, dtin, inds3, val3)
 #     print "ev3 : "    
-#     evVor1.printData()
+#     evVor1.printInfo()
     
     
     evVor2 = Event('Vort. max', ll4, dtin, inds4, val4)
 #     print "ev4 :"
-#     evVor2.printData()
+#     evVor2.printInfo()
     
     print "ev1 == ev2 (False): ", evPSL1 == evPSL2
     print "ev1 > ev2 (True): ", evPSL1 > evPSL2
@@ -302,7 +337,7 @@ if __name__ == "__main__":
     evList1 = EventList([evPSL1, evPSL2, evVor1])
     evList1.addEvent(evVor2)
     print "length (4): ", len(evList1)
-#     evList1.printData()
+#     evList1.printInfo()
     evList2 = evList1
     evList1.extend(evList2)
     print "length (8): ", len(evList1)
@@ -310,7 +345,7 @@ if __name__ == "__main__":
     print "length (3): ", len(evList1)
     evList1.consolidateRelated(500.0)
     print "length (2): ", len(evList1)
-    evList1.printData()
+    evList1.printInfo()
     print "access event[0]: ", evList1[0]
     print "types: ", evList1.eventTypes()
 

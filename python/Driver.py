@@ -12,7 +12,7 @@ from datetime import timedelta
 from SectorList import SectorListLatLon
 from Data import LatLonSearchData
 from Event import Event, EventList, print_copyright
-from IdentCriteria import MaxCriterion, MinCriterion, TimeCriteria
+from IdentCriteria import MaxCriterion, MinCriterion, TimeCriteria, CollocationCriterion
 from Track import TrackList, Track
 
 print_copyright()
@@ -33,7 +33,12 @@ radius = 500.0
 #
 #   USER: DEFINE IDENTIFICATION CRITERIA
 #
-spcCrit = [MaxCriterion('VORBOT', 3.0e-4), MinCriterion('PSL', 99000.0)]
+crit1 = MaxCriterion('VORBOT', 3.0e-4)
+crit2 = MinCriterion('PSL', 99000.0)
+spcCrit = [crit1, crit2]
+requireCollocation = True
+colloc = [CollocationCriterion(crit1.returnEventType(), crit2.returnEventType(), radius)]
+
 minDuration = 24.0 # hours
 maxSpeed = 15.0 # m/s
 timeCrit = TimeCriteria(minDuration, maxSpeed)
@@ -120,7 +125,8 @@ for dfile in ncFiles:
                     evList.addEvent(ev)
         evList.removeDuplicates(radius)
         evList.consolidateRelated(radius)
-        evList.requireCollocation(2)
+        if requireCollocation:
+	        evList.requireCollocation(colloc)
         if verbose:
             print '\t...found ', len(evList), ' events matching spatial criteria.'
         L.append(evList)

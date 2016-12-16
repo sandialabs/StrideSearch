@@ -53,9 +53,13 @@ class SearchData(object):
                 else:
                     self.vardata[var] = self.dfile.variables[var][time_index][:][:]
     
-    def printData(self):
-         print '\tfile start date = ', self.datetimes[0]
-         print '\tfile end date = ', self.datetimes[-1]
+    def infoString(self):
+         str1 = '\tfile start date = ' + str(self.datetimes[0]) + "\n"
+         str1 += '\tfile end date = ' + str(self.datetimes[-1]) + "\n"
+         return str1
+
+    def printInfo(self):
+        print self.infoString()
                
     def __repr__(self):
         return "<%s: filename = %s>" \
