@@ -5,6 +5,10 @@ Copyright 2016 Sandia Corporation. Under the terms of Contract DE-AC04-94AL85000
 
 Algorithms to detect and track storms from model output or reanalysis data.
 
+NEW!
+=======
+Python implementation in `StrideSearch/python`.  Many more capabilities than the Fortran implementation, but possibly slower.  
+Development is ongoing.
 
 Storm detection and tracking algorithm
 =========
