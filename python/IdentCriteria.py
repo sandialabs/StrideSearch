@@ -33,6 +33,10 @@ class Criterion(object):
     def returnEvent(self, sector, workspace, dtime):
         pass
    
+    @abstractmethod
+    def returnEventType(self):
+        pass
+   
     def printData(self):
     	for att in ['varnames', 'threshold']:
     		print '\t', att, ':', getattr(self, att)
@@ -45,12 +49,14 @@ class MaxCriterion(Criterion):
     def evaluate(self, sector, workspace):
         return amax(workspace[self.varnames[0]], axis=0) >= self.threshold
 
+    def returnEventType(self):
+        return "max(" + self.varnames[0] + ")"
             
     def returnEvent(self, sector, workspace, dtime):
         val = amax(workspace[self.varnames[0]])
         ind = argmax(workspace[self.varnames[0]])
         vals = {'max' : val}
-        desc = self.varnames[0] + " max"
+        desc = self.returnEventType()
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
 
                                                         
@@ -62,12 +68,14 @@ class MinCriterion(Criterion):
     def evaluate(self, sector, workspace):
         return amin(workspace[self.varnames[0]]) <= self.threshold
 
+    def returnEventType(self):
+        return "min(" + self.varnames[0] + ")"
             
     def returnEvent(self, sector, workspace, dtime):
         val = amin(workspace[self.varnames[0]])
         ind = argmin(workspace[self.varnames[0]])
         vals = {'min' : val}
-        desc = self.varnames[0] + ' min'
+        desc = self.returnEventType()
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
  
 
@@ -80,12 +88,15 @@ class MaxAverageCriterion(Criterion):
     """ 
     def evaluate(self, sector, workspace):
         return mean(workspace[self.varnames[0]]) >= self.threshold
+    
+    def returnEventType(self):
+        return "maxAvg(" + self.varnames[0] + ")"
 
     def returnEvent(self, sector, workspace, dtime):
         val = amax(mean(workspace[self.varnames[0]]))
         ind = argmax(mean(workspace[self.varnames[0]]))
-        vals = {'max' : val}
-        desc = 'max avg(' + self.varnames[0] + ')'
+        vals = {'max avg' : val}
+        desc = self.returnEventType()
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
         
 class VariationExcessCriterion(Criterion):
@@ -98,11 +109,14 @@ class VariationExcessCriterion(Criterion):
     def evaluate(self, sector, workspace):
         return amax(workspace[self.varnames[0]] - mean(workspace[self.varnames[0]])) >= self.threshold
 
+    def returnEventType(self):
+        return "maxVar(" + self.varnames[0] + ")"
+
     def returnEvent(self, sector, workspace):
         val = amax(workspace[self.varnames[0]] - mean(workspace[self.varnames[0]]))
         ind = argmax(workspace[self.varnames[0]] - mean(workspace[self.varnames[0]]))
-        vals = {'max' : val}
-        desc = 'max var(' + self.varnames[0] + ')'
+        vals = {'max var' : val}
+        desc = self.returnEventType()
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
 
 class DifferenceCriterion(Criterion):
@@ -124,11 +138,14 @@ class DifferenceCriterion(Criterion):
        return "<%s: varname = %s, varname2 = %s, threshold = %s>"%(self.__class__.__name__, 
         self.varnames[0], self.varnames[1], self.threshold)       
     
+    def returnEventType(self):
+        return "max(" + self.varnames[0] + " - " + self.varnames[1] + ")"
+    
     def returnEvent(self, sector, workspace, dtime):
         val = amax(workspace[self.varnames[0]] - workspace[self.varnames[1]])
         ind = argmax(workspace[self.varnames[0]] - workspace[self.varnames[1]])
-        vals = { 'max' : val}
-        desc = 'max(' + self.varnames[0] + ' - ' + self.varnames[1] + ')'
+        vals = { 'max diff' : val}
+        desc = self.returnEventType()
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)         
  
 class TimeCriteria(object):

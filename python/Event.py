@@ -153,7 +153,13 @@ class EventList(object):
             if not alreadyUsed[i]:
                 newevents.append(ev)
         self.events = newevents     
-            
+      
+    def requireCollocation(self, nRelated):
+        newevents = []
+        for ev in self.events:
+            if 1 + len(ev.related) >= nRelated:
+                newevents.append(ev)
+        self.events = newevents
                 
 class Event(object):
     """
@@ -185,24 +191,27 @@ class Event(object):
                 print '\t\t', att, ':', getattr(ev, att)
             print '\t\t----------'
         print '----------'
+        
+    def sameType(self, other):
+        return self.desc == other.desc
     
     def __lt__(self, other):
-        """Event less_than implies a lower-intensity event"""
-        if self.desc == other.desc:
-            if self.vals.keys()[0] == 'max':
-                return self.vals['max'] < other.vals['max']
-            elif self.vals.keys()[0] == 'min':
-                return self.vals['min'] > other.vals['min']
+        """Event less_than (<) implies a lower-intensity event"""
+        if self.sameType(other):
+            if "max" in self.vals.keys()[0]:
+                return self.vals.keys()[0] < other.vals.keys()[0]
+            elif "min" in self.vals.keys()[0]:
+                return self.vals.keys()[0] > other.vals.keys()[0]
         else:
             raise TypeError("Event comparison ERROR: type mismatch")
             
     def __gt__(self, other):
-        """Event greater_than implies a higher-intensity event"""
-        if self.desc == other.desc:
-            if self.vals.keys()[0] == 'max':
-                return self.vals['max'] > other.vals['max']
-            elif self.vals.keys()[0] == 'min':
-                return self.vals['min'] < other.vals['min']
+        """Event greater_than (>) implies a higher-intensity event"""
+        if self.sameType(other):
+            if "max" in self.vals.keys()[0]:
+                return self.vals.keys()[0] > other.vals.keys()[0]
+            elif "min" in  self.vals.keys()[0]:
+                return self.vals.keys()[0] < other.vals.keys()[0]
         else:
             raise TypeError("Event comparison ERROR: type mismatch")
     

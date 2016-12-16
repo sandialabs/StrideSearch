@@ -24,7 +24,7 @@ dataPath = "/Users/pabosle/Desktop/dataTemp"
 #
 #   USER: DEFINE SEARCH REGION, EVENT RADIUS
 #
-southBnd = 55.0
+southBnd = 40.0
 northBnd = 80.0
 westBnd = 110.0
 eastBnd = 240.0
@@ -120,6 +120,7 @@ for dfile in ncFiles:
                     evList.addEvent(ev)
         evList.removeDuplicates(radius)
         evList.consolidateRelated(radius)
+        evList.requireCollocation(2)
         if verbose:
             print '\t...found ', len(evList), ' events matching spatial criteria.'
         L.append(evList)
