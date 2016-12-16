@@ -24,18 +24,19 @@ dataPath = "/Users/pabosle/Desktop/dataTemp"
 #
 #   USER: DEFINE SEARCH REGION, EVENT RADIUS
 #
-southBnd = 45.0
+southBnd = 55.0
 northBnd = 80.0
-westBnd = 160.0
-eastBnd = 210.0
-radius = 400.0
+westBnd = 110.0
+eastBnd = 240.0
+radius = 500.0
 
 #
 #   USER: DEFINE IDENTIFICATION CRITERIA
 #
-spcCrit = [MaxCriterion('VORBOT', 5.5e-4), MinCriterion('PSL', 98000.0)]
+spcCrit = [MaxCriterion('VORBOT', 3.0e-4), MinCriterion('PSL', 99000.0)]
 minDuration = 24.0 # hours
 maxSpeed = 15.0 # m/s
+timeCrit = TimeCriteria(minDuration, maxSpeed)
 print 'identification spcCrit set:'
 for crit in spcCrit:
     crit.printData()
@@ -44,6 +45,7 @@ print ' '
 #
 #   USER: DEFINE DESIRED OUTPUT
 #
+verbose = False
 outputSpatialSearch = True
 spSearchFile = dataPath + "ssSpaceOutput.txt"
 if outputSpatialSearch:
@@ -58,7 +60,7 @@ if outputSpatialSearch:
 #   Get list of all netCDF files to search
 #
 chdir(dataPath)
-ncFiles = glob("*.nc")
+ncFiles = glob("*29-00000.nc")
 
 #
 #   Build search sectors
@@ -89,7 +91,7 @@ sl.setupSectorsForData(gridDesc)
 #   Loop over files (NOTE: this loop is embarassingly parallel)
 #
 print "STRIDE SEARCH STEP 1: Spatial search"
-L = EventList([])
+L = []
 nTotalTimesteps = 0
 for dfile in ncFiles:
     print 'reading file: %s ...'%(dfile)
@@ -100,14 +102,15 @@ for dfile in ncFiles:
     #
     #   Loop over time steps (NOTE: this loop is embarassingly parallel)
     #
-    for time_ind in range(2):
+    for time_ind in range(20): #range(20):
         evList = EventList([]) # must be re-initialized with an empty list!
         ssdata.loadFileDataForCriteriaAtTimestep(spcCrit, time_ind)
         dt = ssdata.datetimes[time_ind]
         #
         #   Loop over sectors (NOTE: this loop is embarassingly parallel)
         #
-        print '\t...processing timestep %s of %s'%(time_ind, ssdata.nTimesteps)
+        if verbose:
+            print '\t...processing timestep %s of %s'%(time_ind, ssdata.nTimesteps)
         for k in range(sl.nSectors):
             sec = sl.findSectorInData(k, ssdata)
             for crit in spcCrit:
@@ -117,17 +120,18 @@ for dfile in ncFiles:
                     evList.addEvent(ev)
         evList.removeDuplicates(radius)
         evList.consolidateRelated(radius)
-        L.extend(evList)
+        if verbose:
+            print '\t...found ', len(evList), ' events matching spatial criteria.'
+        L.append(evList)
          
-print "Spatial search complete:"       
-print "\tfound " + str(len(L)) + " events matching spcCrit."     
+print "Spatial search complete: ", len(L), " time steps searched."
+# for i, el in enumerate(L):
+#     print "len(L[", i, "]) = ", len(el)
+# for el in L:
+#     el.printData()
+         
            
-if outputSpatialSearch:
-    if len(L) <= 20:
-        L.printData()
-    else:
-    	# write to file (TODO)
-        pass
+
         
 #
 #   Stride Search Part II: Temporal correlation
@@ -136,15 +140,13 @@ if outputSpatialSearch:
 print "STRIDE SEARCH STEP 2: Temporal correlation"
 #   temporal algorithm starts with empty list of storm tracks, T
 # 
-# T = TrackList(minDuration, maxSpeed, tsHours)
-# for i in range(nTotalTimesteps):
-#   starttime = datastarttime + timedelta(hours = i * tsHours)
-#   startIndices = L.getIndicesAtTime(starttime)
-#   for j in range(len(L)):
-#       if not L[j].duplicate:
-#           T.buildNewTrack(j, L)
-            
-            
+TL = TrackList(timeCrit, tsHours)
+TL.buildTracksFromSpatialResults(L)
+TL.printData()
+
+
+
+     
 
 if __name__ == "__main__":
     pass
