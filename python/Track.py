@@ -30,8 +30,14 @@ class Track(object):
     def infoString(self):
         str1 = "track data: len = " + str(len(self)) + "\n"
         for ev in self.events:
-            str1 += ev.printInfo() + "\n-----------\n"
+            str1 += ev.infoString() + "\n-----------\n"
         return str1
+    
+    def getLatLons(self):
+        lldict = {}
+        for ev in self.events:
+            lldict[ev.datetime] = ev.latLon
+        return lldict
         
     def printInfo(self):
         print self.infoString()
@@ -88,6 +94,9 @@ class TrackList(object):
     def __len__(self):
         return len(self.tracks)
     
+    def __getitem__(self, ind):
+        return self.tracks[ind]    
+    
     def infoString(self):
         maxLen = len(self.tracks[0])
         minLen = len(self.tracks[0])
@@ -118,7 +127,7 @@ class TrackList(object):
         This method assumes that the EventLists in listOfEventLists are listed in 
         ascending time-step order.
         """
-        alreadyUsed = array([ [False for ev in el] for el in listOfEventLists], dtype = bool)
+        alreadyUsed = [ [False for ev in el] for el in listOfEventLists]
         trackCounter = 0
         for dtInd, evList in enumerate(listOfEventLists):
             for evInd, ev in enumerate(evList):
@@ -179,7 +188,7 @@ class TrackList(object):
                     self.tracks.append(possibleTrack)
         marked = [False for trk in self.tracks]
         for ind, trk in enumerate(self.tracks):
-            if len(trk) < 2:
+            if len(trk) <= 2:
                 marked[ind] = True
         nt = []
         for ind, trk in enumerate(self.tracks):

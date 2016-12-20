@@ -104,8 +104,8 @@ class EventList(object):
         str1 = "Event list data:\n"
         for ev in self.events:
             str1 += ev.infoString()
-        return str1
-        
+        return str1 
+    
     def printInfo(self):
         print self.infoString()
     
@@ -198,6 +198,7 @@ class Event(object):
         self.dataIndex = dataIndex
         self.vals = vals
         self.related = []
+        self.otherData = {}
           
     def __repr__(self):
         return "Event({0}, {1}, {2}, {3}, {4})".format(repr(self.desc), repr(self.latLon),
@@ -209,12 +210,12 @@ class Event(object):
             str1 += '\t' + att + ':' + str(getattr(self, att)) + "\n"
         if len(self.related) > 0:
             str1 += '\trelated events:\n'
-            str1 += "\tmax separtion = %g5 km\n"%(self.separationDistance()) 
+            str1 += "\tmax separtion = %g km\n"%(self.separationDistance()) 
         for ev in self.related:
             for att in ['desc', 'latLon', 'datetime', 'dataIndex', 'vals']:
                 str1 += '\t\t' + att + ':' + str(getattr(ev, att)) + "\n"
             str1 += '\t\t----------'
-        str1 += '----------'
+        str1 += '----------\n'
         return str1
     
     def unpackRelated(self):
@@ -222,7 +223,9 @@ class Event(object):
         for relEv in self.related:
             elist.append(relEv)
         return EventList(elist)
-        
+    
+    def appendOtherData(self, key, val):
+        self.otherData[key] = val    
     
     def printInfo(self):
         print self.infoString()
