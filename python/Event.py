@@ -184,6 +184,9 @@ class EventList(object):
             if collCount == len(collocCriteria):
                 newevents.append(ev)
         self.events = newevents
+
+def emptyEvent():
+    return Event("null", (0.0, 0.0), datetime(1,1,1,0), ("null", "null"), {"null":0.0})
                 
 class Event(object):
     """
