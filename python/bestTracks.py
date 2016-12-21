@@ -4,7 +4,7 @@ from Event import Event, EventList
 from IdentCriteria import TimeCriteria
 from Track import TrackList
 from glob import glob
-from os import chdir
+from os import chdir, getcwd
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 
@@ -40,9 +40,9 @@ def getLongitudeFromString(lonstr):
 maxCycloneRadius = 500.0 # kilometers
 
 # Stride Search source code path
-pydir = "/Users/pabosle/StrideSearch/python"
+pydir = getcwd()
 # Data path
-datadir =  "/Users/pabosle/Desktop/dataTemp/bestTracks-JTWC"
+datadir =  "../testData"
 
 chdir(datadir)
 filenames = glob("./bwp*")
