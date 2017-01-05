@@ -8,7 +8,7 @@ software.
 @author: Peter A. Bosler
 """
 from datetime import datetime
-from math import cos, sin, atan2, radians, pi, sqrt
+from StrideSearchUtilities import sphereDistance
 from pandas import DataFrame, Series
 from collections import OrderedDict
 from numpy import float32
@@ -33,33 +33,6 @@ def print_citation():
     print "\tdoi = {10.5194/gmd-9-1383-2016}}"
 
 earthRadius_km = 6371.220
-
-def sphereDistance(lat1, lon1, lat2, lon2):
-    """
-    Returns the great circle distance between two points on an earth-sized sphere.
-    Assumes input is given in degrees.
-    """
-    __ZERO_TOL = 2.0e-9
-    if abs(lat2 - lat1) < __ZERO_TOL and abs(lon2 - lon1) < __ZERO_TOL:
-            return 0.0
-    else:
-        xa = cos(radians(lat1)) * cos(radians(lon1))
-        ya = cos(radians(lat1)) * sin(radians(lon1))
-        za = sin(radians(lat1))
-        xb = cos(radians(lat2)) * cos(radians(lon2))
-        yb = cos(radians(lat2)) * sin(radians(lon2))
-        zb = sin(radians(lat2))
-        
-        cp1 = ya * zb - yb * za
-        cp2 = xb * za - xa * zb
-        cp3 = xa * yb - xb * ya
-            
-        cpnorm = sqrt(cp1 * cp1 + cp2 * cp2 + cp3 * cp3)
-        
-        dp = xa * xb + ya * yb + za * zb
-        
-        arclen = atan2(cpnorm, dp)
-        return earthRadius_km * arclen
 
 class EventList(object):
     def __init__(self, evList = []):
