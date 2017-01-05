@@ -4,7 +4,7 @@ Implementations for basic criteria are included.
 """
 from Event import Event, print_copyright
 from abc import ABCMeta, abstractmethod
-from numpy import amax, amin, ones, mean, argmax, argmin, array, linspace, concatenate, sign, multiply
+from numpy import amax, amin, ones, mean, argmax, argmin, array, linspace, concatenate, sign, multiply, square, sqrt
 from SectorList import Sector
 from datetime import datetime
 
@@ -77,10 +77,32 @@ class MaxSignedCriterion(Criterion):
     def returnEvent(self, sector, workspace, dtime):
         val = amax(multiply(self.latSigns, workspace[self.varnames[0]]))
         ind = argmax(multiply(self.latSigns, workspace[self.varnames[0]]))
-        vals = {'signed max' : val}
+        vals = {'max' : val}
         desc = self.returnEventType()
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
         
+class MaxMagnitudeCriterion(Criterion):
+    """Maximum magnitude criterion, for vectors given as components.
+    """
+    def __init__(self, varname1, varname2, threshold):
+        Criterion.__init__(self, varname1, threshold)
+        self.addVariableName(varname2)
+    
+    def evaluate(self, sector, workspace):
+        mags = sqrt(square(workspace[self.varnames[0]]) + square(workspace[self.varnames[1]]))
+        return amax(mags) >= self.threshold
+        
+    def returnEventType(self):
+        return "max(sqrt(" + self.varnames[0] + "**2 + " + self.varnames[1] + "**2))"
+    
+    def returnEvent(self, sector, workspace, dtime):
+        mags = sqrt(square(workspace[self.varnames[0]]) + square(workspace[self.varnames[1]]))
+        val = amax(mags)
+        ind = argmax(mags)
+        vals = {'max' : val}
+        desc = self.returnEventType()
+        return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
+
                                                              
 class MinCriterion(Criterion):
     """ 
@@ -138,6 +160,28 @@ class VariationExcessCriterion(Criterion):
         val = amax(workspace[self.varnames[0]] - mean(workspace[self.varnames[0]]))
         ind = argmax(workspace[self.varnames[0]] - mean(workspace[self.varnames[0]]))
         vals = {'max var' : val}
+        desc = self.returnEventType()
+        return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
+        
+class VerticalAverageVariationCriterion(Criterion):
+    """ Calculates the average of two variables, then computes variation excess.
+    """
+    def __init__(self, varname1, varname2, threshold):
+        Criterion.__init__(self, varname1, threshold)
+        self.addVariableName(varname2)
+    
+    def evaluate(self, sector, workspace):
+        variable_average = 0.5 * workspace[self.varnames[0]] + 0.5 * workspace[self.varnames[1]]
+        return amax(variable_average - mean(variable_average)) >= self.threshold  
+    
+    def returnEventType(self):
+        return "maxVar(avg(" + self.varnames[0] + ", " + self.varnames[1] + "))"
+    
+    def returnEvent(self, sector, workspace, dtime):
+        variable_average = 0.5 * workspace[self.varnames[0]] + 0.5 * workspace[self.varnames[1]]
+        val = amax(variable_average - mean(variable_average))
+        ind = argmax(variable_average - mean(variable_average))
+        vals = {'max var(avg)' : val}
         desc = self.returnEventType()
         return Event(desc, sector.dataPoints[ind], dtime, sector.dataPointIndices[ind], vals)
 

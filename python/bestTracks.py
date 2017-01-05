@@ -252,8 +252,9 @@ plt.xlabel('longitude')
 plt.ylabel('latitude')
 plt.title('WestPac tropical cyclones: 2013 (blue), 2014 (red)')
 #plt.show()
-fig.savefig('../JTWCTracks.png',bbox_inches='tight')        
-        
 chdir(pydir)
+fig.savefig('JTWCTracks.png',bbox_inches='tight')        
+        
+
 
     

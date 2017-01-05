@@ -41,11 +41,11 @@ class Track(object):
         return lldict
         
     def printInfo(self, verbose = False):
-        istr =  self.infoString()
+        istr =  self.infoString(True)
         if verbose:
             print istr
         else:
-            print istr[0]
+            print istr.split("\n")[0]
 
     def startDate(self):
         return self.events[0].datetime
@@ -114,6 +114,8 @@ class TrackList(object):
         self.tracks.append(trk)
     
     def infoString(self, verbose = False):
+        if len(self.tracks) == 0:
+            raise RuntimeError("TrackList is empty.")
         maxLen = len(self.tracks[0])
         minLen = maxLen
         for track in self.tracks:
@@ -133,8 +135,8 @@ class TrackList(object):
                 str1 += str(lls) + "\n.................\n"
         return str1
     
-    def printInfo(self):
-        print self.infoString()
+    def printInfo(self, verb = False):
+        print self.infoString(verb)
     
     def getDataFrameList(self):
         dfl = []

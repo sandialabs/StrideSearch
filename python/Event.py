@@ -9,12 +9,16 @@ software.
 """
 from datetime import datetime
 from math import cos, sin, atan2, radians, pi, sqrt
+from pandas import DataFrame, Series
+from collections import OrderedDict
 
 def print_copyright():
     """Prints Stride Search copyright information"""
+    print "------------------------------------------------------------------------------------------------"
     print """Stride Search. Copyright 2016 Sandia Corporation. Under the terms of contract DE-AC04-94AL85000, 
 there is a non-exclusive license for use of this work by or on behalf of the U.S. Government. 
-Export of this program may require a license from the United States Government.\n"""
+Export of this program may require a license from the United States Government."""
+    print "------------------------------------------------------------------------------------------------\n"
 
 def print_citation():
     """Prints the bibtex citation for Stride Search"""
@@ -153,6 +157,22 @@ class EventList(object):
         sizeout = len(newevents)
 #         print "sizein = ", sizein, ", sizeout = ", sizeout, ", diff = ", sizein - sizeout
         self.events = newevents
+    
+    def splitListByDate(self):
+        datedEvList = OrderedDict([])
+        dateList = []
+        for ev in self.events:
+            if ev.datetime not in dateList:
+                dateList.append(ev.datetime)
+        dateList.sort()
+        for dtg in dateList:
+            evCounter = 0
+            for ev in self.events:
+                if ev.datetime == dtg:
+                    keystr = dtgString(dtg) + '-' + str(evCounter)
+                    datedEvList[keystr] = ev.convertToSeries()        
+                    evCounter += 1
+        return dateList, datedEvList
      
     def consolidateRelated(self, radius):
         """
@@ -161,13 +181,34 @@ class EventList(object):
         """
         alreadyUsed = [False for ev in self.events]
         for i, evA in enumerate(self.events):
+            etypes = [evA.desc]
             if not alreadyUsed[i]:
                 for j in range(i+1, len(self.events)):
                     evB = self.events[j]
                     if not alreadyUsed[j]:
                         if evA.isNear(evB, radius) and evA.datetime == evB.datetime:
-                            evA.addRelatedEvent(evB)
+                            if evB.desc not in etypes:
+                                evA.addRelatedEvent(evB)
+                                etypes.append(evB.desc)
+                            else:
+                                if evA.desc == evB.desc:
+                                    if evA > evB:
+                                        pass
+                                    else:
+                                        evA.latLon = evB.latLon
+                                        evA.dataIndex = evB.dataIndex
+                                        evA.vals = evB.vals
+                                else:
+                                    for relEv in evA.related:
+                                        if relEv.desc == evB.desc:
+                                            if relEv > evB:
+                                                pass
+                                            else:
+                                                relEv.latLon = evB.latLon
+                                                relEv.dataIndex = evB.dataIndex
+                                                relEv.vals = evB.vals
                             alreadyUsed[j] = True
+                                            
         newevents = []
         for i, ev in enumerate(self.events):
             if not alreadyUsed[i]:
@@ -217,7 +258,7 @@ class Event(object):
         for ev in self.related:
             for att in ['desc', 'latLon', 'datetime', 'dataIndex', 'vals']:
                 str1 += '\t\t' + att + ':' + str(getattr(ev, att)) + "\n"
-            str1 += '\t\t----------'
+            str1 += '\t\t----------\n'
         str1 += '----------\n'
         return str1
     
@@ -240,9 +281,9 @@ class Event(object):
         """Event less_than (<) implies a lower-intensity event"""
         if self.sameType(other):
             if "max" in self.vals.keys()[0]:
-                return self.vals.keys()[0] < other.vals.keys()[0]
+                return self.vals[self.vals.keys()[0]] < other.vals[other.vals.keys()[0]]
             elif "min" in self.vals.keys()[0]:
-                return self.vals.keys()[0] > other.vals.keys()[0]
+                return self.vals[self.vals.keys()[0]] > other.vals[other.vals.keys()[0]]
         else:
             raise TypeError("Event comparison ERROR: type mismatch")
             
@@ -250,9 +291,9 @@ class Event(object):
         """Event greater_than (>) implies a higher-intensity event"""
         if self.sameType(other):
             if "max" in self.vals.keys()[0]:
-                return self.vals.keys()[0] > other.vals.keys()[0]
+                return self.vals[self.vals.keys()[0]] > other.vals[other.vals.keys()[0]]
             elif "min" in  self.vals.keys()[0]:
-                return self.vals.keys()[0] < other.vals.keys()[0]
+                return self.vals[self.vals.keys()[0]] < other.vals[other.vals.keys()[0]]
         else:
             raise TypeError("Event comparison ERROR: type mismatch")
     
@@ -283,6 +324,67 @@ class Event(object):
         """Related Events are events of different types (e.g., pressure min and vorticity max) that correspond to the same meteorological feature."""
         self.related.append(other)
 
+    def getTypes(self):
+        tl = [self.desc]
+        for relEv in self.related:
+            if relEv.desc not in tl:
+                tl.append(relEv.desc)
+        return tl
+    
+    def getTypesLocsVals(self):
+        typelist = [self.desc]
+        locList = [self.latLon]
+        valList = [self.vals[self.vals.keys()[0]]]
+        for relEv in self.related:
+            typelist.append(relEv.desc)
+            locList.append(relEv.latLon)
+            valList.append(relEv.vals[relEv.vals.keys()[0]])
+        return typelist, locList, valList
+        
+    def convertToSeries(self):
+        tt, ll, vv = self.getTypesLocsVals()
+        dd = {self.desc : (self.latLon, self.vals[self.vals.keys()[0]])}
+        for relEv in self.related:
+            dd[relEv.desc] = (relEv.latLon, relEv.vals[relEv.vals.keys()[0]])
+        return Series(dd, index = tt)
+    
+    def convertToDataFrame(self):
+        tt, ll, vv = self.getTypesLocsVals()
+        dd = {self.desc : {'lat' : self.latLon[0], 'lon' : self.latLon[1], \
+              'val':self.vals[self.vals.keys()[0]]}}
+        for relEv in self.related:
+            dd[relEv.desc] = {'lat' : relEv.latLon[0], 'lon' : relEv.latLon[1], \
+                              'val' : relEv.vals[relEv.vals.keys()[0]]}
+        return DataFrame(dd, dtype=float)
+        
+def dtgString(dt):
+    monthInt = dt.month
+    if monthInt == 1:
+        monstr = "JAN"
+    elif monthInt == 2:
+        monstr = "FEB"
+    elif monthInt == 3:
+        monstr = "MAR"
+    elif monthInt == 4:
+        monstr = "APR"
+    elif monthInt == 5:
+        monstr = "MAY"
+    elif monthInt == 6:
+        monstr = "JUN"
+    elif monthInt == 7:
+        monstr = "JUL"
+    elif monthInt == 8:
+        monstr = "AUG"
+    elif monthInt == 9:
+        monstr = "SEP"
+    elif monthInt == 10:
+        monstr = "OCT"
+    elif monthInt == 11:
+        monstr = "NOV"
+    elif monthInt == 12:
+        monstr = "DEC"
+    return "dtg%02d%02d00%s%04d"%(dt.day, dt.hour, monstr, dt.year)    
+        
                                     
 if __name__ == "__main__":
     print_copyright()
@@ -309,7 +411,7 @@ if __name__ == "__main__":
     val3 = {'max' : 2.0e-4}
     ll4 = (50.2, 90.0)
     inds4 = (45, 80)
-    val4 = {'max', 1.9e-4}
+    val4 = {'max': 1.9e-4}
     
     print "ev1 :"   
     evPSL1 = Event('PSL min', ll1, dtin, inds1, val1)
@@ -332,6 +434,8 @@ if __name__ == "__main__":
     print "ev1 == ev2 (False): ", evPSL1 == evPSL2
     print "ev1 > ev2 (True): ", evPSL1 > evPSL2
     print "ev1 < ev2 (False): ", evPSL1 < evPSL2
+    print "ev3 > ev4 (True): ", evVor1 > evVor2
+    print "ev3 < ev4 (False): ", evVor1 < evVor2
     print "ev1.isNear(ev2) (True): ", evPSL1.isNear(evPSL2, 500.0)
     print "ev1.isRelated(ev2) (True): ", evPSL1.isRelated(evPSL2, 500.0)
     print "ev4.isRelated(ev1) (False): ", evVor2.isRelated(evPSL1, 500.0)
@@ -354,4 +458,5 @@ if __name__ == "__main__":
     evList1.printInfo()
     print "access event[0]: ", evList1[0]
     print "types: ", evList1.eventTypes()
-
+    tt, ll, vv = evList1[0].getTypesLocsVals()
+    print "evList[0].getTypesLocsVals() = ", tt, ll, vv
