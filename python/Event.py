@@ -11,6 +11,7 @@ from datetime import datetime
 from math import cos, sin, atan2, radians, pi, sqrt
 from pandas import DataFrame, Series
 from collections import OrderedDict
+from numpy import float32
 
 def print_copyright():
     """Prints Stride Search copyright information"""
@@ -330,6 +331,9 @@ class Event(object):
             if relEv.desc not in tl:
                 tl.append(relEv.desc)
         return tl
+   
+    def getValue(self):
+        return self.vals[self.vals.keys()[0]]
     
     def getTypesLocsVals(self):
         typelist = [self.desc]
@@ -342,20 +346,18 @@ class Event(object):
         return typelist, locList, valList
         
     def convertToSeries(self):
-        tt, ll, vv = self.getTypesLocsVals()
         dd = {self.desc : (self.latLon, self.vals[self.vals.keys()[0]])}
         for relEv in self.related:
             dd[relEv.desc] = (relEv.latLon, relEv.vals[relEv.vals.keys()[0]])
         return Series(dd, index = tt)
     
     def convertToDataFrame(self):
-        tt, ll, vv = self.getTypesLocsVals()
         dd = {self.desc : {'lat' : self.latLon[0], 'lon' : self.latLon[1], \
               'val':self.vals[self.vals.keys()[0]]}}
         for relEv in self.related:
             dd[relEv.desc] = {'lat' : relEv.latLon[0], 'lon' : relEv.latLon[1], \
                               'val' : relEv.vals[relEv.vals.keys()[0]]}
-        return DataFrame(dd, dtype=float)
+        return DataFrame(dd, dtype=float32)
         
 def dtgString(dt):
     monthInt = dt.month

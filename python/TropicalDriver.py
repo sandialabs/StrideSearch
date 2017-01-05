@@ -51,7 +51,7 @@ ncFiles = glob("*0004-07*.nc")
 #
 #   USER: DEFINE SEARCH REGION, EVENT RADIUS
 #
-southBnd = -40.0
+southBnd = 0.0
 northBnd = 40.0
 westBnd = 100.0
 eastBnd = 270.0
@@ -194,41 +194,23 @@ tracks = TrackList(timeCrit, timestep_size)
 tracks.buildTracksFromSpatialResults(L)
 if verbose:
     tracks.printInfo()
-    
-def makeDictFromTrack(trk):
-    trkDict = {}
-    for ev in trk.events:
-        evDict = {}
-        dtstr = 'dtg%04d%02d%02d%02d00'%(ev.datetime.year, ev.datetime.month, ev.datetime.day, ev.datetime.hour)
-        evDict['datetime'] = ev.datetime
-        evDict['latlon'] = ev.latLon
-        if "max(VOR" in ev.desc:
-            evDict['VOR850'] = ev.vals['max']
-        elif "min(PSL)" == ev.desc:
-            evDict['PSL'] = ev.vals['min']
-        elif "max(sqrt(" in ev.desc:
-            evDict['windspd'] = ev.vals['max']
-        for relEv in ev.related:
-            if "max(VOR" in relEv.desc:
-                evDict['VOR850'] = relEv.vals['max']
-            elif "min(PSL)" == relEv.desc:
-                evDict['PSL'] = relEv.vals['min']
-            elif "max(sqrt(" in relEv.desc:
-                evDict['windspd'] = relEv.vals['max']
-        trkDict[dtstr] = evDict
-    return trkDict
 
-ssDataDict = {}
-trkNo = 0
-for trk in tracks.tracks:
-    tDict = makeDictFromTrack(trk)
-#     ssDataDict[id] = DataFrame(tDict).T
-    ssDataDict[trkNo] = tDict
-    trkNo += 1
-# 
-# store = HDFStore(hdfFile)
-# for id in ssDataDict.keys():
-#     store[id] = ssDataDict[id]
+# index = []
+# for crit in spatialCriteria:
+#     index.append(crit.returnEventType())
+
+ssDict = {}
+for trId, trk in enumerate(tracks.tracks):
+    ssDict[trId] = trk.convertToDataFrame(crit2)
+
+for trId in ssDict:
+    ssDict[int(trId)].to_hdf(hdfFile, 'trk' + str(trId), format='table')
+    
+    
+
+print "----------------------------------"
+print "      STRIDE SEARCH COMPLETE      "
+print "----------------------------------"
         
     
         

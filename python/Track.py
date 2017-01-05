@@ -1,10 +1,10 @@
 """
 """
-from Event import Event, print_copyright , emptyEvent
+from Event import Event, print_copyright , emptyEvent, dtgString
 from datetime import timedelta
 from IdentCriteria import TimeCriteria
 from pandas import DataFrame, Series
-from numpy import nan, shape, array
+from numpy import nan, shape, array, float32
 
 mpsToKph = 3.6
 
@@ -74,18 +74,24 @@ class Track(object):
         return tlist
         
     
-    def getDataFrame(self):
-        dts = [ev.datetime for ev in self.events]
-        lls = [ev.latLon for ev in self.events]
-        typelist = self.getEventTypes()
-        trackData = { tt : Series(nan, index = dts) for tt in typelist}
-        trackData["lat-lon"] = Series(lls, index=dts)
-        for evInd, ev in enumerate(self.events):
-            unpck = ev.unpackRelated()
-            for unpackedEv in unpck:
-                key = unpackedEv.vals.keys()[0]
-                trackData[unpackedEv.desc][dts[evInd]] = unpackedEv.vals[key]
-        return DataFrame(trackData)    
+    def convertToDataFrame(self, locCriterion):
+        trkDict = {}
+        locationDef = locCriterion.returnEventType()
+        for ev in self.events:
+            evDict = {ev.desc : ev.getValue()}
+            if ev.desc == locationDef:
+                evDict['lat'] = ev.latLon[0]
+                evDict['lon'] = ev.latLon[1]
+            for relEv in ev.related:
+                evDict[relEv.desc] = relEv.getValue()
+                if relEv.desc == locationDef:
+                    evDict['lat'] = relEv.latLon[0]
+                    evDict['lon'] = relEv.latLon[1]
+            trkDict[ev.datetime] = evDict
+        return DataFrame(trkDict, dtype=float32)
+            
+                        
+       
             
             
 class TrackList(object):
