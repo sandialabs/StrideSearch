@@ -19,18 +19,21 @@ from collections import OrderedDict
 import time
 
 print_copyright()
+
+#************************************************************************
+#   USER INPUT SECTION
 #
-#   USER: DEFINE DESIRED OUTPUT
+#   1) Define desired output
 #
-verbose = True
+verbose = False
 write_to_HDF = True
-hdfFile = 'tropicalTracks_westpac_JulyYear4.h5'
+hdfFile = '/Users/pabosle/Desktop/dataTemp/ssResults/ssTropicalDemo_JulyYear4.h5'
 save_space_output = True
 write_space_output = True
-spaceFile = 'strideSearch_spatialResults.h5'
+spaceFile = '/Users/pabosle/Desktop/dataTemp/ssResults/ssTropicalDemo_JulyYear4_spatialResults.h5'
 
 #
-#   USER: DEFINE PATH TO DATA
+#   2) Define input/output data paths
 #
 dataPath = "/Users/pabosle/Desktop/dataTemp"
 
@@ -47,22 +50,20 @@ if save_space_output:
     except:
         pass
 chdir(dataPath) 
-ncFiles = glob("*0004-07*.nc")
+ncFiles = glob("*0004*.nc")
+
 #
-#   USER: DEFINE SEARCH REGION, EVENT RADIUS
+#   3) Define search domain
 #
-southBnd = 0.0
+southBnd = -40.0
 northBnd = 40.0
-westBnd = 100.0
-eastBnd = 270.0
+westBnd = 0.0
+eastBnd = 360.0
 radius = 450.0
 
 #
-#   USER: DEFINE IDENTIFICATION CRITERIA
+#   4) Define spatial identification criteria
 #
-vorMax_to_PSLMin_dist = 450.0
-tempMax_to_PSLMin_dist = 225.0
-
 crit1 = MaxSignedCriterion('VOR850', 8.5e-4)
 crit2 = MinCriterion('PSL', 99000.0)
 crit3 = VerticalAverageVariationCriterion('T500', 'T200', 2.0)
@@ -73,6 +74,12 @@ for crit in spatialCriteria:
     print "\t" + crit.infoString()
 print ' '
 
+#
+#   5) Define collocation criteria
+#
+vorMax_to_PSLMin_dist = 450.0
+tempMax_to_PSLMin_dist = 225.0
+
 ccrit1 = CollocationCriterion(crit1.returnEventType(), crit2.returnEventType(), vorMax_to_PSLMin_dist)
 ccrit2 = CollocationCriterion(crit1.returnEventType(), crit3.returnEventType(), tempMax_to_PSLMin_dist)
 ccrit3 = CollocationCriterion(crit2.returnEventType(), crit4.returnEventType(), radius)
@@ -82,6 +89,9 @@ for crit in collocCriteria:
     print "\t" + crit.infoString()
 print ' '
 
+#
+#   6) Define time criteria
+#
 minDuration = 12.0 # hours
 maxSpeed = 15.0 # m/s
 timeCrit = TimeCriteria(minDuration, maxSpeed)
@@ -89,7 +99,14 @@ print 'time criteria set:'
 timeCrit.printInfo()
 print ' '
 
+#   
+#   END USER INPUT SECTION
+#   Modifications below this line are not normally necessary
+#************************************************************************
+
+#************************************************************************
 ### PROGRAM START ###
+#************************************************************************
 chdir(dataPath)
 #
 #   Build search sectors
@@ -115,10 +132,7 @@ print ' '
 #
 gridDesc = [ssdata.nLat, ssdata.nLon]
 sl.setupSectorsForData(gridDesc)
-#
-#   Stride Search Part I: Spatial Search
-#   Loop over files (NOTE: this loop is embarassingly parallel)
-#
+
 print "************************************"
 print "STRIDE SEARCH STEP 1: Spatial search"
 print "************************************"
@@ -126,6 +140,9 @@ spStart = time.time()
 L = OrderedDict([])
 nTotalTimesteps = 0
 nFiles = len(ncFiles)
+#
+#   Loop over files (NOTE: this loop is embarassingly parallel)
+#
 for fi, dfile in enumerate(ncFiles):
     fileStart = time.time()
     if verbose:
@@ -138,7 +155,7 @@ for fi, dfile in enumerate(ncFiles):
     #
     #   Loop over time steps (NOTE: this loop is embarassingly parallel)
     #
-    for time_ind in range(5): #range(ssdata.nTimesteps):
+    for time_ind in range(ssdata.nTimesteps):
         evList = EventList([]) # must be re-initialized with an empty list!
         ssdata.loadFileDataForCriteriaAtTimestep(spatialCriteria, time_ind)
         dt = ssdata.datetimes[time_ind]

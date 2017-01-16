@@ -7,8 +7,8 @@ enable_testing()
 #
 # Find NetCDF and NetCDF Fortran
 #
-FIND_LIBRARY(netcdf netcdf PATHS $ENV{NETCDF}/lib REQUIRED NO_DEFAULT_PATH  )
-FIND_LIBRARY(netcdff netcdff PATHS $ENV{NETCDF}/lib REQUIRED NO_DEFAULT_PATH )
+FIND_LIBRARY(netcdf netcdf PATHS $ENV{NETCDF_ROOT}/lib REQUIRED NO_DEFAULT_PATH  )
+FIND_LIBRARY(netcdff netcdff PATHS $ENV{NETCDF_ROOT}/lib REQUIRED NO_DEFAULT_PATH )
 if ( netcdf )
 	message("CMake found NetCDF! \n" ${netcdf} \n)
 	message( "netcdf = " ${netcdf})
@@ -24,7 +24,7 @@ else (netcdff )
 	message("ERROR : CMake cannot find the NetCDF Fortran library.")
 	message( "netcdff = " ${netcdff})
 endif ( netcdff)
-INCLUDE_DIRECTORIES( $ENV{NETCDF}/include )
+INCLUDE_DIRECTORIES( $ENV{NETCDF_ROOT}/include )
 
 #
 # set default build type to release

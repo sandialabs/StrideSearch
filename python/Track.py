@@ -88,7 +88,7 @@ class Track(object):
                     evDict['lat'] = relEv.latLon[0]
                     evDict['lon'] = relEv.latLon[1]
             trkDict[ev.datetime] = evDict
-        return DataFrame(trkDict, dtype=float32)
+        return DataFrame(trkDict, dtype=float32).T
             
                         
        

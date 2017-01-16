@@ -35,6 +35,8 @@ def print_citation():
 earthRadius_km = 6371.220
 
 class EventList(object):
+    """
+    """
     def __init__(self, evList = []):
         self.events = evList
     
