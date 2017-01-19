@@ -27,10 +27,10 @@ print_copyright()
 #
 verbose = False
 write_to_HDF = True
-hdfFile = '/Users/pabosle/Desktop/dataTemp/ssResults/ssTropicalDemo_JulyYear4.h5'
+hdfFile = '/Users/pabosle/Desktop/dataTemp/ssResults/ssProfiled.h5'
 save_space_output = True
 write_space_output = True
-spaceFile = '/Users/pabosle/Desktop/dataTemp/ssResults/ssTropicalDemo_JulyYear4_spatialResults.h5'
+spaceFile = '/Users/pabosle/Desktop/dataTemp/ssResults/ssProfiled_spatialResults.h5'
 
 #
 #   2) Define input/output data paths
@@ -50,7 +50,7 @@ if save_space_output:
     except:
         pass
 chdir(dataPath) 
-ncFiles = glob("*0004*.nc")
+ncFiles = glob("*0002-08*.nc")
 
 #
 #   3) Define search domain

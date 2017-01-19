@@ -1,6 +1,11 @@
-#include "Python.h"
+// #include "Python.h"
 #include "StrideSearchUtilities.h"
 #include <cmath>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <iomanip>
 
 // static const double deg2rad = std::atan(1.0) / 45.0;
 
@@ -45,8 +50,8 @@ double atan4( const double y, const double x)
 }
 
 void XyzToLL(double& lat, double& lon, const double& x, const double& y, const double& z) {
-    lat = std::atan2(z, std::sqrt(x*x + y*y));
-    lon = atan4(y, x);
+    lat = std::atan2(z, std::sqrt(x*x + y*y)) / deg2rad;
+    lon = atan4(y, x) / deg2rad;
 };
 
 double sphereDistance(const double latA, const double lonA, const double latB, const double lonB){
@@ -69,26 +74,35 @@ double sphereDistance(const double latA, const double lonA, const double latB, c
     }
 }
 
-static PyObject* wrap_sphereDistance(PyObject* self, PyObject* args) {
-    double latA, lonA, latB, lonB;
-    double result;
-    /* Python -> C++ conversion */
-    if (!PyArg_ParseTuple(args, "dddd", &latA, &lonA, &latB, &lonB))
-        return NULL;
-        
-    /* call c++ function */
-    result = sphereDistance(latA, lonA, latB, lonB);
-    
-    /* c++ -> Python conversion */
-    return Py_BuildValue("d", result);
+void print_copyright(){
+    std::cout <<  "------------------------------------------------------------------------------------------------\n";
+    std::cout <<  "Stride Search. Copyright 2016 Sandia Corporation. Under the terms of contract DE-AC04-94AL85000,\n"; 
+    std::cout <<  "there is a non-exclusive license for use of this work by or on behalf of the U.S. Government. \n";
+    std::cout <<  "Export of this program may require a license from the United States Government.\n";
+    std::cout <<  "------------------------------------------------------------------------------------------------\n";
 }
 
-static PyMethodDef UtilMethods[] = { {"sphereDistance", wrap_sphereDistance, METH_VARARGS, 
-    "Calculate the great-circle distance between two lat-lon locations (in degrees)"}, {NULL, NULL, 0, NULL} };
 
-PyMODINIT_FUNC initStrideSearchUtilities(void) {
-    (void) Py_InitModule("StrideSearchUtilities", UtilMethods);
-}
+// static PyObject* wrap_sphereDistance(PyObject* self, PyObject* args) {
+//     double latA, lonA, latB, lonB;
+//     double result;
+//     /* Python -> C++ conversion */
+//     if (!PyArg_ParseTuple(args, "dddd", &latA, &lonA, &latB, &lonB))
+//         return NULL;
+//         
+//     /* call c++ function */
+//     result = sphereDistance(latA, lonA, latB, lonB);
+//     
+//     /* c++ -> Python conversion */
+//     return Py_BuildValue("d", result);
+// }
+// 
+// static PyMethodDef UtilMethods[] = { {"sphereDistance", wrap_sphereDistance, METH_VARARGS, 
+//     "Calculate the great-circle distance between two lat-lon locations (in degrees)"}, {NULL, NULL, 0, NULL} };
+// 
+// PyMODINIT_FUNC initStrideSearchUtilities(void) {
+//     (void) Py_InitModule("StrideSearchUtilities", UtilMethods);
+// }
 
 
 
