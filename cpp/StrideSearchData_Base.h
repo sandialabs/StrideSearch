@@ -5,7 +5,6 @@
 #include "StrideSearchDateTime.h"
 #include "StrideSearchWorkspace.h"
 #include <string>
-#include <netcdf>
 #include <vector>
 #include <map>
 
@@ -27,7 +26,7 @@ class StrideSearchData {
         
         std::string getFilename() const {return filename;}
         
-        virtual void read2DDataFromTimestep(const int time_index) = 0;
+        virtual void read2DDataFromTimestep(const int time_index, const int level_index = 0) = 0;
 
     protected:
         virtual void initDimensions() = 0;

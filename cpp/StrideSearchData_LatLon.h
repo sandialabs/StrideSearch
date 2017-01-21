@@ -21,7 +21,7 @@ class StrideSearchData_LatLon : public StrideSearchData {
         Workspace getSectorWorkingData(const std::vector<std::string>& crit_vars, 
             const std::vector<std::vector<int> >& dataIndices);
 
-        void read2DDataFromTimestep(const int time_index);
+        void read2DDataFromTimestep(const int time_index, const int level_index = 0);
         
         std::string basicInfo() const;
         
