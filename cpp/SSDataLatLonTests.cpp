@@ -13,7 +13,7 @@ int main (int argc, char* argv[]) {
     std::string testFile("sresa1b_ncar_ccsm3-example.nc");
     std::string inputFile = dataDir + testFile;
     
-    std::vector<std::string> search_vars = {"PSL", "VOR850"};
+    std::vector<std::string> search_vars = {"tas", "ua"};
     
     StrideSearchData_LatLon ncData(inputFile, search_vars);
     
