@@ -42,10 +42,10 @@ colloc = [CollocationCriterion(crit1.returnEventType(), crit2.returnEventType(),
 minDuration = 24.0 # hours
 maxSpeed = 15.0 # m/s
 timeCrit = TimeCriteria(minDuration, maxSpeed)
-print 'identification spcCrit set:'
+print ('identification spcCrit set:')
 for crit in spcCrit:
     crit.printData()
-print ' '
+print (' ')
 
 #
 #   USER: DEFINE DESIRED OUTPUT
@@ -71,9 +71,9 @@ ncFiles = glob("*29-00000.nc")
 #   Build search sectors
 #
 sl = SectorListLatLon(southBnd, northBnd, westBnd, eastBnd, radius)
-print 'sector list built:'
+print ('sector list built:')
 sl.printData()
-print ' '
+print (' ')
 #
 #   Setup input data readers
 #
@@ -83,8 +83,8 @@ ssdata.initDimensions()
 datastarttime = ssdata.datetimes[0]
 timestep_size = ssdata.datetimes[1] - ssdata.datetimes[0]
 tsHours = timestep_size.seconds / 3600.0
-print "timestep size:", tsHours, 'hours'
-print ' '
+print ("timestep size:", tsHours, 'hours')
+print (' ')
 #
 #   Give sectors info about the grid
 #
@@ -95,11 +95,11 @@ sl.setupSectorsForData(gridDesc)
 #   Stride Search Part I: Spatial Search
 #   Loop over files (NOTE: this loop is embarassingly parallel)
 #
-print "STRIDE SEARCH STEP 1: Spatial search"
+print ("STRIDE SEARCH STEP 1: Spatial search")
 L = []
 nTotalTimesteps = 0
 for dfile in ncFiles:
-    print 'reading file: %s ...'%(dfile)
+    print ('reading file: %s ...'%(dfile))
     ssdata.updateSourceFile(dfile)
     ssdata.initTime()
     ssdata.printData()
@@ -115,7 +115,7 @@ for dfile in ncFiles:
         #   Loop over sectors (NOTE: this loop is embarassingly parallel)
         #
         if verbose:
-            print '\t...processing timestep %s of %s'%(time_ind, ssdata.nTimesteps)
+            print ('\t...processing timestep %s of %s'%(time_ind, ssdata.nTimesteps))
         for k in range(sl.nSectors):
             sec = sl.findSectorInData(k, ssdata)
             for crit in spcCrit:
@@ -128,10 +128,10 @@ for dfile in ncFiles:
         if requireCollocation:
 	        evList.requireCollocation(colloc)
         if verbose:
-            print '\t...found ', len(evList), ' events matching spatial criteria.'
+            print ('\t...found ', len(evList), ' events matching spatial criteria.')
         L.append(evList)
          
-print "Spatial search complete: ", len(L), " time steps searched."
+print ("Spatial search complete: ", len(L), " time steps searched.")
 # for i, el in enumerate(L):
 #     print "len(L[", i, "]) = ", len(el)
 # for el in L:
@@ -144,7 +144,7 @@ print "Spatial search complete: ", len(L), " time steps searched."
 #   Stride Search Part II: Temporal correlation
 #   NOTE: This section is serial
 #
-print "STRIDE SEARCH STEP 2: Temporal correlation"
+print ("STRIDE SEARCH STEP 2: Temporal correlation")
 #   temporal algorithm starts with empty list of storm tracks, T
 # 
 TL = TrackList(timeCrit, tsHours)

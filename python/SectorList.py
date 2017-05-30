@@ -95,7 +95,7 @@ class SectorList(object):
         return str1
     
     def printInfo(self):
-        print self.infoString()
+        print (self.infoString())
 
 class SectorListLatLon(SectorList):
     def setupSectorsForData(self, gridDesc):

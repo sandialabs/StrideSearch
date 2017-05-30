@@ -44,12 +44,9 @@ std::string StrideSearchData_LatLon::basicInfo() const {
 
 void StrideSearchData_LatLon::read2DDataFromTimestep(const int time_index, const int level_index){
     netCDF::NcFile file(filename, netCDF::NcFile::read);    
-    
     for (auto& elem : nc_data.data2d) {
         netCDF::NcVar ncv(file.getVar(elem.first));
-        
         std::vector<netCDF::NcDim> dims(ncv.getDims());
-        
         if (dims.size() == 3) {
             std::vector<size_t> readStart;
             readStart.push_back(time_index);

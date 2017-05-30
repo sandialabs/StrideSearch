@@ -15,22 +15,22 @@ from numpy import float32
 
 def print_copyright():
     """Prints Stride Search copyright information"""
-    print "------------------------------------------------------------------------------------------------"
-    print """Stride Search. Copyright 2016 Sandia Corporation. Under the terms of contract DE-AC04-94AL85000, 
+    print ("------------------------------------------------------------------------------------------------")
+    print ("""Stride Search. Copyright 2016 Sandia Corporation. Under the terms of contract DE-AC04-94AL85000, 
 there is a non-exclusive license for use of this work by or on behalf of the U.S. Government. 
-Export of this program may require a license from the United States Government."""
-    print "------------------------------------------------------------------------------------------------\n"
+Export of this program may require a license from the United States Government.""")
+    print ("------------------------------------------------------------------------------------------------\n")
 
 def print_citation():
     """Prints the bibtex citation for Stride Search"""
-    print "@article{StrideSearch,"
-    print "\tauthor = {P. A. Bosler and E. L. Roesler and Mark A. Taylor and Miranda R. Mundt},"
-    print "\ttitle = {Stride Search: a general algorithm for storm detection in high-resolution climate data},"
-    print "\tjournal = {Geoscientific Model Development},"
-    print "\tvolume = {9},"
-    print "\tyear = {2016},"
-    print "\tpages = {1383--1398},"
-    print "\tdoi = {10.5194/gmd-9-1383-2016}}"
+    print ("@article{StrideSearch,")
+    print ("\tauthor = {P. A. Bosler and E. L. Roesler and Mark A. Taylor and Miranda R. Mundt},")
+    print ("\ttitle = {Stride Search: a general algorithm for storm detection in high-resolution climate data},")
+    print ("\tjournal = {Geoscientific Model Development},")
+    print ("\tvolume = {9},")
+    print ("\tyear = {2016},")
+    print ("\tpages = {1383--1398},")
+    print ("\tdoi = {10.5194/gmd-9-1383-2016}}")
 
 earthRadius_km = 6371.220
 
@@ -87,7 +87,7 @@ class EventList(object):
         return str1 
     
     def printInfo(self):
-        print self.infoString()
+        print(self.infoString())
     
     def removeDuplicates(self, radius):
         """
@@ -248,7 +248,7 @@ class Event(object):
         self.otherData[key] = val    
     
     def printInfo(self):
-        print self.infoString()
+        print(self.infoString())
         
     def sameType(self, other):
         return self.desc == other.desc
@@ -366,11 +366,11 @@ def dtgString(dt):
 if __name__ == "__main__":
     print_copyright()
     
-    print "BibTex citation:"
+    print ("BibTex citation:")
     print_citation()
     
-    print ' '
-    print "*RUNNING UNIT TESTS: Event class*"
+    print (' ')
+    print ("*RUNNING UNIT TESTS: Event class*")
     #
     #   meaningless data
     #
@@ -390,10 +390,10 @@ if __name__ == "__main__":
     inds4 = (45, 80)
     val4 = {'max': 1.9e-4}
     
-    print "ev1 :"   
+    print ("ev1 :")   
     evPSL1 = Event('PSL min', ll1, dtin, inds1, val1)
-    print evPSL1
-    print evPSL1.infoString()
+    print (evPSL1)
+    print (evPSL1.infoString())
     
     evPSL2 = Event('PSL min', ll2, dtin, inds2, val2)
 #     print "ev2 : "
@@ -408,32 +408,32 @@ if __name__ == "__main__":
 #     print "ev4 :"
 #     evVor2.printInfo()
     
-    print "ev1 == ev2 (False): ", evPSL1 == evPSL2
-    print "ev1 > ev2 (True): ", evPSL1 > evPSL2
-    print "ev1 < ev2 (False): ", evPSL1 < evPSL2
-    print "ev3 > ev4 (True): ", evVor1 > evVor2
-    print "ev3 < ev4 (False): ", evVor1 < evVor2
-    print "ev1.isNear(ev2) (True): ", evPSL1.isNear(evPSL2, 500.0)
-    print "ev1.isRelated(ev2) (True): ", evPSL1.isRelated(evPSL2, 500.0)
-    print "ev4.isRelated(ev1) (False): ", evVor2.isRelated(evPSL1, 500.0)
+    print ("ev1 == ev2 (False): ", evPSL1 == evPSL2)
+    print ("ev1 > ev2 (True): ", evPSL1 > evPSL2)
+    print ("ev1 < ev2 (False): ", evPSL1 < evPSL2)
+    print ("ev3 > ev4 (True): ", evVor1 > evVor2)
+    print ("ev3 < ev4 (False): ", evVor1 < evVor2)
+    print ("ev1.isNear(ev2) (True): ", evPSL1.isNear(evPSL2, 500.0))
+    print ("ev1.isRelated(ev2) (True): ", evPSL1.isRelated(evPSL2, 500.0))
+    print ("ev4.isRelated(ev1) (False): ", evVor2.isRelated(evPSL1, 500.0))
     
-    print "*tests complete*\n"
+    print ("*tests complete*\n")
     
     
-    print "*RUNNING UNIT TESTS: EventList class*"
+    print ("*RUNNING UNIT TESTS: EventList class*")
     evList1 = EventList([evPSL1, evPSL2, evVor1])
     evList1.addEvent(evVor2)
-    print "length (4): ", len(evList1)
+    print ("length (4): ", len(evList1))
 #     evList1.printInfo()
     evList2 = evList1
     evList1.extend(evList2)
-    print "length (8): ", len(evList1)
+    print ("length (8): ", len(evList1))
     evList1.removeDuplicates(500.0)
-    print "length (3): ", len(evList1)
+    print ("length (3): ", len(evList1))
     evList1.consolidateRelated(500.0)
-    print "length (2): ", len(evList1)
+    print ("length (2): ", len(evList1))
     evList1.printInfo()
-    print "access event[0]: ", evList1[0]
-    print "types: ", evList1.eventTypes()
+    print ("access event[0]: ", evList1[0])
+    print ("types: ", evList1.eventTypes())
     tt, ll, vv = evList1[0].getTypesLocsVals()
-    print "evList[0].getTypesLocsVals() = ", tt, ll, vv
+    print ("evList[0].getTypesLocsVals() = ", tt, ll, vv)

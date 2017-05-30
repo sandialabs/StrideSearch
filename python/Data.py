@@ -49,7 +49,7 @@ class SearchData(object):
         Need to update for other variable names, e.g., "time_whole" for Aeras
         """
         self.time = self.dfile.variables['time'][:]
-        self.datetimes = [datetime(1,10,1,0) + timedelta(days = t) for t in self.time]
+        self.datetimes = [datetime(1,10,1,0) + timedelta(days = int(t)) for t in self.time]
         self.nTimesteps = len(self.time)
     
     def updateSourceFile(self, fname):

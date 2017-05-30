@@ -14,6 +14,9 @@ Workspace::Workspace(std::vector<std::string> keys, const int nValsPerKey){
 Workspace2D::Workspace2D(const std::vector<std::string> var_names, const int size_dim0, const int size_dim1){
     dim0_size = size_dim0;
     dim1_size = size_dim1;
+    std::cout << "testing" << "\n";
+    //std::cout << "Dim0: " << dim0_size << "\n";
+    //std::cout << "Dim1: " << dim1_size << "\n";
     varnames = var_names;
     allocated = false;
     allocMemory();
