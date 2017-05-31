@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <ctime>
 
 int main (int argc, char* argv[]) {
     print_copyright();
@@ -12,7 +13,7 @@ int main (int argc, char* argv[]) {
     std::string dataDir("../../testData/");
     //std::string dataDir("/fscratch/pabosle/climateData/ne240_ll513x1024/");
     std::string testFile("sresa1b_ncar_ccsm3-example.nc");
-    //std::string testFile("f1850c5_ne240_rel06.cam.h2.0002-01-29-00000.nc");
+    //std::string testFile("f1850c5_ne240_rel06.cam.h2.0005-07-13-00000.nc");
     std::string inputFile = dataDir + testFile;
     
     std::vector<std::string> search_vars = {"tas", "ua"};
@@ -55,6 +56,24 @@ int main (int argc, char* argv[]) {
         std::cout << "(" << secLL[i].first << ", " << secLL[i].second << ") : ";
         std::cout << ncData.getDatumValue("tas", rndDataInds[i][0], rndDataInds[i][1]) << " 1/s\n";
     }
-    
+    std::clock_t start;
+    double duration;
+    start = std::clock();
+    // for(int i = 0; i < 10000; i++){
+    //   ncData.read2DDataFromSingle("tas");
+    // }
+    ncData.readFullFile("tas");
+    duration = (std::clock()-start)/(double)CLOCKS_PER_SEC;
+    std::cout<<"Single: "<<duration<<"\n";
+
+    start = std::clock();
+    // for(int i = 0; i < 10000; i++){
+    //   ncData.read2DDataFromTimestep(time_index, level_index);
+    // }
+    ncData.readFullWChunks(time_index);
+    duration = (std::clock()-start)/(double)CLOCKS_PER_SEC;
+    std::cout<<"Chunk: "<<duration<<"\n";
+
+
 return 0;
 }
