@@ -1,3 +1,5 @@
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include "StrideSearchSectorList_LatLon.h"
 #include "StrideSearchData_LatLon.h"
@@ -5,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-typedef std::pair<double, double> coord_type;
+using namespace StrideSearch;
 
 int main (int argc, char* argv[]) {
     print_copyright();
@@ -33,7 +35,7 @@ int main (int argc, char* argv[]) {
     SectorList_LatLon ssectors(sb, nb, wb, eb, radius);
     std::cout << "sector list built; n = " << ssectors.nSectors() << std::endl;
     
-    std::vector<coord_type> sec_centers = ssectors.listSectorCenters();
+    std::vector<ll_coord_type> sec_centers = ssectors.listSectorCenters();
     std::cout << "*** sector centers ***\n";
     for (int i = 0; i < ssectors.nSectors(); ++i) {
         std::cout << "(" << sec_centers[i].first << ", " << sec_centers[i].second << ")\n";

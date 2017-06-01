@@ -1,12 +1,16 @@
 #ifndef _STRIDE_SEARCH_DATA_BASE_H_
 #define _STRIDE_SEARCH_DATA_BASE_H_
 
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include "StrideSearchDateTime.h"
 #include "StrideSearchWorkspace.h"
 #include <string>
 #include <vector>
 #include <map>
+
+namespace StrideSearch {
 
 class StrideSearchData {
     public:
@@ -16,9 +20,9 @@ class StrideSearchData {
         };
         virtual ~StrideSearchData(){};
 
-        virtual void getGridDescription(int* gridDescInts) const = 0;
+        virtual void getGridDescription(index_type* gridDescInts) const = 0;
         virtual Workspace getSectorWorkingData(const std::vector<std::string>& varnames, 
-            const std::vector<std::vector<int> >& dataIndices) = 0;
+            const std::vector<std::vector<index_type> >& dataIndices) = 0;
 //         virtual void loadTimestepData(std::vector<IDCriterion*> criteria, const int time_index);       
         
         void updateSourceFile(std::string fname);
@@ -26,7 +30,7 @@ class StrideSearchData {
         
         std::string getFilename() const {return filename;}
         
-        virtual void read2DDataFromTimestep(const int time_index, const int level_index = 0) = 0;
+        virtual void read2DDataFromTimestep(const index_type time_index, const index_type level_index = 0) = 0;
 
     protected:
         virtual void initDimensions() = 0;
@@ -34,11 +38,11 @@ class StrideSearchData {
         std::string filename;
         std::vector<std::string> variables;
         
-        std::vector<double> time;
+        std::vector<scalar_type> time;
        
         int fileNTimesteps;
         int totalNTimesteps;
 };
 
-
+}
 #endif

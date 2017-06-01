@@ -1,7 +1,11 @@
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include <iostream>
 #include <vector> 
 #include <string>
+
+using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
     print_copyright();

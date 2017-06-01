@@ -1,21 +1,22 @@
 #ifndef _STRIDE_SEARCH_SECTOR_LIST_BASE_H_
 #define _STRIDE_SEARCH_SECTOR_LIST_BASE_H_
 
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include "StrideSearchData_Base.h"
 #include <vector>
 #include <memory>
 
-typedef std::pair<double, double> ll_coord_type;
-typedef std::vector<int> indices_type;
+namespace StrideSearch {
 
 struct Sector {
     double centerLat;
     double centerLon;
         
     std::vector<ll_coord_type> data_coords;
-    std::vector<indices_type> data_indices;      
+    std::vector<vec_indices_type> data_indices;      
     
-    Sector(double cLat, double cLon, std::vector<ll_coord_type> cds, std::vector<indices_type> inds) :
+    Sector(scalar_type cLat, scalar_type cLon, std::vector<ll_coord_type> cds, std::vector<vec_indices_type> inds) :
         centerLat(cLat), centerLon(cLon), data_coords(cds), data_indices(inds) {};
 };
 
@@ -29,16 +30,16 @@ class SectorList {
         std::vector<ll_coord_type> listSectorCenters() const;
         
     protected: 
-        double southBnd;
-        double northBnd;
-        double westBnd;
-        double eastBnd;
-        double radius;
+        scalar_type southBnd;
+        scalar_type northBnd;
+        scalar_type westBnd;
+        scalar_type eastBnd;
+        scalar_type radius;
         
-        double lat_stride_deg;
-        std::vector<double> lon_strides_deg;
-        std::vector<double> sec_center_lats;
-        std::vector<double> sec_center_lons;
+        scalar_type lat_stride_deg;
+        std::vector<scalar_type> lon_strides_deg;
+        std::vector<scalar_type> sec_center_lats;
+        std::vector<scalar_type> sec_center_lons;
         
         std::vector<std::unique_ptr<Sector> > sectors;
     
@@ -48,5 +49,6 @@ class SectorList {
 };
 
 
+}
 
 #endif

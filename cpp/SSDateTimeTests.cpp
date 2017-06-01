@@ -1,7 +1,11 @@
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include "StrideSearchDateTime.h"
 
 #include <iostream>
+
+using namespace StrideSearch;
 
 int main (int argc, char* argv[]) {
 

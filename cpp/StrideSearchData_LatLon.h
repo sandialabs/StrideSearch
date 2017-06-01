@@ -8,6 +8,8 @@
 #include <vector> 
 #include <string>
 
+namespace StrideSearch {
+
 class StrideSearchData_LatLon : public StrideSearchData {
     public:
         StrideSearchData_LatLon(const std::string fname, const std::vector<std::string> varnames) : 
@@ -16,34 +18,35 @@ class StrideSearchData_LatLon : public StrideSearchData {
         };
         ~StrideSearchData_LatLon(){};
         
-        void getGridDescription(int* gridDescInts) const;
+        void getGridDescription(index_type* gridDescInts) const;
         
         Workspace getSectorWorkingData(const std::vector<std::string>& crit_vars, 
-            const std::vector<std::vector<int> >& dataIndices);
+            const std::vector<std::vector<index_type> >& dataIndices);
 
-	void readFullFile(const std::string var);
-	
-	void read2DDataFromSingle(const std::string var, const int latIndex);
-	
-	void readFullWChunks(const int time_index);
+        void readFullFile(const std::string var);
+    
+        void read2DDataFromSingle(const std::string var, const index_type latIndex);
+    
+        void readFullWChunks(const index_type time_index);
 
-        void read2DDataFromTimestep(const int time_index, const int level_index = 0);
+        void read2DDataFromTimestep(const int time_index, const index_type level_index = 0);
         
         std::string basicInfo() const;
         
-        double getDatumValue(const std::string var, const int latInd, const int lonInd);
+        double getDatumValue(const std::string var, const index_type latInd, const index_type lonInd);
         
-        std::vector<std::pair<double,double> > getLLCoordsFromIndices(const std::vector<std::vector<int> >& dataIndices) const;
+        std::vector<std::pair<scalar_type, scalar_type> > getLLCoordsFromIndices(
+            const std::vector<std::vector<index_type> >& dataIndices) const;
     
     protected:
-        int nLat;
-        int nLon;
-        std::vector<double> lons;
-        std::vector<double> lats;
+        index_type nLat;
+        index_type nLon;
+        std::vector<scalar_type> lons;
+        std::vector<scalar_type> lats;
         Workspace2D nc_data;
         
         void initDimensions();
 };
 
-
+}
 #endif

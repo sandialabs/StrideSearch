@@ -6,21 +6,23 @@
 #include <map>
 #include <iostream>
 
+namespace StrideSearch {
+
 struct Workspace {
-    std::map<std::string, std::vector<double> > var_work;
+    std::map<std::string, std::vector<scalar_type> > var_work;
     
-    Workspace(std::vector<std::string> keys, const int nValsPerKey);
+    Workspace(std::vector<std::string> keys, const index_type nValsPerKey);
     
-    std::vector<double>& operator[](std::string key) {return var_work[key];}
+    std::vector<scalar_type>& operator[](std::string key) {return var_work[key];}
 };
 std::ostream& operator<<(std::ostream& os, const Workspace& wspc);
 
 class Workspace2D {
     public :
-        typedef double** ptr_type;
+        typedef scalar_type** ptr_type;
     
-        int dim0_size;
-        int dim1_size;
+        index_type dim0_size;
+        index_type dim1_size;
         bool allocated;
     
         std::map<std::string, ptr_type> data2d;
@@ -28,7 +30,7 @@ class Workspace2D {
         ptr_type operator[](const std::string key) {return data2d[key];}
 
         Workspace2D(){dim0_size = 0; dim1_size = 0; allocated = false;}
-        Workspace2D(const std::vector<std::string> var_names, const int size_dim0, const int size_dim1);
+        Workspace2D(const std::vector<std::string> var_names, const index_type size_dim0, const index_type size_dim1);
 
         Workspace2D& operator=(const Workspace2D& other); // copy assignment
     
@@ -42,4 +44,5 @@ class Workspace2D {
 };
 std::ostream& operator<<(std::ostream& os, const Workspace2D& wspc);
 
+}
 #endif

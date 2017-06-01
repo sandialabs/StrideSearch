@@ -4,6 +4,8 @@
 #include <sstream>
 #include <iomanip>
 
+namespace StrideSearch {
+
 DateTime::DateTime(const int yr, const int mo, const int dy, const int hr) {
     year = yr;
     month = mo;
@@ -73,4 +75,6 @@ std::string DateTime::intString() const{
     ss << std::setw(2) << std::setfill('0') << day;
     ss << std::setw(2) << std::setfill('0') << hour << "00";
     return ss.str();
+}
+
 }

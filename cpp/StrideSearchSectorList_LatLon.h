@@ -4,27 +4,30 @@
 #include "StrideSearchSectorList_Base.h"
 #include "StrideSearchData_Base.h"
 
+namespace StrideSearch {
+
 class SectorList_LatLon : public SectorList {
     protected:
-        int nLat;
-        int nLon;
-        double dLambda;
-        double grid_res_deg;
-        int latMinIndex;
-        int latMaxIndex;
-        int lonMinIndex;
-        int lonMaxIndex;
-        int lat_stride_int;
-        std::vector<int> lon_stride_ints;
+        index_type nLat;
+        index_type nLon;
+        scalar_type dLambda;
+        scalar_type grid_res_deg;
+        index_type latMinIndex;
+        index_type latMaxIndex;
+        index_type lonMinIndex;
+        index_type lonMaxIndex;
+        index_type lat_stride_index_type;
+        std::vector<index_type> lon_stride_index_types;
         
         void linkSectorsToData(StrideSearchData* ssdata_ptr);
         
     public:
-        SectorList_LatLon(const double sb, const double nb, const double wb, const double eb, 
-            const double sector_radius_km) :
+        SectorList_LatLon(const scalar_type sb, const scalar_type nb, const scalar_type wb, const scalar_type eb, 
+            const scalar_type sector_radius_km) :
             SectorList(sb, nb, wb, eb, sector_radius_km) {};
         ~SectorList_LatLon() {};
         
 };
 
+}
 #endif

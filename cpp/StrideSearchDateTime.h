@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace StrideSearch {
+
 struct DateTime {
     int year;
     int month;
@@ -18,4 +20,5 @@ inline bool operator==(const DateTime& left, const DateTime& right){
     return left.year == right.year && left.month == right.month && left.day == right.day && left.hour == right.hour;
 }
 
+}
 #endif

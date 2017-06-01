@@ -1,6 +1,18 @@
 cmake_minimum_required(VERSION 2.8)
 
+#
+#   Project details
+#
 PROJECT(StrideSearch)
+INCLUDE_DIRECTORIES(.)
+SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
+SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
+SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
+SET( StrideSearch_VERSION_MAJOR 1)
+SET( StrideSearch_VERSION_MINOR 0)
+
+INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
+
 
 IF (CMAKE_VERSION VERSION_LESS "3.1")
   IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -13,6 +25,9 @@ ELSE ()
   SET (CMAKE_CXX_STANDARD 11)
 ENDIF ()
 
+#
+#   Find NetCDF (required)
+#
 FIND_LIBRARY(netcdf netcdf PATHS $ENV{NETCDF_ROOT}/lib REQUIRED NO_DEFAULT_PATH)
 IF (netcdf)
     message("**** Found NetCDF: " ${netcdf})
@@ -20,7 +35,7 @@ ELSE (netcdf)
     message("CMake ERROR: Cannot find the NetCDF Library" \n)
 ENDIF (netcdf)
 FIND_LIBRARY(netcdf_c++ netcdf_c++4 PATHS $ENV{NETCDF_ROOT}/lib REQUIRED NO_DEFAULT_PATH)
-#FIND_LIBRARY(netcdf_c++ NAMES libnetcdf_c++4.so.1 PATHS $ENV{NETCDF_ROOT}/lib REQUIRED NO_DEFAULT_PATH)
+
 IF (netcdf_c++)
     message("**** Found NetCDF C++ : " ${netcdf_c++})
 ELSE (netcdf_c++)
@@ -29,11 +44,31 @@ ENDIF (netcdf_c++)
 INCLUDE_DIRECTORIES($ENV{NETCDF_ROOT}/include)
 
 #
+#   Find nanoflann (optional, but required for unstructured data)
+#
+SET(USE_NANOFLANN ON)
+FIND_PATH(NANOFLANN_INCLUDE nanoflann.hpp HINTS $ENV{NANOFLANN_ROOT}/include)
+IF (EXISTS ${NANOFLANN_INCLUDE})
+    MESSAGE("Found Nanoflann TPL: ${NANOFLANN_INCLUDE}")
+    INCLUDE_DIRECTORIES( ${NANOFLANN_INCLUDE})
+    OPTION(USE_NANOFLANN "Build with nanoflann support" ON)
+ELSE()
+    OPTION(USE_NANOFLANN "Build with nanoflann support" OFF)
+    MESSAGE("Nanoflann not found; Stride Search will only work for uniform latitude-longitude grids.")
+ENDIF()
+
+
+#
+#   Write configure file *** ALL CMAKE OPTIONS MUST BE SET BEFORE THIS POINT ***
+#
+CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/StrideSearch_Config.h.in" "${PROJECT_BINARY_DIR}/StrideSearch_Config.h")
+#
 # set default build type to release
 #
 if ( NOT CMAKE_BUILD_TYPE)
 	set (CMAKE_BUILD_TYPE RELEASE CACHE STRING "Choose type of build. Options are : NONE, DEBUG, RELEASE." FORCE)
 endif ( NOT CMAKE_BUILD_TYPE)
+
 #
 # default installation
 #

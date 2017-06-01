@@ -5,6 +5,8 @@
 #include <cmath>
 #include <memory>
 
+namespace StrideSearch {
+
 SectorList::SectorList(const double sb, const double nb, const double wb, const double eb, 
     const double sector_radius_km){
     southBnd = sb;
@@ -49,3 +51,4 @@ std::vector<ll_coord_type> SectorList::listSectorCenters() const {
     return result;
 }
 
+}

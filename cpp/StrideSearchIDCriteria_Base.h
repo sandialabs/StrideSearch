@@ -1,20 +1,24 @@
 #ifndef _STRIDE_SEARCH_ID_CRITERIA_BASE_H_
 #define _STRIDE_SEARCH_ID_CRITERIA_BASE_H_
 
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include "StrideSearchEvent.h"
 #include <string>
 #include <vector>
+
+namespace StrideSearch {
 
 class Sector;
 
 class IDCriterion {
     protected:
         std::vector<std::string> varnames;
-        double threshold;
+        scalar_type threshold;
     
     public:
-        IDCriterion(std::vector<std::string> varnames, const double threshold);
+        IDCriterion(std::vector<std::string> varnames, const scalar_type threshold);
         virtual ~IDCriterion(){};
            
         virtual bool evaluate(const Sector* sec, const Workspace* wspc) const = 0;
@@ -35,4 +39,5 @@ class MinCriterion : public IDCriterion {
     std::string returnEventType() const;
 };
 
+}
 #endif

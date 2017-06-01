@@ -1,3 +1,5 @@
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include "StrideSearchData_Base.h"
 #include "StrideSearchData_LatLon.h"
@@ -6,6 +8,8 @@
 #include <string>
 #include <vector>
 #include <ctime>
+
+using namespace StrideSearch;
 
 int main (int argc, char* argv[]) {
     print_copyright();

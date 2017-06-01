@@ -4,8 +4,10 @@
 #include <sstream>
 #include <iomanip>
 
-Event::Event(const std::string dsc, const double value, const ll_coord_type ll, const DateTime dt, 
-            const indices_type ind, const std::string fname, const int tind, const Event::EventType tp) {
+namespace StrideSearch {
+
+Event::Event(const std::string dsc, const scalar_type value, const ll_coord_type ll, const DateTime dt, 
+            const ll_index_type ind, const std::string fname, const index_type tind, const Event::EventType tp) {
     desc = dsc;
     val = value;
     latLon = ll;
@@ -47,3 +49,4 @@ bool Event::isRedundant(const Event& other, const double distThreshold) const {
     return this->desc == other.desc && this->datetime == other.datetime && this->isNear(other, distThreshold);
 }
 
+}

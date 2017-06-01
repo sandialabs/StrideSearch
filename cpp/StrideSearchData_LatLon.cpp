@@ -6,6 +6,8 @@
 #include <iostream>
 #include <sstream>
 
+namespace StrideSearch {
+
 void StrideSearchData_LatLon::initDimensions(){
     netCDF::NcFile file(filename, netCDF::NcFile::read);
     
@@ -129,4 +131,4 @@ std::vector<std::pair<double, double> > StrideSearchData_LatLon::getLLCoordsFrom
     return result;
 }
 
-
+}
