@@ -1,6 +1,6 @@
 #include "StrideSearchData_Base.h"
 #include <vector>
-#include <string>
+#include <string> 
 #include <netcdf>
 #include <map>
 

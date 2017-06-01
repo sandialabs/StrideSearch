@@ -42,14 +42,32 @@ std::string StrideSearchData_LatLon::basicInfo() const {
     return ss.str();
 }
 
+void StrideSearchData_LatLon::readFullFile(const std::string var)
+{
+  for(int i = 0; i < nLat; i++){
+    read2DDataFromSingle(var,i);
+  }
+};
+
+void StrideSearchData_LatLon::read2DDataFromSingle(const std::string var, const int latIndex)
+{
+  for(int i = 0; i < nLon; ++i){
+    getDatumValue(var,latIndex,i);
+  }
+}; 
+
+void StrideSearchData_LatLon::readFullWChunks(const int time_index)
+{
+  for(int i = 0; i < nLon; ++i){
+    read2DDataFromTimestep(time_index,0);
+  }
+};
+
 void StrideSearchData_LatLon::read2DDataFromTimestep(const int time_index, const int level_index){
     netCDF::NcFile file(filename, netCDF::NcFile::read);    
-    
     for (auto& elem : nc_data.data2d) {
         netCDF::NcVar ncv(file.getVar(elem.first));
-        
         std::vector<netCDF::NcDim> dims(ncv.getDims());
-        
         if (dims.size() == 3) {
             std::vector<size_t> readStart;
             readStart.push_back(time_index);

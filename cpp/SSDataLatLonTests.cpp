@@ -5,12 +5,15 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <ctime>
 
 int main (int argc, char* argv[]) {
     print_copyright();
     
     std::string dataDir("../../testData/");
+    //std::string dataDir("/fscratch/pabosle/climateData/ne240_ll513x1024/");
     std::string testFile("sresa1b_ncar_ccsm3-example.nc");
+    //std::string testFile("f1850c5_ne240_rel06.cam.h2.0005-07-13-00000.nc");
     std::string inputFile = dataDir + testFile;
     
     std::vector<std::string> search_vars = {"tas", "ua"};
@@ -21,8 +24,8 @@ int main (int argc, char* argv[]) {
     
     const int time_index = 0;
     const int level_index = 2;
-    const int latInd = 200;
-    const int lonInd = 801;
+    const int latInd = 100;
+    const int lonInd = 200;
     ncData.read2DDataFromTimestep(time_index, level_index);
     std::cout << "tas(" << time_index << ", " << latInd << ", " << lonInd << ") = " << 
         ncData.getDatumValue("tas", latInd, lonInd) << " Pa\n";
@@ -51,8 +54,26 @@ int main (int argc, char* argv[]) {
     std::cout << "lat-lon pts : VOR850 = \n";
     for (int i = 0; i < rndDataInds.size(); ++i) {
         std::cout << "(" << secLL[i].first << ", " << secLL[i].second << ") : ";
-        std::cout << ncData.getDatumValue("VOR850", rndDataInds[i][0], rndDataInds[i][1]) << " 1/s\n";
+        std::cout << ncData.getDatumValue("tas", rndDataInds[i][0], rndDataInds[i][1]) << " 1/s\n";
     }
-    
+    std::clock_t start;
+    double duration;
+    start = std::clock();
+    // for(int i = 0; i < 10000; i++){
+    //   ncData.read2DDataFromSingle("tas");
+    // }
+    ncData.readFullFile("tas");
+    duration = (std::clock()-start)/(double)CLOCKS_PER_SEC;
+    std::cout<<"Single: "<<duration<<"\n";
+
+    start = std::clock();
+    // for(int i = 0; i < 10000; i++){
+    //   ncData.read2DDataFromTimestep(time_index, level_index);
+    // }
+    ncData.readFullWChunks(time_index);
+    duration = (std::clock()-start)/(double)CLOCKS_PER_SEC;
+    std::cout<<"Chunk: "<<duration<<"\n";
+
+
 return 0;
 }
