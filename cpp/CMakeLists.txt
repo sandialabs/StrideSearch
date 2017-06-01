@@ -11,6 +11,11 @@ SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 SET( StrideSearch_VERSION_MAJOR 1)
 SET( StrideSearch_VERSION_MINOR 0)
 
+# PB
+Message("CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")
+Message("CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
+Message("PROJECT_NAME = ${PROJECT_NAME}")
+
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
 
 
@@ -46,7 +51,6 @@ INCLUDE_DIRECTORIES($ENV{NETCDF_ROOT}/include)
 #
 #   Find nanoflann (optional, but required for unstructured data)
 #
-SET(USE_NANOFLANN ON)
 FIND_PATH(NANOFLANN_INCLUDE nanoflann.hpp HINTS $ENV{NANOFLANN_ROOT}/include)
 IF (EXISTS ${NANOFLANN_INCLUDE})
     MESSAGE("Found Nanoflann TPL: ${NANOFLANN_INCLUDE}")
@@ -57,6 +61,34 @@ ELSE()
     MESSAGE("Nanoflann not found; Stride Search will only work for uniform latitude-longitude grids.")
 ENDIF()
 
+OPTION(BUILD_DOCS "Build documentation" ON)
+FIND_PACKAGE(Doxygen)
+IF (DOXYGEN_FOUND)
+    Message("Doxygen found.")
+    #
+    #   Doxygen setup
+    #
+    
+    #   dot
+    EXECUTE_PROCESS(COMMAND which dot OUTPUT_VARIABLE DOT_PATH)
+    MESSAGE("DOT_PATH = ${DOT_PATH}")
+    
+    
+    #   input/output files
+    SET(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
+    SET(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+    
+    #   configure file
+    CONFIGURE_FILE(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    MESSAGE("Doxygen build started.")
+    
+    #   build docs
+    ADD_CUSTOM_TARGET(doc_doxygen ALL COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generating API docs..." VERBATIM)
+ELSE()
+    Message("Doxygen not found -- code docs will not be generated.")
+    OPTION(BUILD_DOCS "Build documentation" OFF)
+ENDIF()
 
 #
 #   Write configure file *** ALL CMAKE OPTIONS MUST BE SET BEFORE THIS POINT ***
