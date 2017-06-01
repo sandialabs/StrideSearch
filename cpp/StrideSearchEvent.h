@@ -20,22 +20,9 @@ class Event {
         
         std::string infoString(int tabLevel = 0) const;
         
-        inline void addRelated(Event* relEv){
-            relatedEvents.push_back(relEv);
-            relEv->isReferenced = true;
-        }
+        void addRelated(Event* relEv); 
           
-        bool lowerIntensity(const Event& other) const { 
-            if (this->desc == other.desc) {
-                if (this->type == Max)
-                    return this->val < other.val;
-                else 
-                    return this->val > other.val;
-            }
-            else {
-                std::cerr << "Event operator < ERROR: can only compare events of same kind.\n";
-            }
-        }
+        bool lowerIntensity(const Event& other) const; 
         
         inline bool isDuplicate(const Event& other) const {
             return desc == other.desc && datetime == other.datetime && dataIndex == other.dataIndex;

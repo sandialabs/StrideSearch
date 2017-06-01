@@ -28,7 +28,7 @@ class StrideSearchData {
         void updateSourceFile(std::string fname);
         void initTime();
         
-        std::string getFilename() const {return filename;}
+        std::string getFilename() const; 
         
         virtual void read2DDataFromTimestep(const index_type time_index, const index_type level_index = 0) = 0;
 

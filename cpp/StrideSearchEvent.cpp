@@ -19,6 +19,24 @@ Event::Event(const std::string dsc, const scalar_type value, const ll_coord_type
     isReferenced = false;           
 }
 
+void Event::addRelated(Event* relEv) {
+    relatedEvents.push_back(relEv);
+    relEv->isReferenced = true;
+}
+
+bool Event::lowerIntensity(const Event& other) const { 
+    if (this->desc == other.desc) {
+        if (this->type == Max)
+            return this->val < other.val;
+        else 
+            return this->val > other.val;
+    }
+    else {
+        std::cerr << "Event operator < ERROR: can only compare events of same kind.\n";
+        return false;
+    }
+}
+
 std::string Event::infoString(int tabLevel) const {
     std::string tabstr("");
     for (int i = 0; i < tabLevel; ++i)
