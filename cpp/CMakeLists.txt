@@ -61,7 +61,7 @@ ELSE()
     MESSAGE("Nanoflann not found; Stride Search will only work for uniform latitude-longitude grids.")
 ENDIF()
 
-OPTION(BUILD_DOCS "Build documentation" ON)
+OPTION(BUILD_DOCS "Build documentation" OFF)
 IF (BUILD_DOCS)
     FIND_PACKAGE(Doxygen)
     IF (DOXYGEN_FOUND)
