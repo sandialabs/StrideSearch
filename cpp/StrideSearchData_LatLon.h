@@ -56,6 +56,12 @@ class StrideSearchData_LatLon : public StrideSearchData {
         std::vector<scalar_type> lats;
         Workspace2D nc_data;
         
+        /// Allocates/reads dimension variables from .nc file.
+        /**
+            On output, latitude coordinate values and longitude coordinate values are filled into class member variables.
+            
+            @todo Add support for the case where nc variable names are not "lat" and "lon," e.g., "latitude"?  
+        */
         void initDimensions();
 };
 

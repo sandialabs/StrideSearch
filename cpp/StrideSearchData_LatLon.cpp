@@ -17,13 +17,13 @@ void StrideSearchData_LatLon::initDimensions(){
     nLat = latVar.getDim(0).getSize();
     nLon = lonVar.getDim(0).getSize();
     
-    double latArr[nLat];
-    double lonArr[nLon];
+    scalar_type latArr[nLat];
+    scalar_type lonArr[nLon];
     latVar.getVar(latArr);
     lonVar.getVar(lonArr);
       
-    lats = std::vector<double>(&latArr[0], &latArr[0] + nLat);
-    lons = std::vector<double>(&lonArr[0], &lonArr[0] + nLon);
+    lats = std::vector<scalar_type>(&latArr[0], &latArr[0] + nLat);
+    lons = std::vector<scalar_type>(&lonArr[0], &lonArr[0] + nLon);
     
    nc_data = Workspace2D(variables, nLat, nLon);
 }

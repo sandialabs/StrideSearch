@@ -21,7 +21,7 @@ class StrideSearchData {
         /// Constructor.
         /**
             @param fname Input file with source dataIndices
-            @param variable names to be used in search
+            @param varnames names to be used in search
         */
         StrideSearchData(const std::string fname, const std::vector<std::string>& varnames) : 
             filename(fname), variables(varnames), fileNTimesteps(0),  totalNTimesteps(0) {
