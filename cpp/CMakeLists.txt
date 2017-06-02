@@ -62,32 +62,38 @@ ELSE()
 ENDIF()
 
 OPTION(BUILD_DOCS "Build documentation" ON)
-FIND_PACKAGE(Doxygen)
-IF (DOXYGEN_FOUND)
-    Message("Doxygen found.")
-    #
-    #   Doxygen setup
-    #
+IF (BUILD_DOCS)
+    FIND_PACKAGE(Doxygen)
+    IF (DOXYGEN_FOUND)
+        Message("Doxygen found.")
+        #
+        #   Doxygen setup
+        #
     
-    #   dot
-    EXECUTE_PROCESS(COMMAND which dot OUTPUT_VARIABLE DOT_PATH)
-    MESSAGE("DOT_PATH = ${DOT_PATH}")
+        #   dot
+        EXECUTE_PROCESS(COMMAND which dot OUTPUT_VARIABLE DOT_PATH)
+        IF (DOT_PATH) 
+            SET(HAVE_DOT YES)
+        ELSE ()
+            SET(HAVE_DOT NO)
+        ENDIF()
     
     
-    #   input/output files
-    SET(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
-    SET(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+        #   input/output files
+        SET(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
+        SET(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
     
-    #   configure file
-    CONFIGURE_FILE(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    MESSAGE("Doxygen build started.")
+        #   configure files
+        CONFIGURE_FILE(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+        MESSAGE("Doxygen build started.")
     
-    #   build docs
-    ADD_CUSTOM_TARGET(doc_doxygen ALL COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generating API docs..." VERBATIM)
-ELSE()
-    Message("Doxygen not found -- code docs will not be generated.")
-    OPTION(BUILD_DOCS "Build documentation" OFF)
+        #   build docs
+        ADD_CUSTOM_TARGET(doc_doxygen ALL COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generating API docs..." VERBATIM)
+    ELSE()
+        Message("Doxygen not found -- code docs will not be generated.")
+       # OPTION(BUILD_DOCS "Build documentation" OFF)
+    ENDIF()
 ENDIF()
 
 #
