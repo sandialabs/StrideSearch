@@ -77,8 +77,7 @@ IF (BUILD_DOCS)
         ELSE ()
             SET(HAVE_DOT NO)
         ENDIF()
-    
-    
+
         #   input/output files
         SET(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
         SET(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
@@ -91,8 +90,7 @@ IF (BUILD_DOCS)
         ADD_CUSTOM_TARGET(doc_doxygen ALL COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generating API docs..." VERBATIM)
     ELSE()
-        Message("Doxygen not found -- code docs will not be generated.")
-       # OPTION(BUILD_DOCS "Build documentation" OFF)
+        Message("Doxygen not found -- documentation html will not be generated.")
     ENDIF()
 ENDIF()
 

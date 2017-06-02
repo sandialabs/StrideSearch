@@ -110,23 +110,23 @@ double StrideSearchData_LatLon::getDatumValue(const std::string var, const int l
 }
 
 Workspace StrideSearchData_LatLon::getSectorWorkingData(const std::vector<std::string>& crit_vars, 
-        const std::vector<std::vector<int> >& dataIndices) {
+        const std::vector<ll_index_type>& dataIndices) {
     Workspace result(crit_vars, dataIndices.size());
     for (int key_num = 0; key_num < crit_vars.size(); ++key_num) {
         for (int i = 0; i < dataIndices.size(); ++i) {
             result[crit_vars[key_num]][i] = 
-                nc_data[crit_vars[key_num]][dataIndices[i][0]][dataIndices[i][1]];
+                nc_data[crit_vars[key_num]][dataIndices[i].first][dataIndices[i].second];
         }
     }
     return result;
 }
 
-std::vector<std::pair<double, double> > StrideSearchData_LatLon::getLLCoordsFromIndices(
-    const std::vector<std::vector<int> >& dataIndices) const {
+std::vector<ll_coord_type > StrideSearchData_LatLon::getLLCoordsFromIndices(
+    const std::vector<ll_index_type>& dataIndices) const {
     
-    std::vector<std::pair<double, double> > result;
+    std::vector<ll_coord_type > result;
     for (int i = 0; i < dataIndices.size(); ++i) {
-        result.push_back(std::pair<double, double>(lats[dataIndices[i][0]], lons[dataIndices[i][1]]));
+        result.push_back(ll_coord_type(lats[dataIndices[i].first], lons[dataIndices[i].second]));
     }
     return result;
 }

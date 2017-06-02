@@ -10,18 +10,26 @@
 
 namespace StrideSearch {
 
+/// Specialized data access for uniform lat-lon grids.
+/**
+*/
 class StrideSearchData_LatLon : public StrideSearchData {
     public:
+        /// Constructor
         StrideSearchData_LatLon(const std::string fname, const std::vector<std::string> varnames) : 
             StrideSearchData(fname, varnames) {
             initDimensions();
         };
+        
+        /// Destructor
         ~StrideSearchData_LatLon(){};
         
+        /// Return an integer array = [nLat, nLon]
         void getGridDescription(index_type* gridDescInts) const;
         
+        /// Get local sector working data
         Workspace getSectorWorkingData(const std::vector<std::string>& crit_vars, 
-            const std::vector<std::vector<index_type> >& dataIndices);
+            const std::vector<ll_index_type>& dataIndices);
 
         void readFullFile(const std::string var);
     
@@ -31,12 +39,15 @@ class StrideSearchData_LatLon : public StrideSearchData {
 
         void read2DDataFromTimestep(const int time_index, const index_type level_index = 0);
         
+        /// Return a string with basic information from the data file.
         std::string basicInfo() const;
         
+        /// Read one scalar value from a data set.
         double getDatumValue(const std::string var, const index_type latInd, const index_type lonInd);
         
-        std::vector<std::pair<scalar_type, scalar_type> > getLLCoordsFromIndices(
-            const std::vector<std::vector<index_type> >& dataIndices) const;
+        /// Return a vector of lat-lon coordinates corresponding to a vector of lat-lon data indices.
+        std::vector<ll_coord_type > getLLCoordsFromIndices(
+            const std::vector<ll_index_type >& dataIndices) const;
     
     protected:
         index_type nLat;

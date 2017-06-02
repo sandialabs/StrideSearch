@@ -36,20 +36,27 @@ int main (int argc, char* argv[]) {
     std::cout << "ua(" << time_index << ", " << latInd << ", " << lonInd << ") = " << 
         ncData.getDatumValue("ua", latInd, lonInd) << " 1/s\n";
         
-    std::vector<std::vector<int> > rndDataInds;
-    for (int k = 0; k < 5; ++k) {
-        rndDataInds.push_back(std::vector<int>(2,0));
-    }
-    rndDataInds[0][0] = latInd;
-    rndDataInds[0][1] = lonInd - 1;
-    rndDataInds[1][0] = latInd;
-    rndDataInds[1][1] = lonInd;
-    rndDataInds[2][0] = latInd;
-    rndDataInds[2][1] = lonInd + 1;
-    rndDataInds[3][0] = latInd - 1;
-    rndDataInds[3][1] = lonInd;
-    rndDataInds[4][0] = latInd + 1;
-    rndDataInds[4][1] = lonInd;
+//     std::vector<std::vector<int> > rndDataInds;
+//     for (int k = 0; k < 5; ++k) {
+//         rndDataInds.push_back(std::vector<int>(2,0));
+//     }
+//     rndDataInds[0][0] = latInd;
+//     rndDataInds[0][1] = lonInd - 1;
+//     rndDataInds[1][0] = latInd;
+//     rndDataInds[1][1] = lonInd;
+//     rndDataInds[2][0] = latInd;
+//     rndDataInds[2][1] = lonInd + 1;
+//     rndDataInds[3][0] = latInd - 1;
+//     rndDataInds[3][1] = lonInd;
+//     rndDataInds[4][0] = latInd + 1;
+//     rndDataInds[4][1] = lonInd;
+    std::vector<ll_index_type> rndDataInds;
+    rndDataInds.push_back(ll_index_type(latInd, lonInd-1));
+    rndDataInds.push_back(ll_index_type(latInd, lonInd));
+    rndDataInds.push_back(ll_index_type(latInd, lonInd+1));
+    rndDataInds.push_back(ll_index_type(latInd-1, lonInd));
+    rndDataInds.push_back(ll_index_type(latInd+1, latInd));
+
     
     Workspace wspc = ncData.getSectorWorkingData(search_vars, rndDataInds);
     std::cout << wspc;
@@ -58,7 +65,7 @@ int main (int argc, char* argv[]) {
     std::cout << "lat-lon pts : VOR850 = \n";
     for (int i = 0; i < rndDataInds.size(); ++i) {
         std::cout << "(" << secLL[i].first << ", " << secLL[i].second << ") : ";
-        std::cout << ncData.getDatumValue("tas", rndDataInds[i][0], rndDataInds[i][1]) << " 1/s\n";
+        std::cout << ncData.getDatumValue("tas", rndDataInds[i].first, rndDataInds[i].second) << " 1/s\n";
     }
     std::clock_t start;
     double duration;
