@@ -28,7 +28,7 @@ class StrideSearchData_LatLon : public StrideSearchData {
         void getGridDescription(index_type* gridDescInts) const;
         
         /// Get local sector working data
-        Workspace getSectorWorkingData(const std::vector<std::string>& crit_vars, 
+        Workspace1D getSectorWorkingData(const std::vector<std::string>& crit_vars, 
             const std::vector<ll_index_type>& dataIndices);
 
         void readFullFile(const std::string var);

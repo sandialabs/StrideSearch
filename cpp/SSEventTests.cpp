@@ -18,8 +18,8 @@ int main (int argc, char* argv[]) {
     ll_coord_type loc1(45.0, 0.0);
     ll_coord_type loc2(45.2, 0.2);
     
-    ll_index_type index1 = {1,1};
-    ll_index_type index2 = {1,2};
+    vec_indices_type index1 = {1,1};
+    vec_indices_type index2 = {1,2};
     
     const double ps1val = 990.0;
     const double ps2val = 992.0;

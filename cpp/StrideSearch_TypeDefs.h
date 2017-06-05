@@ -2,6 +2,7 @@
 #define _STRIDE_SEARCH_TYPE_DEFS_H_
 
 #include "StrideSearch_Config.h"
+#include <vector>
 
 #ifdef USE_NANOFLANN
 #include "nanoflann.hpp"

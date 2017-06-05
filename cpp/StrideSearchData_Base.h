@@ -40,7 +40,7 @@ class StrideSearchData {
         virtual void getGridDescription(index_type* gridDescInts) const = 0;
         
         /// Return a local workspace filled with search data for a particular search region.
-        virtual Workspace getSectorWorkingData(const std::vector<std::string>& varnames, 
+        virtual Workspace1D getSectorWorkingData(const std::vector<std::string>& varnames, 
             const std::vector<ll_index_type>& dataIndices) = 0;
         
         /// Update the source file for this data object. Used for advancing to the next file in a data set.

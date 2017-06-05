@@ -7,12 +7,14 @@
 #include "StrideSearchDateTime.h"
 #include <string>
 #include <iostream>
+#include <vector>
 
 namespace StrideSearch {
 
 /// A record of an important (as deemed by IDCriterion methods) event in the data.
 /**
-    An Event is a record of a user-specified occurence in the data of an IDCrtierion that evaluates as True.
+    An Event is a record of a the data and location associated with an instance of a set of identification criteria
+    (a collection of IDCriterion subclasses) evaluating as True in a Sector.
     
     For example, if an IDCriterion is defined to identify vorticity maxima greater than a threshold, when it encounters
     such a value in the data, it creates an Event with a description like "VortMax", the data value, location in 
@@ -20,7 +22,6 @@ namespace StrideSearch {
     the filename that contains the Event, the time index in that file that corresponds to the Event's time, and the Event
     type enum.
     
-    @todo Abstract the data location to allow for formats other than ll_index_type.
 */
 class Event {
     public:
@@ -29,7 +30,7 @@ class Event {
         
         /// Constructor
         Event(const std::string dsc, const scalar_type value, const ll_coord_type ll, const DateTime dt, 
-            const ll_index_type ind, const std::string fname, const index_type tind, const EventType tp);
+            const vec_indices_type& locIndex, const std::string fname, const index_type tind, const EventType tp);
         /// Destructor
         virtual ~Event(){};
         
@@ -72,7 +73,7 @@ class Event {
         scalar_type val;
         ll_coord_type latLon;
         DateTime datetime;
-        ll_index_type dataIndex;
+        std::vector<index_type> dataIndex;
         std::string filename;
         index_type time_index;
         std::vector<Event*> relatedEvents;

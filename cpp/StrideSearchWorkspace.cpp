@@ -7,7 +7,7 @@
 
 namespace StrideSearch {
 
-Workspace::Workspace(std::vector<std::string> keys, const int nValsPerKey){
+Workspace1D::Workspace1D(std::vector<std::string> keys, const int nValsPerKey){
     for (int i = 0; i < keys.size(); ++i) {
         var_work[keys[i]] = std::vector<double>(nValsPerKey);
     }
@@ -22,7 +22,7 @@ Workspace2D::Workspace2D(const std::vector<std::string> var_names, const index_t
     allocMemory();
 }
 
-std::ostream& operator<<(std::ostream& os, const Workspace& wspc){
+std::ostream& operator<<(std::ostream& os, const Workspace1D& wspc){
     for (auto& elem : wspc.var_work){
         os << elem.first << " = [";
         for (int i = 0; i < elem.second.size(); ++i){

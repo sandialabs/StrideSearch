@@ -39,5 +39,11 @@ class MinCriterion : public IDCriterion {
     std::string returnEventType() const;
 };
 
+class CollocationCriterion : public IDCriterion {
+    bool evaluate(const Sector* sec, const Workspace* wspc) const;
+    Event returnEvent(const Sector* sec, const Workspace*, const DateTime& dt, const StrideSearchData* sdata);
+    std::string returnEventType() const;
+};
+
 }
 #endif

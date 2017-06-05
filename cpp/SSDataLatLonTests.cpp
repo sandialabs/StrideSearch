@@ -14,11 +14,9 @@ using namespace StrideSearch;
 int main (int argc, char* argv[]) {
     print_copyright();
     
-    std::string dataDir("../../testData/");
-    //std::string dataDir("/fscratch/pabosle/climateData/ne240_ll513x1024/");
+    std::string dataDir(StrideSearch_TEST_DATA_DIR);
     std::string testFile("sresa1b_ncar_ccsm3-example.nc");
-    //std::string testFile("f1850c5_ne240_rel06.cam.h2.0005-07-13-00000.nc");
-    std::string inputFile = dataDir + testFile;
+    std::string inputFile = dataDir + "/" + testFile;
     
     std::vector<std::string> search_vars = {"tas", "ua"};
     
@@ -36,20 +34,6 @@ int main (int argc, char* argv[]) {
     std::cout << "ua(" << time_index << ", " << latInd << ", " << lonInd << ") = " << 
         ncData.getDatumValue("ua", latInd, lonInd) << " 1/s\n";
         
-//     std::vector<std::vector<int> > rndDataInds;
-//     for (int k = 0; k < 5; ++k) {
-//         rndDataInds.push_back(std::vector<int>(2,0));
-//     }
-//     rndDataInds[0][0] = latInd;
-//     rndDataInds[0][1] = lonInd - 1;
-//     rndDataInds[1][0] = latInd;
-//     rndDataInds[1][1] = lonInd;
-//     rndDataInds[2][0] = latInd;
-//     rndDataInds[2][1] = lonInd + 1;
-//     rndDataInds[3][0] = latInd - 1;
-//     rndDataInds[3][1] = lonInd;
-//     rndDataInds[4][0] = latInd + 1;
-//     rndDataInds[4][1] = lonInd;
     std::vector<ll_index_type> rndDataInds;
     rndDataInds.push_back(ll_index_type(latInd, lonInd-1));
     rndDataInds.push_back(ll_index_type(latInd, lonInd));
@@ -58,7 +42,7 @@ int main (int argc, char* argv[]) {
     rndDataInds.push_back(ll_index_type(latInd+1, latInd));
 
     
-    Workspace wspc = ncData.getSectorWorkingData(search_vars, rndDataInds);
+    Workspace1D wspc = ncData.getSectorWorkingData(search_vars, rndDataInds);
     std::cout << wspc;
     
     std::vector<std::pair<double,double> > secLL = ncData.getLLCoordsFromIndices(rndDataInds);

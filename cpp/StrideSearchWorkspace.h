@@ -8,14 +8,15 @@
 
 namespace StrideSearch {
 
-struct Workspace {
+class Workspace1D {
+    public:
     std::map<std::string, std::vector<scalar_type> > var_work;
     
-    Workspace(std::vector<std::string> keys, const index_type nValsPerKey);
+    Workspace1D(std::vector<std::string> keys, const index_type nValsPerKey);
     
     std::vector<scalar_type>& operator[](std::string key) {return var_work[key];}
 };
-std::ostream& operator<<(std::ostream& os, const Workspace& wspc);
+std::ostream& operator<<(std::ostream& os, const Workspace1D& wspc);
 
 class Workspace2D {
     public :

@@ -7,12 +7,12 @@
 namespace StrideSearch {
 
 Event::Event(const std::string dsc, const scalar_type value, const ll_coord_type ll, const DateTime dt, 
-            const ll_index_type ind, const std::string fname, const index_type tind, const Event::EventType tp) {
+            const vec_indices_type& locInd, const std::string fname, const index_type tind, const Event::EventType tp) {
     desc = dsc;
     val = value;
     latLon = ll;
     datetime = dt;
-    dataIndex = ind;
+    dataIndex = locInd;
     filename = fname;
     time_index = tind;
     type = tp;

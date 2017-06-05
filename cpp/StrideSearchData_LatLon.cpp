@@ -109,9 +109,9 @@ double StrideSearchData_LatLon::getDatumValue(const std::string var, const int l
     return nc_data[var][latInd][lonInd];
 }
 
-Workspace StrideSearchData_LatLon::getSectorWorkingData(const std::vector<std::string>& crit_vars, 
+Workspace1D StrideSearchData_LatLon::getSectorWorkingData(const std::vector<std::string>& crit_vars, 
         const std::vector<ll_index_type>& dataIndices) {
-    Workspace result(crit_vars, dataIndices.size());
+    Workspace1D result(crit_vars, dataIndices.size());
     for (int key_num = 0; key_num < crit_vars.size(); ++key_num) {
         for (int i = 0; i < dataIndices.size(); ++i) {
             result[crit_vars[key_num]][i] = 
