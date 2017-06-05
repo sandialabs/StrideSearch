@@ -20,9 +20,9 @@ int main (int argc, char* argv[]) {
     std::cout << "DateTime::intString() = " << codingDay.intString() << std::endl;
     
     DateTime codingDay2(year, month, day, hour);
-    std::cout << "Equivalent date-times? " << (codingDay == codingDay2) << std::endl;
+    std::cout << "(True) Equivalent date-times? " << (codingDay == codingDay2 ? "true" : "false") << std::endl;
     
     codingDay2 = DateTime(year, month, day, hour + 1);
-    std::cout << "Equivalent date-times? " << (codingDay == codingDay2) << std::endl;
+    std::cout << "(False) Equivalent date-times? " << (codingDay == codingDay2 ? "true" : "false") << std::endl;
 return 0;
 }

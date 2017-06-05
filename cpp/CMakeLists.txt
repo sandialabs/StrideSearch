@@ -123,27 +123,27 @@ TARGET_LINK_LIBRARIES(stridesearch ${netcdf} ${netcdf_c++})
 ENABLE_TESTING()
 ADD_EXECUTABLE(ssUtilTest.exe SSUtilitiesTests.cpp)
 TARGET_LINK_LIBRARIES(ssUtilTest.exe stridesearch)
-ADD_TEST(NAME SSUtil COMMAND ${PROJECT_BINARY_DIR}/ssUtilTest.exe)
+ADD_TEST(NAME SSUtil COMMAND ${PROJECT_BINARY_DIR}/bin/ssUtilTest.exe)
 
 ADD_EXECUTABLE(ssEventTest.exe SSEventTests.cpp)
 TARGET_LINK_LIBRARIES(ssEventTest.exe stridesearch)
-ADD_TEST(NAME SSEvent COMMAND ${PROJECT_BINARY_DIR}/ssEventTest.exe)
+ADD_TEST(NAME SSEvent COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventTest.exe)
 
 ADD_EXECUTABLE(ssDateTimeTest.exe SSDateTimeTests.cpp)
 TARGET_LINK_LIBRARIES(ssDateTimeTest.exe stridesearch)
-ADD_TEST(NAME SSDatetime COMMAND ${PROJECT_BINARY_DIR}/ssDateTimeTest.exe)
+ADD_TEST(NAME SSDatetime COMMAND ${PROJECT_BINARY_DIR}/bin/ssDateTimeTest.exe)
 
 ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)
 TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe stridesearch)
-ADD_TEST(NAME SSWorkspace COMMAND ${PROJECT_BINARY_DIR}/ssWorkspaceTest.exe)
+ADD_TEST(NAME SSWorkspace COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceTest.exe)
 
 ADD_EXECUTABLE(ssLLDataTest.exe SSDataLatLonTests.cpp)
 TARGET_LINK_LIBRARIES(ssLLDataTest.exe stridesearch)
-ADD_TEST(NAME SSLLData COMMAND ${PROJECT_BINARY_DIR}/ssLLDataTest.exe)
+ADD_TEST(NAME SSLLData COMMAND ${PROJECT_BINARY_DIR}/bin/ssLLDataTest.exe)
 
 ADD_EXECUTABLE(ssLLSectorTest.exe SSLLSectorListTests.cpp)
 TARGET_LINK_LIBRARIES(ssLLSectorTest.exe stridesearch)
-ADD_TEST(NAME SSLLSectors COMMAND ${PROJECT_BINARY_DIR}/ssLLSectorTest.exe)
+ADD_TEST(NAME SSLLSectors COMMAND ${PROJECT_BINARY_DIR}/bin/ssLLSectorTest.exe)
 
 #ADD_EXECUTABLE(ssSectorListTest.exe SSSectorListTests.cpp)
 #TARGET_LINK_LIBRARIES(ssSectorListTest.exe stridesearch)

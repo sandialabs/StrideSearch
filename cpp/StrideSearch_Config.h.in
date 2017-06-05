@@ -4,3 +4,4 @@
 
 #cmakedefine USE_NANOFLANN
 
+#define StrideSearch_TEST_DATA_DIR "@CMAKE_CURRENT_SOURCE_DIR@/../testData"
