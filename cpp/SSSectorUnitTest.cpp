@@ -2,3 +2,55 @@
 #include "StrideSearch_TypeDefs.h"
 #include <vector>
 #include "StrideSearchWorkspaceDict.h"
+#include "StrideSearchSector.h"
+#include "StrideSearchIDCriteria_Base.h"
+#include "StrideSearchMinMaxCriteria.h"
+
+using namespace StrideSearch;
+
+int main() {
+    //
+    //  setup identification criteria
+    //
+    const std::vector<std::string> horizWindVarnames = {"u", "v"};
+    const std::string slpvarname = "sea_level_pressure_hpa";
+    
+    MinCriterion slpCrit(slpvarname, 990.0);
+    MaxMagnitude2DCriterion wndSpdCrit(horizWindVarnames, 22.0);
+    
+    std::vector<IDCriterion*> criteria = {&slpCrit, &wndSpdCrit};
+
+    //
+    //  create sample data (in practice, this will be output from StrideSearchData)
+    //
+    const int nPoints = 10;
+    std::vector<ll_coord_type> crds;
+    std::vector<vec_indices_type> inds;
+    vec_indices_type index(2,-1);
+    std::vector<scalar_type> slp;
+    std::vector<scalar_type> uu;
+    std::vector<scalar_type> vv;
+    for (int i = 0; i < nPoints; ++i) {
+        crds.push_back(ll_coord_type(i - 5.0, 175.0 + i));
+        index[0] = 90 + i;
+        index[1] = 175 + i;
+        inds.push_back(index);
+        
+        uu.push_back(20.0 + (i < 5 ? i : -i));
+        vv.push_back(5.0 + (i < 5 ? 0.5 * i : -0.5 * i));
+        slp.push_back(990.0 + (i%2 == 0 ? -i : 2*i));
+    }
+    
+    Sector sec(0.0, 180.0, crds, inds, criteria.size());
+    sec.allocWorkspace(criteria);
+    
+    
+    //
+    //  create sample workspaces
+    //
+    sec.workspace[0].fillData(slpvarname, slp);
+    sec.workspace[1].fillData(horizWindVarnames[0], uu);
+    sec.workspace[1].fillData(horizWindVarnames[1], vv);
+    
+return 0;
+}

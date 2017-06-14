@@ -32,7 +32,7 @@ struct Sector {
            const std::vector<vec_indices_type>& inds, const index_type nCriteria) : 
            centerLat(cLat), centerLon(cLon), data_coords(crds), data_indices(inds), workspace(nCriteria) {};
     
-    void BuildWorkspace(const std::vector<IDCriterion*>& criteria);
+    void allocWorkspace(const std::vector<IDCriterion*>& criteria);
 };
 
 
