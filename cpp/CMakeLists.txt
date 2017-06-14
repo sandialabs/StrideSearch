@@ -61,8 +61,8 @@ ELSE()
     MESSAGE("Nanoflann not found; Stride Search will only work for uniform latitude-longitude grids.")
 ENDIF()
 
-OPTION(BUILD_DOCS "Build documentation" OFF)
-IF (BUILD_DOCS)
+#OPTION(BUILD_DOCS "Build documentation" OFF)
+#IF (BUILD_DOCS)
     FIND_PACKAGE(Doxygen)
     IF (DOXYGEN_FOUND)
         Message("Doxygen found.")
@@ -87,12 +87,12 @@ IF (BUILD_DOCS)
         MESSAGE("Doxygen build started.")
     
         #   build docs
-        ADD_CUSTOM_TARGET(doc_doxygen ALL COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        ADD_CUSTOM_TARGET(docs COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generating API docs..." VERBATIM)
     ELSE()
         Message("Doxygen not found -- documentation html will not be generated.")
     ENDIF()
-ENDIF()
+#ENDIF()
 
 #
 #   Write configure file *** ALL CMAKE OPTIONS MUST BE SET BEFORE THIS POINT ***
@@ -111,40 +111,57 @@ endif ( NOT CMAKE_BUILD_TYPE)
 set (CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE STRING
       "Choose the installation directory; by default StrideSearch installs in the install directory." )
 
-ADD_LIBRARY(stridesearch StrideSearchUtilities.cpp StrideSearchEvent.cpp 
-    StrideSearchDateTime.cpp StrideSearchWorkspace.cpp
-    StrideSearchData_Base.cpp StrideSearchData_LatLon.cpp
-    StrideSearchSectorList_Base.cpp StrideSearchSectorList_LatLon.cpp)
-TARGET_LINK_LIBRARIES(stridesearch ${netcdf} ${netcdf_c++})
+#ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchEvent.cpp 
+#    StrideSearchDateTime.cpp StrideSearchWorkspace.cpp
+#    StrideSearchData_Base.cpp StrideSearchData_LatLon.cpp
+#    StrideSearchSectorList_Base.cpp StrideSearchSectorList_LatLon.cpp)
+
+ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp StrideSearchEvent.cpp
+            StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterion_Base.cpp
+            StrideSearchMinMaxCriteria.cpp
+            )
+
+#FILE(GLOB STRIDE_SEARCH_CPP_FILES ${PROJECT_SOURCE_DIR}/*.cpp)
+#ADD_LIBRARY(strideSearch ${STRIDE_SEARCH_CPP_FILES})
+##TARGET_INCLUDE_DIRECTORIES(strideSearch PUBLIC ${})
+TARGET_LINK_LIBRARIES(strideSearch ${netcdf} ${netcdf_c++})
 
 #
 #   Testing
 #
 ENABLE_TESTING()
 ADD_EXECUTABLE(ssUtilTest.exe SSUtilitiesTests.cpp)
-TARGET_LINK_LIBRARIES(ssUtilTest.exe stridesearch)
+TARGET_LINK_LIBRARIES(ssUtilTest.exe strideSearch)
 ADD_TEST(NAME SSUtil COMMAND ${PROJECT_BINARY_DIR}/bin/ssUtilTest.exe)
 
 ADD_EXECUTABLE(ssEventTest.exe SSEventTests.cpp)
-TARGET_LINK_LIBRARIES(ssEventTest.exe stridesearch)
+TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)
 ADD_TEST(NAME SSEvent COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventTest.exe)
 
 ADD_EXECUTABLE(ssDateTimeTest.exe SSDateTimeTests.cpp)
-TARGET_LINK_LIBRARIES(ssDateTimeTest.exe stridesearch)
+TARGET_LINK_LIBRARIES(ssDateTimeTest.exe strideSearch)
 ADD_TEST(NAME SSDatetime COMMAND ${PROJECT_BINARY_DIR}/bin/ssDateTimeTest.exe)
 
-ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)
-TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe stridesearch)
-ADD_TEST(NAME SSWorkspace COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceTest.exe)
+ADD_EXECUTABLE(ssWorkspaceDictTest.exe SSWorkspaceDictUnitTest.cpp)
+TARGET_LINK_LIBRARIES(ssWorkspaceDictTest.exe strideSearch)
+ADD_TEST(NAME SSWorkspaceDict COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceDictTest.exe)
 
-ADD_EXECUTABLE(ssLLDataTest.exe SSDataLatLonTests.cpp)
-TARGET_LINK_LIBRARIES(ssLLDataTest.exe stridesearch)
-ADD_TEST(NAME SSLLData COMMAND ${PROJECT_BINARY_DIR}/bin/ssLLDataTest.exe)
+ADD_EXECUTABLE(ssMinMaxCriteriaUnitTest.exe SSMinMaxCriteriaUnitTest.cpp)
+TARGET_LINK_LIBRARIES(ssMinMaxCriteriaUnitTest.exe strideSearch)
+ADD_TEST(NAME SSMinMaxCriteria COMMAND ${PROJECT_BINARY_DIR}/bin/ssMinMaxCriteriaUnitTest.exe)
 
-ADD_EXECUTABLE(ssLLSectorTest.exe SSLLSectorListTests.cpp)
-TARGET_LINK_LIBRARIES(ssLLSectorTest.exe stridesearch)
-ADD_TEST(NAME SSLLSectors COMMAND ${PROJECT_BINARY_DIR}/bin/ssLLSectorTest.exe)
+#ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)
+#TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)
+#ADD_TEST(NAME SSWorkspace COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceTest.exe)
+#
+#ADD_EXECUTABLE(ssLLDataTest.exe SSDataLatLonTests.cpp)
+#TARGET_LINK_LIBRARIES(ssLLDataTest.exe strideSearch)
+#ADD_TEST(NAME SSLLData COMMAND ${PROJECT_BINARY_DIR}/bin/ssLLDataTest.exe)
+#
+#ADD_EXECUTABLE(ssLLSectorTest.exe SSLLSectorListTests.cpp)
+#TARGET_LINK_LIBRARIES(ssLLSectorTest.exe strideSearch)
+#ADD_TEST(NAME SSLLSectors COMMAND ${PROJECT_BINARY_DIR}/bin/ssLLSectorTest.exe)
 
 #ADD_EXECUTABLE(ssSectorListTest.exe SSSectorListTests.cpp)
-#TARGET_LINK_LIBRARIES(ssSectorListTest.exe stridesearch)
+#TARGET_LINK_LIBRARIES(ssSectorListTest.exe strideSearch)
 #ADD_TEST(NAME SSSectorList COMMAND ${PROJECT_BINARY_DIR}/ssSectorListTest.exe)

@@ -7,6 +7,8 @@
 
 namespace StrideSearch {
 
+void Sector::BuildWorkspace(
+
 SectorList::SectorList(const double sb, const double nb, const double wb, const double eb, 
     const double sector_radius_km){
     southBnd = sb;

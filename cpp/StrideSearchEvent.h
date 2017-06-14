@@ -26,6 +26,7 @@ namespace StrideSearch {
 class Event {
     public:
         /// Types of events
+        enum IntensityComparison {LESS_THAN, GREATER_THAN};
         enum EventType {Max, Min};
         
         /// Constructor

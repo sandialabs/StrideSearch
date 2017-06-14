@@ -5,45 +5,32 @@
 #include "StrideSearch_TypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include "StrideSearchEvent.h"
+#include "StrideSearchWorkspaceDict.h"
 #include <string>
 #include <vector>
 
 namespace StrideSearch {
 
-class Sector;
-
 class IDCriterion {
     protected:
+        IDCriterion(const std::vector<std::string>& vars, const scalar_type thresh, const Event::IntensityComparison cmprKind);
+        IDCriterion(const std::string& var, const scalar_type thresh, const Event::IntensityComparison cmprKind);
+        IDCriterion(const std::string& var1, const std::string& var2, const scalar_type thresh, 
+            const Event::IntensityComparison cmprKind);
+
+    public:
+        Event::IntensityComparison compareKind;
         std::vector<std::string> varnames;
         scalar_type threshold;
-    
-    public:
-        IDCriterion(std::vector<std::string> varnames, const scalar_type threshold);
+        index_type wspcIndex;
+        scalar_type val;
+        
         virtual ~IDCriterion(){};
            
-        virtual bool evaluate(const Sector* sec, const Workspace* wspc) const = 0;
-        virtual Event returnEvent(const Sector* sec, const Workspace* wspc, const DateTime& dt, 
-            const StrideSearchData* sdata) const = 0;
-        virtual std::string returnEventType() const = 0;
+        virtual bool evaluate(const WorkspaceDict& wspc) = 0;
+//         virtual Event returnEvent(const WorkspaceDict& wspc, const DateTime& dt) const = 0;
 };
 
-class MaxCriterion : public IDCriterion {
-    bool evaluate(const Sector* sec, const Workspace* wspc) const;
-    Event returnEvent(const Sector* sec, const Workspace*, const DateTime& dt, const StrideSearchData* sdata);
-    std::string returnEventType() const;
-};
-
-class MinCriterion : public IDCriterion {
-    bool evaluate(const Sector* sec, const Workspace* wspc) const;
-    Event returnEvent(const Sector* sec, const Workspace*, const DateTime& dt, const StrideSearchData* sdata);
-    std::string returnEventType() const;
-};
-
-class CollocationCriterion : public IDCriterion {
-    bool evaluate(const Sector* sec, const Workspace* wspc) const;
-    Event returnEvent(const Sector* sec, const Workspace*, const DateTime& dt, const StrideSearchData* sdata);
-    std::string returnEventType() const;
-};
 
 }
 #endif

@@ -4,6 +4,8 @@
 #include "StrideSearch_Config.h"
 #include "StrideSearch_TypeDefs.h"
 #include "StrideSearchData_Base.h"
+#include "StrideSearchWorkspaceDict.h"
+#include "StrideSearchIDCriteria_Base.h"
 #include <vector>
 #include <memory>
 
@@ -13,6 +15,12 @@ namespace StrideSearch {
 /**
     A Sector has a center point on the sphere, and a geodesic radius.  
     It maintains a record of all data points that lie within its boundaries (physical coordinates and data location).
+    This record is created by the SectorList that constructed this sector.
+    
+    Sectors are responsible for 
+    1. Receiving data from StrideSearchData_Base subclasses at each time step
+    2. Evaluating a set of identification criteria (a collection of IDCriterion subclass instances).
+    3. If the criteria evaluate as true, the Sector creates an Event record.
 */
 struct Sector {
     double centerLat;
@@ -20,6 +28,8 @@ struct Sector {
         
     std::vector<ll_coord_type> data_coords;
     std::vector<vec_indices_type> data_indices;      
+    
+    std::vector<WorkspaceDict> workspace;
     
     /// Constructor.
     /**
@@ -29,14 +39,19 @@ struct Sector {
         @param inds indices of the data points contained within this Sector
     */
     Sector(const scalar_type cLat, const scalar_type cLon, const std::vector<ll_coord_type>& cds, 
-        const std::vector<vec_indices_type>& inds) :
-        centerLat(cLat), centerLon(cLon), data_coords(cds), data_indices(inds) {};
+        const std::vector<vec_indices_type>& inds, const int nCriteria) :
+        centerLat(cLat), centerLon(cLon), data_coords(cds), data_indices(inds), {};
+        
+    void BuildWorkspace(const std::vector<IDCriterion>& criteria);
 };
 
 /// A SectorList is the basic unit of work for a single search.
 /**
-    SectorList is responsible for creating Sectors within a given search region defined as a rectangle
+    SectorList is responsible for 
+    1. Creating Sectors within a given search region defined as a rectangle
     in latitude-longitude space.
+    2. Linking each sector to the data points and indices within the file associated with an StrideSearchData_Base subclass.
+    3. Providing a control structure (loop) for the per-timestep search.
 */
 class SectorList {
     public:

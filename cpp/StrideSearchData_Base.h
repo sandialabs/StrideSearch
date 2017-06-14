@@ -5,7 +5,7 @@
 #include "StrideSearch_TypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include "StrideSearchDateTime.h"
-#include "StrideSearchWorkspace.h"
+#include "StrideSearchWorkspaceDict.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -40,8 +40,8 @@ class StrideSearchData {
         virtual void getGridDescription(index_type* gridDescInts) const = 0;
         
         /// Return a local workspace filled with search data for a particular search region.
-        virtual Workspace1D getSectorWorkingData(const std::vector<std::string>& varnames, 
-            const std::vector<ll_index_type>& dataIndices) = 0;
+        void getSectorWorkingData(const std::vector<std::string>& varnames, 
+            const std::vector<vec_indices_type>& dataIndices);
         
         /// Update the source file for this data object. Used for advancing to the next file in a data set.
         void updateSourceFile(std::string fname);
@@ -64,12 +64,19 @@ class StrideSearchData {
         */
         virtual void initDimensions() = 0;
     
+        /// filename of current data file
         std::string filename;
+        
+        /// set of variables to read
         std::vector<std::string> variables;
         
+        /// time variable of the current file
         std::vector<scalar_type> time;
-       
+        
+        /// number of timesteps in the current file       
         int fileNTimesteps;
+        
+        /// total number of timesteps in the data set (so far)
         int totalNTimesteps;
 };
 
