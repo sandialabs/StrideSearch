@@ -6,6 +6,8 @@
 #include <vector>
 #include "StrideSearchWorkspaceDict.h"
 #include "StrideSearchIDCriteria_Base.h"
+#include "StrideSearchEvent.h"
+#include "StrideSearchDateTime.h"
 
 namespace StrideSearch {
 
@@ -33,6 +35,11 @@ struct Sector {
            centerLat(cLat), centerLon(cLon), data_coords(crds), data_indices(inds), workspace(nCriteria) {};
     
     void allocWorkspace(const std::vector<IDCriterion*>& criteria);
+    
+    std::vector<Event> evaluateCriteriaAtTimestep(std::vector<IDCriterion*>& criteria, const DateTime& dt, 
+        const std::string& fname, const index_type timeIndex);
+    
+    std::string infoString(const int tabLevel = 0) const;    
 };
 
 

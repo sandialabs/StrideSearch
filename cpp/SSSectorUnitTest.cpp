@@ -5,6 +5,7 @@
 #include "StrideSearchSector.h"
 #include "StrideSearchIDCriteria_Base.h"
 #include "StrideSearchMinMaxCriteria.h"
+#include "StrideSearchEvent.h"
 
 using namespace StrideSearch;
 
@@ -21,7 +22,7 @@ int main() {
     std::vector<IDCriterion*> criteria = {&slpCrit, &wndSpdCrit};
 
     //
-    //  create sample data (in practice, this will be output from StrideSearchData)
+    //  create sample data 
     //
     const int nPoints = 10;
     std::vector<ll_coord_type> crds;
@@ -46,11 +47,26 @@ int main() {
     
     
     //
-    //  create sample workspaces
+    //  create sample workspaces (in practice, data will be filled from StrideSearchData)
     //
     sec.workspace[0].fillData(slpvarname, slp);
     sec.workspace[1].fillData(horizWindVarnames[0], uu);
     sec.workspace[1].fillData(horizWindVarnames[1], vv);
+    
+    
+    std::cout << sec.infoString() << std::endl;
+    
+    //
+    //  evaluate criteria in sector
+    //
+    const DateTime codingDay(2017, 6, 15, 16);
+    const index_type ind(20);
+    const std::string fname = "placeholder.nc";
+    std::vector<Event> events = sec.evaluateCriteriaAtTimestep(criteria, codingDay, fname, ind);
+    
+    for (int i = 0; i < events.size(); ++i) {
+        std::cout << events[i].infoString();
+    }
     
 return 0;
 }

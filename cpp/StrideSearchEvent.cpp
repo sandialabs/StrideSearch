@@ -58,6 +58,10 @@ std::string Event::infoString(int tabLevel) const {
     ss << tabstr << "\tdescription: " << desc << std::endl;
     ss << tabstr << "\tvalue: " << val << std::endl;
     ss << tabstr << "\t(lat, lon) = (" << latLon.first << ", " << latLon.second << ")\n";
+    ss << tabstr << "\tdata_index = (";
+    for (int j = 0; j < dataIndex.size()-1; ++j)
+        ss << dataIndex[j] << ", ";
+    ss << dataIndex[dataIndex.size() - 1] << ")\n";
     ss << tabstr << "\tDTG: " << datetime.DTGString() << std::endl;
     ss << tabstr << "\tin file: " << filename << std::endl;
     ss << tabstr << "\tisReferenced: " << (isReferenced ? "true" : "false") << std::endl;
