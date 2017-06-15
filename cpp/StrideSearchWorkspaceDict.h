@@ -18,9 +18,13 @@ namespace StrideSearch {
 struct WorkspaceDict {
     std::map<std::string, std::vector<scalar_type>> dict;
 
-    WorkspaceDict();
+    WorkspaceDict() : dict() {};
     WorkspaceDict(const std::string& varname, const index_type nDataInds);
     WorkspaceDict(const std::vector<std::string>& varnames, const index_type nDataInds);
+    
+    void fillData(const std::string varname, const std::vector<scalar_type> vals);
+    
+    std::vector<scalar_type>& getConstDataReference(const std::string& varname);
 };
 
 // template <index_type n> struct WorkspaceDict {

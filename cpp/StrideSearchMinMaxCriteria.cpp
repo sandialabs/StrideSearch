@@ -24,6 +24,9 @@ bool MinCriterion::evaluate(const WorkspaceDict& wspc)
     return (val < threshold);
 }
 
+std::string MinCriterion::description() const {
+    return "min(" + varnames[0] + ")";
+}
 
 bool MaxCriterion::evaluate(const WorkspaceDict& wspc) {
     val = -1.0e20;
@@ -36,6 +39,10 @@ bool MaxCriterion::evaluate(const WorkspaceDict& wspc) {
         }
     }
     return (val > threshold);
+}
+
+std::string MaxCriterion::description() const {
+    return "max(" + varnames[0] + ")";
 }
 
 bool MaxSignedCriterion::evaluate(const WorkspaceDict& wspc) {
@@ -52,6 +59,10 @@ bool MaxSignedCriterion::evaluate(const WorkspaceDict& wspc) {
     return (val > threshold);
 }
 
+std::string MaxSignedCriterion::description() const {
+    return "max(" + varnames[0] + ")*sign(" + varnames[1] + ")";
+}
+
 bool MaxMagnitude2DCriterion::evaluate(const WorkspaceDict& wspc) {
     val = -1.0e20;
     const std::vector<scalar_type>& var1ref = wspc.dict.at(varnames[0]);
@@ -64,6 +75,10 @@ bool MaxMagnitude2DCriterion::evaluate(const WorkspaceDict& wspc) {
         }
     }
     return (val > threshold);
+}
+
+std::string MaxMagnitude2DCriterion::description() const {
+    return "max(sqrt(" + varnames[0] + "^2+" + varnames[1] + "^2))";
 }
 
 bool MaxMagnitude3DCriterion::evaluate(const WorkspaceDict& wspc) {
@@ -81,6 +96,10 @@ bool MaxMagnitude3DCriterion::evaluate(const WorkspaceDict& wspc) {
     return (val > threshold);
 }
 
+std::string MaxMagnitude3DCriterion::description() const {
+    return "max(sqrt(" + varnames[0] + "^2+" + varnames[1] + "^2+" + varnames[2] + "^2))";
+}
+
 bool MaxAverageCriterion::evaluate(const WorkspaceDict& wspc) {
     scalar_type avg = 0.0;
     const std::vector<scalar_type>& varref = wspc.dict.at(varnames[0]);
@@ -89,6 +108,10 @@ bool MaxAverageCriterion::evaluate(const WorkspaceDict& wspc) {
     avg /= varref.size();
     val = avg;
     return (val > threshold);
+}
+
+std::string MaxAverageCriterion::description() const {
+    return "max(avg(" + varnames[0] + "))";
 }
 
 bool MaxVariationCriterion::evaluate(const WorkspaceDict& wspc) {
@@ -105,6 +128,10 @@ bool MaxVariationCriterion::evaluate(const WorkspaceDict& wspc) {
     avg /= vec.size();
     val = maxval - avg; 
     return (val > threshold);
+}
+
+std::string MaxVariationCriterion::description() const {
+    return "max(max(" + varnames[0] + ")-avg(" + varnames[0] + "))";
 }
 
 }

@@ -27,11 +27,12 @@ class Event {
     public:
         /// Types of events
         enum IntensityComparison {LESS_THAN, GREATER_THAN};
-        enum EventType {Max, Min};
+//         enum EventType {Max, Min};
         
-        /// Constructor
+        /// Constructors
+        Event();
         Event(const std::string dsc, const scalar_type value, const ll_coord_type ll, const DateTime dt, 
-            const vec_indices_type& locIndex, const std::string fname, const index_type tind, const EventType tp);
+            const vec_indices_type& locIndex, const std::string fname, const index_type tind, const IntensityComparison tp);
         /// Destructor
         virtual ~Event(){};
         
@@ -79,7 +80,7 @@ class Event {
         index_type time_index;
         std::vector<Event*> relatedEvents;
         bool isReferenced;
-        EventType type;
+        IntensityComparison compare;
 };
 inline bool operator == (const Event& left, const Event& right) {return left.isDuplicate(right);}
 inline bool operator < (const Event& left, const Event& right) {return left.lowerIntensity(right); }

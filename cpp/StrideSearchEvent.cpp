@@ -7,7 +7,7 @@
 namespace StrideSearch {
 
 Event::Event(const std::string dsc, const scalar_type value, const ll_coord_type ll, const DateTime dt, 
-            const vec_indices_type& locInd, const std::string fname, const index_type tind, const Event::EventType tp) {
+            const vec_indices_type& locInd, const std::string fname, const index_type tind, const Event::IntensityComparison tp) {
     desc = dsc;
     val = value;
     latLon = ll;
@@ -15,8 +15,20 @@ Event::Event(const std::string dsc, const scalar_type value, const ll_coord_type
     dataIndex = locInd;
     filename = fname;
     time_index = tind;
-    type = tp;
+    compare = tp;
     isReferenced = false;           
+}
+
+Event::Event() {
+    desc = "null";
+    val = 0.0;
+    latLon = ll_coord_type(0.0, 0.0);
+    datetime = DateTime();
+    dataIndex = std::vector<index_type>(1,-1);
+    filename = "nullfile";
+    time_index = -1;
+    compare = Event::GREATER_THAN;
+    isReferenced = false;
 }
 
 void Event::addRelated(Event* relEv) {
@@ -26,7 +38,7 @@ void Event::addRelated(Event* relEv) {
 
 bool Event::lowerIntensity(const Event& other) const { 
     if (this->desc == other.desc) {
-        if (this->type == Max)
+        if (this->compare == GREATER_THAN)
             return this->val < other.val;
         else 
             return this->val > other.val;

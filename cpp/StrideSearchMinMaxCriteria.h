@@ -15,6 +15,7 @@ class MinCriterion : public IDCriterion {
         IDCriterion(varname, threshold, Event::LESS_THAN) {};
     
     bool evaluate(const WorkspaceDict& wspc) ;
+    std::string description() const;
 };
 
 /// Compares the maximum data value in the workspace to the threshold.
@@ -24,6 +25,7 @@ class MaxCriterion : public IDCriterion {
         IDCriterion(varname, threshold, Event::GREATER_THAN) {};
     
     bool evaluate(const WorkspaceDict& wspc) ;
+    std::string description() const;
 };
 
 /// Compares the maximum value of the product varname * sign(signvarname) to the threshold.
@@ -37,6 +39,7 @@ class MaxSignedCriterion : public IDCriterion {
         IDCriterion(varname, signVarname, threshold, Event::GREATER_THAN) {};
     
     bool evaluate(const WorkspaceDict& wspc);
+    std::string description() const;
 };
 
 /// Compares the maximum magnitude of a 2-component vector to the threshold.
@@ -51,6 +54,7 @@ class MaxMagnitude2DCriterion : public IDCriterion {
         IDCriterion(vecComponentVarnames, threshold, Event::GREATER_THAN) {};
     
     bool evaluate(const WorkspaceDict& wspc);
+    std::string description() const;
 };
 
 /// Compares the maximum magnitude of a 3-component vector to the threshold.
@@ -64,6 +68,7 @@ class MaxMagnitude3DCriterion : public IDCriterion {
         IDCriterion(vecComponentVarnames, threshold, Event::GREATER_THAN) {};
     
     bool evaluate(const WorkspaceDict& wspc);
+    std::string description() const;
 };
 
 /// Compares the arithmetic average of a variable to the threshold.
@@ -76,6 +81,7 @@ class MaxAverageCriterion : public IDCriterion {
         IDCriterion(varname, threshold, Event::GREATER_THAN) {};
     
     bool evaluate(const WorkspaceDict& wspc);
+    std::string description() const;
 };
 
 class MaxVariationCriterion : public IDCriterion {
@@ -84,6 +90,7 @@ class MaxVariationCriterion : public IDCriterion {
         IDCriterion(varname, threshold, Event::GREATER_THAN) {};
         
     bool evaluate(const WorkspaceDict& wspc);
+    std::string description() const;
 };
 
 }

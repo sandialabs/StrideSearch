@@ -28,7 +28,7 @@ class IDCriterion {
         virtual ~IDCriterion(){};
            
         virtual bool evaluate(const WorkspaceDict& wspc) = 0;
-//         virtual Event returnEvent(const WorkspaceDict& wspc, const DateTime& dt) const = 0;
+        virtual std::string description() const = 0;
 };
 
 
