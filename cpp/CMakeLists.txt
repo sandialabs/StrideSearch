@@ -118,7 +118,7 @@ set (CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE STRING
 
 ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp StrideSearchEvent.cpp
             StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterion_Base.cpp
-            StrideSearchMinMaxCriteria.cpp 
+            StrideSearchMinMaxCriteria.cpp StrideSearchSectorList_Base.cpp StrideSearchSectorListLatLon.cpp
             )
 
 #FILE(GLOB STRIDE_SEARCH_CPP_FILES ${PROJECT_SOURCE_DIR}/*.cpp)
@@ -153,6 +153,11 @@ ADD_TEST(NAME SSMinMaxCriteria COMMAND ${PROJECT_BINARY_DIR}/bin/ssMinMaxCriteri
 ADD_EXECUTABLE(ssSectorUnitTest.exe SSSectorUnitTest.cpp)
 TARGET_LINK_LIBRARIES(ssSectorUnitTest.exe strideSearch)
 ADD_TEST(NAME SSSector COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorUnitTest.exe)
+
+ADD_EXECUTABLE(ssSectorListUnitTest.exe SSSectorListUnitTest.cpp)
+TARGET_LINK_LIBRARIES(ssSectorListUnitTest.exe strideSearch)
+ADD_TEST(NAME SSSectorList COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorListUnitTest.exe)
+
 
 #ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)
 #TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)

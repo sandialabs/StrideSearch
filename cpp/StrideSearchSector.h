@@ -28,12 +28,17 @@ struct Sector {
     std::vector<ll_coord_type> data_coords;
     std::vector<vec_indices_type> data_indices;
     
+    index_type stripID;
+    
     std::vector<WorkspaceDict> workspace;
     
     /// Constructor
     Sector(const scalar_type cLat, const scalar_type cLon, const std::vector<ll_coord_type>& crds,
-           const std::vector<vec_indices_type>& inds, const index_type nCriteria) : 
-           centerLat(cLat), centerLon(cLon), data_coords(crds), data_indices(inds), workspace(nCriteria) {};
+           const std::vector<vec_indices_type>& inds, const index_type nCriteria, const index_type sid) : 
+           centerLat(cLat), centerLon(cLon), data_coords(crds), data_indices(inds), workspace(nCriteria), stripID(sid) {};
+    
+    Sector(const scalar_type cLat, const scalar_type cLon, const index_type sid) : 
+        centerLat(cLat), centerLon(cLon), stripID(sid) {};
     
     /// Allocates memory for this sector's local workspace
     void allocWorkspace(const std::vector<IDCriterion*>& criteria);

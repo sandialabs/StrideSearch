@@ -7,7 +7,14 @@
 namespace StrideSearch {
 
 /// Specialized SectorList for uniform latitude-longitude grids.
-class SectorList_LatLon : public SectorList {
+/**
+    The assumed grid structure has the following properties:
+    - nLongitude points = 2 * (nLatitude points - 1)
+    - data resolution in radians is dLambda = 2 * PI / (nLongitude points)
+    - longitude values are given by (j - 1) * dLambda for j = 1, 2, ..., nLongitude points.
+    - latitude values are given by -PI/2.0 + (i - 1) * dLambda for i = 1, 2, ..., nLatitude points.
+*/
+class SectorListLatLon : public SectorList {
     protected:
         /// number of latitude points in grid
         index_type nLat;
@@ -26,17 +33,17 @@ class SectorList_LatLon : public SectorList {
         /// maximum data index for a given search region
         index_type lonMaxIndex;
         /// latitude stride, in units of data indices
-        index_type lat_stride_index_type;
+        index_type lat_stride_index;
         /// longitude strides, in units of data indices
-        std::vector<index_type> lon_stride_index_types;
+        std::vector<index_type> lon_stride_indices;
         
-        void linkSectorsToData(StrideSearchData* ssdata_ptr);
+        void linkSectorsToData(StrideSearchData* ssdata_ptr = NULL);
         
     public:
-        SectorList_LatLon(const scalar_type sb, const scalar_type nb, const scalar_type wb, const scalar_type eb, 
-            const scalar_type sector_radius_km) :
-            SectorList(sb, nb, wb, eb, sector_radius_km) {};
-        ~SectorList_LatLon() {};
+        SectorListLatLon(const scalar_type sb, const scalar_type nb, const scalar_type wb, const scalar_type eb, 
+            const scalar_type sector_radius_km, index_type nLats, index_type nLons);
+        ~SectorListLatLon() {};
+        
         
 };
 

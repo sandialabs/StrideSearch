@@ -44,6 +44,7 @@ std::string Sector::infoString(const int tabLevel) const {
         }
         ss << data_indices[i][data_indices[i].size()-1] << ") ";
     }
+    ss << std::endl << "--------------------------" << std::endl;
     return ss.str();
 }
 

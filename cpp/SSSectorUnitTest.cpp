@@ -42,7 +42,10 @@ int main() {
         slp.push_back(990.0 + (i%2 == 0 ? -i : 2*i));
     }
     
-    Sector sec(0.0, 180.0, crds, inds, criteria.size());
+    Sector emptySec(90.0, 0.0, 0);
+    std::cout << emptySec.infoString() << std::endl;
+    
+    Sector sec(0.0, 180.0, crds, inds, criteria.size(), 0);
     sec.allocWorkspace(criteria);
     
     
