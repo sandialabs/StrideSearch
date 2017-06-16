@@ -5,11 +5,6 @@ Copyright 2016 Sandia Corporation. Under the terms of Contract DE-AC04-94AL85000
 
 Algorithms to detect and track storms from model output or reanalysis data.
 
-NEW!
-=======
-Python implementation in `StrideSearch/python`.  Many more capabilities than the Fortran implementation, but possibly slower.  
-Development is ongoing.
-
 Storm detection and tracking algorithm
 =========
 This library provides methods for searching latitude-longitude data sets 
@@ -64,6 +59,9 @@ NetCDF file access utilities provided by the __Geophysical Fluid Dynamics Labora
 
 Build / Install
 ===============
+
+Fortran implementation
+-----------------------
 This version has been updated to use the CMake cross-platform Makefile generator.  A sample configure script is
 
     #!/bin/bash
@@ -99,7 +97,22 @@ Then install it with
 
 	make install
 
-Software / algorithm design
+Python implementation
+-------------------------
+The python implementation requires some python modules that are not always included in an operating systems's 
+python distribution, for example, python's setup utilities.  
+These utilities are easiest to obtain from a scientific python distribution, such as [Canopy](https://www.enthought.com/products/canopy/)
+or [Anaconda](https://www.continuum.io); both have free versions that contain the necessary modules.
+
+Assuming the setup utilities exist, users need to run and install the included setup.py file.
+
+
+C++ implementation
+--------------------
+Coming soon!
+
+
+<!--- Software / algorithm design
 ===============
 The fundamental data structure in the StrideSearch software is a linked-list e.g. @ref StormListNode, @ref TrackListNode.  @n
 We do not know in advance how many storms will be detected per timestep, or how many storm tracks may be built from one dataset. @n
@@ -148,7 +161,7 @@ Each linked list relies on the `initialize` and `Copy` subroutines to construct 
 The @ref StrideSearchData class and subroutines should also be extended or altered to read the data corresponding to the new application. @n
 Finally, the @ref stridesearchmodule::dostridesearch subroutine should be modified to include the storm identification criteria suitable for the new application. @n
 An example of each of these extensions of the basic Stride Search data types and methods are provided by @ref TropicalData and @ref TropicalStrideSearch.
-
+--->
 
 References
 =================

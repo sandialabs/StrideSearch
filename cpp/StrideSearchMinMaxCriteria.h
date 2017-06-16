@@ -84,6 +84,10 @@ class MaxAverageCriterion : public IDCriterion {
     std::string description() const;
 };
 
+/// Compares the difference between a sector's maximum value and the sector average for the same variable.
+/**
+    Used, for example, as a warm-core identification criteria (Vitart et. al., 1997) for tropical cyclones.
+*/
 class MaxVariationCriterion : public IDCriterion {
     public:
     MaxVariationCriterion(const std::string varname, const scalar_type threshold) :

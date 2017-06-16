@@ -11,6 +11,7 @@
 
 namespace StrideSearch {
 
+/// Base class and interface for all identification criteria.
 class IDCriterion {
     protected:
         IDCriterion(const std::vector<std::string>& vars, const scalar_type thresh, const Event::IntensityComparison cmprKind);

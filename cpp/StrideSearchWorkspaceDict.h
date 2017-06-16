@@ -10,10 +10,14 @@
 
 namespace StrideSearch {
 
-
+/// Space for each sector to have its own local memory for the variables associated with a set of IDCriterion subclasses.
 /** A Workspace is a set of dictionaries whose keys are variable names and whose values arrays of data read from 
-    a netCDF file.  Each IDCriterion has its own workspace.
+    a netCDF file.  
     
+    Each IDCriterion has its own workspace, but the workspace may contain multiple data variables if the IDCriterion
+    requires.
+    
+    @todo It's possible that this class could be sped up with a templated implementation (code commented below)
 */
 struct WorkspaceDict {
     std::map<std::string, std::vector<scalar_type>> dict;
@@ -22,8 +26,10 @@ struct WorkspaceDict {
     WorkspaceDict(const std::string& varname, const index_type nDataInds);
     WorkspaceDict(const std::vector<std::string>& varnames, const index_type nDataInds);
     
+    /// Fill workspace with data from a std::vector.  Primarily used for testing.
     void fillData(const std::string varname, const std::vector<scalar_type> vals);
     
+    /// Return a constant (read only) reference to the data stored in one workspace variable.
     std::vector<scalar_type>& getConstDataReference(const std::string& varname);
 };
 
