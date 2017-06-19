@@ -3,6 +3,7 @@
 
 #include "StrideSearchSectorList_Base.h"
 #include "StrideSearchData_Base.h"
+#include "StrideSearchDataLatLon.h"
 
 namespace StrideSearch {
 
@@ -15,6 +16,15 @@ namespace StrideSearch {
     - latitude values are given by -PI/2.0 + (i - 1) * dLambda for i = 1, 2, ..., nLatitude points.
 */
 class SectorListLatLon : public SectorList {
+    public:
+        SectorListLatLon(const scalar_type sb, const scalar_type nb, const scalar_type wb, const scalar_type eb, 
+            const scalar_type sector_radius_km, index_type nLats, index_type nLons);
+        SectorListLatLon(const std::vector<ll_coord_type>& secCenters, const std::vector<scalar_type>& radii);
+        
+        void linkSectorsToData();
+    
+        ~SectorListLatLon() {};
+
     protected:
         /// number of latitude points in grid
         index_type nLat;
@@ -35,15 +45,7 @@ class SectorListLatLon : public SectorList {
         /// latitude stride, in units of data indices
         index_type lat_stride_index;
         /// longitude strides, in units of data indices
-        std::vector<index_type> lon_stride_indices;
-        
-        void linkSectorsToData(StrideSearchData* ssdata_ptr = NULL);
-        
-    public:
-        SectorListLatLon(const scalar_type sb, const scalar_type nb, const scalar_type wb, const scalar_type eb, 
-            const scalar_type sector_radius_km, index_type nLats, index_type nLons);
-        ~SectorListLatLon() {};
-        
+        std::vector<index_type> lon_stride_indices;        
         
 };
 

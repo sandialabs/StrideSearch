@@ -3,6 +3,7 @@
 #include "StrideSearchUtilities.h"
 #include "StrideSearchSectorList_Base.h"
 #include "StrideSearchData_Base.h"
+#include "StrideSearchDataLatLon.h"
 #include "StrideSearchSectorListLatLon.h"
 #include <cmath>
 #include <iostream>
@@ -27,7 +28,10 @@ SectorListLatLon::SectorListLatLon(const scalar_type sb, const scalar_type nb, c
     linkSectorsToData();
 }
 
-void SectorListLatLon::linkSectorsToData(StrideSearchData* ssdata_ptr){
+SectorListLatLon::SectorListLatLon(const std::vector<ll_coord_type>& secCenters, const std::vector<scalar_type>& radii) :
+    SectorList(secCenters, radii) {};
+
+void SectorListLatLon::linkSectorsToData(){
     for (index_type i = 0; i < sectors.size(); ++i) {
         const index_type centerLatIndex((std::floor(sectors[i]->centerLat + 90.0) / grid_res_deg));
         const index_type centerLonIndex(std::floor(sectors[i]->centerLon / grid_res_deg));

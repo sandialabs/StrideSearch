@@ -30,6 +30,7 @@ class SectorList {
             @param eb eastern longitudinal boundary, in degrees
         */
         SectorList(scalar_type sb, scalar_type nb, scalar_type wb, scalar_type eb, scalar_type sector_radius_km);
+        SectorList(const std::vector<ll_coord_type>& centers, const std::vector<scalar_type>& radii);
         virtual ~SectorList() {};
         
         /// Return the number of sectors in a SectorList
@@ -38,9 +39,21 @@ class SectorList {
         /// Return a vector of all Sector centers.
         std::vector<ll_coord_type> listSectorCenters() const;
         
-        std::string sectorInfoString(const index_type secInd) const;
+        std::string sectorInfoString(const index_type secInd, const bool printAllData = false) const;
         
         std::string infoString() const;
+        
+        void buildWorkspaces(const std::vector<IDCriterion*>& criteria);
+        void buildWorkspaces(const std::vector<std::vector<IDCriterion*>>& separate_criteria);
+        
+        /// Links each sector to the data points within its boundaries.
+        void linkSectorsToData(const StrideSearchData* data_ptr);
+
+#ifdef USE_NANOFLANN
+        void fastLinkSectorsToData(const StrideSearchData* data_ptr);
+#endif
+        
+        std::vector<std::unique_ptr<Sector>> sectors;
         
     protected: 
         scalar_type southBnd;
@@ -54,13 +67,9 @@ class SectorList {
         index_type nStrips;
         std::vector<scalar_type> lon_strides_deg;
         
-        std::vector<std::unique_ptr<Sector>> sectors;
         
-        /// Links each sector to the data points within its boundaries.
-        /***
-            Pure virtual function -- its implementation depends on the data set and must be handled by subclasses.
-        */
-        virtual void linkSectorsToData(StrideSearchData* ssdata_ptr) = 0;
+        
+
         
         
 };

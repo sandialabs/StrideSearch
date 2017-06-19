@@ -3,6 +3,9 @@
 #include <string> 
 #include <netcdf>
 #include <map>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 
 namespace StrideSearch {
 
@@ -40,6 +43,15 @@ void StrideSearchData::initTime(){
         index[0] = k;
         time_var.getVar(index, &time[k]);
     }    
+}
+
+std::string StrideSearchData::infoString() const {
+    std::ostringstream ss;
+    ss << "StrideSearchData:\n";
+    ss << "\tfile = " << filename << std::endl;
+    ss << "\tlats.size() = " << lats.size() << std::endl;
+    ss << "\tlons.size() = " << lons.size() << std::endl;
+    return ss.str();
 }
 
 void StrideSearchData::updateSourceFile(std::string fname){

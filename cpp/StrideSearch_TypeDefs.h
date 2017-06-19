@@ -18,10 +18,7 @@ namespace StrideSearch {
 
     /// Latitude-Longitude coordinate pair type
     typedef std::pair<scalar_type, scalar_type> ll_coord_type;
-    
-    /// Latitude-Longitude index pair type
-    typedef std::pair<index_type, index_type> ll_index_type;
-    
+
     /// Vector of index_type type
     typedef std::vector<index_type> vec_indices_type;
     

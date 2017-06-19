@@ -119,6 +119,7 @@ set (CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE STRING
 ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp StrideSearchEvent.cpp
             StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterion_Base.cpp
             StrideSearchMinMaxCriteria.cpp StrideSearchSectorList_Base.cpp StrideSearchSectorListLatLon.cpp
+            StrideSearchData_Base.cpp StrideSearchDataLatLon.cpp
             )
 
 #FILE(GLOB STRIDE_SEARCH_CPP_FILES ${PROJECT_SOURCE_DIR}/*.cpp)
@@ -157,6 +158,10 @@ ADD_TEST(NAME SSSector COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorUnitTest.exe)
 ADD_EXECUTABLE(ssSectorListUnitTest.exe SSSectorListUnitTest.cpp)
 TARGET_LINK_LIBRARIES(ssSectorListUnitTest.exe strideSearch)
 ADD_TEST(NAME SSSectorList COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorListUnitTest.exe)
+
+ADD_EXECUTABLE(ssDataLatLonUnitTest.exe SSDataLatLonUnitTest.cpp)
+TARGET_LINK_LIBRARIES(ssDataLatLonUnitTest.exe strideSearch)
+ADD_TEST(NAME ssDataLatLonUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssDataLatLonUnitTest.exe)
 
 
 #ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)

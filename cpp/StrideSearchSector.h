@@ -24,6 +24,7 @@ namespace StrideSearch {
 struct Sector {
     scalar_type centerLat;
     scalar_type centerLon;
+    scalar_type radius;
     
     std::vector<ll_coord_type> data_coords;
     std::vector<vec_indices_type> data_indices;
@@ -33,12 +34,16 @@ struct Sector {
     std::vector<WorkspaceDict> workspace;
     
     /// Constructor
-    Sector(const scalar_type cLat, const scalar_type cLon, const std::vector<ll_coord_type>& crds,
+    Sector(const scalar_type cLat, const scalar_type cLon, const scalar_type rad, const std::vector<ll_coord_type>& crds,
            const std::vector<vec_indices_type>& inds, const index_type nCriteria, const index_type sid) : 
-           centerLat(cLat), centerLon(cLon), data_coords(crds), data_indices(inds), workspace(nCriteria), stripID(sid) {};
+           centerLat(cLat), centerLon(cLon), radius(rad), data_coords(crds), 
+           data_indices(inds), workspace(nCriteria), stripID(sid) {};
     
-    Sector(const scalar_type cLat, const scalar_type cLon, const index_type sid) : 
-        centerLat(cLat), centerLon(cLon), stripID(sid) {};
+    Sector(const scalar_type cLat, const scalar_type cLon, const scalar_type rad, const index_type sid) : 
+        centerLat(cLat), centerLon(cLon), radius(rad), stripID(sid) {};
+    
+    /// Prepares Sector's workspace for memory allocation
+    void defineWorkspace(const std::vector<IDCriterion*>& criteria);
     
     /// Allocates memory for this sector's local workspace
     void allocWorkspace(const std::vector<IDCriterion*>& criteria);
@@ -48,7 +53,7 @@ struct Sector {
         const std::string& fname, const index_type timeIndex);
     
     /// Returns a string containing this sector's information.
-    std::string infoString(const int tabLevel = 0) const;    
+    std::string infoString(const int tabLevel = 0, const bool printWspc = false) const;
 };
 
 

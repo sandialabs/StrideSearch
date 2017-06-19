@@ -31,6 +31,9 @@ struct WorkspaceDict {
     
     /// Return a constant (read only) reference to the data stored in one workspace variable.
     std::vector<scalar_type>& getConstDataReference(const std::string& varname);
+    
+    ///
+    inline index_type nVariables() const {return dict.size();}
 };
 
 // template <index_type n> struct WorkspaceDict {
