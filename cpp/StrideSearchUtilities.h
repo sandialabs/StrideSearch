@@ -51,6 +51,8 @@ void XyzToLL(scalar_type& lat, scalar_type& lon, const scalar_type& x, const sca
 */
 scalar_type sphereDistance(scalar_type latA, scalar_type lonA, scalar_type latB, scalar_type lonB);
 
+scalar_type sphereDistance(const ll_coord_type& posA, const ll_coord_type& posB);
+
 
 }
 #endif

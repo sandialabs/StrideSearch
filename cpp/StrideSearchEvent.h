@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <memory>
 
 namespace StrideSearch {
 
@@ -25,9 +26,10 @@ namespace StrideSearch {
 */
 class Event {
     public:
+        friend class EventList;
+        friend class CollocationCriterion;
         /// Types of events
         enum IntensityComparison {LESS_THAN, GREATER_THAN};
-//         enum EventType {Max, Min};
         
         /// Constructors
         Event();
@@ -46,7 +48,7 @@ class Event {
             
             @todo Require related Events to have different types
         */
-        void addRelated(Event* relEv); 
+        void addRelated(std::shared_ptr<Event> relEv); 
           
         /// Evaluates True if other is an Event of lower intensity (as determined by the EventType) than this.
         bool lowerIntensity(const Event& other) const; 
@@ -69,6 +71,9 @@ class Event {
         */
         bool isRedundant(const Event& other, const double distThreshold) const;
         
+        scalar_type minRelatedDistance() const;
+        
+        scalar_type maxRelatedDistance() const;
                 
     protected:
         std::string desc;
@@ -78,7 +83,7 @@ class Event {
         std::vector<index_type> dataIndex;
         std::string filename;
         index_type time_index;
-        std::vector<Event*> relatedEvents;
+        std::vector<std::shared_ptr<Event>> relatedEvents;
         bool isReferenced;
         IntensityComparison compare;
 };

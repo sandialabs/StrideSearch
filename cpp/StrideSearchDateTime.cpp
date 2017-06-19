@@ -68,6 +68,31 @@ std::string DateTime::DTGString(std::string time_zone_string) const {
     return dyStr + hrStr + time_zone_string + moStr + yrStr;
 }
 
+bool operator < (const DateTime& left, const DateTime& right) {
+    bool result = false;
+    if (left.year < right.year)
+        result = true;
+    else if (left.year == right.year) {
+        if (left.month < right.month) {
+            result = true;
+        }
+        else if (left.month == right.month) {
+            if (left.day < right.day) {
+                result = true;
+            }
+            else if (left.day == right.day) {
+                if (left.hour < right.hour)
+                    result = true;
+            }
+        }
+    }
+    return result;
+}
+
+bool operator > (const DateTime& left, const DateTime& right) {
+    return right < left;
+}
+
 std::string DateTime::intString() const{
     std::ostringstream ss;
     ss << std::setw(4) << std::setfill('0') << year;

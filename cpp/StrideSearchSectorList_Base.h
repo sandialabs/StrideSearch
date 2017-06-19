@@ -19,6 +19,8 @@ namespace StrideSearch {
     in latitude-longitude space.
     2. Linking each sector to the data points and indices within the file associated with an StrideSearchData_Base subclass.
     3. Providing a control structure (loop) for the per-timestep search.
+    
+    @todo make thread-safe by using std::shared_ptr
 */
 class SectorList {
     public:

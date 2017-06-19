@@ -89,7 +89,7 @@ int main() {
     //  evaluate criteria
     //
     const DateTime codingDay(2017, 6, 19, 12);
-    std::vector<std::vector<Event>> foundEvents;
+    std::vector<std::vector<std::shared_ptr<Event> > > foundEvents;
     for (int i = 0; i < secList.nSectors(); ++i) {
         foundEvents.push_back(
             secList.sectors[i]->evaluateCriteriaAtTimestep(separateCriteria[i], codingDay, ssData.getFilename(), time_index));
@@ -100,7 +100,7 @@ int main() {
         if (foundEvents[i].size() > 0) 
             std::cout << "Event List " << i << ":\n";
         for (int j = 0; j < foundEvents[i].size(); ++j) {
-            std::cout << foundEvents[i][j].infoString();
+            std::cout << foundEvents[i][j]->infoString();
         }
     }
 return 0;

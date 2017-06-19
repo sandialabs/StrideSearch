@@ -16,13 +16,13 @@ void Sector::allocWorkspace(const std::vector<IDCriterion*>& criteria) {
     }
 }
 
-std::vector<Event> Sector::evaluateCriteriaAtTimestep(std::vector<IDCriterion*>& criteria, const DateTime& dt, 
+std::vector<std::shared_ptr<Event>> Sector::evaluateCriteriaAtTimestep(std::vector<IDCriterion*>& criteria, const DateTime& dt, 
     const std::string& fname, const index_type timeIndex) {
-    std::vector<Event> result;
+    std::vector<std::shared_ptr<Event>> result;
     for (index_type i = 0; i < criteria.size(); ++i) {
         if (criteria[i]->evaluate(workspace[i])) {
-            result.push_back(Event(criteria[i]->description(), criteria[i]->val, data_coords[criteria[i]->wspcIndex], 
-                dt, data_indices[criteria[i]->wspcIndex], fname, timeIndex, criteria[i]->compareKind));
+            result.push_back(std::shared_ptr<Event>(new Event(criteria[i]->description(), criteria[i]->val, data_coords[criteria[i]->wspcIndex], 
+                dt, data_indices[criteria[i]->wspcIndex], fname, timeIndex, criteria[i]->compareKind)));
         }
     }
     return result;

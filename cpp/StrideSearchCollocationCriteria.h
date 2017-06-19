@@ -3,13 +3,22 @@
 
 #include "StrideSearch_Config.h"
 #include "StrideSearch_TypeDefs.h"
-#include "StrideSearchIDCriteria_Base.h"
+#include "StrideSearchEvent.h"
+#include <string>
 
-class CollocationCriterion : public IDCriterion {
-    bool evaluate(const Sector* sec, const Workspace* wspc) const;
-    Event returnEvent(const Sector* sec, const Workspace*, const DateTime& dt, const StrideSearchData* sdata);
-    std::string returnEventType() const;
+namespace StrideSearch {
+
+class CollocationCriterion {
+    protected:
+        std::string eventDesc1;
+        std::string eventDesc2;
+        scalar_type distanceThreshold;
+        
+    public:
+        CollocationCriterion(const std::string& desc1, const std::string& desc2, const scalar_type thresh);
+        
+        bool evaluate(const Event& event) const;
 };
 
-
+}
 #endif

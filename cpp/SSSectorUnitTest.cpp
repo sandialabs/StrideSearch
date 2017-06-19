@@ -66,10 +66,10 @@ int main() {
     const DateTime codingDay(2017, 6, 15, 16);
     const index_type ind(20);
     const std::string fname = "placeholder.nc";
-    std::vector<Event> events = sec.evaluateCriteriaAtTimestep(criteria, codingDay, fname, ind);
+    std::vector<std::shared_ptr<Event>> events = sec.evaluateCriteriaAtTimestep(criteria, codingDay, fname, ind);
     
     for (int i = 0; i < events.size(); ++i) {
-        std::cout << events[i].infoString();
+        std::cout << events[i]->infoString();
     }
     
 return 0;

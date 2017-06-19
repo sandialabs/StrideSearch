@@ -26,20 +26,20 @@ int main (int argc, char* argv[]) {
     const int time_index = 0;
     const std::string fname = "fakeFile.nc";
     const double radius_km = 500.0;
-    Event ev_ps1("min(PSL)", ps1val, loc1, dt1, index1, fname, time_index, Event::LESS_THAN);
-    std::cout << ev_ps1.infoString();
+    std::shared_ptr<Event> ev_ps1(new Event("min(PSL)", ps1val, loc1, dt1, index1, fname, time_index, Event::LESS_THAN));
+    std::cout << ev_ps1->infoString();
     
     Event ev_ps2("min(PSL)", ps2val, loc2, dt1, index2, fname, time_index, Event::LESS_THAN);
-    std::cout << "False: ev_ps2 is duplicate of ev_ps1? " << (ev_ps1.isDuplicate(ev_ps2) ? "true" : "false") << std::endl;
-    std::cout << "True: ev_ps2 is near ev_ps1? " << (ev_ps1.isNear(ev_ps2, radius_km) ? "true" : "false") << std::endl;
-    std::cout << "True: ev_ps2 is less intense than ev_ps1? " << (ev_ps2 < ev_ps1 ? "true" : "false") << std::endl;
+    std::cout << "False: ev_ps2 is duplicate of ev_ps1? " << (ev_ps1->isDuplicate(ev_ps2) ? "true" : "false") << std::endl;
+    std::cout << "True: ev_ps2 is near ev_ps1? " << (ev_ps1->isNear(ev_ps2, radius_km) ? "true" : "false") << std::endl;
+    std::cout << "True: ev_ps2 is less intense than ev_ps1? " << (ev_ps2 < *ev_ps1 ? "true" : "false") << std::endl;
     std::cout << "True: ev_ps2 is redundant listing of ev_ps1? " << 
-        (ev_ps2.isRedundant(ev_ps1, radius_km) ? "true" : "false") << std::endl;
+        (ev_ps2.isRedundant(*ev_ps1, radius_km) ? "true" : "false") << std::endl;
     
     const double vor1val = 0.0035;
-    Event ev_vor1("max(VOR)", vor1val, loc2, dt1, index2, fname, time_index, Event::GREATER_THAN);
+    std::shared_ptr<Event> ev_vor1(new Event("max(VOR)", vor1val, loc2, dt1, index2, fname, time_index, Event::GREATER_THAN));
     
-    ev_ps1.addRelated(&ev_vor1);
-    std::cout << ev_ps1.infoString();
+    ev_ps1->addRelated(ev_vor1);
+    std::cout << ev_ps1->infoString();
 return 0;
 }

@@ -25,5 +25,9 @@ inline bool operator==(const DateTime& left, const DateTime& right){
     return left.year == right.year && left.month == right.month && left.day == right.day && left.hour == right.hour;
 }
 
+bool operator < (const DateTime& left, const DateTime& right); 
+
+bool operator > (const DateTime& left, const DateTime& right); 
+
 }
 #endif

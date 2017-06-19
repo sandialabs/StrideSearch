@@ -119,7 +119,8 @@ set (CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE STRING
 ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp StrideSearchEvent.cpp
             StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterion_Base.cpp
             StrideSearchMinMaxCriteria.cpp StrideSearchSectorList_Base.cpp StrideSearchSectorListLatLon.cpp
-            StrideSearchData_Base.cpp StrideSearchDataLatLon.cpp
+            StrideSearchData_Base.cpp StrideSearchDataLatLon.cpp StrideSearchEventList.cpp
+            StrideSearchCollocationCriteria.cpp
             )
 
 #FILE(GLOB STRIDE_SEARCH_CPP_FILES ${PROJECT_SOURCE_DIR}/*.cpp)

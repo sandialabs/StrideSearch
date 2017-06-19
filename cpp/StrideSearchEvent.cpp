@@ -7,31 +7,14 @@
 namespace StrideSearch {
 
 Event::Event(const std::string dsc, const scalar_type value, const ll_coord_type ll, const DateTime dt, 
-            const vec_indices_type& locInd, const std::string fname, const index_type tind, const Event::IntensityComparison tp) {
-    desc = dsc;
-    val = value;
-    latLon = ll;
-    datetime = dt;
-    dataIndex = locInd;
-    filename = fname;
-    time_index = tind;
-    compare = tp;
-    isReferenced = false;           
-}
+            const vec_indices_type& locInd, const std::string fname, const index_type tind, const Event::IntensityComparison tp) :
+       desc(dsc), val(value), latLon(ll), datetime(dt), dataIndex(locInd), filename(fname), time_index(tind),
+       compare(tp), isReferenced(false) {};
 
-Event::Event() {
-    desc = "null";
-    val = 0.0;
-    latLon = ll_coord_type(0.0, 0.0);
-    datetime = DateTime();
-    dataIndex = std::vector<index_type>(1,-1);
-    filename = "nullfile";
-    time_index = -1;
-    compare = Event::GREATER_THAN;
-    isReferenced = false;
-}
+Event::Event() : desc("null"), val(0.0), latLon(0.0, 0.0), datetime(), dataIndex(std::vector<index_type>(1,-1)), 
+    filename("nullfile"), time_index(-1), compare(Event::GREATER_THAN), isReferenced(false) {};
 
-void Event::addRelated(Event* relEv) {
+void Event::addRelated(std::shared_ptr<Event> relEv) {
     relatedEvents.push_back(relEv);
     relEv->isReferenced = true;
 }
@@ -48,6 +31,31 @@ bool Event::lowerIntensity(const Event& other) const {
         return false;
     }
 }
+
+scalar_type Event::minRelatedDistance() const {
+    scalar_type result = 0.0;
+    if (relatedEvents.size() > 0) {
+        result = 2.0 * PI * EARTH_RADIUS_KM;
+        for (index_type i = 0; i < relatedEvents.size(); ++i) {
+            const scalar_type dist = sphereDistance(latLon, relatedEvents[i]->latLon);
+            if (dist < result)
+                result = dist;
+        }
+    }
+    return result;
+}
+
+scalar_type Event::maxRelatedDistance() const {
+    scalar_type result = 0.0;
+    for (index_type i = 0; i < relatedEvents.size(); ++i) {
+        const scalar_type dist = sphereDistance(latLon, relatedEvents[i]->latLon);
+        if ( dist > result) 
+            result = dist;
+    }
+    return result;
+}
+
+
 
 std::string Event::infoString(int tabLevel) const {
     std::string tabstr("");

@@ -77,6 +77,10 @@ scalar_type sphereDistance(const scalar_type latA, const scalar_type lonA, const
     }
 }
 
+scalar_type sphereDistance(const ll_coord_type& posA, const ll_coord_type& posB) {
+    return sphereDistance(posA.first, posA.second, posB.first, posB.second);
+}
+
 void print_copyright(){
     std::cout <<  "------------------------------------------------------------------------------------------------\n";
     std::cout <<  "Stride Search. Copyright 2016 Sandia Corporation. Under the terms of contract DE-AC04-94AL85000,\n"; 

@@ -8,6 +8,7 @@
 #include "StrideSearchIDCriteria_Base.h"
 #include "StrideSearchEvent.h"
 #include "StrideSearchDateTime.h"
+#include <memory>
 
 namespace StrideSearch {
 
@@ -49,7 +50,7 @@ struct Sector {
     void allocWorkspace(const std::vector<IDCriterion*>& criteria);
     
     /// Evaluates a set criteria against a set of local data; returns an event for each criterion that evaluates true.
-    std::vector<Event> evaluateCriteriaAtTimestep(std::vector<IDCriterion*>& criteria, const DateTime& dt, 
+    std::vector<std::shared_ptr<Event>> evaluateCriteriaAtTimestep(std::vector<IDCriterion*>& criteria, const DateTime& dt, 
         const std::string& fname, const index_type timeIndex);
     
     /// Returns a string containing this sector's information.
