@@ -22,6 +22,9 @@ static const scalar_type deg2rad = std::atan(1.0) / 45.0;
 /// Constant Pi.
 static const scalar_type PI = 4.0 * std::atan(1.0);
 
+/// Meters per second to Kilometers per hour conversion factor
+static const scalar_type mps2kph = 3.6;
+
 /// Prints the required copyright information to the console.
 void print_copyright();
 

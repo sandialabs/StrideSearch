@@ -120,7 +120,7 @@ ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp Stri
             StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterion_Base.cpp
             StrideSearchMinMaxCriteria.cpp StrideSearchSectorList_Base.cpp StrideSearchSectorListLatLon.cpp
             StrideSearchData_Base.cpp StrideSearchDataLatLon.cpp StrideSearchEventList.cpp
-            StrideSearchCollocationCriteria.cpp
+            StrideSearchCollocationCriteria.cpp StrideSearchTrack.cpp
             )
 
 #FILE(GLOB STRIDE_SEARCH_CPP_FILES ${PROJECT_SOURCE_DIR}/*.cpp)

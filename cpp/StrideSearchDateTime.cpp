@@ -11,6 +11,36 @@ DateTime::DateTime(const int yr, const int mo, const int dy, const int hr) {
     month = mo;
     day = dy;
     hour = hr;
+    if (monthDayMap.empty()) 
+        buildMonthDayMap();
+}
+
+void DateTime::buildMonthDayMap() {
+    monthDayMap.emplace(1, 31);
+    monthDayMap.emplace(2, 28);
+    monthDayMap.emplace(3, 31);
+    monthDayMap.emplace(4, 30);
+    monthDayMap.emplace(5, 31);
+    monthDayMap.emplace(6, 30);
+    monthDayMap.emplace(7, 31);
+    monthDayMap.emplace(8, 31);
+    monthDayMap.emplace(9, 30);
+    monthDayMap.emplace(10, 31);
+    monthDayMap.emplace(11, 30);
+    monthDayMap.emplace(12, 31);
+    
+    monthStringMap.emplace(1, "JAN");
+    monthStringMap.emplace(2, "FEB");
+    monthStringMap.emplace(3, "MAR");
+    monthStringMap.emplace(4, "APR");
+    monthStringMap.emplace(5, "MAY");
+    monthStringMap.emplace(6, "JUN");
+    monthStringMap.emplace(7, "JUL");
+    monthStringMap.emplace(8, "AUG");
+    monthStringMap.emplace(9, "SEP");
+    monthStringMap.emplace(10, "OCT");
+    monthStringMap.emplace(11, "NOV");
+    monthStringMap.emplace(12, "DEC");
 }
 
 std::string DateTime::DTGString(std::string time_zone_string) const {
@@ -26,47 +56,19 @@ std::string DateTime::DTGString(std::string time_zone_string) const {
     ss2 << std::setw(2) << std::setfill('0') << hour << "00";
     std::string hrStr(ss2.str());
     
-    std::string moStr;
-    switch (month) {
-        case 1:
-            moStr = "JAN";
-            break;
-        case 2:
-            moStr = "FEB";
-            break;
-        case 3:
-            moStr = "MAR";
-            break;
-        case 4:
-            moStr = "APR";
-            break;
-        case 5:
-            moStr = "MAY";
-            break;
-        case 6:
-            moStr = "JUN";
-            break;
-        case 7:
-            moStr = "JUL";
-            break;
-        case 8:
-            moStr = "AUG";
-            break;
-        case 9:
-            moStr = "SEP";
-            break;
-        case 10:
-            moStr = "OCT";
-            break;
-        case 11:
-            moStr = "NOV";
-            break;
-        case 12:
-            moStr = "DEC";
-            break;
-    }
+    std::string moStr = monthString(month);
+
     return dyStr + hrStr + time_zone_string + moStr + yrStr;
 }
+
+std::string DateTime::monthString() const {
+    return monthStringMap.at(month);
+}
+
+std::string DateTime::monthString(const int mInt) const {
+    return monthStringMap.at(mInt);
+}
+
 
 bool operator < (const DateTime& left, const DateTime& right) {
     bool result = false;

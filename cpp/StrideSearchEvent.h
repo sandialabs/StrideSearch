@@ -28,6 +28,7 @@ class Event {
     public:
         friend class EventList;
         friend class CollocationCriterion;
+        friend class Track;
         /// Types of events
         enum IntensityComparison {LESS_THAN, GREATER_THAN};
         

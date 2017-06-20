@@ -24,5 +24,7 @@ int main (int argc, char* argv[]) {
     
     codingDay2 = DateTime(year, month, day, hour + 1);
     std::cout << "(False) Equivalent date-times? " << (codingDay == codingDay2 ? "true" : "false") << std::endl;
+    
+    std::cout << "(False) codingDay2 < codingDay1? " << (codingDay2 < codingDay ? "true" : "false") << std::endl;
 return 0;
 }
