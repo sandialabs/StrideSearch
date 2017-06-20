@@ -131,6 +131,9 @@ void EventList::consolidateRelatedEvents(const scalar_type distThreshold) {
                             descSet.insert(events[j]->desc);
                         }
                         else {
+                            //
+                            //  event i is related to an event of type j already; pick the most intense one, discard the other
+                            //
                             if (events[i]->desc == events[j]->desc) {
                                 if ( *events[i] < *events[j] ) {
                                     events[i]->latLon = events[j]->latLon;
