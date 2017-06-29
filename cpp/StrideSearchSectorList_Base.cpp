@@ -43,7 +43,7 @@ SectorList::SectorList(const std::vector<ll_coord_type>& centers, const std::vec
 }
 
 #ifdef USE_NANOFLANN
-    void fastLinkSectorsToData(const StrideSearchData* data_ptr){};
+    void SectorList::fastLinkSectorsToData(const StrideSearchData* data_ptr){};
 #endif
 
 void SectorList::linkSectorsToData(const StrideSearchData* data_ptr) {
