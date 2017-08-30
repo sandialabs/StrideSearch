@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <cassert>
+#include <limits>
 
 namespace StrideSearch {
 
@@ -47,21 +48,57 @@ SectorList::SectorList(const std::vector<ll_coord_type>& centers, const std::vec
 #endif
 
 void SectorList::linkSectorsToData(const StrideSearchData* data_ptr) {
-    for (index_type sec_i = 0; sec_i < sectors.size(); ++sec_i) {
-        for (index_type i = 0; i < data_ptr->lats.size(); ++i) {
-           for (index_type j = 0; j < data_ptr->lons.size(); ++j) {
+    if (data_ptr->layout1d()) {
+        for (index_type sec_i = 0; sec_i < sectors.size(); ++sec_i) {
+            for (index_type i = 0; i < data_ptr->lats.size(); ++ i) {
                 const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
-                    data_ptr->lats[i], data_ptr->lons[j]);
-                if ( dist <= sectors[sec_i]->radius ) {
-                    sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[j]));
-                    const std::vector<index_type> ind = {i, j};
+                    data_ptr->lats[i], data_ptr->lons[i]);
+                if ( dist <= sectors[sec_i]->radius) {
+                    sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[i]));
+                    const std::vector<index_type> ind = {i};
                     sectors[sec_i]->data_indices.push_back(ind);
-                }         
-           } 
+                }
+            }
+        }
+    }
+    if (data_ptr->layout2d()) {
+        for (index_type sec_i = 0; sec_i < sectors.size(); ++sec_i) {
+            for (index_type i = 0; i < data_ptr->lats.size(); ++i) {
+               for (index_type j = 0; j < data_ptr->lons.size(); ++j) {
+                    const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
+                        data_ptr->lats[i], data_ptr->lons[j]);
+                    if ( dist <= sectors[sec_i]->radius ) {
+                        sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[j]));
+                        const std::vector<index_type> ind = {i, j};
+                        sectors[sec_i]->data_indices.push_back(ind);
+                    }         
+               } 
+            }
         }
     }
 }
 
+index_type SectorList::maxDataPointsPerSector() const {
+    index_type result = 0;
+    for (index_type i = 0; i < sectors.size(); ++i) {
+        const index_type nPts = sectors[i]->nDataPoints();
+        if ( nPts > result) {
+            result = nPts;
+        }
+    }
+    return result;
+}
+
+index_type SectorList::minDataPointsPerSector() const {
+    index_type result = std::numeric_limits<index_type>::max();
+    for (index_type i = 0; i < sectors.size(); ++i) {
+        const index_type nPts = sectors[i]->nDataPoints();
+        if (nPts < result) {
+            result = nPts;
+        }
+    }
+    return result;
+}
 
 void SectorList::buildWorkspaces(const std::vector<IDCriterion*>& criteria) {
     for (index_type i = 0; i < sectors.size(); ++i) {
@@ -101,7 +138,8 @@ std::string SectorList::infoString() const {
             ss << lon_strides_deg[i] << ", ";
         ss << lon_strides_deg[lon_strides_deg.size() - 1] << std::endl;
     }
-    
+    ss << "\tmin pts per sector = " << minDataPointsPerSector() << std::endl;
+    ss << "\tmax pts per sector = " << maxDataPointsPerSector() << std::endl;
     ss << std::endl << "-------------------" << std::endl;
     return ss.str();
 }

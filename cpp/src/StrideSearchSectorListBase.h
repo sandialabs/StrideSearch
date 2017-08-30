@@ -57,6 +57,9 @@ class SectorList {
         
         std::vector<std::unique_ptr<Sector>> sectors;
         
+        index_type maxDataPointsPerSector() const;
+        index_type minDataPointsPerSector() const;
+        
     protected: 
         scalar_type southBnd;
         scalar_type northBnd;

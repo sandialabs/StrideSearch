@@ -50,7 +50,7 @@ class StrideSearchDataLatLon : public StrideSearchData {
             
             @todo Add support for the case where nc variable names are not "lat" and "lon," e.g., "latitude"?  
         */
-        void initDimensions();
+        void initDimensions() override;
 };
 
 }

@@ -49,6 +49,8 @@ struct Sector {
     /// Allocates memory for this sector's local workspace
     void allocWorkspace(const std::vector<IDCriterion*>& criteria);
     
+    inline index_type nDataPoints() const {return data_indices.size();}
+    
     /// Evaluates a set criteria against a set of local data; returns an event for each criterion that evaluates true.
     std::vector<std::shared_ptr<Event>> evaluateCriteriaAtTimestep(std::vector<IDCriterion*>& criteria, const DateTime& dt, 
         const std::string& fname, const index_type timeIndex);

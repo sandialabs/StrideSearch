@@ -11,6 +11,14 @@ using namespace StrideSearch;
 
 int main() {
     //
+    //  Empty sector, basic tests
+    //
+    const scalar_type dummy_radius = 1000.0;
+    Sector emptySec(90.0, 0.0, dummy_radius, 0);
+    std::cout << "---EMPTY SECTOR---" << std::endl;
+    std::cout << emptySec.infoString() << std::endl;
+
+    //
     //  setup identification criteria
     //
     const std::vector<std::string> horizWindVarnames = {"u", "v"};
@@ -42,13 +50,11 @@ int main() {
         slp.push_back(990.0 + (i%2 == 0 ? -i : 2*i));
     }
     
-    const scalar_type dummy_radius = 1000.0;
-    Sector emptySec(90.0, 0.0, dummy_radius, 0);
-    std::cout << emptySec.infoString() << std::endl;
-    
+    //
+    //  Example sector, with dummy data
+    //
     Sector sec(0.0, 180.0, dummy_radius, crds, inds, criteria.size(), 0);
     sec.allocWorkspace(criteria);
-    
     
     //
     //  create sample workspaces (in practice, data will be filled from StrideSearchData)
@@ -57,12 +63,13 @@ int main() {
     sec.workspace[1].fillData(horizWindVarnames[0], uu);
     sec.workspace[1].fillData(horizWindVarnames[1], vv);
     
-    
+    std::cout << "--- Example Sector ---" << std::endl;
     std::cout << sec.infoString() << std::endl;
     
     //
     //  evaluate criteria in sector
     //
+    std::cout << "--- Events from example ---" << std::endl;
     const DateTime codingDay(2017, 6, 15, 16);
     const index_type ind(20);
     const std::string fname = "placeholder.nc";
