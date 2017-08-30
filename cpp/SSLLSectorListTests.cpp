@@ -1,8 +1,8 @@
-#include "StrideSearch_Config.h"
-#include "StrideSearch_TypeDefs.h"
+#include "StrideSearchConfig.h"
+#include "StrideSearchTypeDefs.h"
 #include "StrideSearchUtilities.h"
-#include "StrideSearchSectorList_LatLon.h"
-#include "StrideSearchData_LatLon.h"
+#include "StrideSearchSectorListLatLon.h"
+#include "StrideSearchDataLatLon.h"
 #include <vector>
 #include <iostream>
 #include <string>

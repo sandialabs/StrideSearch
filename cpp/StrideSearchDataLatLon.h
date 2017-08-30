@@ -2,7 +2,7 @@
 #define _STRIDE_SEARCH_DATA_LATLON_H_
 
 #include "StrideSearchUtilities.h"
-#include "StrideSearchData_Base.h"
+#include "StrideSearchDataBase.h"
 #include <vector> 
 #include <string>
 

@@ -97,7 +97,7 @@ ENDIF()
 #
 #   Write configure file *** ALL CMAKE OPTIONS MUST BE SET BEFORE THIS POINT ***
 #
-CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/StrideSearch_Config.h.in" "${PROJECT_BINARY_DIR}/StrideSearch_Config.h")
+CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/StrideSearchConfig.h.in" "${PROJECT_BINARY_DIR}/StrideSearchConfig.h")
 #
 # set default build type to release
 #
@@ -117,9 +117,9 @@ set (CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE STRING
 #    StrideSearchSectorList_Base.cpp StrideSearchSectorList_LatLon.cpp)
 
 ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp StrideSearchEvent.cpp
-            StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterion_Base.cpp
-            StrideSearchMinMaxCriteria.cpp StrideSearchSectorList_Base.cpp StrideSearchSectorListLatLon.cpp
-            StrideSearchData_Base.cpp StrideSearchDataLatLon.cpp StrideSearchEventList.cpp
+            StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterionBase.cpp
+            StrideSearchMinMaxCriteria.cpp StrideSearchSectorListBase.cpp StrideSearchSectorListLatLon.cpp
+            StrideSearchDataBase.cpp StrideSearchDataLatLon.cpp StrideSearchEventList.cpp
             StrideSearchCollocationCriteria.cpp StrideSearchTrack.cpp
             )
 

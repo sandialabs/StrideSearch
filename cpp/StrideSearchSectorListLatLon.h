@@ -1,8 +1,8 @@
 #ifndef _STRIDE_SEARCH_SECTOR_LIST_LAT_LON_H_
 #define _STRIDE_SEARCH_SECTOR_LIST_LAT_LON_H_
 
-#include "StrideSearchSectorList_Base.h"
-#include "StrideSearchData_Base.h"
+#include "StrideSearchSectorListBase.h"
+#include "StrideSearchDataBase.h"
 #include "StrideSearchDataLatLon.h"
 
 namespace StrideSearch {

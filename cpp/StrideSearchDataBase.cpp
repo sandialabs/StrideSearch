@@ -1,4 +1,4 @@
-#include "StrideSearchData_Base.h"
+#include "StrideSearchDataBase.h"
 #include <vector>
 #include <string> 
 #include <netcdf>

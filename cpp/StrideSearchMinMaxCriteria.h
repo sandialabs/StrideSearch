@@ -1,9 +1,9 @@
 #ifndef _STRIDE_SEARCH_MIN_MAX_CRITERIA_H_
 #define _STRIDE_SEARCH_MIN_MAX_CRITERIA_H_
 
-#include "StrideSearch_Config.h"
-#include "StrideSearch_TypeDefs.h"
-#include "StrideSearchIDCriteria_Base.h"
+#include "StrideSearchConfig.h"
+#include "StrideSearchTypeDefs.h"
+#include "StrideSearchIDCriterionBase.h"
 #include "StrideSearchWorkspaceDict.h"
 
 namespace StrideSearch {

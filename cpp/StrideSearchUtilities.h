@@ -7,8 +7,8 @@
 /// Tolerance for floating point zero.
 #define ZERO_TOL 2.0e-9
 
-#include "StrideSearch_Config.h"
-#include "StrideSearch_TypeDefs.h"
+#include "StrideSearchConfig.h"
+#include "StrideSearchTypeDefs.h"
 #include <cmath>
 #include <string>
 #include <map>

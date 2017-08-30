@@ -1,8 +1,8 @@
-#ifndef _STRIDE_SEARCH_ID_CRITERIA_BASE_H_
-#define _STRIDE_SEARCH_ID_CRITERIA_BASE_H_
+#ifndef _STRIDE_SEARCH_ID_CRITERION_BASE_H_
+#define _STRIDE_SEARCH_ID_CRITERION_BASE_H_
 
-#include "StrideSearch_Config.h"
-#include "StrideSearch_TypeDefs.h"
+#include "StrideSearchConfig.h"
+#include "StrideSearchTypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include "StrideSearchEvent.h"
 #include "StrideSearchWorkspaceDict.h"

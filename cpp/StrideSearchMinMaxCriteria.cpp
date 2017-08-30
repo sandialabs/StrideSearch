@@ -1,5 +1,5 @@
-#include "StrideSearch_Config.h"
-#include "StrideSearch_TypeDefs.h"
+#include "StrideSearchConfig.h"
+#include "StrideSearchTypeDefs.h"
 #include "StrideSearchMinMaxCriteria.h"
 #include <iostream>
 #include <sstream>

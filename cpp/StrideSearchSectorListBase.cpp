@@ -1,6 +1,6 @@
 #include "StrideSearchUtilities.h"
-#include "StrideSearchSectorList_Base.h"
-#include "StrideSearchData_Base.h"
+#include "StrideSearchSectorListBase.h"
+#include "StrideSearchDataBase.h"
 #include <vector>
 #include <cmath>
 #include <memory>

@@ -1,13 +1,13 @@
-#include "StrideSearch_Config.h"
-#include "StrideSearch_TypeDefs.h"
+#include "StrideSearchConfig.h"
+#include "StrideSearchTypeDefs.h"
 #include <vector>
 #include "StrideSearchWorkspaceDict.h"
 #include "StrideSearchSector.h"
 #include "StrideSearchSectorListLatLon.h"
-#include "StrideSearchIDCriteria_Base.h"
+#include "StrideSearchIDCriterionBase.h"
 #include "StrideSearchMinMaxCriteria.h"
 #include "StrideSearchEvent.h"
-#include "StrideSearchData_Base.h"
+#include "StrideSearchDataBase.h"
 #include "StrideSearchDateTime.h"
 #include "StrideSearchDataLatLon.h"
 #include <string>

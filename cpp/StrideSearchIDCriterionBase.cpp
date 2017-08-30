@@ -1,4 +1,4 @@
-#include "StrideSearchIDCriteria_Base.h"
+#include "StrideSearchIDCriterionBase.h"
 
 namespace StrideSearch {
 

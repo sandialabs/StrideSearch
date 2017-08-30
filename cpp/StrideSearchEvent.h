@@ -1,8 +1,8 @@
 #ifndef _STRIDE_SEARCH_EVENT_H_
 #define _STRIDE_SEARCH_EVENT_H_
 
-#include "StrideSearch_Config.h"
-#include "StrideSearch_TypeDefs.h"
+#include "StrideSearchConfig.h"
+#include "StrideSearchTypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include "StrideSearchDateTime.h"
 #include <string>

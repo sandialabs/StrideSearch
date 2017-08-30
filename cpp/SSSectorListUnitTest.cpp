@@ -1,9 +1,9 @@
-#include "StrideSearch_Config.h"
-#include "StrideSearch_TypeDefs.h"
+#include "StrideSearchConfig.h"
+#include "StrideSearchTypeDefs.h"
 #include <vector>
 #include "StrideSearchWorkspaceDict.h"
 #include "StrideSearchSector.h"
-#include "StrideSearchSectorList_Base.h"
+#include "StrideSearchSectorListBase.h"
 #include "StrideSearchSectorListLatLon.h"
 
 using namespace StrideSearch;

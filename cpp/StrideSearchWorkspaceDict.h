@@ -1,8 +1,8 @@
 #ifndef _STRIDE_SEARCH_WORKSPACE_DICT_H_
 #define _STRIDE_SEARCH_WORKSPACE_DICT_H_
 
-#include "StrideSearch_Config.h"
-#include "StrideSearch_TypeDefs.h"
+#include "StrideSearchConfig.h"
+#include "StrideSearchTypeDefs.h"
 #include <map>
 #include <vector>
 #include <string>
