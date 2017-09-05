@@ -32,6 +32,10 @@ bool Event::lowerIntensity(const Event& other) const {
     }
 }
 
+scalar_type Event::distance(const Event& other) const {
+    return sphereDistance(latLon, other.latLon);
+}
+
 scalar_type Event::minRelatedDistance() const {
     scalar_type result = 0.0;
     if (relatedEvents.size() > 0) {

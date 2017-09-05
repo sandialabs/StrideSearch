@@ -56,7 +56,7 @@ class Event {
         
         /// Evalates True if other is an exact duplicate of this.
         /**
-            Duplicates may occur when overlapping Sector s detect the same event.
+            Duplicates may occur when overlapping Sectors detect the same event.
         */
         inline bool isDuplicate(const Event& other) const {
             return desc == other.desc && datetime == other.datetime && dataIndex == other.dataIndex;
@@ -75,6 +75,8 @@ class Event {
         scalar_type minRelatedDistance() const;
         
         scalar_type maxRelatedDistance() const;
+        
+        scalar_type distance(const Event& other) const;
                 
     protected:
         std::string desc;

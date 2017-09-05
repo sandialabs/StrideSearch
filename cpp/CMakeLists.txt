@@ -123,5 +123,6 @@ set (CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE STRING
 #
 add_subdirectory( src )
 add_subdirectory( tests )
+add_subdirectory( examples )
 
 ENABLE_TESTING()
