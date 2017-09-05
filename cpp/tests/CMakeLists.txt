@@ -1,6 +1,8 @@
 #
 #   Testing
 #
+INCLUDE(Ctest)
+
 ADD_EXECUTABLE(ssUtilTest.exe SSUtilitiesTests.cpp)
 TARGET_LINK_LIBRARIES(ssUtilTest.exe strideSearch)
 ADD_TEST(NAME SSUtil COMMAND ${PROJECT_BINARY_DIR}/bin/ssUtilTest.exe)
