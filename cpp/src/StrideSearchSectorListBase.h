@@ -50,6 +50,8 @@ class SectorList {
         
         /// Links each sector to the data points within its boundaries.
         void linkSectorsToData(const StrideSearchData* data_ptr);
+        
+        index_type closestSectorToPoint(const scalar_type lat, const scalar_type lon) const;
 
 #ifdef USE_NANOFLANN
         void fastLinkSectorsToData(const StrideSearchData* data_ptr);

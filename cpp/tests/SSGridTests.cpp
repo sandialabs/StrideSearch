@@ -6,6 +6,8 @@
 #include "StrideSearchDataBase.h"
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 using namespace StrideSearch;
 
@@ -36,7 +38,7 @@ int main(int argc, char* argv[]) {
     const scalar_type wb = 0.0;
     const scalar_type eb = 360.0;
     
-    const scalar_type sector_radius = 1000.0;
+    const scalar_type sector_radius = 3000.0;
     
     SectorList llSectors(sb, nb, wb, eb, sector_radius);
     SectorList conusSectors(sb, nb, wb, eb, sector_radius);
@@ -51,7 +53,30 @@ int main(int argc, char* argv[]) {
     conusSectors.linkSectorsToData(&conusData);
     std::cout << conusSectors.infoString() << std::endl;
     
+    std::vector<index_type> plotSectorInds = {23, 39};
     
+    for (int i = 0; i < plotSectorInds.size(); ++i) {
+        std::stringstream ss;
+        ss << "llGridSector" << plotSectorInds[i] << ".csv";
+        std::ofstream csvFile(ss.str());
+        
+        llSectors.sectors[plotSectorInds[i]]->outputCoordsToCSV(csvFile);
+    }
     
+    for (int i = 0; i < plotSectorInds.size(); ++i) {
+        std::stringstream ss;
+        ss << "conusGridSector" << plotSectorInds[i] << ".csv";
+        std::ofstream csvFile(ss.str());
+        
+        conusSectors.sectors[plotSectorInds[i]]->outputCoordsToCSV(csvFile);
+    }
+    
+    for (int i = 0; i < plotSectorInds.size(); ++i) {
+        std::stringstream ss;
+        ss << "csGridSector" << plotSectorInds[i] << ".csv";
+        std::ofstream csvFile(ss.str());
+        
+        csSectors.sectors[plotSectorInds[i]]->outputCoordsToCSV(csvFile);
+    }
 return 0;
 }

@@ -22,7 +22,7 @@ class StrideSearchDataLatLon : public StrideSearchData {
         ~StrideSearchDataLatLon(){};
         
         /// Return an integer array = [nLat, nLon]
-        void getGridDescription(index_type* gridDescInts) const;
+        void getGridDescription(index_type* gridDescInts) const override;
         
         /// Return a string with basic information from the data file.
         std::string basicInfo() const;
@@ -35,7 +35,7 @@ class StrideSearchDataLatLon : public StrideSearchData {
             const std::vector<vec_indices_type>& dataIndices) const;
         
         /// Load data from file into a Sector's local workspace
-        void loadSectorWorkingData(Sector* sec, const index_type& tInd, const index_type& levInd = -1);
+        void loadSectorWorkingData(Sector* sec, const index_type& tInd, const index_type& levInd = -1) override;
         
         std::string infoString() const;
         

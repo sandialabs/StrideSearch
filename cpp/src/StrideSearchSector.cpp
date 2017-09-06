@@ -1,4 +1,5 @@
 #include "StrideSearchSector.h"
+#include "StrideSearchUtilities.h"
 #include <string>
 #include <iostream>
 #include <iomanip>
@@ -27,8 +28,24 @@ std::vector<std::shared_ptr<Event>> Sector::evaluateCriteriaAtTimestep(std::vect
     }
     return result;
 }
-    
-    
+
+scalar_type Sector::distanceToSectorCenter(const scalar_type lat, const scalar_type lon) const {
+    return sphereDistance(lat, lon, centerLat, centerLon);
+}
+
+void Sector::outputCoordsToCSV(std::ostream& os) const {
+    os << "x,y,z" << std::endl;
+    scalar_type x;
+    scalar_type y; 
+    scalar_type z;
+    llToXYZ(x, y, z, centerLat, centerLon);
+    os << x << "," << y << "," << z << std::endl;
+    for (index_type i = 0; i < data_coords.size(); ++i) { 
+        llToXYZ(x, y, z, data_coords[i].first, data_coords[i].second);
+        os << x << "," << y << "," << z << std::endl;
+    }
+}
+     
 std::string Sector::infoString(const int tabLevel, const bool printWspc) const {
     std::string tabstr("");
     for (int i = 0; i < tabLevel; ++i)

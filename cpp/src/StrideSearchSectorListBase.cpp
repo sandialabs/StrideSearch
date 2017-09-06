@@ -78,6 +78,19 @@ void SectorList::linkSectorsToData(const StrideSearchData* data_ptr) {
     }
 }
 
+index_type SectorList::closestSectorToPoint(const scalar_type lat, const scalar_type lon) const {
+    index_type result = -1;
+    scalar_type dist = std::numeric_limits<scalar_type>::max();
+    for (index_type i = 0; i < sectors.size(); ++i) {
+        const scalar_type testDist = sectors[i]->distanceToSectorCenter(lat, lon);
+        if (testDist < dist) {
+            dist = testDist;
+            result = i;
+        }
+    }
+    return result;
+}
+
 index_type SectorList::maxDataPointsPerSector() const {
     index_type result = 0;
     for (index_type i = 0; i < sectors.size(); ++i) {

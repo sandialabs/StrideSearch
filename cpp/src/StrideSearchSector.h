@@ -9,6 +9,7 @@
 #include "StrideSearchEvent.h"
 #include "StrideSearchDateTime.h"
 #include <memory>
+#include <iostream>
 
 namespace StrideSearch {
 
@@ -57,6 +58,10 @@ struct Sector {
     
     /// Returns a string containing this sector's information.
     std::string infoString(const int tabLevel = 0, const bool printWspc = false) const;
+    
+    scalar_type distanceToSectorCenter(const scalar_type lat, const scalar_type lon) const;
+    
+    void outputCoordsToCSV(std::ostream& os) const;
 };
 
 
