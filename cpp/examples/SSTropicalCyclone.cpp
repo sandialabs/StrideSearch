@@ -22,11 +22,13 @@ int main(int argc, char* argv[]) {
     //
     //  Set up data set for reading
     //
-    const std::string data_dir = "/Users/pabosle/Desktop/dataTemp";
+    const std::string data_dir = "/Users/pabosle/Desktop/dataTemp/atmLatLon";
     //const std::string data_filename = "f1850c5_ne240_rel06.cam.h2.0002-08-27-00000.nc";
     const std::string data_filename = "f1850c5_ne240_rel06.cam.h2.0002-07-28-00000.nc";
     const std::string full_name = data_dir + "/" + data_filename;
     std::vector<std::string> file_list = {full_name};
+    
+    const DateTime startDate(1850, 10, 1, 0); // Data set initial time is year 1, October 1.
     
     StrideSearchData ssData(file_list[0]);
     ssData.initDimensions();
@@ -44,7 +46,7 @@ int main(int argc, char* argv[]) {
     const scalar_type sector_size_km = 500.0; // search sector radius size (kilometers)
 
     SectorList sectors(south_bnd, north_bnd, west_bnd, east_bnd, sector_size_km);
-    sectors.linkSectorsToData(&ssData);
+    //sectors.linkSectorsToData(&ssData);
     
     std::cout << sectors.infoString(); 
     
@@ -82,10 +84,7 @@ int main(int argc, char* argv[]) {
     //
     Timer searchTimer("TropicalCylone_spatial_search");
     searchTimer.start();
-    
-    searchTimer.end();
-    std::cout << searchTimer.infoString(); 
-    
+
     std::vector<IDCriterion*> location_criterion(1, &vor850);
     
     typedef std::shared_ptr<Event> event_ptr_type;
@@ -99,16 +98,19 @@ int main(int argc, char* argv[]) {
         //  Loop over each time step (note: this loop is embarrassingly parallel)
         //
         for (index_type k = 0; k < ssData.nTimesteps(); ++k) {
-//             DateTime currentTime
+            const DateTime currentDate(ssData.getTime(k), startDate);
+            std::cout << ssData.getTime(k) << " ----- " << currentDate.DTGString() << std::endl;
             //
             //  Loop over each sector 
-            //  (note: this loop is embarrassingly parallel, but its output must be 
-            //  synced to prevent duplicates)
+            //  (note: this loop is embarrassingly parallel)
             //
             for (index_type i = 0; i < sectors.nSectors(); ++i) {
                 
             }
         }
     }
+    
+    searchTimer.end();
+    std::cout << searchTimer.infoString(); 
 return 0;
 }

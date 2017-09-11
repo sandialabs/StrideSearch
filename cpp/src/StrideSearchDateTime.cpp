@@ -35,10 +35,10 @@ DateTime::DateTime(const scalar_type daysSinceStart, const DateTime& start) {
     t.tm_sec = 0;
     t.tm_min = 0;
     t.tm_year = start.year;
-    t.tm_mon = 0;
+    t.tm_mon = start.month;
     t.tm_isdst = -1;
-    t.tm_mday = daysSinceStart;
-    t.tm_hour = (daysSinceStart - int(daysSinceStart)) * 24.0;
+    t.tm_mday = int(daysSinceStart) + start.day;
+    t.tm_hour = int((daysSinceStart - int(daysSinceStart)) * 24.0) + start.hour;
     std::time_t num_time = std::mktime(&t);
     
     const std::tm *normal_date = std::localtime(&num_time);
