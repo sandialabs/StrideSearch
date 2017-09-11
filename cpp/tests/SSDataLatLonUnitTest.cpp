@@ -17,6 +17,8 @@
 using namespace StrideSearch;
 
 int main() {
+    print_copyright();
+
     const std::string testfilename = "sresa1b_ncar_ccsm3-example.nc";
     std::string file = StrideSearch_TEST_DATA_DIR;
     file += "/";

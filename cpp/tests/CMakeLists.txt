@@ -39,6 +39,9 @@ ADD_EXECUTABLE(ssGridsTest.exe SSGridTests.cpp)
 TARGET_LINK_LIBRARIES(ssGridsTest.exe strideSearch)
 ADD_TEST(NAME ssGridsTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssGridsTest.exe)
 
+ADD_EXECUTABLE(ssTimerUnitTest.exe SSTimerUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssTimerUnitTest.exe strideSearch)
+ADD_TEST(NAME ssTimerUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssTimerUnitTest.exe)
 
 #ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)
 #TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)

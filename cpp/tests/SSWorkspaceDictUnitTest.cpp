@@ -1,6 +1,7 @@
 #include "StrideSearchConfig.h"
 #include "StrideSearchTypeDefs.h"
 #include "StrideSearchWorkspaceDict.h"
+#include "StrideSearchUtilities.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -8,6 +9,8 @@
 using namespace StrideSearch;
 
 int main() {
+    print_copyright();
+    
     std::vector<std::string> varnames = {"U850", "V850"};
     
     const int nDataInds = 10;

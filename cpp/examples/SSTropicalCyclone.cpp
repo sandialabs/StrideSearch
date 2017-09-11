@@ -1,10 +1,12 @@
 #include "StrideSearchTypeDefs.h"
 #include "StrideSearchConfig.h"
+#include "StrideSearchUtilities.h"
 #include "StrideSearchDataBase.h"
 #include "StrideSearchSectorListBase.h"
 #include "StrideSearchMinMaxCriteria.h"
 #include "StrideSearchTimer.h"
 #include "StrideSearchEvent.h"
+#include "StrideSearchDateTime.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -13,6 +15,8 @@
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
+    print_copyright();
+    
     Timer setupTimer("TropicalCyclone_setup");
     setupTimer.start();
     //
@@ -95,7 +99,7 @@ int main(int argc, char* argv[]) {
         //  Loop over each time step (note: this loop is embarrassingly parallel)
         //
         for (index_type k = 0; k < ssData.nTimesteps(); ++k) {
-            DateTime currentTime
+//             DateTime currentTime
             //
             //  Loop over each sector 
             //  (note: this loop is embarrassingly parallel, but its output must be 

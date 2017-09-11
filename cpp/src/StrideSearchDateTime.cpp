@@ -6,11 +6,48 @@
 
 namespace StrideSearch {
 
-DateTime::DateTime(const int yr, const int mo, const int dy, const int hr) {
-    year = yr;
-    month = mo;
-    day = dy;
-    hour = hr;
+DateTime::DateTime(const int yr, const int mo, const int dy, const int hr) : year(yr), month(mo), day(dy), hour(hr) {
+    if (monthDayMap.empty()) 
+        buildMonthDayMap();
+}
+
+DateTime::DateTime(const std::string ymd_string) {
+    year = std::stoi(ymd_string.substr(0,4));
+    month = std::stoi(ymd_string.substr(5,2));
+    day = std::stoi(ymd_string.substr(8,2));
+    std::string hr_str = "00";
+    try {
+         hr_str = ymd_string.substr(11,2);
+    }
+    catch (const std::out_of_range& e) {}
+    hour = std::stoi(hr_str);
+    if (monthDayMap.empty())
+        buildMonthDayMap();
+}
+
+DateTime::DateTime(const std::tm& ctm) : year(ctm.tm_year), month(ctm.tm_mon), day(ctm.tm_mday), hour(ctm.tm_hour) {
+    if (monthDayMap.empty()) 
+        buildMonthDayMap();
+};
+
+DateTime::DateTime(const scalar_type daysSinceStart, const DateTime& start) {
+    std::tm t = {0};
+    t.tm_sec = 0;
+    t.tm_min = 0;
+    t.tm_year = start.year;
+    t.tm_mon = 0;
+    t.tm_isdst = -1;
+    t.tm_mday = daysSinceStart;
+    t.tm_hour = (daysSinceStart - int(daysSinceStart)) * 24.0;
+    std::time_t num_time = std::mktime(&t);
+    
+    const std::tm *normal_date = std::localtime(&num_time);
+    
+    year = normal_date->tm_year;
+    month = normal_date->tm_mon;
+    day = normal_date->tm_mday;
+    hour = normal_date->tm_hour;
+    
     if (monthDayMap.empty()) 
         buildMonthDayMap();
 }

@@ -12,7 +12,8 @@
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
-
+    print_copyright();
+    
     std::string llGridFile = StrideSearch_TEST_DATA_DIR;
     std::string conusGridFile = StrideSearch_TEST_DATA_DIR;
     std::string csGridFile = StrideSearch_TEST_DATA_DIR;

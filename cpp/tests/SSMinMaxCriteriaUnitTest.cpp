@@ -7,7 +7,7 @@
 using namespace StrideSearch;
 
 int main() {
-    
+    print_copyright();
     //
     // create sample workspaces
     //

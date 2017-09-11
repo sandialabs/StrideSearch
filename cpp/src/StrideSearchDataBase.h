@@ -51,6 +51,7 @@ class StrideSearchData {
         
         inline std::string getFilename() const {return filename;}
         inline index_type nTimesteps() const {return fileNTimesteps;}
+        inline scalar_type getTime(const index_type i) const {return time[i];}
         
         virtual void loadSectorWorkingData(Sector* sec, const index_type& tInd, const index_type& levInd = -1) {};
 

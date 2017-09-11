@@ -10,6 +10,7 @@
 using namespace StrideSearch;
 
 int main() {
+    print_copyright();
     //
     //  Empty sector, basic tests
     //

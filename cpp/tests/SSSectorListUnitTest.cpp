@@ -9,7 +9,8 @@
 using namespace StrideSearch;
 
 int main() {
-
+    print_copyright();
+    
     const scalar_type dataResDeg = 10.0;
     const index_type nLat = 19;
     const index_type nLon = 36;
