@@ -27,6 +27,15 @@ SectorList::SectorList(const scalar_type sb, const scalar_type nb, const scalar_
             lon_strides_deg[i] = 360.0;
     }
     
+    std::cout << "SectorList setup:" << std::endl;
+    std::cout << "\tnStrips = " << nStrips << std::endl;
+    std::cout << "\tlatStride = " << lat_stride_deg << std::endl;
+    for (index_type i = 0; i < lon_strides_deg.size() - 1; ++i){
+        std::cout << lon_strides_deg[i] << ", ";
+    }
+    std::cout << lon_strides_deg[lon_strides_deg.size() - 1] << std::endl;
+    
+    
     for (index_type i = 0; i < nStrips; ++i) {
         const scalar_type latI = southBnd + i * lat_stride_deg;
         const index_type nLonsThisStrip(std::ceil((eastBnd - westBnd) / lon_strides_deg[i]));
@@ -142,6 +151,8 @@ std::string SectorList::sectorInfoString(const index_type secInd, const bool pri
 std::string SectorList::infoString() const {
     std::ostringstream ss;
     ss << "Sector List Record: \n";
+    ss <<"\tsearch region SW corner (lat, lon) = (" << southBnd << ", " << westBnd << ")" << std::endl;
+    ss <<"\tsearch region NE corner (lat, lon) = (" << northBnd << ", " << eastBnd << ")" << std::endl;
     ss << "nSectors = " << nSectors();
     if (lon_strides_deg.size() > 0) {
         ss << "\tnumber of latitude strips = " << nStrips << std::endl;

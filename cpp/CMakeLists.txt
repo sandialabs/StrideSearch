@@ -11,13 +11,7 @@ SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 SET( StrideSearch_VERSION_MAJOR 1)
 SET( StrideSearch_VERSION_MINOR 0)
 
-# PB
-Message("CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")
-Message("CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
-Message("PROJECT_NAME = ${PROJECT_NAME}")
-
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
-
 
 IF (CMAKE_VERSION VERSION_LESS "3.1")
   IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -58,7 +52,7 @@ IF (EXISTS ${NANOFLANN_INCLUDE})
     OPTION(USE_NANOFLANN "Build with nanoflann support" ON)
 ELSE()
     OPTION(USE_NANOFLANN "Build with nanoflann support" OFF)
-    MESSAGE("Nanoflann not found; Stride Search will only work for uniform latitude-longitude grids.")
+    MESSAGE("Nanoflann not found.")
 ENDIF()
 
 #OPTION(BUILD_DOCS "Build documentation" OFF)
@@ -112,11 +106,6 @@ endif ( NOT CMAKE_BUILD_TYPE)
 #
 set (CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE STRING
       "Choose the installation directory; by default StrideSearch installs in the install directory." )
-
-#ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchEvent.cpp 
-#    StrideSearchDateTime.cpp StrideSearchWorkspace.cpp
-#    StrideSearchData_Base.cpp StrideSearchData_LatLon.cpp
-#    StrideSearchSectorList_Base.cpp StrideSearchSectorList_LatLon.cpp)
 
 #
 # Add subdirectories

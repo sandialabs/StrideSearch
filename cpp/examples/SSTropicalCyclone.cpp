@@ -3,12 +3,15 @@
 #include "StrideSearchDataBase.h"
 #include "StrideSearchSectorListBase.h"
 #include "StrideSearchMinMaxCriteria.h"
+#include "StrideSearchTimer.h"
 #include <string>
 #include <iostream>
 
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
+    Timer setupTimer("TropicalCyclone_setup");
+    setupTimer.start();
     //
     //  Set up data set for reading
     //
@@ -58,5 +61,8 @@ int main(int argc, char* argv[]) {
     // collocation criteria
     const scalar_type vort_psl_dist_threshold = 450.0; // km
     const scalar_type temp_psl_dist_threshold = 225.0; // km
+    
+    setupTimer.end();
+    std::cout << setupTimer.infoString();
 return 0;
 }
