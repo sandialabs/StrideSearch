@@ -4,10 +4,24 @@
 #include "StrideSearchSectorListBase.h"
 #include "StrideSearchMinMaxCriteria.h"
 #include <string>
+#include <iostream>
 
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
+    //
+    //  Set up data set for reading
+    //
+    const std::string data_dir = "/Users/pabosle/Desktop/dataTemp";
+    //const std::string data_filename = "f1850c5_ne240_rel06.cam.h2.0002-08-27-00000.nc";
+    const std::string data_filename = "f1850c5_ne240_rel06.cam.h2.0002-07-28-00000.nc";
+    const std::string full_name = data_dir + "/" + data_filename;
+    
+    StrideSearchData ssData(full_name);
+    ssData.initDimensions();
+    
+    std::cout << ssData.infoString();
+    
     //
     //  Set up search region and StrideSearch sectors
     //
@@ -18,16 +32,10 @@ int main(int argc, char* argv[]) {
     
     const scalar_type sector_size_km = 500.0; // search sector radius size (kilometers)
 
-    SectorList sectors(south_bnd, north_bnd, east_bnd, west_bnd, sector_size_km);
+    SectorList sectors(south_bnd, north_bnd, west_bnd, east_bnd, sector_size_km);
+    sectors.linkSectorsToData(&ssData);
     
-    //
-    //  Set up data set for reading
-    //
-    const std::string data_dir = "/Users/pabosle/Desktop/dataTemp";
-    const std::string data_filename = "f1850c5_ne240_rel06.cam.h2.0002-08-27-00000.nc";
-    const std::string full_name = data_dir + "/" + data_filename;
-    
-    StrideSearchData ssData(full_name);
+    std::cout << sectors.infoString(); 
     
     //
     //  Set up identification criteria
@@ -42,6 +50,13 @@ int main(int argc, char* argv[]) {
     
     MinCriterion psl(psl_varname, psl_threshold);
     
+    const std::string mid_level_temp = "T500";
+    const std::string upper_level_temp = "T200";
+    const scalar_type warm_core_threshold = 2.0;
+    MaxVariationCriterionVerticalAvg(mid_level_temp, upper_level_temp, warm_core_threshold);
     
+    // collocation criteria
+    const scalar_type vort_psl_dist_threshold = 450.0; // km
+    const scalar_type temp_psl_dist_threshold = 225.0; // km
 return 0;
 }
