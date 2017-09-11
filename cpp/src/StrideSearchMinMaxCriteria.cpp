@@ -5,13 +5,14 @@
 #include <sstream>
 #include <iomanip>
 #include <cmath>
+#include <limits>
 
 namespace StrideSearch {
 
 
 bool MinCriterion::evaluate(const WorkspaceDict& wspc)
  {
-    val = 1.e20;
+    val = std::numeric_limits<scalar_type>::max();
     // find the minimum data value in the workspace
     //std::vector<scalar_type> varvec = wspc.dict.at(varnames[0]);
     const std::vector<scalar_type>& dataRef = wspc.dict.at(varnames[0]);
@@ -29,7 +30,7 @@ std::string MinCriterion::description() const {
 }
 
 bool MaxCriterion::evaluate(const WorkspaceDict& wspc) {
-    val = -1.0e20;
+    val = std::numeric_limits<scalar_type>::lowest();
     // find the maximum data value in the workspace
     const std::vector<scalar_type>& dataRef = wspc.dict.at(varnames[0]);
     for (index_type i = 0; i < dataRef.size(); ++i) {
@@ -46,7 +47,7 @@ std::string MaxCriterion::description() const {
 }
 
 bool MaxSignedCriterion::evaluate(const WorkspaceDict& wspc) {
-    val = -1.0e20;
+    val = std::numeric_limits<scalar_type>::lowest();
     // find the maximum value of data var1 with sign given by data var2
     const std::vector<scalar_type>& var1ref = wspc.dict.at(varnames[0]);
     const std::vector<scalar_type>& var2ref = wspc.dict.at(varnames[1]);
@@ -64,7 +65,7 @@ std::string MaxSignedCriterion::description() const {
 }
 
 bool MaxMagnitude2DCriterion::evaluate(const WorkspaceDict& wspc) {
-    val = -1.0e20;
+    val = std::numeric_limits<scalar_type>::lowest();
     const std::vector<scalar_type>& var1ref = wspc.dict.at(varnames[0]);
     const std::vector<scalar_type>& var2ref = wspc.dict.at(varnames[1]);
     for (index_type i = 0; i < var1ref.size(); ++i) {
@@ -82,7 +83,7 @@ std::string MaxMagnitude2DCriterion::description() const {
 }
 
 bool MaxMagnitude3DCriterion::evaluate(const WorkspaceDict& wspc) {
-    val = -1.0e20;
+    val = std::numeric_limits<scalar_type>::lowest();
     const std::vector<scalar_type>& var1ref = wspc.dict.at(varnames[0]);
     const std::vector<scalar_type>& var2ref = wspc.dict.at(varnames[1]);
     const std::vector<scalar_type>& var3ref = wspc.dict.at(varnames[2]);
@@ -116,7 +117,7 @@ std::string MaxAverageCriterion::description() const {
 
 bool MaxVariationCriterion::evaluate(const WorkspaceDict& wspc) {
     scalar_type avg = 0.0;
-    scalar_type maxval = -1.0e20;
+    scalar_type maxval = std::numeric_limits<scalar_type>::lowest();
     const std::vector<scalar_type>& vec = wspc.dict.at(varnames[0]);
     for (int i = 0; i < vec.size(); ++i) {
         avg += vec[i];
@@ -132,6 +133,29 @@ bool MaxVariationCriterion::evaluate(const WorkspaceDict& wspc) {
 
 std::string MaxVariationCriterion::description() const {
     return "max(max(" + varnames[0] + ")-avg(" + varnames[0] + "))";
+}
+
+bool MaxVariationCriterionVerticalAvg::evaluate(const WorkspaceDict& wspc) {
+    scalar_type avg = 0.0;
+    scalar_type maxval = std::numeric_limits<scalar_type>::lowest();
+    const std::vector<scalar_type>& vec1 = wspc.dict.at(varnames[0]);
+    const std::vector<scalar_type>& vec2 = wspc.dict.at(varnames[1]);
+    for (index_type i = 0; i < vec1.size(); ++i) {
+        const scalar_type vert_avg = 0.5 * (vec1[i] + vec2[i]);
+        avg += vert_avg;
+        if (vert_avg > maxval) {
+            maxval = vert_avg;
+            wspcIndex = i;
+        }
+    }
+    avg /= vec1.size();
+    val = maxval - avg;
+    return (val > threshold);
+}
+
+std::string MaxVariationCriterionVerticalAvg::description() const {
+    const std::string avgstr = "0.5 * (" + varnames[0] + " + " + varnames[1] + ")";
+    return "max(max(" + avgstr + ") - avg(" + avgstr + "))";
 }
 
 }

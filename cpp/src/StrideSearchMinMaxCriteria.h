@@ -85,14 +85,25 @@ class MaxAverageCriterion : public IDCriterion {
 };
 
 /// Compares the difference between a sector's maximum value and the sector average for the same variable.
-/**
-    Used, for example, as a warm-core identification criteria (Vitart et. al., 1997) for tropical cyclones.
-*/
 class MaxVariationCriterion : public IDCriterion {
     public:
     MaxVariationCriterion(const std::string varname, const scalar_type threshold) :
         IDCriterion(varname, threshold, Event::GREATER_THAN) {};
         
+    bool evaluate(const WorkspaceDict& wspc);
+    std::string description() const;
+};
+
+/// Compares the difference between a sector's maximum value and the sector average for a variable's vertical average
+/**
+    Used, for example, as a warm-core identification criteria (Vitart et. al., 1997) for tropical cyclones.
+*/
+class MaxVariationCriterionVerticalAvg : public IDCriterion {
+    public:
+    MaxVariationCriterionVerticalAvg(const std::string varname_low_level, 
+        const std::string varname_hi_level, const scalar_type threshold) : 
+        IDCriterion(varname_low_level, varname_hi_level, threshold, Event::GREATER_THAN) {};
+    
     bool evaluate(const WorkspaceDict& wspc);
     std::string description() const;
 };
