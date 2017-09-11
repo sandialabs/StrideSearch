@@ -9,10 +9,6 @@
 
 namespace StrideSearch {
 
-std::string StrideSearchData::getFilename() const {
-    return filename;
-}
-
 void StrideSearchData::initTime(){
     std::vector<std::string> tstrings = {"time", "time_whole"};
     

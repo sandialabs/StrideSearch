@@ -49,7 +49,8 @@ class StrideSearchData {
         */
         void initTime();
         
-        std::string getFilename() const; 
+        inline std::string getFilename() const {return filename;}
+        inline index_type nTimesteps() const {return fileNTimesteps;}
         
         virtual void loadSectorWorkingData(Sector* sec, const index_type& tInd, const index_type& levInd = -1) {};
 
@@ -78,10 +79,10 @@ class StrideSearchData {
         std::vector<scalar_type> time;
         
         /// number of timesteps in the current file       
-        int fileNTimesteps;
+        index_type fileNTimesteps;
         
         /// total number of timesteps in the data set (so far)
-        int totalNTimesteps;
+        index_type totalNTimesteps;
 };
 
 }
