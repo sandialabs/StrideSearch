@@ -8,6 +8,14 @@ EventList::EventList() : events(std::vector<std::shared_ptr<Event>>()) {};
 
 EventList::EventList(const std::vector<std::shared_ptr<Event>>& eventVec) : events(eventVec) {};
 
+EventList::EventList(const std::vector<std::vector<std::shared_ptr<Event>>>& eventVecs) {
+    for (index_type i = 0; i < eventVecs.size(); ++i) {
+        for (index_type j = 0; j < eventVecs[i].size(); ++j) {
+            events.push_back(eventVecs[i][j]);
+        }
+    }
+}
+
 void EventList::extend(const EventList& other) {
     for (index_type i = 0; i < other.size(); ++i)
         events.push_back(other.events[i]);

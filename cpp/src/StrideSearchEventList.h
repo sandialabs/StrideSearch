@@ -18,6 +18,7 @@ class EventList {
     public:
         EventList();
         EventList(const std::vector<std::shared_ptr<Event>>& eventVec);
+        EventList(const std::vector<std::vector<std::shared_ptr<Event>>>& eventVecs);
     
         void extend(const EventList& other);
         

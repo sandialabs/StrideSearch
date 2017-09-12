@@ -65,6 +65,9 @@ SectorList::SectorList(const EventList& evList, const scalar_type radius) {
 
 void SectorList::linkSectorsToData(const StrideSearchData* data_ptr) {
     if (data_ptr->layout1d()) {
+        //
+        //  This loop is embarrassingly parallel
+        //
         for (index_type sec_i = 0; sec_i < sectors.size(); ++sec_i) {
             for (index_type i = 0; i < data_ptr->lats.size(); ++ i) {
                 const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
@@ -78,6 +81,9 @@ void SectorList::linkSectorsToData(const StrideSearchData* data_ptr) {
         }
     }
     if (data_ptr->layout2d()) {
+        //
+        //  This loop is embarrassingly parallel
+        //
         for (index_type sec_i = 0; sec_i < sectors.size(); ++sec_i) {
             for (index_type i = 0; i < data_ptr->lats.size(); ++i) {
                for (index_type j = 0; j < data_ptr->lons.size(); ++j) {
