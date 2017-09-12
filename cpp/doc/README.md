@@ -7,7 +7,7 @@ Algorithms to detect and track storms from model output or reanalysis data.
 
 Storm detection and tracking algorithm
 =========
-This library provides methods for searching latitude-longitude data sets 
+This library provides methods for searching climate data sets 
 in [NetCDF](http://www.unidata.ucar.edu/software/netcdf/) format for various kinds of storms which may be defined by the user. @n
 Storm identification criteria may correspond to any meteorological phenomena of interest that can be described quantitatively
 in terms of available data. 
@@ -33,6 +33,9 @@ exceeds some user-defined storm threshold.
 * After all sectors have been searched, it compares the found storms from the linked-list to remove duplicates.  
 * Outputs the linked-list to various formats.
 
+The main classes responsible for accomplishing the spatial search are StrideSearch::Sector, StrideSearch::Event, and StrideSearch::IDCriterion (and its subclasses).
+Many collective operations are encapsulated by the related classes StrideSearch::SectorList and StrideSearch::EventList.
+
 Temporal correlation
 -----------------
 The temporal correlation program takes the output of all per-timestep Spatial Searches and examines the data for correlations
@@ -50,8 +53,10 @@ has been searched.
 
 Software requirements
 ===============
-The software requires [NetCDF](http://www.unidata.ucar.edu/software/netcdf/) and [NetCDF Fortran](http://www.unidata.ucar.edu/software/netcdf/)
-libraries and a modern Fortran compiler.      @n
+The software requires [NetCDF](http://www.unidata.ucar.edu/software/netcdf/) and either [NetCDF C++](http://www.unidata.ucar.edu/software/netcdf/)
+or [NetCDF Fortran](http://www.unidata.ucar.edu/software/netcdf/) 
+libraries.
+Either a C++ compiler (preferred) or a modern Fortran compiler are also required.      @n
 An MPI distribution is not required.   @n   
 
 NetCDF file access utilities provided by the __Geophysical Fluid Dynamics Laboratory's (GFDL)__ 
@@ -60,8 +65,41 @@ NetCDF file access utilities provided by the __Geophysical Fluid Dynamics Labora
 Build / Install
 ===============
 
+C++ implementation
+--------------------
+The C++ implementation of the spatial search is now preferred. 
+It is nearly as flexible as the python code and nearly as fast as the Fortran code.  
+
+    #!/bin/bash
+    
+    export NETCDF_ROOT=/opt/netcdf-4.4.1
+    SRC_ROOT=$HOME/StrideSearch/cpp
+    
+    rm -f CMakeCache.txt
+    rm -rf CMakeFiles/
+    
+    EXTRA_ARGS=$1
+    
+    cmake \
+    -D CMAKE_BUILD_TYPE:STRING="DEBUG" \
+    -D CMAKE_VERBOSE_MAKEFILE:BOOL=OFF \
+    $EXTRA_ARGS \
+    $SRC_ROOT
+
+Configure with CMake using a configure script similar to the one illustrated above.
+Then, build the project by typing 
+
+    make -j 4 && make install
+
+If Doxygen documentation is desired, type 
+
+    make docs
+
+
 Fortran implementation
 -----------------------
+Limited to latitude-longitude grid types.
+
 This version has been updated to use the CMake cross-platform Makefile generator.  A sample configure script is
 
     #!/bin/bash
@@ -107,9 +145,8 @@ or [Anaconda](https://www.continuum.io); both have free versions that contain th
 Assuming the setup utilities exist, users need to run and install the included setup.py file.
 
 
-C++ implementation
---------------------
-Coming soon!
+
+
 
 
 <!--- Software / algorithm design

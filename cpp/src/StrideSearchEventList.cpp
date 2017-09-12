@@ -60,12 +60,7 @@ std::string EventList::infoString(const int tablevel, const bool printAll) const
     return ss.str();
 }
 
-/// Removes duplicate and redundant entries from an EventList
-/**
-    Duplicates are literal duplicates -- identical Event records.
-    Redundant records are Events of the same type and same time, close to each other in space.  
-    Only the most intense of the redundant entries will be kept.
-*/
+
 void EventList::removeDuplicates(const scalar_type distThreshold) {
     std::vector<bool> duplicates(events.size(), false);
     index_type dupCount = 0;
@@ -115,10 +110,6 @@ std::map<DateTime, std::vector<Event>> EventList::separateByDate() const {
     return result;
 }
 
-/// Consolidates related events under one Event listing.
-/** 
-Assumes that EventList::removeDuplicates has already occurred.
-*/
 void EventList::consolidateRelatedEvents(const scalar_type distThreshold) {
     std::vector<bool> alreadyUsed(events.size(), false);
     for (index_type i = 0; i < events.size(); ++i) {

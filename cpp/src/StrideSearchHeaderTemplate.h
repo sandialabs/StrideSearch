@@ -3,6 +3,7 @@
 
 #include "StrideSearchTypeDefs.h"
 #include "StrideSearchConfig.h"
+#include "StrideSearchUtilities.h"
 
 namespace StrideSearch {
 

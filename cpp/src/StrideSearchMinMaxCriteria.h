@@ -14,6 +14,7 @@ class MinCriterion : public IDCriterion {
     MinCriterion(const std::string varname, const scalar_type threshold) : 
         IDCriterion(varname, threshold, Event::LESS_THAN) {};
     
+    /// Returns true if a value in a Sector falls below threshold.
     bool evaluate(const WorkspaceDict& wspc) ;
     std::string description() const;
 };
@@ -24,6 +25,7 @@ class MaxCriterion : public IDCriterion {
     MaxCriterion(const std::string varname, const scalar_type threshold) : 
         IDCriterion(varname, threshold, Event::GREATER_THAN) {};
     
+    /// Returns true if a value in a Sector exceeds threshold.
     bool evaluate(const WorkspaceDict& wspc) ;
     std::string description() const;
 };
@@ -38,6 +40,7 @@ class MaxSignedCriterion : public IDCriterion {
     MaxSignedCriterion(const std::string varname, const std::string signVarname, const scalar_type threshold) : 
         IDCriterion(varname, signVarname, threshold, Event::GREATER_THAN) {};
     
+    /// Returns true if a value of sign(signVarname) * varname exceeds threshold
     bool evaluate(const WorkspaceDict& wspc);
     std::string description() const;
 };
@@ -53,6 +56,7 @@ class MaxMagnitude2DCriterion : public IDCriterion {
     MaxMagnitude2DCriterion(const std::vector<std::string>& vecComponentVarnames, const scalar_type threshold) : 
         IDCriterion(vecComponentVarnames, threshold, Event::GREATER_THAN) {};
     
+    /// Returns true if sqrt(varnames[0]^2 + varnames[1]^2) exceeds threshold
     bool evaluate(const WorkspaceDict& wspc);
     std::string description() const;
 };
@@ -67,6 +71,7 @@ class MaxMagnitude3DCriterion : public IDCriterion {
     MaxMagnitude3DCriterion(const std::vector<std::string>& vecComponentVarnames, const scalar_type threshold) : 
         IDCriterion(vecComponentVarnames, threshold, Event::GREATER_THAN) {};
     
+    /// Returns true if sqrt(vecComponentVarnames[0]^2 + vecComponentVarnames[1]^2 + vecComponentVarnames[2]^2) exceeds threshold.
     bool evaluate(const WorkspaceDict& wspc);
     std::string description() const;
 };
@@ -80,6 +85,7 @@ class MaxAverageCriterion : public IDCriterion {
     MaxAverageCriterion(const std::string varname, const scalar_type threshold) : 
         IDCriterion(varname, threshold, Event::GREATER_THAN) {};
     
+    /// Returns true if a Sector's average data value exceeds threshold.
     bool evaluate(const WorkspaceDict& wspc);
     std::string description() const;
 };
@@ -89,7 +95,8 @@ class MaxVariationCriterion : public IDCriterion {
     public:
     MaxVariationCriterion(const std::string varname, const scalar_type threshold) :
         IDCriterion(varname, threshold, Event::GREATER_THAN) {};
-        
+    
+    /// Returns true if the difference between a Sector's maximum data value the Sector average exceeds threshold.
     bool evaluate(const WorkspaceDict& wspc);
     std::string description() const;
 };
@@ -104,6 +111,7 @@ class MaxVariationCriterionVerticalAvg : public IDCriterion {
         const std::string varname_hi_level, const scalar_type threshold) : 
         IDCriterion(varname_low_level, varname_hi_level, threshold, Event::GREATER_THAN) {};
     
+    /// Returns true if the difference between the maximum value of the average of var1 and var2 and the average value of the average of var1 and var2 exceeds threshold.
     bool evaluate(const WorkspaceDict& wspc);
     std::string description() const;
 };

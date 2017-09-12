@@ -54,6 +54,10 @@ void XyzToLL(scalar_type& lat, scalar_type& lon, const scalar_type& x, const sca
 */
 scalar_type sphereDistance(scalar_type latA, scalar_type lonA, scalar_type latB, scalar_type lonB);
 
+/// Computes the geodesic length in kilometers between two points on an Earth-sized sphere (const radius = EARTH_RADIUS_KM).
+/**
+    Assumes input values are given in degrees.
+*/
 scalar_type sphereDistance(const ll_coord_type& posA, const ll_coord_type& posB);
 
 

@@ -159,7 +159,7 @@ std::string SectorList::infoString() const {
     ss << "Sector List Record: \n";
     ss <<"\tsearch region SW corner (lat, lon) = (" << southBnd << ", " << westBnd << ")" << std::endl;
     ss <<"\tsearch region NE corner (lat, lon) = (" << northBnd << ", " << eastBnd << ")" << std::endl;
-    ss << "nSectors = " << nSectors();
+    ss << "\tnSectors = " << nSectors() << std::endl;
     if (lon_strides_deg.size() > 0) {
         ss << "\tnumber of latitude strips = " << nStrips << std::endl;
         ss << "\tlat stride (deg) = " << lat_stride_deg << std::endl;

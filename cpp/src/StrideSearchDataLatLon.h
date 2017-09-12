@@ -10,6 +10,8 @@ namespace StrideSearch {
 
 /// Specialized data access for uniform lat-lon grids.
 /**
+    Note: this class is currently unused, except for its unit test.  
+    @todo Should we keep this class?
 */
 class StrideSearchDataLatLon : public StrideSearchData {
     public:
@@ -35,12 +37,19 @@ class StrideSearchDataLatLon : public StrideSearchData {
             const std::vector<vec_indices_type>& dataIndices) const;
         
         /// Load data from file into a Sector's local workspace
+        /**
+            Assumes variables have dimensions (time, level, lat, lon) or (time, lat, lon)
+        */
         void loadSectorWorkingData(Sector* sec, const index_type& tInd, const index_type& levInd = -1) override;
         
+        /// Basic info about this StrideSearchData instance, output to a string.
         std::string infoString() const;
         
     protected:
+        /// Number of meridional grid points per longitude line.
         index_type nLat;
+        
+        /// Number of zonal grid points per latitude line.
         index_type nLon;
         
         

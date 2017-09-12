@@ -22,20 +22,24 @@ namespace StrideSearch {
     2. Linking each sector to the data points and indices within the file associated with an StrideSearchData_Base subclass.
     3. Providing a control structure (loop) for the per-timestep search.
     
-    @todo make thread-safe by using std::shared_ptr
+    @todo SectorList setup is slow.  Need an octree or k-d tree algorithm for linkSectorsToData.
 */
 class SectorList {
     public:
-        /// Constructor. Inputs are the boundaries of a search region, and a sector radius in kilometers.
+        /// Constructor that defines its own Sectors. Inputs are the boundaries of a search region, and a sector radius in kilometers.
         /**
             @param sb southern latitudinal boundary, in degrees
             @param nb norhern latitudinal boundary, in degrees
             @param wb western longitudinal boundary, in degrees
             @param eb eastern longitudinal boundary, in degrees
+            @param sector_radius_km sector geodesic radius, in kilometers
         */
         SectorList(scalar_type sb, scalar_type nb, scalar_type wb, scalar_type eb, scalar_type sector_radius_km);
+        
+        /// Constructor for known Sector centers.
         SectorList(const std::vector<ll_coord_type>& centers, const std::vector<scalar_type>& radii);
         
+        /// Constructor for Sectors centered on a set of Events contained in EventList.
         SectorList(const EventList& evList, const scalar_type radius);
         
         virtual ~SectorList() {};
@@ -46,37 +50,54 @@ class SectorList {
         /// Return a vector of all Sector centers.
         std::vector<ll_coord_type> listSectorCenters() const;
         
+        /// Get basic or all information about a specific Sector, output to string.
         std::string sectorInfoString(const index_type secInd, const bool printAllData = false) const;
         
+        /// Get basic information about *this SectorList, output to string.
         std::string infoString() const;
         
+        /// Allocate memory and build workspaces for a common set of identification criteria across all sectors.
         void buildWorkspaces(const std::vector<IDCriterion*>& criteria);
+        /// Allocate memory and build workspaces where each Sector has its own set of identification criteria.
         void buildWorkspaces(const std::vector<std::vector<IDCriterion*>>& separate_criteria);
         
         /// Links each sector to the data points within its boundaries.
         void linkSectorsToData(const StrideSearchData* data_ptr);
         
+        /// Find the sector that's closest to an arbitrary point.
         index_type closestSectorToPoint(const scalar_type lat, const scalar_type lon) const;
 
 #ifdef USE_NANOFLANN
         void fastLinkSectorsToData(const StrideSearchData* data_ptr);
 #endif
         
+        /// Pointers to Sectors contained by *this
         std::vector<std::unique_ptr<Sector>> sectors;
         
+        /// Returns the maximum number of data points contained by any one sector.
         index_type maxDataPointsPerSector() const;
+        /// Returns the minimum number of data points contained by any one sector.
         index_type minDataPointsPerSector() const;
         
     protected: 
+        /// Southern boundary of search domain, in [-90, 90).        
         scalar_type southBnd;
+        /// Northern boundary of search domain, in (-90, 90].
         scalar_type northBnd;
+        /// Western boundary of search domain, in [0, 360).
         scalar_type westBnd;
+        /// Eastern boundary of search domain, in (0, 360].
         scalar_type eastBnd;
+        /// radius of each Sector in *this.
         scalar_type radius;
         
+        /// Latitude stride separating latitude strips.
         scalar_type lat_stride_deg;
         
+        /// Number of latitude strips in *this, if applicable.
         index_type nStrips;
+        
+        /// Longitude strides along each latitude strip, if applicable.
         std::vector<scalar_type> lon_strides_deg;
         
         

@@ -28,8 +28,6 @@ int main(int argc, char* argv[]) {
     //  Set up data set for reading
     //
     const std::string data_dir = "/Users/pabosle/Desktop/dataTemp/atmLatLon";
-    //const std::string data_filename = "f1850c5_ne240_rel06.cam.h2.0002-08-27-00000.nc";
-    //const std::string data_filename = "f1850c5_ne240_rel06.cam.h2.0002-07-28-00000.nc";
     const std::string data_filename = "f1850c5_ne240_rel06.cam.h2.0004-07-18-00000.nc";
     const std::string full_name = data_dir + "/" + data_filename;
     std::vector<std::string> file_list = {full_name};

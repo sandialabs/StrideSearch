@@ -48,10 +48,6 @@ std::string StrideSearchDataLatLon::basicInfo() const {
     return ss.str();
 }
 
-///
-/**
-    Assumes variables have dimensions (time, level, lat, lon) or (time, lat, lon)
-*/
  void StrideSearchDataLatLon::loadSectorWorkingData(Sector* sec, const index_type& tInd, const index_type& levInd) {
     netCDF::NcFile file(filename, netCDF::NcFile::read);
     //

@@ -33,12 +33,6 @@ void StrideSearchData::initTime(){
     scalar_type timevals[fileNTimesteps];
     time_var.getVar(timevals);
     time = std::vector<scalar_type>(&timevals[0], &timevals[0] + fileNTimesteps);
-    
-//     std::vector<size_t> index(1,0);
-//     for (index_type k = 0; k < fileNTimesteps; ++k) {
-//         index[0] = k;
-//         time_var.getVar(index, &time[k]);
-//     }    
 }
 
 std::string StrideSearchData::infoString() const {

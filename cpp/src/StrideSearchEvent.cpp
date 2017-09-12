@@ -52,11 +52,6 @@ std::set<std::string> Event::getDescriptions() const {
     return result;
 }
 
-/// Returns true if two related Events are collocated.
-/**
-    Assumption 1: EventList::consolidateRelated has already finished.
-    Assumption 2: *this and its relatedEvents have the same time_index.
-*/
 bool Event::isCollocated(const IDCriterion* crit1, const IDCriterion* crit2, const scalar_type distThreshold) {
     bool result = false;
     const std::set<std::string> descSet = getDescriptions();
@@ -116,8 +111,6 @@ scalar_type Event::maxRelatedDistance() const {
     }
     return result;
 }
-
-
 
 std::string Event::infoString(int tabLevel) const {
     std::string tabstr("");

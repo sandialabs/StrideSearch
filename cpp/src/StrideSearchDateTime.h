@@ -19,12 +19,16 @@ static month_string_map_type monthStringMap;
 /// Bare-bones date-time structure and methods.
 class DateTime {
     public:
+        /// Year
         int year;
+        /// Month
         int month;
+        /// Day
         int day;
+        /// Hour
         int hour;
         
-        /// Constructor.
+        /// Basic Constructor.
         DateTime(const int yr = 1850, const int mo = 1, const int dy = 1, const int hr = 0);
         
         /// Constructor using YYYY-MM-DD or YYYY-MM-DD-HH formatted string 
@@ -36,29 +40,38 @@ class DateTime {
         /// Constructor from ctime::tm
         DateTime(const std::tm& ctm);
         
-        /// Constructor 
+        /// Constructor using time values in units of days since a particular Day 0.
+        /**
+            This constructor converts dataset time to c++ "localtime" relative to a Day 0 defined by start.
+            @param daysSinceStart time (in days) since Day 0 of a simulation.  May have fractional values.
+            @param start Day 0.
+        */
         DateTime(const scalar_type daysSinceStart, const DateTime& start);
     
         /// Return a string formatted YYYYMMDDHH00.
         std::string intString() const;
     
+        /// Return a string corresponding to a month's integer.
         std::string monthString(const int mInt) const;
+        
+        /// Return the month string corresponding to *this.
         std::string monthString() const;
         
         
     protected:
+        /// Builds the maps used to convert from integers to strings, and from months to days-in-month.
         void buildMonthDayMap();
-        
-        time_point_type startDate;
-        
 };
 
+/// Equivalence operator.
 inline bool operator==(const DateTime& left, const DateTime& right){
     return left.year == right.year && left.month == right.month && left.day == right.day && left.hour == right.hour;
 }
 
+/// Less than implies that the left operand occurs prior to the right operand.
 bool operator < (const DateTime& left, const DateTime& right); 
 
+/// Greater than implies that the right operand occurs prior to the left operand.
 bool operator > (const DateTime& left, const DateTime& right); 
 
 }

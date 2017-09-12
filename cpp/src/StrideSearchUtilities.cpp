@@ -10,8 +10,6 @@
 
 namespace StrideSearch {
 
-// static const double deg2rad = std::atan(1.0) / 45.0;
-
 void llToXYZ(scalar_type& x, scalar_type& y, scalar_type& z, const scalar_type& lat, const scalar_type& lon){
     x = std::cos(deg2rad * lat) * std::cos(deg2rad * lon);
     y = std::cos(deg2rad * lat) * std::sin(deg2rad * lon);
@@ -88,28 +86,6 @@ void print_copyright(){
     std::cout <<  "Export of this program may require a license from the United States Government.\n";
     std::cout <<  "------------------------------------------------------------------------------------------------\n";
 }
-
-
-// static PyObject* wrap_sphereDistance(PyObject* self, PyObject* args) {
-//     double latA, lonA, latB, lonB;
-//     double result;
-//     /* Python -> C++ conversion */
-//     if (!PyArg_ParseTuple(args, "dddd", &latA, &lonA, &latB, &lonB))
-//         return NULL;
-//         
-//     /* call c++ function */
-//     result = sphereDistance(latA, lonA, latB, lonB);
-//     
-//     /* c++ -> Python conversion */
-//     return Py_BuildValue("d", result);
-// }
-// 
-// static PyMethodDef UtilMethods[] = { {"sphereDistance", wrap_sphereDistance, METH_VARARGS, 
-//     "Calculate the great-circle distance between two lat-lon locations (in degrees)"}, {NULL, NULL, 0, NULL} };
-// 
-// PyMODINIT_FUNC initStrideSearchUtilities(void) {
-//     (void) Py_InitModule("StrideSearchUtilities", UtilMethods);
-// }
 
 
 }
