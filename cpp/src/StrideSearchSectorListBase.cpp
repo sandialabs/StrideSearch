@@ -52,6 +52,13 @@ SectorList::SectorList(const std::vector<ll_coord_type>& centers, const std::vec
     }
 }
 
+SectorList::SectorList(const EventList& evList, const scalar_type radius) {
+    for (int i = 0; i < evList.size(); ++i) {
+        const ll_coord_type loc = evList.getEvent(i)->location();
+        sectors.push_back(std::unique_ptr<Sector>(new Sector(loc.first, loc.second, radius, -1)));
+    }
+}
+
 #ifdef USE_NANOFLANN
     void SectorList::fastLinkSectorsToData(const StrideSearchData* data_ptr){};
 #endif

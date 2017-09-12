@@ -33,6 +33,8 @@ class EventList {
         std::map<DateTime, std::vector<Event>> separateByDate() const;
         
         void consolidateRelatedEvents(const scalar_type distThreshold);
+        
+        inline std::shared_ptr<Event> getEvent(const index_type i) const {return events[i];}
     
     protected:
         std::vector<std::shared_ptr<Event>> events;

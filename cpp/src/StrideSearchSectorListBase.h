@@ -7,6 +7,8 @@
 #include "StrideSearchWorkspaceDict.h"
 #include "StrideSearchIDCriterionBase.h"
 #include "StrideSearchSector.h"
+#include "StrideSearchEventList.h"
+#include "StrideSearchEvent.h"
 #include <vector>
 #include <memory>
 
@@ -33,6 +35,9 @@ class SectorList {
         */
         SectorList(scalar_type sb, scalar_type nb, scalar_type wb, scalar_type eb, scalar_type sector_radius_km);
         SectorList(const std::vector<ll_coord_type>& centers, const std::vector<scalar_type>& radii);
+        
+        SectorList(const EventList& evList, const scalar_type radius);
+        
         virtual ~SectorList() {};
         
         /// Return the number of sectors in a SectorList

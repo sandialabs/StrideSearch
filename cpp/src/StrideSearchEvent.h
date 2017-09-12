@@ -27,7 +27,6 @@ namespace StrideSearch {
 class Event {
     public:
         friend class EventList;
-        friend class CollocationCriterion;
         friend class Track;
         /// Types of events
         enum IntensityComparison {LESS_THAN, GREATER_THAN};
@@ -77,6 +76,8 @@ class Event {
         scalar_type maxRelatedDistance() const;
         
         scalar_type distance(const Event& other) const;
+        
+        inline ll_coord_type location() const {return latLon;}
                 
     protected:
         std::string desc;

@@ -152,5 +152,78 @@ void StrideSearchData::initDimensions() {
     }
 }
 
+void StrideSearchData::loadSectorWorkingData(Sector* sec, const index_type& tInd, const index_type& levInd) {
+    netCDF::NcFile file(filename, netCDF::NcFile::read);
+    if (oneD) {
+        //
+        //  loop over every variable in sector's WorkspaceDict
+        //
+        for (index_type wspcInd = 0; wspcInd < sec->workspace.size(); ++wspcInd) {
+            //
+            //  loop over every variable in WorkspaceDict
+            //
+            for (auto& wvar : sec->workspace[wspcInd].dict) {
+                netCDF::NcVar ncv(file.getVar(wvar.first));
+                const index_type nDims = ncv.getDimCount();
+                if (nDims == 2) { // e.g., (time, node)
+                    std::vector<size_t> getIndex(2,0);
+                    getIndex[0] = tInd;
+                    for (index_type i = 0; i < sec->data_indices.size(); ++i) {
+                        getIndex[1] = sec->data_indices[i][0];
+                        ncv.getVar(getIndex, &wvar.second[i]);
+                    }
+                }
+                else if (nDims == 3) { // e.g., (time, level, node)
+                    std::vector<size_t> getIndex(3,0);
+                    getIndex[0] = tInd;
+                    getIndex[1] = levInd;
+                    for (index_type i = 0; i < sec->data_indices.size(); ++i) {
+                        getIndex[2] = sec->data_indices[i][0];
+                        ncv.getVar(getIndex, &wvar.second[i]);
+                    }
+                }
+                else {
+                    std::cerr << "StrideSearchDataBase::loadSectorWorkingData ERROR: dimension number" << std::endl;
+                }
+            }
+        }
+    }
+    else if (twoD) {
+        //
+        //  loop over every variable in sector's WorkspaceDict
+        //
+        for (index_type wspcInd = 0; wspcInd < sec->workspace.size(); ++wspcInd) {
+            //
+            //  loop over every variable in workspacedict
+            //
+            for (auto& wvar : sec->workspace[wspcInd].dict) {
+                netCDF::NcVar ncv(file.getVar(wvar.first));
+                const index_type nDims = ncv.getDimCount();
+                if (nDims == 3) { // e.g., (time, lat, lon)
+                    std::vector<size_t> getIndex(3,0);
+                    getIndex[0] = tInd;
+                    for (index_type i = 0; i < sec->data_indices.size(); ++i) {
+                        getIndex[1] = sec->data_indices[i][0];
+                        getIndex[2] = sec->data_indices[i][1];
+                        ncv.getVar(getIndex, &wvar.second[i]);
+                    }
+                }
+                else if (nDims == 4) { // e.g., (time, level, lat, lon)
+                    std::vector<size_t> getIndex(4,0);
+                    getIndex[0] = tInd;
+                    getIndex[1] = levInd;
+                    for (index_type i = 0; i < sec->data_indices.size(); ++i) {
+                        getIndex[2] = sec->data_indices[i][0];
+                        getIndex[3] = sec->data_indices[i][1];
+                        ncv.getVar(getIndex, &wvar.second[i]);
+                    }
+                }
+                else {
+                    std::cerr << "StrideSearchDataBase::loadSectorWorkingData ERROR: dimension number" << std::endl;
+                }
+            }
+        }
+    }
+}
 
 }
