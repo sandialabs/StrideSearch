@@ -1,8 +1,10 @@
 #include "StrideSearchUtilities.h"
 #include "StrideSearchEvent.h"
+#include "StrideSearchIDCriterionBase.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <exception>
 
 namespace StrideSearch {
 
@@ -15,8 +17,13 @@ Event::Event() : desc("null"), val(0.0), latLon(0.0, 0.0), datetime(), dataIndex
     filename("nullfile"), time_index(-1), compare(Event::GREATER_THAN), isReferenced(false) {};
 
 void Event::addRelated(std::shared_ptr<Event> relEv) {
-    relatedEvents.push_back(relEv);
-    relEv->isReferenced = true;
+    if (datetime == relEv->datetime && time_index == relEv->time_index) {
+        relatedEvents.push_back(relEv);
+        relEv->isReferenced = true;
+    }
+    else {
+        throw std::runtime_error("Related events must have same DateTime and time_index");
+    }
 }
 
 bool Event::lowerIntensity(const Event& other) const { 
@@ -35,6 +42,57 @@ bool Event::lowerIntensity(const Event& other) const {
 scalar_type Event::distance(const Event& other) const {
     return sphereDistance(latLon, other.latLon);
 }
+
+std::set<std::string> Event::getDescriptions() const {
+    std::set<std::string> result;
+    result.insert(desc);
+    for (index_type i = 0; i < relatedEvents.size(); ++i) {
+        result.insert(relatedEvents[i]->desc);
+    }
+    return result;
+}
+
+/// Returns true if two related Events are collocated.
+/**
+    Assumption 1: EventList::consolidateRelated has already finished.
+    Assumption 2: *this and its relatedEvents have the same time_index.
+*/
+bool Event::isCollocated(const IDCriterion* crit1, const IDCriterion* crit2, const scalar_type distThreshold) {
+    bool result = false;
+    const std::set<std::string> descSet = getDescriptions();
+    if (descSet.count(crit1->description()) == 1 && descSet.count(crit2->description()) == 1) {
+        ll_coord_type loc1;
+        ll_coord_type loc2;
+        if (desc == crit1->description()) {
+            loc1 = latLon;
+            for (index_type j = 0; j < relatedEvents.size(); ++j) {
+                if (relatedEvents[j]->desc == crit2->description()) {
+                    loc2 = relatedEvents[j]->latLon;
+                }
+            }
+        }
+        else if (desc == crit2->description()) {
+            loc1 = latLon;
+            for (index_type j = 0; j < relatedEvents.size(); ++j) {
+                if (relatedEvents[j]->desc == crit1->description()) {
+                    loc2 = relatedEvents[j]->latLon;
+                }
+            }
+        }
+        else {
+            for (index_type j = 0; j < relatedEvents.size(); ++j) {
+                if (relatedEvents[j]->desc == crit1->description()) {
+                    loc1 = relatedEvents[j]->latLon;
+                }
+                if (relatedEvents[j]->desc == crit2->description()) {
+                    loc2 = relatedEvents[j]->latLon;
+                }
+            }
+        }
+        result = (sphereDistance(loc1, loc2) <= distThreshold);
+    }
+    return result;
+};
 
 scalar_type Event::minRelatedDistance() const {
     scalar_type result = 0.0;
@@ -74,10 +132,13 @@ std::string Event::infoString(int tabLevel) const {
     for (int j = 0; j < dataIndex.size()-1; ++j)
         ss << dataIndex[j] << ", ";
     ss << dataIndex[dataIndex.size() - 1] << ")\n";
+    ss << tabstr << "\ttime_index = " << time_index << std::endl;
     ss << tabstr << "\tDTG: " << datetime.DTGString() << std::endl;
     ss << tabstr << "\tin file: " << filename << std::endl;
     ss << tabstr << "\tisReferenced: " << (isReferenced ? "true" : "false") << std::endl;
     if (relatedEvents.size() > 0) {
+        ss << tabstr << "\tRelated Events:" << std::endl;
+        ss << tabstr << "\t>>>>>>>>>>>>>>>>>>>\n";
         tabLevel += 1;
         for (int i = 0; i < relatedEvents.size(); ++i)
             ss << relatedEvents[i]->infoString(tabLevel);

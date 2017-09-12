@@ -11,6 +11,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <fstream>
 #include <vector>
 #include <memory>
 
@@ -91,6 +92,7 @@ int main(int argc, char* argv[]) {
     Timer searchTimer("TropicalCylone_spatial_search");
     searchTimer.start();    
     typedef std::shared_ptr<Event> event_ptr_type;
+    EventList mainList;
     //
     //  Loop over each data file
     //  (note: this loop is embarrassingly parallel)
@@ -122,7 +124,6 @@ int main(int argc, char* argv[]) {
                     sectors.sectors[i]->evaluateCriteriaAtTimestep(loc_criteria, currentDate, ssData.getFilename(), k));
                 possCounter += possibleEvents[i].size();
             }
-            std::cout << "\tfound " << possCounter << " possible events, ";
             //
             //  Create new sectors, one at each possible event location -- search for all criteria
             //
@@ -144,22 +145,34 @@ int main(int argc, char* argv[]) {
                     timestepSecList.sectors[i]->evaluateCriteriaAtTimestep(id_criteria, currentDate, ssData.getFilename(), k));
                 evCounter += foundEvents[i].size();
             }
-            std::cout << evCounter << " actual events." << std::endl;     
+            EventList foundEventList(foundEvents);
+            foundEventList.removeDuplicates(sector_size_km);
             //
-            //  Step 3: apply collocation criteria, if different than sector size
+            //  Apply collocation criteria
             //
-            
-            // TO-DO
-            
+            foundEventList.consolidateRelatedEvents(sector_size_km);
+            foundEventList.requireCollocation(&vor850, &psl, vort_psl_dist_threshold);
+            foundEventList.requireCollocation(&warm_core, &psl, temp_psl_dist_threshold);
+            std::cout << " : " << std::setw(2) << std::setfill(' ') << evCounter << " events." << std::endl;     
             //
-            //  Step 4: save timestep data
+            //  Save timestep data
             //
-
+            mainList.extend(foundEventList);
         }
     }
+    searchTimer.end();
+    
+    //
+    //  write output
+    //
+    std::ofstream outfile("sstropicalResults.txt");
+    const int indent_tabs = 0;
+    const bool printAll = true;
+    outfile << mainList.infoString(indent_tabs, printAll);
+    outfile.close();
+    
     std::cout << setupTimer.infoString();
     
-    searchTimer.end();
     std::cout << searchTimer.infoString(); 
     
     programTimer.end();

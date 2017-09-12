@@ -177,4 +177,18 @@ void EventList::consolidateRelatedEvents(const scalar_type distThreshold) {
     events = newEvents;
 }
 
+void EventList::requireCollocation(const IDCriterion* crit1, const IDCriterion* crit2, const scalar_type distThreshold) {
+    std::vector<bool> isCollocated(events.size(), false);
+    for (index_type i =0; i < events.size(); ++i) {
+        isCollocated[i] = events[i]->isCollocated(crit1, crit2, distThreshold);
+    }
+    std::vector<std::shared_ptr<Event>> newEvents;
+    for (index_type i= 0; i < events.size(); ++i) {
+        if (isCollocated[i]) {
+            newEvents.push_back(events[i]);
+        }
+    }
+    events = newEvents;
+}
+
 }

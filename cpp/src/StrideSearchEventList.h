@@ -6,6 +6,7 @@
 #include "StrideSearchUtilities.h"
 #include "StrideSearchDateTime.h"
 #include "StrideSearchEvent.h"
+#include "StrideSearchIDCriterionBase.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -34,6 +35,8 @@ class EventList {
         std::map<DateTime, std::vector<Event>> separateByDate() const;
         
         void consolidateRelatedEvents(const scalar_type distThreshold);
+        
+        void requireCollocation(const IDCriterion* crit1, const IDCriterion* crit2, const scalar_type distThreshold);
         
         inline std::shared_ptr<Event> getEvent(const index_type i) const {return events[i];}
     

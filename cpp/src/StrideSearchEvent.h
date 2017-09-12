@@ -6,6 +6,7 @@
 #include "StrideSearchUtilities.h"
 #include "StrideSearchDateTime.h"
 #include <string>
+#include <set>
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -24,6 +25,8 @@ namespace StrideSearch {
     type enum.
     
 */
+class IDCriterion;
+
 class Event {
     public:
         friend class EventList;
@@ -64,6 +67,8 @@ class Event {
         /// Evaluates true if 2 events are near each other, where near is defined as a distance threshold.
         bool isNear(const Event& other, const double distThreshold) const;
         
+        inline bool sameDateTime(const Event& other) const {return datetime == other.datetime;}
+        
         /// Evaluates true if two Events of the same type with different values and/or locations are near each other.
         /**
             Redundant Events are events of the same type that are closely spaced; for example, two sectors may find the same
@@ -78,6 +83,10 @@ class Event {
         scalar_type distance(const Event& other) const;
         
         inline ll_coord_type location() const {return latLon;}
+        
+        bool isCollocated(const IDCriterion* crit1, const IDCriterion* crit2, const scalar_type distThreshold);
+        
+        std::set<std::string> getDescriptions() const;
                 
     protected:
         std::string desc;

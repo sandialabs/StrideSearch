@@ -8,6 +8,8 @@
 #include <sstream>
 #include <cassert>
 #include <limits>
+#include <algorithm>
+#include <numeric>
 
 namespace StrideSearch {
 
@@ -26,15 +28,6 @@ SectorList::SectorList(const scalar_type sb, const scalar_type nb, const scalar_
         else
             lon_strides_deg[i] = 360.0;
     }
-    
-    std::cout << "SectorList setup:" << std::endl;
-    std::cout << "\tnStrips = " << nStrips << std::endl;
-    std::cout << "\tlatStride = " << lat_stride_deg << std::endl;
-    for (index_type i = 0; i < lon_strides_deg.size() - 1; ++i){
-        std::cout << lon_strides_deg[i] << ", ";
-    }
-    std::cout << lon_strides_deg[lon_strides_deg.size() - 1] << std::endl;
-    
     
     for (index_type i = 0; i < nStrips; ++i) {
         const scalar_type latI = southBnd + i * lat_stride_deg;
@@ -170,10 +163,8 @@ std::string SectorList::infoString() const {
     if (lon_strides_deg.size() > 0) {
         ss << "\tnumber of latitude strips = " << nStrips << std::endl;
         ss << "\tlat stride (deg) = " << lat_stride_deg << std::endl;
-        ss << "\tlon strides (deg) = ";
-        for (index_type i = 0; i < lon_strides_deg.size() - 1; ++i)
-            ss << lon_strides_deg[i] << ", ";
-        ss << lon_strides_deg[lon_strides_deg.size() - 1] << std::endl;
+        ss << "\tmin(lonStride) = " << *std::min_element(lon_strides_deg.begin(), lon_strides_deg.end()) << std::endl;
+        ss << "\tmax(lonStride) = " << *std::max_element(lon_strides_deg.begin(), lon_strides_deg.end()) << std::endl;
     }
     ss << "\tmin pts per sector = " << minDataPointsPerSector() << std::endl;
     ss << "\tmax pts per sector = " << maxDataPointsPerSector() << std::endl;
