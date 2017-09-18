@@ -22,16 +22,14 @@ Spatial search
 The user must specify a sector radius (in km) to define the search sectors.  @n
 Only one storm may be detected per radius so this input is a tunable parameter of the algorithm.  @n
 Depending on the application, larger or smaller radii may be desired.  @n
-Any 2 storms that are separated by a great-circle distance less than the sector radius will be considered duplicates and one of them will be removed.
+Any 2 storms that are separated by a great-circle distance less than the sector radius will be considered duplicates and one of them will be skipped.
 
 The spatial search algorithm:
 * Covers the requested search area (specified by a maximum and minimum latitude) with overlapping circular search sectors, 
 defined by the user-specified great-circle distance in km.	  
 * Reads the NetCDF input file for relevant storm data (i.e., windspeed, sea level pressure, vorticity) in each storm sector.
-* Stores information about any sector (and its relevant data) in a linked-list data structure if that sector's data
-exceeds some user-defined storm threshold.   
-* After all sectors have been searched, it compares the found storms from the linked-list to remove duplicates.  
-* Outputs the linked-list to various formats.
+* Stores information about any sector (and its relevant data) in a local data structure for thread-parallelism.   
+* Outputs the set of found storms to a data file for later input to the track-building algorithm.
 
 The main classes responsible for accomplishing the spatial search are StrideSearch::Sector, StrideSearch::Event, and StrideSearch::IDCriterion (and its subclasses).
 Many collective operations are encapsulated by the related classes StrideSearch::SectorList and StrideSearch::EventList.
@@ -59,7 +57,7 @@ libraries.
 Either a C++ compiler (preferred) or a modern Fortran compiler are also required.      @n
 An MPI distribution is not required.   @n   
 
-NetCDF file access utilities provided by the __Geophysical Fluid Dynamics Laboratory's (GFDL)__ 
+For the Fortran implementation, NetCDF file access utilities provided by the __Geophysical Fluid Dynamics Laboratory's (GFDL)__ 
 [TSTORMS](http://www.gfdl.noaa.gov/tstorms) code for tropical cyclone detection are incorporated into this software.
 
 Build / Install
@@ -144,6 +142,8 @@ or [Anaconda](https://www.continuum.io); both have free versions that contain th
 
 Assuming the setup utilities exist, users need to run and install the included setup.py file.
 
+While flexible, the python implementation is not optimized for speed and can be quite slow.
+
 
 
 
@@ -204,11 +204,8 @@ References
 =================
 Stride Search is described in more detail in P. Bosler et al., 2015, _Geosci. Model Dev._.  
 
-Stride Search uses the netcdf file access subprograms provided by GFDL's [TSTORMS](http://www.gfdl.noaa.gov/tstorms) software.
-These are contained in the `<stride search root>/gfdlUtilities` subdirectory.  
-
 Included in the Stride Search software are two examples of driver programs.  @n
 1. The tropical cyclone driver uses identification criteria defined in F. Vitart et al., 1997, _J. Climate_, 10:745-760.
-2. The polar low search uses the identification criteria given by T. J. Bracegirdle and S. L. Gray, 2008, _Int. J. Climatology_, 28:1903-1919.
+2. The polar low search (Fortran only) uses the identification criteria given by T. J. Bracegirdle and S. L. Gray, 2008, _Int. J. Climatology_, 28:1903-1919.
 
 
