@@ -22,10 +22,6 @@ namespace StrideSearch {
 
     /// Vector of index_type type
     typedef std::vector<index_type> vec_indices_type;
-        
-#ifdef USE_NANOFLANN
-
-#endif
 }
 
 #endif

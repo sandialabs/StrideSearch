@@ -30,10 +30,10 @@ int main(int argc, char* argv[]) {
     const std::string tempvarname = "tas"; // surface temp
     const std::string precipvarname = "pr"; // precipitation flux
     
-    StrideSearchData ssData(file);
-    ssData.initTime();
-    ssData.initDimensions();
-    std::cout << ssData.infoString();
+    std::shared_ptr<StrideSearchData> ssData(new StrideSearchData(file));
+    ssData->initTime();
+    ssData->initDimensions();
+    std::cout << ssData->infoString();
     
     //
     //  pick an arbitrary time/level
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
     SectorList secList(sec_centers, radii);
     std::cout << "SectorList ready. nSectors = " << secList.nSectors() << std::endl;
     
-    secList.linkSectorsToData(&ssData);
+    secList.linkSectorsToData(ssData);
     std::cout << "\tAfter linking to data:" << std::endl;
     std::cout << secList.infoString() << std::endl;
     
@@ -80,7 +80,7 @@ int main(int argc, char* argv[]) {
     //  load data from file
     //
     for (int i = 0; i < secList.nSectors(); ++i) {
-        ssData.loadSectorWorkingData(secList.sectors[i].get(), time_index, lev_index);
+        ssData->loadSectorWorkingData(secList.sectors[i].get(), time_index, lev_index);
     }
 
     for (int i = 0; i < secList.nSectors(); ++i)
@@ -94,7 +94,7 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < secList.nSectors(); ++i) {
         foundEvents.push_back(
             secList.sectors[i]->evaluateCriteriaAtTimestep(separateCriteria[i], codingDay, 
-                ssData.getFilename(), time_index));    
+                ssData->getFilename(), time_index));    
     }
     
     std::cout << "foundEvents.size() = " << foundEvents.size() << std::endl;

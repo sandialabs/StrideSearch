@@ -107,11 +107,16 @@ class StrideSearchData {
         */
         virtual void initDimensions();
         
+        inline index_type nPoints() const {return _nPoints;}
+        
+        index_type get1dIndex(const index_type latI, const index_type lonJ) const;
+        std::pair<index_type, index_type> get2dIndex(const index_type ind) const;
+        
     protected:
         /// filename of current data file
         std::string filename;
         
-        /// True for grids whose horizontal memory layouts have rank = 1.  
+        /// True for grids whose horizontal memory layouts have rank = 1. 
         /**
             See layout1d() for more information.
         */
@@ -131,6 +136,9 @@ class StrideSearchData {
         
         /// total number of timesteps in the data set (so far)
         index_type totalNTimesteps;
+        
+        /// number of horizontal grid points
+        index_type _nPoints;
 };
 
 }

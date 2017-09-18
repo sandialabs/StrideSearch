@@ -35,9 +35,9 @@ ADD_EXECUTABLE(ssDataUnitTest.exe SSDataUnitTest.cpp)
 TARGET_LINK_LIBRARIES(ssDataUnitTest.exe strideSearch)
 ADD_TEST(NAME ssDataUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssDataUnitTest.exe)
 
-ADD_EXECUTABLE(ssDataLatLonUnitTest.exe SSDataLatLonUnitTest.cpp)
-TARGET_LINK_LIBRARIES(ssDataLatLonUnitTest.exe strideSearch)
-ADD_TEST(NAME ssDataLatLonUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssDataLatLonUnitTest.exe)
+#ADD_EXECUTABLE(ssDataLatLonUnitTest.exe SSDataLatLonUnitTest.cpp)
+#TARGET_LINK_LIBRARIES(ssDataLatLonUnitTest.exe strideSearch)
+#ADD_TEST(NAME ssDataLatLonUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssDataLatLonUnitTest.exe)
 
 ADD_EXECUTABLE(ssGridsTest.exe SSGridTests.cpp)
 TARGET_LINK_LIBRARIES(ssGridsTest.exe strideSearch)

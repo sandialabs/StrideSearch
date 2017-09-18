@@ -3,6 +3,7 @@
 
 #include "StrideSearchConfig.h"
 #include "StrideSearchTypeDefs.h"
+#include "StrideSearchUtilities.h"
 #include "StrideSearchDataBase.h"
 #include "StrideSearchWorkspaceDict.h"
 #include "StrideSearchIDCriterionBase.h"
@@ -62,14 +63,12 @@ class SectorList {
         void buildWorkspaces(const std::vector<std::vector<IDCriterion*>>& separate_criteria);
         
         /// Links each sector to the data points within its boundaries.
-        void linkSectorsToData(const StrideSearchData* data_ptr);
+        void linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr);
         
         /// Find the sector that's closest to an arbitrary point.
         index_type closestSectorToPoint(const scalar_type lat, const scalar_type lon) const;
 
-#ifdef USE_NANOFLANN
-        void fastLinkSectorsToData(const StrideSearchData* data_ptr);
-#endif
+
         
         /// Pointers to Sectors contained by *this
         std::vector<std::unique_ptr<Sector>> sectors;

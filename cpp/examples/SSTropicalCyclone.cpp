@@ -34,10 +34,10 @@ int main(int argc, char* argv[]) {
     
     const DateTime startDate(1850, 10, 1, 0); // Data set initial date = October 1, f1850 compset.
     
-    StrideSearchData ssData(file_list[0]);
-    ssData.initDimensions();
+    std::shared_ptr<StrideSearchData> ssData(new StrideSearchData(file_list[0]));
+    ssData->initDimensions();
     
-    std::cout << ssData.infoString();
+    std::cout << ssData->infoString();
     
     //
     //  Set up search region and StrideSearch sectors
@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
     const scalar_type sector_size_km = 500.0; // search sector radius size (kilometers)
 
     SectorList sectors(south_bnd, north_bnd, west_bnd, east_bnd, sector_size_km);
-    sectors.linkSectorsToData(&ssData);
+    sectors.linkSectorsToData(ssData);
     
     std::cout << sectors.infoString(); 
     
@@ -99,16 +99,16 @@ int main(int argc, char* argv[]) {
     std::stringstream ss;
     std::string nullstr;
     for (auto& file : file_list) {
-        ssData.updateSourceFile(file);
+        ssData->updateSourceFile(file);
         std::cout << "... processing file " << ++filecounter << " of " << file_list.size() << std::endl;
         //
         //  Loop over each time step (note: this loop is embarrassingly parallel)
         //
-        ss << " of " << ssData.nTimesteps() << "; ";
+        ss << " of " << ssData->nTimesteps() << "; ";
         const std::string nTimestepsStr = ss.str();
         ss.str(nullstr);
-        for (index_type k = 0; k < ssData.nTimesteps(); ++k) {
-            const DateTime currentDate(ssData.getTime(k), startDate);
+        for (index_type k = 0; k < ssData->nTimesteps(); ++k) {
+            const DateTime currentDate(ssData->getTime(k), startDate);
             std::cout << "timestep " << std::setw(3) << std::setfill(' ') << k << nTimestepsStr << currentDate.DTGString(); 
             //
             //  Loop over each sector, load data, use a single criterion to locate possible events
@@ -117,9 +117,9 @@ int main(int argc, char* argv[]) {
             std::vector<std::vector<event_ptr_type>> possibleEvents;
             int possCounter = 0;
             for (index_type i = 0; i < sectors.nSectors(); ++i) {
-                ssData.loadSectorWorkingData(sectors.sectors[i].get(), k);
+                ssData->loadSectorWorkingData(sectors.sectors[i].get(), k);
                 possibleEvents.push_back(
-                    sectors.sectors[i]->evaluateCriteriaAtTimestep(loc_criteria, currentDate, ssData.getFilename(), k));
+                    sectors.sectors[i]->evaluateCriteriaAtTimestep(loc_criteria, currentDate, file, k));
                 possCounter += possibleEvents[i].size();
             }
             //
@@ -129,7 +129,7 @@ int main(int argc, char* argv[]) {
             possibleList.removeDuplicates(sector_size_km);
             
             SectorList timestepSecList(possibleList, sector_size_km);
-            timestepSecList.linkSectorsToData(&ssData);
+            timestepSecList.linkSectorsToData(ssData);
             timestepSecList.buildWorkspaces(id_criteria);
             //
             //  Loop over possible event sectors, load data, evaluate all criteria 
@@ -138,9 +138,9 @@ int main(int argc, char* argv[]) {
             int evCounter = 0;
             std::vector<std::vector<event_ptr_type>> foundEvents;
             for (index_type i = 0; i < timestepSecList.nSectors(); ++i) {
-                ssData.loadSectorWorkingData(timestepSecList.sectors[i].get(), k);
+                ssData->loadSectorWorkingData(timestepSecList.sectors[i].get(), k);
                 foundEvents.push_back(
-                    timestepSecList.sectors[i]->evaluateCriteriaAtTimestep(id_criteria, currentDate, ssData.getFilename(), k));
+                    timestepSecList.sectors[i]->evaluateCriteriaAtTimestep(id_criteria, currentDate, file, k));
                 evCounter += foundEvents[i].size();
             }
             EventList foundEventList(foundEvents);

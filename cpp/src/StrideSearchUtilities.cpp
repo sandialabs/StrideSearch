@@ -11,9 +11,9 @@
 namespace StrideSearch {
 
 void llToXYZ(scalar_type& x, scalar_type& y, scalar_type& z, const scalar_type& lat, const scalar_type& lon){
-    x = std::cos(deg2rad * lat) * std::cos(deg2rad * lon);
-    y = std::cos(deg2rad * lat) * std::sin(deg2rad * lon);
-    z = std::sin(deg2rad * lat);
+    x = EARTH_RADIUS_KM * std::cos(deg2rad * lat) * std::cos(deg2rad * lon);
+    y = EARTH_RADIUS_KM * std::cos(deg2rad * lat) * std::sin(deg2rad * lon);
+    z = EARTH_RADIUS_KM * std::sin(deg2rad * lat);
 }
 
 scalar_type atan4( const scalar_type y, const scalar_type x)
