@@ -11,8 +11,6 @@
 
 namespace StrideSearch {
 
-using namespace nanoflann;
-
 template<class T, class DataSource, typename _DistanceType = T>
 struct SphereDistAdaptor
 {
@@ -85,8 +83,6 @@ struct NanoflannAdaptor {
     std::weak_ptr<StrideSearchData> data_ptr;
 };
 
-//typedef KDTreeSingleIndexAdaptor<SphereDistAdaptor<scalar_type, NanoflannAdaptor>, NanoflannAdaptor, 3, index_type> tree_type;
-typedef KDTreeSingleIndexAdaptor<L2_Simple_Adaptor<scalar_type, NanoflannAdaptor>, NanoflannAdaptor, 3, index_type> tree_type;
 }
 
 #endif
