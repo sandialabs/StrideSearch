@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <cmath>
 
 namespace StrideSearch {
 
@@ -105,6 +106,7 @@ void StrideSearchData::initDimensions() {
         twoD = true;
         oneD = false;
         
+        sphereRadius = 1.0;
         
     }
     else if (!x_var.isNull() && !y_var.isNull() && !z_var.isNull()) {
@@ -138,6 +140,14 @@ void StrideSearchData::initDimensions() {
         oneD = true;
         twoD = false;
         
+        scalar_type avg_norm = 0.0;
+        for (int i=0; i<3; ++i) {
+            avg_norm += std::sqrt(xArr[i]*xArr[i] + yArr[i]*yArr[i] + zArr[i]*zArr[i]);
+        }
+        avg_norm /= 3.0;
+        
+        sphereRadius = avg_norm;
+        
         _nPoints = nNodes;    
     }
     else if (!coord_var.isNull()) {       
@@ -167,6 +177,14 @@ void StrideSearchData::initDimensions() {
         
         oneD = true;
         twoD = false;
+        
+        scalar_type avg_norm = 0.0;
+        for (int i=0; i<3; ++i) {
+            avg_norm += std::sqrt(xyzArr[0][i]*xyzArr[0][i] + xyzArr[1][i]*xyzArr[1][i] + xyzArr[2][i]*xyzArr[2][i]);
+        }
+        avg_norm /= 3.0;
+        
+        sphereRadius = avg_norm;
         
         _nPoints = nNodes;
     }

@@ -11,9 +11,9 @@
 namespace StrideSearch {
 
 void llToXYZ(scalar_type& x, scalar_type& y, scalar_type& z, const scalar_type& lat, const scalar_type& lon){
-    x = EARTH_RADIUS_KM * std::cos(deg2rad * lat) * std::cos(deg2rad * lon);
-    y = EARTH_RADIUS_KM * std::cos(deg2rad * lat) * std::sin(deg2rad * lon);
-    z = EARTH_RADIUS_KM * std::sin(deg2rad * lat);
+    x = sphereRadius * std::cos(deg2rad * lat) * std::cos(deg2rad * lon);
+    y = sphereRadius * std::cos(deg2rad * lat) * std::sin(deg2rad * lon);
+    z = sphereRadius * std::sin(deg2rad * lat);
 }
 
 scalar_type atan4( const scalar_type y, const scalar_type x)
@@ -71,7 +71,7 @@ scalar_type sphereDistance(const scalar_type latA, const scalar_type lonA, const
         
         const scalar_type dotProd = xA * xB + yA * yB + zA * zB;
         
-        return EARTH_RADIUS_KM * std::atan2(cpnorm, dotProd);
+        return sphereRadius * std::atan2(cpnorm, dotProd);
     }
 }
 

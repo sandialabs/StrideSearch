@@ -25,6 +25,9 @@ static const scalar_type PI = 4.0 * std::atan(1.0);
 /// Meters per second to Kilometers per hour conversion factor
 static const scalar_type mps2kph = 3.6;
 
+/// Radius of sphere; set to Earth's radius here, then redefined by StrideSearchData::initDimensions().
+static scalar_type sphereRadius = EARTH_RADIUS_KM;
+
 /// Prints the required copyright information to the console.
 void print_copyright();
 
