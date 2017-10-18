@@ -10,7 +10,7 @@
 #include <cmath>
 
 namespace StrideSearch {
-
+using namespace nanoflann;
 template<class T, class DataSource, typename _DistanceType = T>
 struct SphereDistAdaptor
 {

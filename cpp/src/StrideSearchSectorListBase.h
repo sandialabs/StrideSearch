@@ -64,6 +64,10 @@ class SectorList {
         
         /// Links each sector to the data points within its boundaries.
         void linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr);
+
+	void linkSectorsToDataWNano(const std::shared_ptr<StrideSearchData> data_ptr);
+
+	void linkSectorsToDataWOutNano(const std::shared_ptr<StrideSearchData> data_ptr);
         
         /// Find the sector that's closest to an arbitrary point.
         index_type closestSectorToPoint(const scalar_type lat, const scalar_type lon) const;

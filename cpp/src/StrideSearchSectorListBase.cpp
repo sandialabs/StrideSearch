@@ -59,11 +59,10 @@ SectorList::SectorList(const EventList& evList, const scalar_type radius) {
 #ifdef USE_NANOFLANN
 void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr) {
     // Build tree
-    
-    //typedef nanoflann::KDTreeSingleIndexAdaptor<SphereDistAdaptor<scalar_type, NanoflannAdaptor>, 
-    //    NanoflannAdaptor, 3, index_type> tree_type;
-    typedef nanoflann::KDTreeSingleIndexAdaptor<L2_Simple_Adaptor<scalar_type, NanoflannAdaptor>, 
-        NanoflannAdaptor, 3, index_type> tree_type;
+    int numOccur = 0;
+    typedef nanoflann::KDTreeSingleIndexAdaptor<SphereDistAdaptor<scalar_type, NanoflannAdaptor>, NanoflannAdaptor, 3, index_type> tree_type;
+    //typedef nanoflann::KDTreeSingleIndexAdaptor<L2_Simple_Adaptor<scalar_type, NanoflannAdaptor>, 
+    //NanoflannAdaptor, 3, index_type> tree_type;
 
     NanoflannAdaptor adaptor(data_ptr);
     const int max_leaf_size = 10;
@@ -82,9 +81,9 @@ void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_
         std::cout <<"looking for data points within " << sectors[secInd]->radius << " km of (lat,lon) = (" 
             << sectors[secInd]->centerLat << ", " << sectors[secInd]->radius << "), or (x,y,z) = " << xyz[0] << ", "
             << xyz[1] << ", " << xyz[2] << "..." ;
-        const index_type nMatches = search_tree.radiusSearch(&xyz[0], sectors[secInd]->radius, return_matches, params);
+        const index_type nMatches = search_tree.radiusSearch(&xyz[0], sectors[secInd]->radius * sectors[secInd]->radius, return_matches, params);
         std::cout << "\t"  << ": found " << nMatches << " data points." << std::endl;
-        
+        numOccur += nMatches;
         if (data_ptr->layout1d()) {
             for (index_type i = 0; i < nMatches; ++i) {
                 std::vector<index_type> llind = {return_matches[i].first};
@@ -99,6 +98,7 @@ void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_
             }
         }
     }
+    std::cout<<numOccur<<std::endl;
 }
 #else
 void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr) {
