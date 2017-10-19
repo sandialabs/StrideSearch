@@ -13,7 +13,7 @@
 #include "StrideSearchNanoflannAdaptor.h"
 
 using namespace StrideSearch;
-void compareSectors(std::vector<std::unique_ptr<Sector>>& a, std::vector<std::unique_ptr<Sector>>& b);
+bool compareSectors(std::vector<std::unique_ptr<Sector>>& a, std::vector<std::unique_ptr<Sector>>& b);
 
 int main(int argc, char* argv[]) {
   print_copyright();
@@ -58,18 +58,50 @@ int main(int argc, char* argv[]) {
   std::cout << csSectors.infoString() << std::endl;
 
   compareSectors(csSectorsN.sectors,csSectors.sectors);
-  
+  //compareSectors(csSectors.sectors,csSectorsN.sectors);
 }
 
-void compareSectors(std::vector<std::unique_ptr<Sector>>& nano, std::vector<std::unique_ptr<Sector>>& noNano) {
-  for(int i = 0; i < nano.size(); i++) {
-    for(int j = 0; j < nano[i]->data_indices.size(); j++) {
-      //Make method to compare data_indices.at(j) instead of below method. 
-      for(int k = 0; k < nano[i]->data_indices.at(j).size(); k++) {
-	std::cout << nano[i]->data_indices.at(j)[k] << ", " << noNano[i]->data_indices.at(j)[k] << std::endl;
+bool compareVect(std::vector<scalar_type> a, std::vector<scalar_type> b) {
+  if(a.size() != b.size()) {
+    std::cout<<"coords contained of the two vectors do not have same size."<<std::endl;
+    return false;
+  }
+  for(int i = 0; i < a.size(); i++) {
+    for(int j = 0; j < b.size(); j++) {
+      if(a[i] == b[j]) {
+	b.erase(b.begin() + j);
+	//std::cout<<a[i]<<std::endl;
+	break;
       }
     }
-     return;
+  }
+  //std::cout<<b.size()<<std::endl;
+  return b.size() == 0;
+}
+
+bool compareSectors(std::vector<std::unique_ptr<Sector>>& nano, std::vector<std::unique_ptr<Sector>>& noNano) {
+  std::vector<scalar_type> a;
+  std::vector<scalar_type> b;
+  if(nano.size() != noNano.size()) {
+    std::cout<<"vectors are not equal."<<std::endl;
+    return false; 
+  }
+  for(int i = 0; i < nano.size(); i++) {
+    for(int j = 0; j < nano[i]->data_indices.size(); j++) {
+      //Make method to compare data_indices.at(j) instead of below method.
+      for(int k = 0; k < nano[i]->data_indices.at(j).size(); k++) {
+	a.push_back(nano[i]->data_indices.at(j)[k]);
+	b.push_back(noNano[i]->data_indices.at(j)[k]);
+      }
+    }
+  }
+  if(!compareVect(a,b)) {
+    std::cout<<"vectors are not equal."<<std::endl;
+    return false;
+  }
+  else {
+    std::cout<<"vectors are equal."<<std::endl;
+    return true;
   }
 }
 
