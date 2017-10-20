@@ -56,16 +56,23 @@ int main(int argc, char* argv[]) {
   std::cout << csSectorsN.infoString() << std::endl;
   csSectors.linkSectorsToDataWOutNano(csData);
   std::cout << csSectors.infoString() << std::endl;
-
   compareSectors(csSectorsN.sectors,csSectors.sectors);
+
+  conusSectorsN.linkSectorsToDataWNano(conusData);
+  std::cout << conusSectorsN.infoString() << std::endl;
+  conusSectors.linkSectorsToDataWOutNano(conusData);
+  std::cout << conusSectors.infoString() << std::endl;
+  compareSectors(conusSectorsN.sectors,conusSectors.sectors);
+
+  llSectorsN.linkSectorsToDataWNano(llData);
+  std::cout << llSectorsN.infoString() << std::endl;
+  llSectors.linkSectorsToDataWOutNano(llData);
+  std::cout << llSectors.infoString() << std::endl;
+  compareSectors(llSectorsN.sectors,llSectors.sectors);
   //compareSectors(csSectors.sectors,csSectorsN.sectors);
 }
 
 bool compareVect(std::vector<scalar_type> a, std::vector<scalar_type> b) {
-  if(a.size() != b.size()) {
-    std::cout<<"coords contained of the two vectors do not have same size."<<std::endl;
-    return false;
-  }
   for(int i = 0; i < a.size(); i++) {
     for(int j = 0; j < b.size(); j++) {
       if(a[i] == b[j]) {
@@ -83,12 +90,13 @@ bool compareSectors(std::vector<std::unique_ptr<Sector>>& nano, std::vector<std:
   std::vector<scalar_type> a;
   std::vector<scalar_type> b;
   if(nano.size() != noNano.size()) {
-    std::cout<<"vectors are not equal."<<std::endl;
+    std::cout<<"-----------------------------------------" << std::endl;
+    std::cout<<"Results: Grid differ in length"  << std::endl;
+    std::cout<<"-----------------------------------------" << std::endl;
     return false; 
   }
   for(int i = 0; i < nano.size(); i++) {
     for(int j = 0; j < nano[i]->data_indices.size(); j++) {
-      //Make method to compare data_indices.at(j) instead of below method.
       for(int k = 0; k < nano[i]->data_indices.at(j).size(); k++) {
 	a.push_back(nano[i]->data_indices.at(j)[k]);
 	b.push_back(noNano[i]->data_indices.at(j)[k]);
@@ -96,11 +104,15 @@ bool compareSectors(std::vector<std::unique_ptr<Sector>>& nano, std::vector<std:
     }
   }
   if(!compareVect(a,b)) {
-    std::cout<<"vectors are not equal."<<std::endl;
+    std::cout<<"-----------------------------------------" << std::endl;
+    std::cout<<"Results: Grids differ in coords contained."  << std::endl;
+    std::cout<<"-----------------------------------------" << std::endl;
     return false;
   }
   else {
-    std::cout<<"vectors are equal."<<std::endl;
+    std::cout<<"-----------------------------------------" << std::endl;
+    std::cout<<"Results: Grids are equal." << std::endl;
+    std::cout<<"-----------------------------------------" << std::endl;
     return true;
   }
 }
