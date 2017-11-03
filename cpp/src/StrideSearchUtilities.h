@@ -63,6 +63,7 @@ scalar_type sphereDistance(scalar_type latA, scalar_type lonA, scalar_type latB,
 */
 scalar_type sphereDistance(const ll_coord_type& posA, const ll_coord_type& posB);
 
+scalar_type sphDist(const scalar_type ax, const scalar_type ay, const scalar_type az, const scalar_type bx, const scalar_type by, const scalar_type bz);
 
 }
 #endif

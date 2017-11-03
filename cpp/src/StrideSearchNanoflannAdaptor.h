@@ -39,7 +39,7 @@ struct SphereDistAdaptor
     
     template <typename U, typename V> 
     inline DistanceType accum_dist(const U a, const V b, int) const {
-        return (b-a) * (b-a);
+      return (b-a) * (b-a);
     }
 };
 

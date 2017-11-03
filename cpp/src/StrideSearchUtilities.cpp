@@ -72,7 +72,7 @@ scalar_type sphereDistance(const scalar_type latA, const scalar_type lonA, const
         const scalar_type dotProd = xA * xB + yA * yB + zA * zB;
         
         return sphereRadius * std::atan2(cpnorm, dotProd);
-    }
+	}
 }
 
 scalar_type sphereDistance(const ll_coord_type& posA, const ll_coord_type& posB) {
