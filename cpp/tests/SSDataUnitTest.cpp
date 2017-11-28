@@ -93,8 +93,7 @@ int main(int argc, char* argv[]) {
     std::vector<std::vector<std::shared_ptr<Event>>> foundEvents;
     for (int i = 0; i < secList.nSectors(); ++i) {
         foundEvents.push_back(
-            secList.sectors[i]->evaluateCriteriaAtTimestep(separateCriteria[i], codingDay, 
-                ssData->getFilename(), time_index));    
+            secList.sectors[i]->evaluateCriteriaAtTimestep(separateCriteria[i], codingDay, ssData->getFilename(), time_index));    
     }
     
     std::cout << "foundEvents.size() = " << foundEvents.size() << std::endl;

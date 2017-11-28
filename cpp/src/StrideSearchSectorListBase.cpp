@@ -58,47 +58,39 @@ SectorList::SectorList(const EventList& evList, const scalar_type radius) {
 
 #ifdef USE_NANOFLANN
 void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr) {
-    // Build tree
-    int numOccur = 0;
+    std::cout << "Running Stride with nano" << std::endl;
     typedef nanoflann::KDTreeSingleIndexAdaptor<SphereDistAdaptor<scalar_type, NanoflannAdaptor>, NanoflannAdaptor, 3, index_type> tree_type;
-    //typedef nanoflann::KDTreeSingleIndexAdaptor<L2_Simple_Adaptor<scalar_type, NanoflannAdaptor>, 
-    //NanoflannAdaptor, 3, index_type> tree_type;
-
     NanoflannAdaptor adaptor(data_ptr);
     const int max_leaf_size = 10;
     nanoflann::KDTreeSingleIndexAdaptorParams params(max_leaf_size);
     tree_type search_tree(3, adaptor, params);
     search_tree.buildIndex();
-    
+
     for (index_type secInd = 0; secInd < nSectors(); ++secInd){
-        std::vector<std::pair<index_type, scalar_type>> return_matches;
-        // radius search from sector center with sector radius
-        scalar_type xyz[3];
-        llToXYZ(xyz[0], xyz[1], xyz[2], sectors[secInd]->centerLat, sectors[secInd]->centerLon);
-        
-        nanoflann::SearchParams params;
-        
-        std::cout <<"looking for data points within " << sectors[secInd]->radius << " km of (lat,lon) = (" 
-            << sectors[secInd]->centerLat << ", " << sectors[secInd]->radius << "), or (x,y,z) = " << xyz[0] << ", "
-            << xyz[1] << ", " << xyz[2] << "..." ;
-        const index_type nMatches = search_tree.radiusSearch(&xyz[0], sectors[secInd]->radius * sectors[secInd]->radius, return_matches, params);
-        std::cout << "\t"  << ": found " << nMatches << " data points." << std::endl;
-        numOccur += nMatches;
-        if (data_ptr->layout1d()) {
-            for (index_type i = 0; i < nMatches; ++i) {
-                std::vector<index_type> llind = {return_matches[i].first};
-                sectors[secInd]->data_indices.push_back(llind);
-            }
-        }
-        else if (data_ptr->layout2d()) {
-            for (index_type i = 0; i < nMatches; ++i) {
-                const std::pair<index_type, index_type> llpair = data_ptr->get2dIndex(return_matches[i].first);
-                const std::vector<index_type> llind = {llpair.first, llpair.second};
-                sectors[secInd]->data_indices.push_back(llind);
-            }
-        }
-    }
-    std::cout<<numOccur<<std::endl;
+      std::vector<std::pair<index_type, scalar_type>> return_matches;
+      // radius search from sector center with sector radius                                                                                                                                              
+      scalar_type xyz[3];
+      llToXYZ(xyz[0], xyz[1], xyz[2], sectors[secInd]->centerLat, sectors[secInd]->centerLon);
+
+      nanoflann::SearchParams params;
+
+      const index_type nMatches = search_tree.radiusSearch(&xyz[0], sectors[secInd]->radius * sectors[secInd]->radius, return_matches, params);
+      if (data_ptr->layout1d()) {
+	for (index_type i = 0; i < nMatches; ++i) {
+	  std::vector<index_type> llind = {return_matches[i].first};
+	  sectors[secInd]->data_indices.push_back(llind);
+	  sectors[secInd]->data_coords.push_back(ll_coord_type(data_ptr->lats[return_matches[i].first], data_ptr->lons[return_matches[i].first]));
+	}
+      }
+      else if (data_ptr->layout2d()) {
+	for (index_type i = 0; i < nMatches; ++i) {
+	  const std::pair<index_type, index_type> llpair = data_ptr->get2dIndex(return_matches[i].first);
+	  const std::vector<index_type> llind = {llpair.first, llpair.second};
+	  sectors[secInd]->data_indices.push_back(llind);
+	  sectors[secInd]->data_coords.push_back(ll_coord_type(data_ptr->lats[llpair.first], data_ptr->lons[llpair.second]));
+	}
+      }
+    } 
 }
 #else
 void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr) {

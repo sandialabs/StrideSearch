@@ -121,7 +121,6 @@ bool compareSectors(std::vector<std::unique_ptr<Sector>>& nano, std::vector<std:
     return false; 
   }
   for(int i = 0; i < nano.size(); ++i) {
-    //std::cout<<nano[i]->data_coords.size()<<", "<<noNano[i]->data_coords.size()<<std::endl;
     for(int j = 0; j < nano[i]->data_coords.size(); j++) {
       pairA.push_back(nano[i]->data_coords.at(j));
       pairB.push_back(noNano[i]->data_coords.at(j));
