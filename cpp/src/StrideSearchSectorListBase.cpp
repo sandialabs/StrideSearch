@@ -102,7 +102,7 @@ void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_
             for (index_type i = 0; i < data_ptr->lats.size(); ++ i) {
                 const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
                     data_ptr->lats[i], data_ptr->lons[i]);
-                if ( dist <= sectors[sec_i]->radius) {
+                if ( dist < sectors[sec_i]->radius) {
                     sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[i]));
                     const std::vector<index_type> ind = {i};
                     sectors[sec_i]->data_indices.push_back(ind);
@@ -119,7 +119,7 @@ void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_
                for (index_type j = 0; j < data_ptr->lons.size(); ++j) {
                     const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
                         data_ptr->lats[i], data_ptr->lons[j]);
-                    if ( dist <= sectors[sec_i]->radius ) {
+                    if ( dist < sectors[sec_i]->radius ) {
                         sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[j]));
                         const std::vector<index_type> ind = {i, j};
                         sectors[sec_i]->data_indices.push_back(ind);
