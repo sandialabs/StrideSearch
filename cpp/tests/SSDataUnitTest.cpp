@@ -8,6 +8,7 @@
 #include "StrideSearchMinMaxCriteria.h"
 #include "StrideSearchEvent.h"
 #include "StrideSearchDateTime.h"
+#include "StrideSearchNanoflannTree.h"
 #include <string>
 #include <iostream>
 #include <memory>
@@ -35,6 +36,9 @@ int main(int argc, char* argv[]) {
     ssData->initDimensions();
     std::cout << ssData->infoString();
     
+    NanoflannTree tree(ssData);
+    tree.buildTree();
+
     //
     //  pick an arbitrary time/level
     //
@@ -57,7 +61,7 @@ int main(int argc, char* argv[]) {
     SectorList secList(sec_centers, radii);
     std::cout << "SectorList ready. nSectors = " << secList.nSectors() << std::endl;
     
-    secList.linkSectorsToData(ssData);
+    secList.linkSectorsToData(ssData,tree);
     std::cout << "\tAfter linking to data:" << std::endl;
     std::cout << secList.infoString() << std::endl;
     

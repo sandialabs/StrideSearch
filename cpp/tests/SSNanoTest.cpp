@@ -10,7 +10,10 @@
 #include <limits>
 #include <algorithm>
 #include <numeric>
+
+#ifdef USE_NANOFLANN
 #include "StrideSearchNanoflannAdaptor.h"
+#endif
 
 using namespace StrideSearch;
 bool compareSectors(std::vector<std::unique_ptr<Sector>>& a, std::vector<std::unique_ptr<Sector>>& b);
@@ -156,8 +159,8 @@ void SectorList::linkSectorsToDataWNano(const std::shared_ptr<StrideSearchData> 
 
   std::cout << "Running Stride with nano" << std::endl;
   typedef nanoflann::KDTreeSingleIndexAdaptor<SphereDistAdaptor<scalar_type, NanoflannAdaptor>, NanoflannAdaptor, 3, index_type> tree_type;
-  NanoflannAdaptor adaptor(data_ptr);
   const int max_leaf_size = 10;
+  NanoflannAdaptor adaptor(data_ptr);
   nanoflann::KDTreeSingleIndexAdaptorParams params(max_leaf_size);
   tree_type search_tree(3, adaptor, params);
   search_tree.buildIndex();
@@ -169,7 +172,6 @@ void SectorList::linkSectorsToDataWNano(const std::shared_ptr<StrideSearchData> 
     llToXYZ(xyz[0], xyz[1], xyz[2], sectors[secInd]->centerLat, sectors[secInd]->centerLon);
 
     nanoflann::SearchParams params;
-
     const index_type nMatches = search_tree.radiusSearch(&xyz[0], sectors[secInd]->radius * sectors[secInd]->radius, return_matches, params);
     if (data_ptr->layout1d()) {
       for (index_type i = 0; i < nMatches; ++i) {

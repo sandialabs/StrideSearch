@@ -57,14 +57,8 @@ SectorList::SectorList(const EventList& evList, const scalar_type radius) {
 }
 
 #ifdef USE_NANOFLANN
-void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr) {
+  void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, NanoflannTree tree) {
     std::cout << "Running Stride with nano" << std::endl;
-    typedef nanoflann::KDTreeSingleIndexAdaptor<SphereDistAdaptor<scalar_type, NanoflannAdaptor>, NanoflannAdaptor, 3, index_type> tree_type;
-    NanoflannAdaptor adaptor(data_ptr);
-    const int max_leaf_size = 10;
-    nanoflann::KDTreeSingleIndexAdaptorParams params(max_leaf_size);
-    tree_type search_tree(3, adaptor, params);
-    search_tree.buildIndex();
 
     for (index_type secInd = 0; secInd < nSectors(); ++secInd){
       std::vector<std::pair<index_type, scalar_type>> return_matches;
@@ -74,7 +68,7 @@ void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_
 
       nanoflann::SearchParams params;
 
-      const index_type nMatches = search_tree.radiusSearch(&xyz[0], sectors[secInd]->radius * sectors[secInd]->radius, return_matches, params);
+      const index_type nMatches = tree.search_tree->radiusSearch(&xyz[0], sectors[secInd]->radius * sectors[secInd]->radius, return_matches, params);
       if (data_ptr->layout1d()) {
 	for (index_type i = 0; i < nMatches; ++i) {
 	  std::vector<index_type> llind = {return_matches[i].first};
@@ -93,7 +87,7 @@ void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_
     } 
 }
 #else
-void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr) {
+  void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, NanoflannTree tree) {
     if (data_ptr->layout1d()) {
         //
         //  This loop is embarrassingly parallel

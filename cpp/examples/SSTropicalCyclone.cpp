@@ -15,6 +15,10 @@
 #include <vector>
 #include <memory>
 
+#ifdef USE_NANOFLANN
+#include "StrideSearchNanoflannTree.h"
+#endif
+
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
@@ -36,6 +40,7 @@ int main(int argc, char* argv[]) {
     
     std::shared_ptr<StrideSearchData> ssData(new StrideSearchData(file_list[0]));
     ssData->initDimensions();
+
     
     std::cout << ssData->infoString();
     
@@ -50,7 +55,12 @@ int main(int argc, char* argv[]) {
     const scalar_type sector_size_km = 500.0; // search sector radius size (kilometers)
 
     SectorList sectors(south_bnd, north_bnd, west_bnd, east_bnd, sector_size_km);
-    sectors.linkSectorsToData(ssData);
+
+    NanoflannTree tree(ssData); 
+
+    tree.buildTree();
+
+    sectors.linkSectorsToData(ssData,tree);
     
     std::cout << sectors.infoString(); 
     
@@ -129,7 +139,7 @@ int main(int argc, char* argv[]) {
             possibleList.removeDuplicates(sector_size_km);
             
             SectorList timestepSecList(possibleList, sector_size_km);
-            timestepSecList.linkSectorsToData(ssData);
+            timestepSecList.linkSectorsToData(ssData,tree);
             timestepSecList.buildWorkspaces(id_criteria);
             //
             //  Loop over possible event sectors, load data, evaluate all criteria 

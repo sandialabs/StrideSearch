@@ -9,6 +9,7 @@
 #include <memory>
 #include <cmath>
 
+
 namespace StrideSearch {
 using namespace nanoflann;
 template<class T, class DataSource, typename _DistanceType = T>
@@ -80,8 +81,11 @@ struct NanoflannAdaptor {
 
     template <class BBOX> bool kdtree_get_bbox(BBOX&) const {return false;}
     
-    std::weak_ptr<StrideSearchData> data_ptr;
+  std::weak_ptr<StrideSearchData> data_ptr;
+
 };
+
+typedef nanoflann::KDTreeSingleIndexAdaptor<SphereDistAdaptor<scalar_type,NanoflannAdaptor>,NanoflannAdaptor,3,index_type>tree_type;
 
 }
 

@@ -139,6 +139,7 @@ class StrideSearchData {
         
         /// number of horizontal grid points
         index_type _nPoints;
+ 
 };
 
 }

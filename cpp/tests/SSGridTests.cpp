@@ -38,6 +38,14 @@ int main(int argc, char* argv[]) {
     conusData->initDimensions();
     csData->initDimensions();
     
+    NanoflannTree llTree(llData);
+    NanoflannTree conusTree(conusData);
+    NanoflannTree csTree(csData);
+
+    llTree.buildTree();
+    conusTree.buildTree();
+    csTree.buildTree();
+    
     const scalar_type sb = -90.0;
     const scalar_type nb = 90.0;
     const scalar_type wb = 0.0;
@@ -49,13 +57,13 @@ int main(int argc, char* argv[]) {
     SectorList conusSectors(sb, nb, wb, eb, sector_radius);
     SectorList csSectors(sb, nb, wb, eb, sector_radius);
 
-    csSectors.linkSectorsToData(csData);
+    csSectors.linkSectorsToData(csData,csTree);
     std::cout << csSectors.infoString() << std::endl;
 
-    llSectors.linkSectorsToData(llData);
+    llSectors.linkSectorsToData(llData,llTree);
     std::cout << llSectors.infoString() << std::endl;
     
-    conusSectors.linkSectorsToData(conusData);
+    conusSectors.linkSectorsToData(conusData,conusTree);
     std::cout << conusSectors.infoString() << std::endl;
     
     std::vector<index_type> plotSectorInds = {23, 39};

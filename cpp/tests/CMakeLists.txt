@@ -7,10 +7,9 @@ ADD_EXECUTABLE(ssUtilTest.exe SSUtilitiesTests.cpp)
 TARGET_LINK_LIBRARIES(ssUtilTest.exe strideSearch)
 ADD_TEST(NAME ssUtil COMMAND ${PROJECT_BINARY_DIR}/bin/ssUtilTest.exe)
 
-
-ADD_EXECUTABLE(ssNanoTest.exe SSNanoTest.cpp)
-TARGET_LINK_LIBRARIES(ssNanoTest.exe strideSearch)
-ADD_TEST(NAME ssNano COMMAND ${PROJECT_BINARY_DIR}/bin/ssNanoTest.exe)
+#ADD_EXECUTABLE(ssNanoTest.exe SSNanoTest.cpp)
+#TARGET_LINK_LIBRARIES(ssNanoTest.exe strideSearch)
+#ADD_TEST(NAME ssNano COMMAND ${PROJECT_BINARY_DIR}/bin/ssNanoTest.exe)
 
 ADD_EXECUTABLE(ssEventTest.exe SSEventTests.cpp)
 TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)
