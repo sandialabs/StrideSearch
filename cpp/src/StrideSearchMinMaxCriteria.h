@@ -78,7 +78,7 @@ class MaxMagnitude3DCriterion : public IDCriterion {
 
 /// Compares the arithmetic average of a variable to the threshold.
 /**
- @todo Add capability for spatial averages
+ @todo Add capability for spatial, rather than arithmetic, averages
 */
 class MaxAverageCriterion : public IDCriterion {
     public:

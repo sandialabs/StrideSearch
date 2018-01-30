@@ -58,7 +58,7 @@ SectorList::SectorList(const EventList& evList, const scalar_type radius) {
 
 #ifdef USE_NANOFLANN
   void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, NanoflannTree tree) {
-    std::cout << "Running Stride with nano" << std::endl;
+    //std::cout << "Running Stride with nano" << std::endl;
 
     for (index_type secInd = 0; secInd < nSectors(); ++secInd){
       std::vector<std::pair<index_type, scalar_type>> return_matches;

@@ -4,6 +4,7 @@
 #include "StrideSearchDataBase.h"
 #include "StrideSearchSectorListBase.h"
 #include "StrideSearchMinMaxCriteria.h"
+#include "StrideSearchExtraCriteria.h"
 #include "StrideSearchTimer.h"
 #include "StrideSearchEvent.h"
 #include "StrideSearchDateTime.h"
@@ -31,7 +32,8 @@ int main(int argc, char* argv[]) {
     //
     //  Set up data set for reading
     //
-    const std::string data_dir = "/gscratch/pabosle/strideSearchData/matt/";
+    //const std::string data_dir = "/gscratch/pabosle/strideSearchData/matt/";
+    const std::string data_dir = "/Users/pabosle/Desktop/dataTemp/StrideSearch/atmLatLon/";
     const std::string data_filename = "f1850c5_ne240_rel06.cam.h2.0004-07-18-00000.nc";
     const std::string full_name = data_dir + "/" + data_filename;
     std::vector<std::string> file_list = {full_name};
@@ -69,12 +71,10 @@ int main(int argc, char* argv[]) {
     //
     const std::string vort_varname = "VOR850";
     const scalar_type vort_threshold = 8.5e-4;
-    
     MaxCriterion vor850(vort_varname, vort_threshold);
     
     const std::string psl_varname = "PSL";
     const scalar_type psl_threshold = 99000.0;
-    
     MinCriterion psl(psl_varname, psl_threshold);
     
     const std::string mid_level_temp = "T500";
@@ -82,8 +82,12 @@ int main(int argc, char* argv[]) {
     const scalar_type warm_core_threshold = 2.0;
     MaxVariationCriterionVerticalAvg warm_core(mid_level_temp, upper_level_temp, warm_core_threshold);
     
+    const std::vector<std::string> wind_vars = {"UBOT", "VBOT"};
+    const scalar_type wind_spd_threshold = 0.0;
+    MaxMagnitude2DCriterion wind_spd(wind_vars, wind_spd_threshold);
+    
     std::vector<IDCriterion*> loc_criteria = {&vor850};
-    std::vector<IDCriterion*> id_criteria = {&vor850, &psl, &warm_core};
+    std::vector<IDCriterion*> id_criteria = {&vor850, &psl, &warm_core, &wind_spd};
     
     // collocation criteria
     const scalar_type vort_psl_dist_threshold = 450.0; // km

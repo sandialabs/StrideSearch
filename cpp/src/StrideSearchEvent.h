@@ -34,7 +34,7 @@ class Event {
         friend class EventList;
         friend class Track;
         /// Types of events
-        enum IntensityComparison {LESS_THAN, GREATER_THAN};
+        enum IntensityComparison {LESS_THAN, GREATER_THAN, NO_COMPARE};
         
         /// Default constructor.  Creates an empty event.  Rarely used.
         Event();
