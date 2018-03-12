@@ -61,6 +61,19 @@ class MaxMagnitude2DCriterion : public IDCriterion {
     std::string description() const;
 };
 
+/// Compares the sum of 2 variables to the threshold.
+/**
+    This is used, for example, to find total precipitation given convective precip and large-scale precip..
+*/
+class MaxSumCriterion : public IDCriterion {
+    public:
+    MaxSumCriterion(const std::string varname1, const std::string varname2, const scalar_type threshold) :
+        IDCriterion(varname1, varname2, threshold, Event::GREATER_THAN) {};
+    /// Returns true if varnames[0]+ varnames[1] exceeds threshold
+    bool evaluate(const WorkspaceDict& wspc);
+    std::string description() const;
+};
+
 /// Compares the maximum magnitude of a 3-component vector to the threshold.
 /**
     This is used, for example, to find maximum wind speeds given a three-component wind vector.

@@ -78,6 +78,24 @@ bool MaxMagnitude2DCriterion::evaluate(const WorkspaceDict& wspc) {
     return (val > threshold);
 }
 
+bool MaxSumCriterion::evaluate(const WorkspaceDict& wspc) {
+    val = std::numeric_limits<scalar_type>::lowest();
+    const std::vector<scalar_type>& var1ref = wspc.dict.at(varnames[0]);
+    const std::vector<scalar_type>& var2ref = wspc.dict.at(varnames[1]);
+    for (index_type i=0; i<var1ref.size(); ++i) {
+        const scalar_type sum = var1ref[i] + var2ref[i];
+        if (sum > val) {
+            val = sum;
+            wspcIndex = i;
+        }
+    }
+    return (val > threshold);
+}
+
+std::string MaxSumCriterion::description() const {
+    return "max(" + varnames[0] + "+" + varnames[1] + ")";
+}
+
 std::string MaxMagnitude2DCriterion::description() const {
     return "max(sqrt(" + varnames[0] + "^2+" + varnames[1] + "^2))";
 }
