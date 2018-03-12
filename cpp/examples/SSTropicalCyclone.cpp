@@ -35,6 +35,8 @@ int main(int argc, char* argv[]) {
     const DateTime startDate(1850, 10, 1, 0); // Data set initial date = October 1, f1850 compset.
     
     StrideSearchData ssData(file_list[0]);
+    // Initializes data reader, builds tree, one-time sector list construction; assumes grid stays the same for all 
+    // input files.
     ssData.initDimensions();
     
     std::cout << ssData.infoString();
