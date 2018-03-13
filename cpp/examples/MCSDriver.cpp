@@ -52,7 +52,7 @@ struct Input{
     std::string infoString() const;
 };
 
-int main(argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     print_copyright();
     Timer programTimer("MCSDriver");
     programTimer.start();
@@ -60,14 +60,22 @@ int main(argc, char* argv[]) {
         Get input from command line
     */
     Input input(argc, argv);
+    input.usageMessage(std::cout);
+    std::cout << std::endl;
+    
     std::cout << input.infoString();
+    std::cout << std::endl;
     
     Timer setupTimer("MCS_setup");
     setupTimer.start();
     /*
         set up data for reading
     */
-    std::shared_ptr<StrideSearchData> ssData(new StrideSearchData(input.inFiles[0]);
+    if (input.inFiles.empty()) {
+        std::cout << "ERROR: no input files defined." << std::endl;
+        return 1;
+    }
+    std::shared_ptr<StrideSearchData> ssData(new StrideSearchData(input.inFiles[0]));
     // one-time initialization of stride search data, assumes grid is the same for all files
     ssData->initDimensions();
     std::cout << ssData->infoString();
@@ -96,12 +104,16 @@ int main(argc, char* argv[]) {
         precip = std::shared_ptr<IDCriterion>(new 
             MaxSumCriterion(input.pvarname1, input.pvarname2, input.precip_threshold));
     }
-    std::vector<IDCriterion*> loc_criterion = {precip.get()};
-    std::vector<IDCriterion*> id_critera = {precip.get(), olr.get()};
+    else {
+        std::cout << "ERROR: either -precip_var_name or both -precip_var1 and -precip_var2 must be defined." << std::endl;
+        return 1;
+    }
+    std::vector<IDCriterion*> loc_criteria = {precip.get()};
+    std::vector<IDCriterion*> id_criteria = {precip.get(), olr.get()};
     
     // collocation criteria
     const scalar_type precip_olr_dist_threshold = input.precip_olr_dist_threshold;
-    sectors.buildWorkspaces(loc_criterion);
+    sectors.buildWorkspaces(loc_criteria);
     setupTimer.end();
     std::cout << "setup complete " << setupTimer.infoString();
     
@@ -151,7 +163,7 @@ int main(argc, char* argv[]) {
             
             SectorList timestepSecList(possibleList, input.sector_size_km);
             timestepSecList.linkSectorsToData(ssData, tree);
-            timestepSecList.buildWorkspaces(id_critera);
+            timestepSecList.buildWorkspaces(id_criteria);
             //
             //  loop over possible events, load data, and evaluate all criteria
             //
@@ -161,16 +173,16 @@ int main(argc, char* argv[]) {
                 ssData->loadSectorWorkingData(timestepSecList.sectors[i].get(), k);
                 foundEvents.push_back(
                     timestepSecList.sectors[i]->evaluateCriteriaAtTimestep(id_criteria, currentDate, file, k));
-                evCounter += foundEvents[i].size();
+                eventCounter += foundEvents[i].size();
             }
             EventList foundEventList(foundEvents);
-            foundEventList.removeDuplicates(sector_size_km);
+            foundEventList.removeDuplicates(input.sector_size_km);
             //
             //  apply collocation criteria
             //
             foundEventList.consolidateRelatedEvents(input.sector_size_km);
             foundEventList.requireCollocation(precip.get(), olr.get(), input.precip_olr_dist_threshold);
-            std::cout << " : " << std::setw(2) << std::setfill(' ') << evCounter << " events." << std::endl;
+            std::cout << " : " << std::setw(2) << std::setfill(' ') << eventCounter << " events." << std::endl;
             
             //
             //  save timestep data
@@ -198,14 +210,14 @@ return 0;
 
 Input::Input(int argc, char* argv[]) {
     program_name = argv[0];
-    outputFilename = std::string();
+    outputFilename = "strideSearchDefaultOutput.txt";
     inFiles = std::vector<std::string>();
     nInputFiles = 0;
     pvarcount = 0;
     if (argc == 1 && argv[1] == "-h") {
         usageMessage(std::cout);   
     }
-    if (argc > 3) {
+    if (argc > 1) {
         for (int i=1; i<argc; ++i) {
             const std::string& token = argv[i];
             if (token == "-n") {
@@ -270,12 +282,6 @@ Input::Input(int argc, char* argv[]) {
                 inFiles.push_back(token);
             }
         }
-        if (outputFilename == std::string()) {
-            outputFilename = "ssDefaultOutput.txt";
-        }
-        if (pvarcount < 1 || pvarcount > 2) {
-            std::cerr << "ERROR: precipitation variables not defined."
-        }
         nInputFiles = inFiles.size();
         startDate = DateTime(start_year, start_month, start_day, start_hour);
     }
@@ -303,7 +309,20 @@ std::string Input::infoString() const {
 
 void Input::usageMessage(std::ostream& os) const {
     os << "Usage: " << std::endl;
-    os << program_name << " -s sector_size_km -olr olr_threshold -precip precip_threshold [-o o_filename.txt] [-n nDataFiles]"
+    os << program_name << " -s sector_size_km -olr olr_threshold -precip precip_threshold [-o o_filename.txt] [-n nDataFiles]";
     os << " dataFile1.nc dataFile2.nc ..." << std::endl;
+    os << std::endl;
+    os << "Required input:" << std::endl;
+    os << "\t-precip_threshold (float)" << std::endl;
+    os << "\t-precip_var_name (string)" << std::endl;
+    os << "\t-olr_threshold (float)" << std::endl;
+    os << "\t-olr_varname (string)" << std::endl;
+    os << "\t(filename strings)" << std::endl;
+    os << "Optional input:" << std::endl;
+    os << "\t-o (string) : output filename " << std::endl;
+    os << "\t-s or --size (float) : sector radius size (km)" << std::endl;
+    os << "\t-north, -south, -west, -east (floats) : search area boundaries (degrees)" << std::endl;
+    os << "\t-precip_var1 and -precip_var2 (strings) : used instead of -precip_var_name" << std::endl;
+    os << "\t-year, -month, -day, -hour (integers) : data set start date definition." << std::endl;
 }
 
