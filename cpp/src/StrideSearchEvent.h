@@ -89,6 +89,10 @@ class Event {
         /// Geodesic distance betweeen *this and an other Event.
         scalar_type distance(const Event& other) const;
         
+        inline const DateTime* getDateTime() const {return &datetime;}
+        
+        std::string tstormsEntry() const;
+        
         /// Returns the latitude-longitude coordinate of *this.
         inline ll_coord_type location() const {return latLon;}
         
