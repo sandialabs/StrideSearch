@@ -28,6 +28,7 @@ tempPslDistThreshold = 225.0
 tempExcessThreshold = 2.0
 outputDir = '${outputLoc}'
 outputRoot = '${outputRoot}'
+doThickness = .FALSE.
 /
 EOF
 

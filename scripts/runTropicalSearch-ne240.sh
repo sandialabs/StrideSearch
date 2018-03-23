@@ -24,6 +24,7 @@ cat <<EOF > tropicalSearch-ne240.namelist
 	tempExcessThreshold = 2.0
 	outputDir = '${outputLoc}'
 	outputRoot = '${filename%.nc}-timing'
+	doThickness = .FALSE.
 /
 EOF
 

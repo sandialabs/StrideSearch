@@ -349,6 +349,7 @@ pure function SpatialAverageTemp( tSearch, dataRes )
 			endif
 		enddo
 	enddo
+	SpatialAverageTemp =  tsum / area
 end function
 
 !> @brief Returns an integer array used to define land masks

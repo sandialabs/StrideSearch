@@ -16,6 +16,7 @@ character(len = 256) :: outputDir, outputRoot, outputFile, outputFileRoot
 real :: southernBoundary, northernBoundary
 real :: sectorRadius
 real :: pslThreshold, windThreshold, vortThreshold, vortPslDistThreshold, tempPslDistThreshold, tempExcessThreshold
+logical :: doThickness
 
 integer :: argc
 real :: programTimerStart, programTimerEnd
@@ -29,7 +30,7 @@ type(TropicalStormListNode), pointer :: tstormList
 
 namelist /input/ ncfilename, southernBoundary, northernBoundary, sectorRadius, &
 				 pslThreshold, windThreshold, vortThreshold, vortPslDistThreshold, tempPslDistThreshold, &
-				 tempExcessThreshold, outputDir, outputRoot
+				 tempExcessThreshold, outputDir, outputRoot, doThickness
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !	start program : read input from user
@@ -55,6 +56,7 @@ open(unit=12, file=trim(namelistfile), status='OLD', action='READ', iostat=readS
 	print *, "vortPslDistThreshold = ", vortPslDistThreshold
 	print *, "tempExcessThreshold = ", tempExcessThreshold
 	print *, "tempPslDistThreshold = ", tempPslDistThreshold
+	print *, "doThickness = ", doThickness
 close(12)
 
 write(outputFileRoot,'(A,A,A)') trim(outputDir), '/', trim(outputRoot)
@@ -66,7 +68,7 @@ open(unit=14, file=outputFile, status='REPLACE', action='WRITE')
 !	initialize search
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-call initializeTropicalData(ncData, ncfilename)
+call initializeTropicalData(ncData, ncfilename, doThickness)
 call PrintCoordinateInfo(ncData)
 
 call TropicalSearchSetup( tSearch, southernBoundary, northernBoundary, sectorRadius, &
