@@ -28,17 +28,7 @@ class StrideSearchData {
         
         /// Destructor.
         virtual ~StrideSearchData(){};
-
-        /// Array of integers that describe a grid.  
-        /**
-            Read a descriptive array of integers from a data file's grid variables.  For a uniform lat-lon grid, for
-            example, the array would be [nLat, nLon].  
-            For unstructured grids, the array could be [nNodes, nElem], etc.
-            
-            @todo This is not used -- remove it.
-        */
-        virtual void getGridDescription(index_type* gridDescInts) const {};
-        
+       
         /// Update the source file for this data object. Used for advancing to the next file in a data set.
         void updateSourceFile(const std::string fname);
         
@@ -109,8 +99,11 @@ class StrideSearchData {
         
         inline index_type nPoints() const {return _nPoints;}
         
-        index_type get1dIndex(const index_type latI, const index_type lonJ) const;
-        std::pair<index_type, index_type> get2dIndex(const index_type ind) const;
+//         / Get a 1d index that corresponds to (latI, lonJ)
+//         index_type get1dIndex(const index_type latI, const index_type lonJ) const;
+//         
+//         / Get a 2d index that corresponds to ind
+//         std::pair<index_type, index_type> get2dIndex(const index_type ind) const;
         
     protected:
         /// filename of current data file

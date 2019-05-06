@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iomanip>
 #include <cmath>
+#include <exception>
 
 namespace StrideSearch {
 
@@ -27,8 +28,11 @@ void StrideSearchData::initTime(){
             break;           
         }
     }
-    if (!timeFound) 
-        std::cerr << "StrideSearchData ERROR: could not find time variable in file " << filename << std::endl;
+    if (!timeFound) {
+        std::ostringstream ss;
+        ss << "StrideSearchData::initTime error: could not find time variable in file " << filename << std::endl;
+        throw std::runtime_error(ss.str());
+    }
     fileNTimesteps = time_var.getDim(0).getSize();
     totalNTimesteps += fileNTimesteps;   
     
@@ -51,26 +55,26 @@ void StrideSearchData::updateSourceFile(const std::string fname){
     initTime();
 }
 
-index_type StrideSearchData::get1dIndex(const index_type latI, const index_type lonJ) const {
-    index_type result = -1;
-    if (twoD) {
-        const index_type nLat = lats.size();
-        const index_type nLon = lons.size();
-        result = lonJ * nLat + latI;
-    }
-    return result;
-}
-
-std::pair<index_type, index_type> StrideSearchData::get2dIndex(const index_type ind) const {
-    std::pair<index_type, index_type> result(-1,-1);
-    if (twoD) {
-        const index_type nLat = lats.size();
-        const index_type nLon = lons.size();
-        result.second = ind / nLat;
-        result.first = ind - result.second * nLat;
-    }
-    return result;
-}
+// index_type StrideSearchData::get1dIndex(const index_type latI, const index_type lonJ) const {
+//     index_type result = -1;
+//     if (twoD) {
+//         const index_type nLat = lats.size();
+//         const index_type nLon = lons.size();
+//         result = lonJ * nLat + latI;
+//     }
+//     return result;
+// }
+// 
+// std::pair<index_type, index_type> StrideSearchData::get2dIndex(const index_type ind) const {
+//     std::pair<index_type, index_type> result(-1,-1);
+//     if (twoD) {
+//         const index_type nLat = lats.size();
+//         const index_type nLon = lons.size();
+//         result.second = ind / nLat;
+//         result.first = ind - result.second * nLat;
+//     }
+//     return result;
+// }
 
 void StrideSearchData::initDimensions() {
     
@@ -107,7 +111,7 @@ void StrideSearchData::initDimensions() {
         twoD = true;
         oneD = false;
         
-        sphereRadius = 1.0;
+        sphereRadius = EARTH_RADIUS_KM;
         
     }
     else if (!x_var.isNull() && !y_var.isNull() && !z_var.isNull()) {
@@ -190,7 +194,9 @@ void StrideSearchData::initDimensions() {
         _nPoints = nNodes;
     }
     else {
-        std::cerr << "Cannot find coordinate variables in file " << filename << std::endl;
+        std::ostringstream ss;
+        ss << "StrideSearchData::initDimensions error: Cannot find coordinate variables in file " << filename << std::endl;
+        throw std::runtime_error(ss.str());
     }
 }
 
@@ -225,7 +231,9 @@ void StrideSearchData::loadSectorWorkingData(Sector* sec, const index_type& tInd
                     }
                 }
                 else {
-                    std::cerr << "StrideSearchDataBase::loadSectorWorkingData ERROR: dimension number" << std::endl;
+                    std::ostringstream ss;
+                    ss << "StrideSearchDataBase::loadSectorWorkingData error: nDim unsupported for layout1d data." << std::endl;
+                    throw std::runtime_error(ss.str());
                 }
             }
         }
@@ -261,7 +269,9 @@ void StrideSearchData::loadSectorWorkingData(Sector* sec, const index_type& tInd
                     }
                 }
                 else {
-                    std::cerr << "StrideSearchDataBase::loadSectorWorkingData ERROR: dimension number" << std::endl;
+                    std::ostringstream ss;
+                    ss << "StrideSearchDataBase::loadSectorWorkingData error: ndim unsupported for layout2d data." << std::endl;
+                    throw std::runtime_error(ss.str());
                 }
             }
         }

@@ -12,7 +12,7 @@ WorkspaceDict::WorkspaceDict(const std::string& varname, const index_type nDataI
     dict.emplace(varname, std::vector<scalar_type>(nDataInds, 0.0));
 }
 
-std::vector<scalar_type>& WorkspaceDict::getConstDataReference(const std::string& varname) {
+std::vector<scalar_type>& WorkspaceDict::getDataReference(const std::string& varname) {
     return dict.at(varname);
 }
 

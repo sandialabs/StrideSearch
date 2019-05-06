@@ -10,7 +10,7 @@ namespace StrideSearch {
 #define EARTH_RADIUS_KM 6371.220
 
 /// Sphere radius. Global variable, determined by data.
-static scalar_type sphereRadius=EARTH_RADIUS_KM;
+static scalar_type sphereRadius = EARTH_RADIUS_KM;
 
 /// Tolerance for floating point zero.
 #define ZERO_TOL 2.0e-9

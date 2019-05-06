@@ -21,7 +21,7 @@ int main() {
     wspc.dict.at("U850")[3] = 30.0;
     
     const std::vector<scalar_type>& v850ref = wspc.dict.at("V850");
-    const std::vector<scalar_type>& u850ref = wspc.getConstDataReference("U850");
+    const std::vector<scalar_type>& u850ref = wspc.getDataReference("U850");
 
     std::cout << wspc << std::endl;
 

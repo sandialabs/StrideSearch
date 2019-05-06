@@ -33,19 +33,15 @@ struct WorkspaceDict {
     /// Constructor with memory allocation
     WorkspaceDict(const std::vector<std::string>& varnames, const index_type nDataInds);
     
-    /// Fill workspace with data from a std::vector.  Primarily used for testing.
+    /// Fill workspace with data from a std::vector. Used for testing.
     void fillData(const std::string varname, const std::vector<scalar_type> vals);
     
     /// Return a constant (read only) reference to the data stored in one workspace variable.
-    std::vector<scalar_type>& getConstDataReference(const std::string& varname);
+    std::vector<scalar_type>& getDataReference(const std::string& varname);
     
     /// Return the number of variables used by *this
     inline index_type nVariables() const {return dict.size();}
 };
-
-// template <index_type n> struct WorkspaceDict {
-//     std::map<std::string, std::unique_ptr<scalar_type[n]>> dict;
-// }
 
 }
 
