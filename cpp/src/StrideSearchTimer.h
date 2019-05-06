@@ -5,8 +5,31 @@
 #include "StrideSearchTypeDefs.h"
 #include <chrono>
 #include <string>
+#include <unistd.h>
+#include <sys/time.h>
 
 namespace StrideSearch {
+
+namespace time {
+
+static timeval tic() {
+    timeval t;
+    gettimeofday(&t,0);
+    return t;
+}
+
+static double calc_et(const timeval& t1, const timeval& t2) {
+    static constexpr double us = 1.0e6; // microseconds
+    return (t2.tv_sec * us + t2.tv_usec - t1.tv_sec*us - t1.tv_usec)/us;
+}
+
+static double toc(const timeval& t1) {
+    timeval t;
+    gettimeofday(&t,0);
+    return calc_et(t1,t);
+}
+
+}
 
 /// Basic wall-clock timer.
 class Timer {

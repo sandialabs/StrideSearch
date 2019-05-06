@@ -11,6 +11,14 @@ ADD_EXECUTABLE(ssDateTimeTest.exe SSDateTimeTests.cpp)
 TARGET_LINK_LIBRARIES(ssDateTimeTest.exe strideSearch)
 ADD_TEST(NAME ssDatetime COMMAND ${PROJECT_BINARY_DIR}/bin/ssDateTimeTest.exe)
 
+ADD_EXECUTABLE(ssTimerUnitTest.exe SSTimerUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssTimerUnitTest.exe strideSearch)
+ADD_TEST(NAME ssTimerUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssTimerUnitTest.exe)
+
+ADD_EXECUTABLE(ssSectorUnitTest.exe SSSectorUnitTest.cpp)
+TARGET_LINK_LIBRARIES(ssSectorUnitTest.exe strideSearch)
+ADD_TEST(NAME ssSector COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorUnitTest.exe)
+
 #ADD_EXECUTABLE(ssNanoTest.exe SSNanoTest.cpp)
 #TARGET_LINK_LIBRARIES(ssNanoTest.exe strideSearch)
 #ADD_TEST(NAME ssNano COMMAND ${PROJECT_BINARY_DIR}/bin/ssNanoTest.exe)
@@ -27,9 +35,7 @@ ADD_EXECUTABLE(ssMinMaxCriteriaUnitTest.exe SSMinMaxCriteriaUnitTest.cpp)
 TARGET_LINK_LIBRARIES(ssMinMaxCriteriaUnitTest.exe strideSearch)
 ADD_TEST(NAME ssMinMaxCriteria COMMAND ${PROJECT_BINARY_DIR}/bin/ssMinMaxCriteriaUnitTest.exe)
 
-ADD_EXECUTABLE(ssSectorUnitTest.exe SSSectorUnitTest.cpp)
-TARGET_LINK_LIBRARIES(ssSectorUnitTest.exe strideSearch)
-ADD_TEST(NAME ssSector COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorUnitTest.exe)
+
 
 ADD_EXECUTABLE(ssSectorListUnitTest.exe SSSectorListUnitTest.cpp)
 TARGET_LINK_LIBRARIES(ssSectorListUnitTest.exe strideSearch)
@@ -47,9 +53,7 @@ ADD_EXECUTABLE(ssGridsTest.exe SSGridTests.cpp)
 TARGET_LINK_LIBRARIES(ssGridsTest.exe strideSearch)
 ADD_TEST(NAME ssGridsTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssGridsTest.exe)
 
-ADD_EXECUTABLE(ssTimerUnitTest.exe SSTimerUnitTests.cpp)
-TARGET_LINK_LIBRARIES(ssTimerUnitTest.exe strideSearch)
-ADD_TEST(NAME ssTimerUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssTimerUnitTest.exe)
+
 
 #ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)
 #TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)
