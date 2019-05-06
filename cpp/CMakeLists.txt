@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 #
 #   Project details
@@ -13,32 +13,23 @@ SET( StrideSearch_VERSION_MINOR 0)
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
 
-IF (CMAKE_VERSION VERSION_LESS "3.1")
-  IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    SET (CMAKE_CXX_FLAGS "--std=gnu++11 -g ${CMAKE_CXX_FLAGS}")
-  ENDIF ()
-  IF (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    SET (CMAKE_CXX_FLAGS "--std=c++11 -g ${CMAKE_CXX_FLAGS}")
-  ENDIF ()
-ELSE ()
-  SET (CMAKE_CXX_STANDARD 11)
-ENDIF ()
+SET (CMAKE_CXX_STANDARD 11)
 
 #
 #   Find NetCDF (required)
 #
 FIND_LIBRARY(netcdf netcdf PATHS $ENV{NETCDF_ROOT}/lib REQUIRED NO_DEFAULT_PATH)
 IF (netcdf)
-    message("**** Found NetCDF: " ${netcdf})
+    message("Found NetCDF: " ${netcdf})
 ELSE (netcdf)
-    message("CMake ERROR: Cannot find the NetCDF Library" \n)
+    message(FATAL_ERROR "CMake ERROR: Cannot find the NetCDF Library" \n)
 ENDIF (netcdf)
 FIND_LIBRARY(netcdf_c++ netcdf_c++4 PATHS $ENV{NETCDF_ROOT}/lib REQUIRED NO_DEFAULT_PATH)
 
 IF (netcdf_c++)
-    message("**** Found NetCDF C++ : " ${netcdf_c++})
+    message("Found NetCDF C++ : " ${netcdf_c++})
 ELSE (netcdf_c++)
-    message("CMake ERROR: Cannot find the NetCDF C++ Library")
+    message(FATAL_ERROR "ERROR: Cannot find the NetCDF C++ Library")
 ENDIF (netcdf_c++)
 INCLUDE_DIRECTORIES($ENV{NETCDF_ROOT}/include)
 
@@ -49,44 +40,39 @@ FIND_PATH(NANOFLANN_INCLUDE nanoflann.hpp HINTS $ENV{NANOFLANN_ROOT}/include)
 IF (EXISTS ${NANOFLANN_INCLUDE})
     MESSAGE("Found Nanoflann TPL: ${NANOFLANN_INCLUDE}")
     INCLUDE_DIRECTORIES( ${NANOFLANN_INCLUDE})
-    OPTION(USE_NANOFLANN "Build with nanoflann support" ON)
 ELSE()
-    OPTION(USE_NANOFLANN "Build with nanoflann support" OFF)
-    MESSAGE("Nanoflann not found.")
+    MESSAGE(FATAL_ERROR "Nanoflann not found.")
 ENDIF()
 
-#OPTION(BUILD_DOCS "Build documentation" OFF)
-#IF (BUILD_DOCS)
-    FIND_PACKAGE(Doxygen)
-    IF (DOXYGEN_FOUND)
-        Message("Doxygen found.")
-        #
-        #   Doxygen setup
-        #
-    
-        #   dot
-        EXECUTE_PROCESS(COMMAND which dot OUTPUT_VARIABLE DOT_PATH)
-        IF (DOT_PATH) 
-            SET(HAVE_DOT YES)
-        ELSE ()
-            SET(HAVE_DOT NO)
-        ENDIF()
+FIND_PACKAGE(Doxygen)
+IF (DOXYGEN_FOUND)
+    Message("Doxygen found.")
+    #
+    #   Doxygen setup
+    #
 
-        #   input/output files
-        SET(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
-        SET(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-    
-        #   configure files
-        CONFIGURE_FILE(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-        MESSAGE("Doxygen build started.")
-    
-        #   build docs
-        ADD_CUSTOM_TARGET(docs COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generating API docs..." VERBATIM)
-    ELSE()
-        Message("Doxygen not found -- documentation html will not be generated.")
+    #   dot
+    EXECUTE_PROCESS(COMMAND which dot OUTPUT_VARIABLE DOT_PATH)
+    IF (DOT_PATH) 
+        SET(HAVE_DOT YES)
+    ELSE ()
+        SET(HAVE_DOT NO)
     ENDIF()
-#ENDIF()
+
+    #   input/output files
+    SET(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
+    SET(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+    #   configure files
+    CONFIGURE_FILE(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    MESSAGE(STATUS "To build documentation, type 'make docs'")
+
+    #   build docs
+    ADD_CUSTOM_TARGET(docs COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generating API docs..." VERBATIM)
+ELSE()
+    Message("Doxygen not found -- documentation html will not be generated.")
+ENDIF()
 
 include_directories("${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/src")
 

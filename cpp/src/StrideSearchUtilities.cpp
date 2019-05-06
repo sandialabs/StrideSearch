@@ -1,19 +1,17 @@
-// #include "Python.h"
 #include "StrideSearchUtilities.h"
 #include <cmath>
 #include <string>
 #include <iostream>
-#include <sstream>
-#include <vector>
 #include <iomanip>
 
 
 namespace StrideSearch {
 
-void llToXYZ(scalar_type& x, scalar_type& y, scalar_type& z, const scalar_type& lat, const scalar_type& lon){
-    x = sphereRadius * std::cos(deg2rad * lat) * std::cos(deg2rad * lon);
-    y = sphereRadius * std::cos(deg2rad * lat) * std::sin(deg2rad * lon);
-    z = sphereRadius * std::sin(deg2rad * lat);
+void llToXYZ(scalar_type& x, scalar_type& y, scalar_type& z, const scalar_type& lat, const scalar_type& lon, 
+    const scalar_type& sphRad) {
+    x = sphRad * std::cos(DEG2RAD * lat) * std::cos(DEG2RAD * lon);
+    y = sphRad * std::cos(DEG2RAD * lat) * std::sin(DEG2RAD * lon);
+    z = sphRad * std::sin(DEG2RAD * lat);
 }
 
 scalar_type atan4( const scalar_type y, const scalar_type x)
@@ -50,12 +48,14 @@ scalar_type atan4( const scalar_type y, const scalar_type x)
     return result;
 }
 
+
 void XyzToLL(scalar_type& lat, scalar_type& lon, const scalar_type& x, const scalar_type& y, const scalar_type& z) {
-    lat = std::atan2(z, std::sqrt(x*x + y*y)) / deg2rad;
-    lon = atan4(y, x) / deg2rad;
+    lat = std::atan2(z, std::sqrt(x*x + y*y)) / DEG2RAD;
+    lon = atan4(y, x) / DEG2RAD;
 };
 
-scalar_type sphereDistance(const scalar_type latA, const scalar_type lonA, const scalar_type latB, const scalar_type lonB){
+scalar_type sphereDistance(const scalar_type latA, const scalar_type lonA, const scalar_type latB, const scalar_type lonB,
+    const scalar_type& sphRad){
     if (std::abs(latB - latA) < ZERO_TOL && std::abs(lonB - lonA) < ZERO_TOL)
         return 0.0;
     else {
@@ -71,12 +71,12 @@ scalar_type sphereDistance(const scalar_type latA, const scalar_type lonA, const
         
         const scalar_type dotProd = xA * xB + yA * yB + zA * zB;
         
-        return sphereRadius * std::atan2(cpnorm, dotProd);
+        return sphRad * std::atan2(cpnorm, dotProd);
 	}
 }
 
-scalar_type sphereDistance(const ll_coord_type& posA, const ll_coord_type& posB) {
-    return sphereDistance(posA.first, posA.second, posB.first, posB.second);
+scalar_type sphereDistance(const ll_coord_type& posA, const ll_coord_type& posB, const scalar_type& sphRad) {
+    return sphereDistance(posA.first, posA.second, posB.first, posB.second, sphRad);
 }
 
 void print_copyright(){

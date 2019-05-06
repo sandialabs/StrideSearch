@@ -21,14 +21,14 @@ SectorList::SectorList(const scalar_type sb, const scalar_type nb, const scalar_
     const scalar_type sector_radius_km) : southBnd(sb), northBnd(nb), westBnd(wb), eastBnd(eb), radius(sector_radius_km) 
 {
     const scalar_type sector_arc_length(radius / EARTH_RADIUS_KM);
-    nStrips = index_type(std::floor( (deg2rad * northBnd - deg2rad * southBnd) / sector_arc_length) + 1);
+    nStrips = index_type(std::floor( (DEG2RAD * northBnd - DEG2RAD * southBnd) / sector_arc_length) + 1);
     lat_stride_deg = (northBnd - southBnd) / (nStrips - 1);
 
     lon_strides_deg = std::vector<scalar_type>(nStrips, -1.0);
     for (index_type i = 0; i < nStrips; ++i){
         const scalar_type cLat(southBnd + i * lat_stride_deg);
         if (std::abs(std::abs(cLat) - 90.0) > ZERO_TOL) 
-            lon_strides_deg[i] = radius / (EARTH_RADIUS_KM * std::cos(deg2rad * cLat)) / deg2rad;
+            lon_strides_deg[i] = radius / (EARTH_RADIUS_KM * std::cos(DEG2RAD * cLat)) / DEG2RAD;
         else
             lon_strides_deg[i] = 360.0;
     }
