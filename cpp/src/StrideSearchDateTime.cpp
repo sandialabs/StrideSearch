@@ -3,6 +3,8 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <chrono>
+#include <ctime>
 
 namespace StrideSearch {
 

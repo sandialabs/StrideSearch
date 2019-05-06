@@ -5,8 +5,7 @@
 #include "StrideSearchTypeDefs.h"
 #include <string>
 #include <map>
-#include <chrono>
-#include <ctime>
+
 
 namespace StrideSearch {
 
@@ -66,6 +65,11 @@ class DateTime {
 /// Equivalence operator.
 inline bool operator==(const DateTime& left, const DateTime& right){
     return left.year == right.year && left.month == right.month && left.day == right.day && left.hour == right.hour;
+}
+
+///
+inline bool operator != (const DateTime& left, const DateTime& right) {
+    return !(left==right);
 }
 
 /// Less than implies that the left operand occurs prior to the right operand.
