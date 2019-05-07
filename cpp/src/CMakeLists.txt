@@ -1,4 +1,4 @@
-ADD_LIBRARY(strideSearch SSUtilities.cpp ) # StrideSearchDateTime.cpp StrideSearchEvent.cpp
+ADD_LIBRARY(strideSearch SSUtilities.cpp  SSDateTime.cpp) # StrideSearchEvent.cpp
 #            StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterionBase.cpp
 #            StrideSearchMinMaxCriteria.cpp StrideSearchSectorListBase.cpp StrideSearchSectorListLatLon.cpp
 #            StrideSearchDataBase.cpp StrideSearchDataLatLon.cpp StrideSearchEventList.cpp

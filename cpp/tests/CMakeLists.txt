@@ -7,13 +7,15 @@ ADD_EXECUTABLE(ssUtilTest.exe SSUtilitiesTests.cpp)
 TARGET_LINK_LIBRARIES(ssUtilTest.exe strideSearch)
 ADD_TEST(NAME ssUtil COMMAND ${PROJECT_BINARY_DIR}/bin/ssUtilTest.exe)
 
+ADD_EXECUTABLE(ssDateTimeTest.exe SSDateTimeTests.cpp)
+TARGET_LINK_LIBRARIES(ssDateTimeTest.exe strideSearch)
+ADD_TEST(NAME ssDatetime COMMAND ${PROJECT_BINARY_DIR}/bin/ssDateTimeTest.exe)
+
 #ADD_EXECUTABLE(ssEventTest.exe SSEventTests.cpp)
 #TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)
 #ADD_TEST(NAME ssEvent COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventTest.exe)
 #
-#ADD_EXECUTABLE(ssDateTimeTest.exe SSDateTimeTests.cpp)
-#TARGET_LINK_LIBRARIES(ssDateTimeTest.exe strideSearch)
-#ADD_TEST(NAME ssDatetime COMMAND ${PROJECT_BINARY_DIR}/bin/ssDateTimeTest.exe)
+
 #
 #ADD_EXECUTABLE(ssWorkspaceDictTest.exe SSWorkspaceDictUnitTest.cpp)
 #TARGET_LINK_LIBRARIES(ssWorkspaceDictTest.exe strideSearch)
