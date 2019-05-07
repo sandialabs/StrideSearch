@@ -10,7 +10,7 @@
 #include "StrideSearchSector.h"
 #include "StrideSearchEventList.h"
 #include "StrideSearchEvent.h"
-#include "StrideSearchNanoflannTree.h"
+// #include "StrideSearchNanoflannTree.h"
 #include <vector>
 #include <memory>
 #ifdef USE_NANOFLANN
@@ -67,7 +67,7 @@ class SectorList {
         void buildWorkspaces(const std::vector<std::vector<IDCriterion*>>& separate_criteria);
         
         /// Links each sector to the data points within its boundaries.
-        void linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, NanoflannTree tree);
+        void linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, const NanoflannTree& tree);
 
 	void linkSectorsToDataWNano(const std::shared_ptr<StrideSearchData> data_ptr);
 

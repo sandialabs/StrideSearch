@@ -2,17 +2,15 @@
 
 namespace StrideSearch {
 
-  NanoflannTree::NanoflannTree(const std::shared_ptr<StrideSearchData> data_ptr) : data(data_ptr){}
+  NanoflannTree::NanoflannTree(const std::shared_ptr<StrideSearchData> data_ptr) : data(data_ptr), adaptor(data_ptr) {
+    buildTree();
+  }
 
   void NanoflannTree::buildTree() {
-    #ifdef USE_NANOFLANN
-    adaptor = new NanoflannAdaptor(data);
-    const int max_leaf_size = 10;
+    const int max_leaf_size = 20;
     nanoflann::KDTreeSingleIndexAdaptorParams params(max_leaf_size);
-    search_tree = new tree_type(3,*adaptor,params);
+    search_tree = std::unique_ptr<tree_type>(new tree_type(3,adaptor,params));
     search_tree->buildIndex();
-    std::cout<<"Tree built"<<std::endl;
-    #endif
   }
 
 }

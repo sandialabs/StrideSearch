@@ -56,8 +56,8 @@ SectorList::SectorList(const EventList& evList, const scalar_type radius) {
     }
 }
 
-#ifdef USE_NANOFLANN
-  void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, NanoflannTree tree) {
+// #ifdef USE_NANOFLANN
+  void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, const NanoflannTree& tree) {
     //std::cout << "Running Stride with nano" << std::endl;
 
     for (index_type secInd = 0; secInd < nSectors(); ++secInd){
@@ -86,44 +86,44 @@ SectorList::SectorList(const EventList& evList, const scalar_type radius) {
       }
     } 
 }
-#else
-  void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, NanoflannTree tree) {
-    if (data_ptr->layout1d()) {
-        //
-        //  This loop is embarrassingly parallel
-        //
-        for (index_type sec_i = 0; sec_i < sectors.size(); ++sec_i) {
-            for (index_type i = 0; i < data_ptr->lats.size(); ++ i) {
-                const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
-                    data_ptr->lats[i], data_ptr->lons[i]);
-                if ( dist < sectors[sec_i]->radius) {
-                    sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[i]));
-                    const std::vector<index_type> ind = {i};
-                    sectors[sec_i]->data_indices.push_back(ind);
-                }
-            }
-        }
-    }
-    if (data_ptr->layout2d()) {
-        //
-        //  This loop is embarrassingly parallel
-        //
-        for (index_type sec_i = 0; sec_i < sectors.size(); ++sec_i) {
-            for (index_type i = 0; i < data_ptr->lats.size(); ++i) {
-               for (index_type j = 0; j < data_ptr->lons.size(); ++j) {
-                    const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
-                        data_ptr->lats[i], data_ptr->lons[j]);
-                    if ( dist < sectors[sec_i]->radius ) {
-                        sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[j]));
-                        const std::vector<index_type> ind = {i, j};
-                        sectors[sec_i]->data_indices.push_back(ind);
-                    }         
-               } 
-            }
-        }
-    }
-}
-#endif
+// #else
+//   void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, NanoflannTree tree) {
+//     if (data_ptr->layout1d()) {
+//         //
+//         //  This loop is embarrassingly parallel
+//         //
+//         for (index_type sec_i = 0; sec_i < sectors.size(); ++sec_i) {
+//             for (index_type i = 0; i < data_ptr->lats.size(); ++ i) {
+//                 const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
+//                     data_ptr->lats[i], data_ptr->lons[i]);
+//                 if ( dist < sectors[sec_i]->radius) {
+//                     sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[i]));
+//                     const std::vector<index_type> ind = {i};
+//                     sectors[sec_i]->data_indices.push_back(ind);
+//                 }
+//             }
+//         }
+//     }
+//     if (data_ptr->layout2d()) {
+//         //
+//         //  This loop is embarrassingly parallel
+//         //
+//         for (index_type sec_i = 0; sec_i < sectors.size(); ++sec_i) {
+//             for (index_type i = 0; i < data_ptr->lats.size(); ++i) {
+//                for (index_type j = 0; j < data_ptr->lons.size(); ++j) {
+//                     const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
+//                         data_ptr->lats[i], data_ptr->lons[j]);
+//                     if ( dist < sectors[sec_i]->radius ) {
+//                         sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[j]));
+//                         const std::vector<index_type> ind = {i, j};
+//                         sectors[sec_i]->data_indices.push_back(ind);
+//                     }         
+//                } 
+//             }
+//         }
+//     }
+// }
+// #endif
 
 index_type SectorList::closestSectorToPoint(const scalar_type lat, const scalar_type lon) const {
     index_type result = -1;

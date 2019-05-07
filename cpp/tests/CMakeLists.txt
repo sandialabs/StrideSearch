@@ -19,6 +19,11 @@ ADD_EXECUTABLE(ssWorkspaceDictTest.exe SSWorkspaceDictUnitTest.cpp)
 TARGET_LINK_LIBRARIES(ssWorkspaceDictTest.exe strideSearch)
 ADD_TEST(NAME ssWorkspaceDict COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceDictTest.exe)
 
+ADD_EXECUTABLE(ssNanoflannUnitTest.exe SSNanoflannUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssNanoflannUnitTest.exe strideSearch)
+ADD_TEST(NAME ssNanoflannUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssNanoflannUnitTest.exe)
+
+
 #ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)
 #TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)
 #ADD_TEST(NAME SSWorkspace COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceTest.exe)

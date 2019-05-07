@@ -4,17 +4,13 @@
 #include "StrideSearchTypeDefs.h"
 #include "StrideSearchConfig.h"
 #include "StrideSearchDataBase.h"
-#ifdef USE_NANOFLANN
 #include "nanoflann.hpp"
 #include "StrideSearchNanoflannAdaptor.h"
-#endif
+#include <memory>
 
 namespace StrideSearch {
   ///A NanoflannTree builds and saves the kd-tree when nanoflann.hpp is available. 
-
-  #ifdef USE_NANOFLANN
   using namespace nanoflann;
-  #endif
 
   class NanoflannTree {
   public:
@@ -24,16 +20,11 @@ namespace StrideSearch {
     /// If nanoflann.hpp library exists build kd-tree.
     void buildTree();
 
-    #ifdef USE_NANOFLANN
-    /// Type definition for kd-tree single index adaptor. 
-    typedef nanoflann::KDTreeSingleIndexAdaptor<SphereDistAdaptor<scalar_type,NanoflannAdaptor>,NanoflannAdaptor,3,index_type>tree_type;
-
     /// Variable for creating adaptor. 
-    NanoflannAdaptor* adaptor;
+    NanoflannAdaptor adaptor;
 
     /// kd-tree data structure. 
-    tree_type* search_tree;
-    #endif
+    std::unique_ptr<tree_type> search_tree;
 
   protected:
     /// StrideSearchData used for tree build. 

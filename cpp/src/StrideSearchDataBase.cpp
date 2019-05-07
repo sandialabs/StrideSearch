@@ -1,5 +1,5 @@
 #include "StrideSearchDataBase.h"
-#include "StrideSearchSectorListBase.h"
+// #include "StrideSearchSectorListBase.h"
 #include <vector>
 #include <string> 
 #include <netcdf>
@@ -45,6 +45,7 @@ std::string StrideSearchData::infoString() const {
     std::ostringstream ss;
     ss << "StrideSearchData:\n";
     ss << "\tfile = " << filename << std::endl;
+    ss << "\tnPoints = " << _nPoints << std::endl;
     ss << "\tlats.size() = " << lats.size() << std::endl;
     ss << "\tlons.size() = " << lons.size() << std::endl;
     return ss.str();
@@ -55,26 +56,26 @@ void StrideSearchData::updateSourceFile(const std::string fname){
     initTime();
 }
 
-// index_type StrideSearchData::get1dIndex(const index_type latI, const index_type lonJ) const {
-//     index_type result = -1;
-//     if (twoD) {
-//         const index_type nLat = lats.size();
-//         const index_type nLon = lons.size();
-//         result = lonJ * nLat + latI;
-//     }
-//     return result;
-// }
-// 
-// std::pair<index_type, index_type> StrideSearchData::get2dIndex(const index_type ind) const {
-//     std::pair<index_type, index_type> result(-1,-1);
-//     if (twoD) {
-//         const index_type nLat = lats.size();
-//         const index_type nLon = lons.size();
-//         result.second = ind / nLat;
-//         result.first = ind - result.second * nLat;
-//     }
-//     return result;
-// }
+index_type StrideSearchData::get1dIndex(const index_type latI, const index_type lonJ) const {
+    index_type result = -1;
+    if (twoD) {
+        const index_type nLat = lats.size();
+        const index_type nLon = lons.size();
+        result = lonJ * nLat + latI;
+    }
+    return result;
+}
+
+std::pair<index_type, index_type> StrideSearchData::get2dIndex(const index_type ind) const {
+    std::pair<index_type, index_type> result(-1,-1);
+    if (twoD) {
+        const index_type nLat = lats.size();
+        const index_type nLon = lons.size();
+        result.second = ind / nLat;
+        result.first = ind - result.second * nLat;
+    }
+    return result;
+}
 
 void StrideSearchData::initDimensions() {
     
@@ -97,7 +98,8 @@ void StrideSearchData::initDimensions() {
         _nPoints = nLat * nLon;
         
         std::cout << "File : " << filename << std::endl;
-        std::cout << "\tFound lat-lon coordinates: nLat = " << nLat << ", nLon = " << nLon << "; nNodes = " << 
+        std::cout << "\tFound lat-lon coordinates, (1xnlat), (1xnlon): nLat = " 
+            << nLat << ", nLon = " << nLon << "; nNodes = " << 
             nLat * nLon << std::endl;   
     
         scalar_type latArr[nLat];
@@ -121,7 +123,7 @@ void StrideSearchData::initDimensions() {
         const index_type nNodes = x_var.getDim(0).getSize();
         
         std::cout << "File : " << filename << std::endl;
-        std::cout << "\tFound x-y-z coordinates (1 x n): nNodes = " << nNodes << std::endl;  
+        std::cout << "\tFound x-y-z coordinates 3x(1xn): nNodes = " << nNodes << std::endl;  
         
         scalar_type xArr[nNodes];
         scalar_type yArr[nNodes];

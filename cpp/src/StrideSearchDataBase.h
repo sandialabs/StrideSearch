@@ -26,6 +26,21 @@ class StrideSearchData {
         */
         StrideSearchData(const std::string fname) : filename(fname), fileNTimesteps(0),  totalNTimesteps(0) {};
         
+        /// Constructor for testing only.
+        StrideSearchData(const int nlon) : filename(), fileNTimesteps(0), totalNTimesteps(0), lats(nlon/2+1), lons(nlon) {
+            const scalar_type dlam = 2*PI/nlon;
+            const int nlat = nlon/2 + 1;
+            for (int i=0; i<nlat; ++i) {
+                lats[i] = -0.5*PI + i*dlam;
+            }
+            for (int j=0; j<nlon; ++j) {
+                lons[j] = j*dlam;
+            }
+            _nPoints = nlat*nlon;
+            oneD = false;
+            twoD = true;
+        }
+        
         /// Destructor.
         virtual ~StrideSearchData(){};
        
@@ -99,11 +114,21 @@ class StrideSearchData {
         
         inline index_type nPoints() const {return _nPoints;}
         
-//         / Get a 1d index that corresponds to (latI, lonJ)
-//         index_type get1dIndex(const index_type latI, const index_type lonJ) const;
-//         
-//         / Get a 2d index that corresponds to ind
-//         std::pair<index_type, index_type> get2dIndex(const index_type ind) const;
+        /// Get a 1d index that corresponds to (latI, lonJ)
+        /**
+            This function presumes a data layout/stride pattern.  
+            
+            It is required by nanoflann.
+        */
+        index_type get1dIndex(const index_type latI, const index_type lonJ) const;
+        
+        /// Get a 2d index that corresponds to ind
+        /**
+            This function presumes a data layout/stride pattern.  
+            
+            It is required by nanoflann.
+        */
+        std::pair<index_type, index_type> get2dIndex(const index_type ind) const;
         
     protected:
         /// filename of current data file
