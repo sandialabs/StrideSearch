@@ -1,6 +1,7 @@
 #include "StrideSearchConfig.h"
-#include "StrideSearchTypeDefs.h"
-#include "StrideSearchUtilities.h"
+#include "SSDefs.hpp"
+#include "SSConsts.hpp"
+#include "SSUtilities.hpp"
 #include <iostream>
 #include <vector> 
 #include <string>

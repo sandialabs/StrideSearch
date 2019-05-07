@@ -42,18 +42,7 @@ ELSE (netcdf_c++)
 ENDIF (netcdf_c++)
 INCLUDE_DIRECTORIES($ENV{NETCDF_ROOT}/include)
 
-#
-#   Find nanoflann (optional, but required for unstructured data)
-#
-FIND_PATH(NANOFLANN_INCLUDE nanoflann.hpp HINTS $ENV{NANOFLANN_ROOT}/include)
-IF (EXISTS ${NANOFLANN_INCLUDE})
-    MESSAGE("Found Nanoflann TPL: ${NANOFLANN_INCLUDE}")
-    INCLUDE_DIRECTORIES( ${NANOFLANN_INCLUDE})
-    OPTION(USE_NANOFLANN "Build with nanoflann support" ON)
-ELSE()
-    OPTION(USE_NANOFLANN "Build with nanoflann support" OFF)
-    MESSAGE("Nanoflann not found.")
-ENDIF()
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/tpl/include)
 
 #OPTION(BUILD_DOCS "Build documentation" OFF)
 #IF (BUILD_DOCS)
