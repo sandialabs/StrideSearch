@@ -76,6 +76,11 @@ Real sphereDistance(const Real latA, const Real lonA, const Real latB, const Rea
     }
 }
 
+Real chordDistanceFromRadius(const Real radius) {
+    const Real theta = radius / (2*PI*EARTH_RADIUS_KM);
+    return std::sqrt(EARTH_RADIUS_KM*EARTH_RADIUS_KM*(1-2*std::cos(theta)));
+}
+
 // Real sphereDistance(const ll_coord_type& posA, const ll_coord_type& posB) {
 //     return sphereDistance(posA.first, posA.second, posB.first, posB.second);
 // }

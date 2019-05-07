@@ -8,6 +8,7 @@
 namespace StrideSearch {
 
 
+
 }
 
 #endif

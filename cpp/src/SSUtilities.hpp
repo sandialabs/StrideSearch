@@ -35,6 +35,8 @@ void XyzToLL(Real& lat, Real& lon, const Real& x, const Real& y, const Real& z);
 */
 Real sphereDistance(Real latA, Real lonA, Real latB, Real lonB);
 
+Real chordDistanceFromRadius(const Real radius);
+
 // / Computes the geodesic length in kilometers between two points on an Earth-sized sphere (const radius = EARTH_RADIUS_KM).
 // /**
 //     Assumes input values are given in degrees.
