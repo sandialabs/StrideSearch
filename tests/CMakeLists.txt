@@ -3,13 +3,26 @@
 #
 INCLUDE(CTest)
 
+ADD_EXECUTABLE(ssDefsTest.exe SSDefsUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssDefsTest.exe strideSearch)
+ADD_TEST(NAME ssDefs COMMAND ${PROJECT_BINARY_DIR}/bin/ssDefsTest.exe)
+
 ADD_EXECUTABLE(ssUtilTest.exe SSUtilitiesTests.cpp)
 TARGET_LINK_LIBRARIES(ssUtilTest.exe strideSearch)
 ADD_TEST(NAME ssUtil COMMAND ${PROJECT_BINARY_DIR}/bin/ssUtilTest.exe)
 
+ADD_EXECUTABLE(ssNcReaderTest.exe SSNCReaderUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssNcReaderTest.exe strideSearch)
+ADD_TEST(NAME ssNcReader COMMAND ${PROJECT_BINARY_DIR}/bin/ssNcReaderTest.exe)
+
 ADD_EXECUTABLE(ssDateTimeTest.exe SSDateTimeTests.cpp)
 TARGET_LINK_LIBRARIES(ssDateTimeTest.exe strideSearch)
 ADD_TEST(NAME ssDatetime COMMAND ${PROJECT_BINARY_DIR}/bin/ssDateTimeTest.exe)
+
+ADD_EXECUTABLE(ssKdTreeTest.exe SSKdTreeUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssKdTreeTest.exe strideSearch)
+ADD_TEST(NAME ssKdTree COMMAND ${PROJECT_BINARY_DIR}/bin/ssKdTreeTest.exe)
+
 
 #ADD_EXECUTABLE(ssEventTest.exe SSEventTests.cpp)
 #TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)

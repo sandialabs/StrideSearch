@@ -12,9 +12,9 @@
 namespace StrideSearch {
 
 void llToXYZ(Real& x, Real& y, Real& z, const Real& lat, const Real& lon){
-    x = std::cos(DEG2RAD * lat) * std::cos(DEG2RAD * lon);
-    y = std::cos(DEG2RAD * lat) * std::sin(DEG2RAD * lon);
-    z = std::sin(DEG2RAD * lat);
+    x = EARTH_RADIUS_KM*std::cos(DEG2RAD * lat) * std::cos(DEG2RAD * lon);
+    y = EARTH_RADIUS_KM*std::cos(DEG2RAD * lat) * std::sin(DEG2RAD * lon);
+    z = EARTH_RADIUS_KM*std::sin(DEG2RAD * lat);
 }
 
 Real atan4( const Real y, const Real x)
@@ -52,8 +52,8 @@ Real atan4( const Real y, const Real x)
 }
 
 void XyzToLL(Real& lat, Real& lon, const Real& x, const Real& y, const Real& z) {
-    lat = std::atan2(z, std::sqrt(x*x + y*y)) / DEG2RAD;
-    lon = atan4(y, x) / DEG2RAD;
+    lat = std::atan2(z, std::sqrt(x*x + y*y)) * RAD2DEG;
+    lon = atan4(y, x) * RAD2DEG;
 };
 
 Real sphereDistance(const Real latA, const Real lonA, const Real latB, const Real lonB){

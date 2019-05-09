@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 #
 #   Project details
@@ -8,21 +8,12 @@ INCLUDE_DIRECTORIES(.)
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
-SET( StrideSearch_VERSION_MAJOR 1)
+SET( StrideSearch_VERSION_MAJOR 2)
 SET( StrideSearch_VERSION_MINOR 0)
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
 
-IF (CMAKE_VERSION VERSION_LESS "3.1")
-  IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    SET (CMAKE_CXX_FLAGS "--std=gnu++11 -g ${CMAKE_CXX_FLAGS}")
-  ENDIF ()
-  IF (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    SET (CMAKE_CXX_FLAGS "--std=c++11 -g ${CMAKE_CXX_FLAGS}")
-  ENDIF ()
-ELSE ()
-  SET (CMAKE_CXX_STANDARD 11)
-ENDIF ()
+SET (CMAKE_CXX_STANDARD 11)
 
 #
 #   Find NetCDF (required)
@@ -44,38 +35,63 @@ INCLUDE_DIRECTORIES($ENV{NETCDF_ROOT}/include)
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/tpl/include)
 
-#OPTION(BUILD_DOCS "Build documentation" OFF)
-#IF (BUILD_DOCS)
-    FIND_PACKAGE(Doxygen)
-    IF (DOXYGEN_FOUND)
-        Message("Doxygen found.")
-        #
-        #   Doxygen setup
-        #
-    
-        #   dot
-        EXECUTE_PROCESS(COMMAND which dot OUTPUT_VARIABLE DOT_PATH)
-        IF (DOT_PATH) 
-            SET(HAVE_DOT YES)
-        ELSE ()
-            SET(HAVE_DOT NO)
-        ENDIF()
+#
+#   Optional packages for GPU 
+#   
+#   *not implemented yet*
+#
+set(CUDA_BUILD FALSE)
+if (Kokkos_ROOT)   
+    option(HAVE_KOKKOS "Located Kokkos library." ON)
+    include(${Kokkos_ROOT}/kokkos_generated_settings.cmake)
+    set(Kokkos_INCLUDE_DIRS ${Kokkos_ROOT}/include)
+    set(Kokkos_LIBRARIES ${Kokkos_ROOT}/lib/libkokkos.a)
+    string(FIND "${KOKKOS_GMAKE_DEVICES}" "Cuda" cuda_str_pos)
+    if (${cuda_str_pos} GREATER -1)
+        option(HAVE_CUDA "If true, indicates a Kokkos Cuda build." ON)
+        set(CUDA_BUILD TRUE)
+        execute_process(COMMAND ${CMAKE_CXX_COMPILER} "--nvcc-wrapper-show" 
+	        RESULT_VARIABLE WRAPS_NVCC OUTPUT_VARIABLE WRAPS_NVCC_OUT)
+        string (FIND ${WRAPS_NVCC_OUT} "nvcc" pos)
+    endif()
+endif()
 
-        #   input/output files
-        SET(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
-        SET(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-    
-        #   configure files
-        CONFIGURE_FILE(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-        MESSAGE("Doxygen build started.")
-    
-        #   build docs
-        ADD_CUSTOM_TARGET(docs COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generating API docs..." VERBATIM)
-    ELSE()
-        Message("Doxygen not found -- documentation html will not be generated.")
+
+#
+#   Optional packages for documentation
+#
+FIND_PACKAGE(Doxygen)
+IF (DOXYGEN_FOUND)
+    Message("Doxygen found.")
+    #
+    #   Doxygen setup
+    #
+
+    #   dot
+    EXECUTE_PROCESS(COMMAND which dot OUTPUT_VARIABLE DOT_PATH)
+    IF (DOT_PATH) 
+        SET(HAVE_DOT YES)
+        Message("Graphviz found.")
+    ELSE ()
+        SET(HAVE_DOT NO)
+        Message("Graphviz not found; this will affect the documentation output.")
     ENDIF()
-#ENDIF()
+
+    #   input/output files
+    SET(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
+    SET(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+    #   configure files
+    CONFIGURE_FILE(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    MESSAGE("Doxygen build started.")
+
+    #   build docs
+    ADD_CUSTOM_TARGET(docs COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Generating API docs..." VERBATIM)
+ELSE()
+    Message("Doxygen not found -- documentation html will not be generated.")
+ENDIF()
+
 
 include_directories("${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/src")
 

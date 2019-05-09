@@ -2,6 +2,6 @@
 #define StrideSearch_VERSION_MAJOR @StrideSearch_VERSION_MAJOR@
 #define StrideSearch_VERSION_MINOR @StrideSearch_VERSION_MINOR@
 
-#cmakedefine USE_NANOFLANN
+#cmakedefine HAVE_KOKKOS
 
-#define StrideSearch_TEST_DATA_DIR "@CMAKE_CURRENT_SOURCE_DIR@/../testData"
+#define StrideSearch_TEST_DATA_DIR "@CMAKE_CURRENT_SOURCE_DIR@/testData"

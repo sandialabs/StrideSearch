@@ -18,6 +18,8 @@ namespace StrideSearch {
 
     /// Mean sea level radius of the Earth (meters)
     static constexpr Real EARTH_RADIUS_KM = 6371.220;
+    
+    static constexpr Real SQ_EARTH_RADIUS_KM = EARTH_RADIUS_KM*EARTH_RADIUS_KM;
 
     /// One sidereal day, in units of seconds
     static constexpr Real SIDEREAL_DAY_SEC = 24.0 * 3600.0;
@@ -26,7 +28,7 @@ namespace StrideSearch {
     static constexpr Real EARTH_OMEGA_HZ = 2.0 * PI / SIDEREAL_DAY_SEC;
 
     /// Floating point zero
-    static constexpr Real ZERO_TOL = 1.0e-14;
+    static constexpr Real ZERO_TOL = 1.0e-11;
 
 }
 #endif

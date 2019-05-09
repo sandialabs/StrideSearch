@@ -31,7 +31,7 @@ class SSData {
         SSData(std::shared_ptr<NCReader> rdr);
         
     protected:
-        std::shared_ptr<NCReader> reader;
+        std::unique_ptr<NCReader> reader;
         adaptor_type adaptor;
 };
 

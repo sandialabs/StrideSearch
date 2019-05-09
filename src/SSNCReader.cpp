@@ -6,12 +6,28 @@ namespace StrideSearch {
 
 NCReader::NCReader(const std::string& filename) {
     src_file = filename;
-    ncfile = std::shared_ptr<const netCDF::NcFile>(new netCDF::NcFile(filename, netCDF::NcFile::read));
+    ncfile = std::unique_ptr<const netCDF::NcFile>(new netCDF::NcFile(filename, netCDF::NcFile::read));
 }
 
 void NCReader::updateFile(const std::string& filename) {
     src_file = filename;
-    ncfile = std::shared_ptr<const netCDF::NcFile>(new netCDF::NcFile(filename, netCDF::NcFile::read));
+    ncfile = std::unique_ptr<const netCDF::NcFile>(new netCDF::NcFile(filename, netCDF::NcFile::read));
+}
+
+void NCReader::printLats() const {
+    std::cout << "lats = [";
+    for (Index i=0; i<lats.size(); ++i) {
+        std::cout << lats[i] << (i<lats.size()-1 ? "," : "];");
+    }
+    std::cout << std::endl;
+}
+
+void NCReader::printLons() const {
+    std::cout << "lons = [";
+    for (Index j=0; j<lons.size(); ++j) {
+        std::cout << lons[j] << (j<lons.size()-1 ? "," : "];");
+    }
+    std::cout << std::endl;
 }
 
 RealArray NCReader::getTime() const {
@@ -58,10 +74,10 @@ void LatLonNCReader::initCoordinates() {
 Points LatLonNCReader::makePoints() const {
     Points result(n_lat*n_lon);
     for (Int i=0; i<n_lat; ++i) {
-        const Real z = EARTH_RADIUS_KM * std::sin(lats[i]);
+        const Real z = EARTH_RADIUS_KM * std::sin(lats[i]*DEG2RAD);
         for (Int j=0; j<n_lon; ++j) {
-            const Real x = EARTH_RADIUS_KM * std::cos(lats[i]) * std::cos(lons[j]);
-            const Real y = EARTH_RADIUS_KM * std::cos(lats[i]) * std::sin(lons[j]);
+            const Real x = EARTH_RADIUS_KM * std::cos(lats[i]*DEG2RAD) * std::cos(lons[j]*DEG2RAD);
+            const Real y = EARTH_RADIUS_KM * std::cos(lats[i]*DEG2RAD) * std::sin(lons[j]*DEG2RAD);
             const Int insert_ind = i*n_lon + j;
             result.x[insert_ind] = x;
             result.y[insert_ind] = y;
@@ -79,6 +95,7 @@ void UnstructuredNCReader::initCoordinates() {
     
     if (!x_var.isNull() && !y_var.isNull() && !z_var.isNull()) {
         n_nodes = x_var.getDim(0).getSize();
+        
         Real xarr[n_nodes];
         Real yarr[n_nodes];
         Real zarr[n_nodes];
@@ -86,17 +103,28 @@ void UnstructuredNCReader::initCoordinates() {
         y_var.getVar(yarr);
         z_var.getVar(zarr);
         
-        x = RealArray(&xarr[0], &xarr[0] + n_nodes);
-        y = RealArray(&yarr[0], &yarr[0] + n_nodes);
-        z = RealArray(&zarr[0], &zarr[0] + n_nodes);
+        lats = RealArray(n_nodes);
+        lons = RealArray(n_nodes);
+        for (Index i=0; i< n_nodes; ++i) {
+            Real lat, lon;
+            XyzToLL(lat, lon, xarr[i], yarr[i], zarr[i]);
+            lats[i] = lat;
+            lons[i] = lon;
+        }
     }
     else if (!coord_var.isNull()) {
         n_nodes = coord_var.getDim(1).getSize();
         Real xyz_arr[3][n_nodes];
         coord_var.getVar(xyz_arr);
-        x = RealArray(&xyz_arr[0][0], &xyz_arr[0][0] + n_nodes);
-        y = RealArray(&xyz_arr[1][0], &xyz_arr[1][0] + n_nodes);
-        z = RealArray(&xyz_arr[2][0], &xyz_arr[2][0] + n_nodes);
+        
+        lats = RealArray(n_nodes);
+        lons = RealArray(n_nodes);
+        for (Index i=0; i< n_nodes; ++i) {
+            Real lat, lon;
+            XyzToLL(lat, lon, xyz_arr[0][i], xyz_arr[1][i], xyz_arr[2][i]);
+            lats[i] = lat;
+            lons[i] = lon;
+        }
     }
     else {
         throw std::runtime_error("UnstructuredNCReader::initDimensions error: coordinate variables not found.");
@@ -105,9 +133,11 @@ void UnstructuredNCReader::initCoordinates() {
 
 Points UnstructuredNCReader::makePoints() const {
     Points result(n_nodes);
-    result.x = x;
-    result.y = y;
-    result.z = z;
+    for (Index i=0; i<n_nodes; ++i) {
+        result.x[i] = EARTH_RADIUS_KM*std::cos(lats[i]*DEG2RAD)*std::cos(lons[i]*DEG2RAD);
+        result.y[i] = EARTH_RADIUS_KM*std::cos(lats[i]*DEG2RAD)*std::sin(lons[i]*DEG2RAD);
+        result.z[i] = EARTH_RADIUS_KM*std::sin(lats[i]*DEG2RAD);
+    }
     return result;
 }
     

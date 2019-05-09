@@ -44,5 +44,7 @@ int main (int argc, char* argv[]) {
     if (relativeDate != DateTime(2000,10,28,6)) {
         throw std::logic_error("bad relative date computation.");
     }
+    
+std::cout << "tests pass." << std::endl;
 return 0;
 }
