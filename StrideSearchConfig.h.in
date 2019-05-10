@@ -1,3 +1,5 @@
+#ifndef STRIDE_SEARCH_CONFIG_H
+#define STRIDE_SEARCH_CONFIG_H
 // Stride Search configuration details
 #define StrideSearch_VERSION_MAJOR @StrideSearch_VERSION_MAJOR@
 #define StrideSearch_VERSION_MINOR @StrideSearch_VERSION_MINOR@
@@ -5,3 +7,5 @@
 #cmakedefine HAVE_KOKKOS
 
 #define StrideSearch_TEST_DATA_DIR "@CMAKE_CURRENT_SOURCE_DIR@/testData"
+
+#endif

@@ -23,6 +23,11 @@ ADD_EXECUTABLE(ssKdTreeTest.exe SSKdTreeUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssKdTreeTest.exe strideSearch)
 ADD_TEST(NAME ssKdTree COMMAND ${PROJECT_BINARY_DIR}/bin/ssKdTreeTest.exe)
 
+ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)
+ADD_TEST(NAME ssWorkspace COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceTest.exe)
+
+
 
 #ADD_EXECUTABLE(ssEventTest.exe SSEventTests.cpp)
 #TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)
