@@ -74,6 +74,11 @@ class IDCriterion {
 */
 class MinCriterion : public IDCriterion {
     public:
+        /// Constructor.
+        /**
+            @param var : variable name (must exactly match a netcdf variable)
+            @param thresh : threshold; values less than this will trigger an event
+        */
         MinCriterion(const std::string& var, const Real thresh) : 
             IDCriterion(var, thresh, IntensityComparison::LESS_THAN, SpatialDependence::INDEPENDENT) {}
     
@@ -88,6 +93,11 @@ class MinCriterion : public IDCriterion {
 */
 class MaxCriterion : public IDCriterion {
     public:
+        /// Constructor.
+        /**
+            @param var : variable name (must exactly match a netcdf variable)
+            @param thresh : threshold; values greater than this will trigger an event
+        */
         MaxCriterion(const std::string& var, const Real thresh) :
             IDCriterion(var, thresh, IntensityComparison::GREATER_THAN, SpatialDependence::INDEPENDENT) {}
         
@@ -102,6 +112,12 @@ class MaxCriterion : public IDCriterion {
 */
 class MaxSignedCriterion : public IDCriterion {
     public:
+        /// Constructor.
+        /**
+            @param var : variable name (must exactly match a netcdf variable)
+            @param signvar : variable name to use for sign multiplier
+            @param thresh : threshold; values greater than this will trigger an event
+        */
         MaxSignedCriterion(const std::string& var, const std::string& signvar, const Real thresh ) :
             IDCriterion(std::vector<std::string>({var, signvar}), thresh, IntensityComparison::GREATER_THAN,
                 SpatialDependence::INDEPENDENT) {}
@@ -116,10 +132,23 @@ class MaxSignedCriterion : public IDCriterion {
 */
 class MaxMagnitudeCriterion : public IDCriterion {
     public:
+        /// Constructor.
+        /**
+            @param comp1var : variable name for vector component 1 (must exactly match a netcdf variable)
+            @param comp2var : variable name for vector component 2 (must exactly match a netcdf variable)
+            @param thresh : threshold; values greater than this will trigger an event
+        */
         MaxMagnitudeCriterion(const std::string& comp1var, const std::string& comp2var, const Real thresh) :
             IDCriterion(std::vector<std::string>({comp1var, comp2var}), thresh, IntensityComparison::GREATER_THAN,
                 SpatialDependence::INDEPENDENT) {}
         
+        /// Constructor.
+        /**
+            @param comp1var : variable name for vector component 1 (must exactly match a netcdf variable)
+            @param comp2var : variable name for vector component 2 (must exactly match a netcdf variable)
+            @param comp3var : variable name for vector component 3 (must exactly match a netcdf variable)
+            @param thresh : threshold; values greater than this will trigger an event
+        */
         MaxMagnitudeCriterion(const std::string& comp1var, const std::string& comp2var, const std::string comp3var,
             const Real thresh) : IDCriterion(std::vector<std::string>({comp1var, comp2var, comp3var}),
                 thresh, IntensityComparison::GREATER_THAN, SpatialDependence::INDEPENDENT) {}
@@ -129,8 +158,16 @@ class MaxMagnitudeCriterion : public IDCriterion {
         std::string description() const;
 };
 
+/// Compares the average data value to the threshold
+/** Note: This criterion is not associated with a unique location.
+*/
 class MaxAverageCriterion : public IDCriterion {
     public:
+        /// Constructor
+        /**
+            @param var : variable name (must exactly match a netcdf variable)
+            @param thresh : threshold; values greater than this will trigger an event
+        */
         MaxAverageCriterion(const std::string& var, const Real thresh) :
             IDCriterion(var, thresh, IntensityComparison::GREATER_THAN, SpatialDependence::DEPENDENT) {}
             
@@ -139,8 +176,16 @@ class MaxAverageCriterion : public IDCriterion {
         std::string description() const;
 };
 
+/// Compares the difference between a maximum value and the average value of a variable.
+/**
+*/
 class MaxVariationCriterion : public IDCriterion {
     public:
+        /// Constructor
+        /**
+            @param var : variable name (must exactly match a netcdf variable)
+            @param thresh : threshold; values greater than this will trigger an event
+        */
         MaxVariationCriterion(const std::string& var, const Real thresh) :
             IDCriterion(var, thresh, IntensityComparison::GREATER_THAN, SpatialDependence::DEPENDENT) {}
         
@@ -149,8 +194,19 @@ class MaxVariationCriterion : public IDCriterion {
         std::string description() const;
 };
 
+/// Averages two variables, then compares the maximum of this average to the average of the average.
+/**
+   Evaluates True if \f$\max(0.5*(var1 + var2)) - \text{avg}(0.5*(var1+var2)) > \f$ threshold. @n
+   Used e.g., as a warm core criterion for tropical cyclones
+*/
 class MaxVariationOfAverageCriterion : public IDCriterion {
     public:
+        /// Constructor.
+        /**
+            @param var1 : variable name (must exactly match a netcdf variable)
+            @param var2 : variable name (must exactly match a netcdf variable)
+            @param thresh : threshold; values greater than this will trigger an event
+        */
         MaxVariationOfAverageCriterion(const std::string& var1, const std::string& var2, const Real thresh) :
             IDCriterion(std::vector<std::string>({var1, var2}), thresh, IntensityComparison::GREATER_THAN,
                 SpatialDependence::DEPENDENT) {}
