@@ -27,6 +27,9 @@ ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)
 ADD_TEST(NAME ssWorkspace COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceTest.exe)
 
+ADD_EXECUTABLE(ssIdCriteriaTest.exe SSIdCriteriaUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssIdCriteriaTest.exe strideSearch)
+ADD_TEST(NAME ssIdCriteria COMMAND ${PROJECT_BINARY_DIR}/bin/ssIdCriteriaTest.exe)
 
 
 #ADD_EXECUTABLE(ssEventTest.exe SSEventTests.cpp)

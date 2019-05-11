@@ -2,6 +2,7 @@
 #include "SSDefs.hpp"
 #include "SSWorkspace.hpp"
 #include <exception>
+#include <typeinfo>
 
 using namespace StrideSearch;
 
@@ -21,7 +22,8 @@ std::cout << "Workspace unit tests." << std::endl;
     std::cout << w1 << std::endl;
     
     std::cout << "&w1.data.at('V850') = " << &w1.data.at("V850") << std::endl;
-    std::cout << "ref(V850) = " << &ref << std::endl;
+    std::cout << "&ref(V850) = " << &ref << std::endl;
+    std::cout << "typid(&ref).name() = " << typeid(&ref).name() << std::endl;
     if (&ref != &w1.data.at("V850")) {
         throw std::runtime_error("something went wrong 1.");
     }

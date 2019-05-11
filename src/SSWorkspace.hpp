@@ -28,10 +28,10 @@ struct Workspace {
     Workspace() : data() {}
     
     /// Constructor with memory allocation
-    Workspace(const std::string& var, const Index n);
+    Workspace(const std::string& var, const Index nn);
     
     /// Constructor with memory allocation
-    Workspace(const std::vector<std::string>& vars, const Index n);
+    Workspace(const std::vector<std::string>& vars, const Index nn);
     
     /// Fill workspace with data from a predefined array.  Used for testing.
     void fillData(const std::string& var, const RealArray& vals);
@@ -44,6 +44,8 @@ struct Workspace {
     
     /// Return the number of variables used by *this
     inline Int nVars() const {return data.size();}
+
+    Int n;
 };
 
 std::ostream& operator << (std::ostream& os, const Workspace& wspc);

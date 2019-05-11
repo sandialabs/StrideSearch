@@ -2,7 +2,7 @@
 #define _STRIDE_SEARCH_DATE_TIME_H_
 
 #include "StrideSearchConfig.h"
-#include "StrideSearchTypeDefs.h"
+#include "SSDefs.hpp"
 #include <string>
 #include <map>
 #include <chrono>
@@ -46,7 +46,7 @@ class DateTime {
             @param daysSinceStart time (in days) since Day 0 of a simulation.  May have fractional values.
             @param start Day 0.
         */
-        DateTime(const scalar_type daysSinceStart, const DateTime& start);
+        DateTime(const Real daysSinceStart, const DateTime& start);
     
         /// Return a string formatted YYYYMMDDHH00.
         std::string intString() const;

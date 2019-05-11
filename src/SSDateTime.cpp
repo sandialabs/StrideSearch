@@ -30,7 +30,7 @@ DateTime::DateTime(const std::tm& ctm) : year(ctm.tm_year), month(ctm.tm_mon), d
         buildMonthDayMap();
 };
 
-DateTime::DateTime(const scalar_type daysSinceStart, const DateTime& start) {
+DateTime::DateTime(const Real daysSinceStart, const DateTime& start) {
     std::tm t = {0};
     t.tm_sec = 0;
     t.tm_min = 0;

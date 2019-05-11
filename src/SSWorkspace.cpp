@@ -2,11 +2,11 @@
 
 namespace StrideSearch {
 
-Workspace::Workspace(const std::string& var, const Index n) {
+Workspace::Workspace(const std::string& var, const Index nn) : n(nn) {
     data.emplace(var, RealArray(n,0.0));
 }
 
-Workspace::Workspace(const std::vector<std::string>& vars, const Index n) {
+Workspace::Workspace(const std::vector<std::string>& vars, const Index nn) : n(nn) {
     for (auto& var : vars)
         data.emplace(var, RealArray(n,0.0));
 }
