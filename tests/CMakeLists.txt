@@ -41,11 +41,7 @@ ADD_TEST(NAME ssIdCriteria COMMAND ${PROJECT_BINARY_DIR}/bin/ssIdCriteriaTest.ex
 #ADD_EXECUTABLE(ssWorkspaceDictTest.exe SSWorkspaceDictUnitTest.cpp)
 #TARGET_LINK_LIBRARIES(ssWorkspaceDictTest.exe strideSearch)
 #ADD_TEST(NAME ssWorkspaceDict COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceDictTest.exe)
-#
-#ADD_EXECUTABLE(ssMinMaxCriteriaUnitTest.exe SSMinMaxCriteriaUnitTest.cpp)
-#TARGET_LINK_LIBRARIES(ssMinMaxCriteriaUnitTest.exe strideSearch)
-#ADD_TEST(NAME ssMinMaxCriteria COMMAND ${PROJECT_BINARY_DIR}/bin/ssMinMaxCriteriaUnitTest.exe)
-#
+
 #ADD_EXECUTABLE(ssSectorUnitTest.exe SSSectorUnitTest.cpp)
 #TARGET_LINK_LIBRARIES(ssSectorUnitTest.exe strideSearch)
 #ADD_TEST(NAME ssSector COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorUnitTest.exe)
