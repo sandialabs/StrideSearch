@@ -48,7 +48,7 @@ class IDCriterion {
         std::vector<std::string> varnames;
         /// Threshold value for this criterion
         Real threshold;
-        /// Index of a triggered Event within a Sector's workspace
+        /// Index of a triggered Event within a Sector's workspace (a tree index, not a data index)
         Index wspcIndex;
         /// Value of a triggered Event.  This is only defined if the Criterion has evaluated True.
         Real val;

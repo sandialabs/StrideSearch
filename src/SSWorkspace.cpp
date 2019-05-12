@@ -19,6 +19,12 @@ RealArray& Workspace::getDataRef(const std::string& var) {
     return data.at(var);
 }
 
+void Workspace::fillData(const std::string& var, const RealArray& vals) {
+    for (Int i=0; i<std::min(data.at(var).size(), vals.size()); ++i) {
+        data.at(var)[i] = vals[i];
+    }
+}
+
 std::ostream& operator << (std::ostream& os, const Workspace& wspc) {
     for (auto& elem : wspc.data) {
         os << elem.first << ": ";
