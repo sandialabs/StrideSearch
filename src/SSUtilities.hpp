@@ -3,6 +3,8 @@
 
 #include "StrideSearchConfig.h"
 #include "SSDefs.hpp"
+#include <iostream>
+#include <array>
 
 namespace StrideSearch {
 
@@ -37,12 +39,9 @@ Real sphereDistance(Real latA, Real lonA, Real latB, Real lonB);
 
 Real chordDistanceFromRadius(const Real radius);
 
-// / Computes the geodesic length in kilometers between two points on an Earth-sized sphere (const radius = EARTH_RADIUS_KM).
-// /**
-//     Assumes input values are given in degrees.
-// */
-// Real sphereDistance(const ll_coord_type& posA, const ll_coord_type& posB);
-
+std::ostream& operator << (std::ostream& os, const std::array<Index,1>& arr);
+std::ostream& operator << (std::ostream& os, const std::array<Index,2>& arr);
+std::ostream& operator << (std::ostream& os, const std::array<Index,3>& arr);
 
 }
 #endif

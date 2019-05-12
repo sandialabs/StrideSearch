@@ -25,7 +25,8 @@ namespace StrideSearch {
     template <int d>
     struct HorizontalDimensionType {
         enum {value = d};
-        typedef std::array<Index,d> data_index_type;
+        typedef std::array<Index,d> horiz_index_type;
+        typedef std::array<Index,d+1> full_index_type;
     };
     
     /// Unstructured data layout instantiation.
@@ -33,16 +34,6 @@ namespace StrideSearch {
     
     /// Structured lat-lon grid data layout instantiation.
     typedef HorizontalDimensionType<2> LatLonLayout;
-    
-//     std::ostream& operator << (std::ostream& os, const std::array<Index,1>& a) { 
-//         os << a[0]; 
-//         return os;
-//     }
-//     
-//     std::ostream& operator << (std::ostream& os, const std::array<Index,2>& a) { 
-//         os << "(" << a[0] << "," << a[1] << ")"; 
-//         return os;
-//     }
     
 #ifdef HAVE_KOKKOS
     typedef Kokkos::View<Real*> RealArray;

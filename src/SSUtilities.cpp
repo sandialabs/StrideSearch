@@ -54,7 +54,7 @@ Real atan4( const Real y, const Real x)
 void XyzToLL(Real& lat, Real& lon, const Real& x, const Real& y, const Real& z) {
     lat = std::atan2(z, std::sqrt(x*x + y*y)) * RAD2DEG;
     lon = atan4(y, x) * RAD2DEG;
-};
+}
 
 Real sphereDistance(const Real latA, const Real lonA, const Real latB, const Real lonB){
     if (std::abs(latB - latA) < ZERO_TOL && std::abs(lonB - lonA) < ZERO_TOL)
@@ -81,10 +81,6 @@ Real chordDistanceFromRadius(const Real radius) {
     return std::sqrt(EARTH_RADIUS_KM*EARTH_RADIUS_KM*(1-2*std::cos(theta)));
 }
 
-// Real sphereDistance(const ll_coord_type& posA, const ll_coord_type& posB) {
-//     return sphereDistance(posA.first, posA.second, posB.first, posB.second);
-// }
-
 void print_copyright(){
     std::cout <<  "------------------------------------------------------------------------------------------------\n";
     std::cout <<  "Stride Search. Copyright 2016 Sandia Corporation. Under the terms of contract DE-AC04-94AL85000,\n"; 
@@ -93,5 +89,27 @@ void print_copyright(){
     std::cout <<  "------------------------------------------------------------------------------------------------\n";
 }
 
+std::ostream& operator << (std::ostream& os, const std::array<Index,2>& arr) {
+    os << "(";
+    for (int i=0; i<2; ++i) {
+        os << arr[i] << (i==1 ? ")" : ",");
+    }
+    return os;
+}
+
+std::ostream& operator << (std::ostream& os, const std::array<Index,1>& arr) {
+    os << "(" << arr[0] << ")";
+    return os;
+}
+
+
+std::ostream& operator << (std::ostream& os, const std::array<Index,3>& arr) {
+    os << "(";
+    for (int i=0; i<3; ++i) {
+        os << arr[i] << (i==2 ? ")" : ",");
+    }
+    return os;
+}
 
 }
+

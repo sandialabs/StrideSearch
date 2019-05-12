@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector> 
 #include <string>
+#include <array>
 
 using namespace StrideSearch;
 
@@ -36,7 +37,11 @@ int main(int argc, char* argv[]) {
     std::cout << "great circle distance from (" << lat << ", " << lon << ") to (" << lat2 << ", " << lon2 << ") = " 
               << gcd2 << " km by geometry." << std::endl << std::endl;
     
-
+    std::array<Index,3> indArr;
+    indArr[0] = 21;
+    indArr[1] = 22;
+    indArr[2] = 23;
+    std::cout << indArr << std::endl;
 std::cout << "tests pass." << std::endl;    
 return 0;
 }

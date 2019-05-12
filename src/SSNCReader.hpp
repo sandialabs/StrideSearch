@@ -84,7 +84,7 @@ class NCReader {
 */
 class LatLonNCReader : public NCReader {
     public: 
-        typedef typename LatLonLayout::data_index_type data_index_type;
+        typedef typename LatLonLayout::horiz_index_type data_index_type;
         
         /// Returns a collection of x, y, z points for use with nanoflann
         Points makePoints() const;    
@@ -120,7 +120,7 @@ class LatLonNCReader : public NCReader {
 */
 class UnstructuredNCReader : public NCReader {
     public: 
-        typedef typename UnstructuredLayout::data_index_type data_index_type;
+        typedef typename UnstructuredLayout::horiz_index_type data_index_type;
         
         /// Returns a collection of x, y, z points for use with nanoflann
         Points makePoints() const;

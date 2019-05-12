@@ -31,11 +31,9 @@ ADD_EXECUTABLE(ssIdCriteriaTest.exe SSIdCriteriaUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssIdCriteriaTest.exe strideSearch)
 ADD_TEST(NAME ssIdCriteria COMMAND ${PROJECT_BINARY_DIR}/bin/ssIdCriteriaTest.exe)
 
-
-#ADD_EXECUTABLE(ssEventTest.exe SSEventTests.cpp)
-#TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)
-#ADD_TEST(NAME ssEvent COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventTest.exe)
-#
+ADD_EXECUTABLE(ssEventTest.exe SSEventUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)
+ADD_TEST(NAME ssEvent COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventTest.exe)
 
 #
 #ADD_EXECUTABLE(ssWorkspaceDictTest.exe SSWorkspaceDictUnitTest.cpp)
