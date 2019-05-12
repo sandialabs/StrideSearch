@@ -46,12 +46,21 @@ std::cout << "testing Event class..." << std::endl;
     
     std::cout << evpsl1->infoString();
     std::cout << "evpsl1 is duplicate of evpsl2 (false) : " << 
-        (evpsl1->isDuplicate(*evpsl2) ? "true" : "false") << std::endl;
-    std::cout << "evpsl2 is near evpsl1 (true) : " << (evpsl2->isNear(*evpsl1, radius) ? "true" : "false") << std::endl;
+            (evpsl1->isDuplicate(*evpsl2) ? "true" : "false") << std::endl;
+    if (evpsl1->isDuplicate(*evpsl2)) 
+        throw std::runtime_error("impossible!");
+    std::cout << "evpsl2 is near evpsl1 (true) : " << 
+            (evpsl2->isNear(*evpsl1, radius) ? "true" : "false") << std::endl;
+    if (!evpsl2->isNear(*evpsl1, radius)) 
+        throw std::runtime_error("impossible!");
     std::cout << "evpsl2 is less intense than evpsl1 (true) : " 
-        << (evpsl2->lowerIntensity(*evpsl1) ? "true" : "false") << std::endl;
+            << (evpsl2->lowerIntensity(*evpsl1) ? "true" : "false") << std::endl;
+    if (!evpsl2->lowerIntensity(*evpsl1)) 
+        throw std::runtime_error("impossible!");
     std::cout << "evpsl1 is redundant with evpsl2 (true) : " << 
         (evpsl1->isRedundant(*evpsl2, radius) ? "true" : "false") << std::endl;
+    if (!evpsl1->isRedundant(*evpsl2, radius)) 
+        throw std::runtime_error("impossible!");
         
     evpsl1->addRelated(evvort1);
     std::cout << evpsl1->infoString();
@@ -72,11 +81,15 @@ std::cout << "testing Event class..." << std::endl;
     std::cout << evpsl1->infoString();
     std::cout << "evpsl1 is duplicate of evpsl2 (false) : " << 
         (evpsl1->isDuplicate(*evpsl2) ? "true" : "false") << std::endl;
+    if (evpsl1->isDuplicate(*evpsl2)) throw std::runtime_error("impossible!");
     std::cout << "evpsl2 is near evpsl1 (true) : " << (evpsl2->isNear(*evpsl1, radius) ? "true" : "false") << std::endl;
+    if (!evpsl2->isNear(*evpsl1, radius)) throw std::runtime_error("impossible!");
     std::cout << "evpsl2 is less intense than evpsl1 (true) : " 
         << (evpsl2->lowerIntensity(*evpsl1) ? "true" : "false") << std::endl;
+    if (!evpsl2->lowerIntensity(*evpsl1)) throw std::runtime_error("impossible!");
     std::cout << "evpsl1 is redundant with evpsl2 (true) : " << 
         (evpsl1->isRedundant(*evpsl2, radius) ? "true" : "false") << std::endl;
+    if (!evpsl1->isRedundant(*evpsl2, radius)) throw std::runtime_error("impossible!");
         
     evpsl1->addRelated(evvort1);
     std::cout << evpsl1->infoString();
