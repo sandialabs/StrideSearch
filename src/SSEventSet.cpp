@@ -111,10 +111,11 @@ std::string EventSet<DataLayout>::infoString(const int tab_lev, const bool print
 }
 
 template <typename DataLayout>
-std::map<DateTime, std::vector<Event<DataLayout>>> EventSet<DataLayout>::separateByDateTime() const{
-    std::map<DateTime, std::vector<Event<DataLayout>>> result;
+std::map<DateTime, std::vector<std::shared_ptr<Event<DataLayout>>>> 
+EventSet<DataLayout>::separateByDateTime() const{
+    std::map<DateTime, std::vector<std::shared_ptr<Event<DataLayout>>>> result;
     for (Index i=0; i<events.size(); ++i) {
-        result[events[i]->datetime].push_back(*events[i]);
+        result[events[i]->datetime].push_back(events[i]);
     }
     return result;
 }

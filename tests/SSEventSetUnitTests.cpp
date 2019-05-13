@@ -65,11 +65,11 @@ std::cout << "testing EventSet class." << std::endl;
             throw std::runtime_error("impossible!");
         
         std::cout << "*** separating by DateTime ***" << std::endl;
-        std::map<DateTime, std::vector<event_type>> esplit = eset.separateByDateTime();
+        std::map<DateTime, std::vector<event_ptr>> esplit = eset.separateByDateTime();
         for (auto& e : esplit) {
             std::cout << e.first.DTGString() << ":" << std::endl;
             for (int i=0; i<e.second.size(); ++i)
-                std::cout << e.second[i].infoString(1);
+                std::cout << e.second[i]->infoString(1);
         }
         
     }
@@ -101,11 +101,11 @@ std::cout << "testing EventSet class." << std::endl;
         std::cout << eset.infoString(0,true);
         
         std::cout << "*** separating by DateTime ***" << std::endl;
-        std::map<DateTime, std::vector<event_type>> esplit = eset.separateByDateTime();
+        std::map<DateTime, std::vector<event_ptr>> esplit = eset.separateByDateTime();
         for (auto& e : esplit) {
             std::cout << e.first.DTGString() << ":" << std::endl;
             for (int i=0; i<e.second.size(); ++i)
-                std::cout << e.second[i].infoString(1);
+                std::cout << e.second[i]->infoString(1);
         }
         
     }

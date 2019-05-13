@@ -55,7 +55,7 @@ class EventSet {
             The output is a std::map whose keys are DateTime instances and whose values are EventLists whose contained
             Events all exist at the DateTime of their key.
         */
-        std::map<DateTime,std::vector<Event<DataLayout>>> separateByDateTime() const;
+        std::map<DateTime,std::vector<std::shared_ptr<Event<DataLayout>>>> separateByDateTime() const;
         
         /// Consolidates related events under one Event listing.
         /** 

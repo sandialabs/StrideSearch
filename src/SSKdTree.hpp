@@ -12,6 +12,12 @@ namespace StrideSearch {
 namespace nf = nanoflann;
 
 /// Points adaptor for nanoflann kdtree 
+/**
+
+    @note: this class is an implementation detail, not typically used by client applications
+
+    This is the interface to the nanoflann KdTree package.
+*/
 struct PointsKDTreeAdaptor {
     typedef Real coord_t;
     static constexpr Int max_leaf_size = 20;
@@ -40,6 +46,13 @@ typedef PointsKDTreeAdaptor adaptor_type;
 
 typedef nf::KDTreeSingleIndexAdaptor<nf::L2_Simple_Adaptor<Real,adaptor_type>,adaptor_type,3,Index> tree_type;
 
+/// KDTree for spatial search
+/**
+    @note: this class is an implementation detail, not typically used by client applications
+
+    A tree is built only once per search (since the whole dataset is assumed to use the same grid).
+    It is used to link SSData to each SSSector by defining each SSSector's local data indices.
+*/
 class KDTree {
     public:
         KDTree(const NCReader* ncr);

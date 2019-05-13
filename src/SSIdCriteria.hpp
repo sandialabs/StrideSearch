@@ -17,6 +17,14 @@ namespace StrideSearch {
     Each subclass must relate to a single, quantifiable identification criterion for a particular storm.
     
     The IDCriterion class is one of the fundamental StrideSearch classes (along with Sector and Event).
+    
+    Required methods & their responsibilities for subclasses:@n
+    - evaluate(const Workspace&) : 
+        - Perform the required reduction over the data in Workspace to compute this->val;
+        - Compare this->val against threshold, return result of comparison as bool. 
+        .
+    - description() : Return a string without spaces that completely describes what *this evaluates, including variable names.
+        
 */
 class IDCriterion {
     protected:

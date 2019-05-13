@@ -40,6 +40,12 @@ struct Points {
             1. In Cartesian (x,y,z) coordinates.
             2. On an Earth-sized sphere with units of kilometers.
 
+    Required subclass methods:
+        - makePoints() const : return a Points object of Cartesian coordinates, each with magnitude = EARTH_RADIUS_KM
+        - nPoints() const : return the number of horizontal grid points in the data set
+        - getLat(const Index ind) const: Return the latitude of the data point in the Points object
+        - getLon(const Index ind) const: Return the latitude of the data point in the Points object
+
 */
 class NCReader {
     public:
@@ -50,15 +56,20 @@ class NCReader {
         virtual Real getLon(const Index ptInd) const = 0;
         
         /// returns the time values contained in the NcFile
+        /**
+            @throws std::runtime_error if *this cannot locate a time coordinate variable in ncfile.
+        */
         RealArray getTime() const;  
         
         /// Updates reader to use a new source file in the same data set (the same horizontal grid is assumed).
         void updateFile(const std::string& filename);
         
-        //// Returns the curent source filename
+        /// Returns the curent source filename
         std::string filename() const {return src_file;}
         
+        /// Print coordinates to console
         void printLats() const;
+        /// Print coordinates to console
         void printLons() const;
         
     protected:
@@ -71,9 +82,18 @@ class NCReader {
         /// full filename (including path)
         std::string src_file; 
         
+        /// Initializes data point coordinates
+        /**
+            Standardizes all data points to lat-lon coordinates to minimize storage and
+            to facilitate normalizing all coordinates to an Earth-sized sphere with radius = EARTH_RADIUS_KM.
+            
+            @throws std::runtime_error if *this cannot locate coordinate variables in ncfile.
+        */
         virtual void initCoordinates() = 0;
         
+        /// Latitude coordinates of data points
         RealArray lats;
+        /// Longitude coordinates of data points
         RealArray lons;
 
 };
@@ -81,6 +101,8 @@ class NCReader {
 
 ///    Instantiation of NCReader for lat-lon structured grids
 /**
+    This class's makePoints method packs the 2d data into a 1d array of points;
+    the inverse of this packing is computed as part of the getLat and getLon methods.
 */
 class LatLonNCReader : public NCReader {
     public: 
@@ -117,6 +139,7 @@ class LatLonNCReader : public NCReader {
 
 ///    Instantiation of NCReader for unstructured grids
 /**
+    This class assumes a 1-1 mapping between data points and Points points.
 */
 class UnstructuredNCReader : public NCReader {
     public: 
