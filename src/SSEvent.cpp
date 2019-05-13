@@ -21,6 +21,7 @@ std::string Event<DataLayout>::infoString(int tab_level) const {
     ss << tabstr << "\tloc_ind = " << loc_ind << std::endl;
     ss << tabstr << "\tloc_ind_3d = " << loc_ind_3d << std::endl;
     ss << tabstr << "\ttime_ind = " << time_ind << std::endl;
+    ss << tabstr << "\tDTG = " << datetime.DTGString() << std::endl;
     ss << tabstr << "\tfilename = " << filename << std::endl;
     ss << tabstr << "\tisReferenced = " << (isReferenced ? "true" : "false") << std::endl;
     if (relatedEvents.size() > 0) {

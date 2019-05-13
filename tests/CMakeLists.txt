@@ -39,13 +39,15 @@ ADD_EXECUTABLE(ssSectorUnitTest.exe SSSectorUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssSectorUnitTest.exe strideSearch)
 ADD_TEST(NAME ssSector COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorUnitTest.exe)
 
-#
+ADD_EXECUTABLE(ssEventSetUnitTest.exe SSEventSetUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssEventSetUnitTest.exe strideSearch)
+ADD_TEST(NAME ssEventSet COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventSetUnitTest.exe)
+
+
 #ADD_EXECUTABLE(ssWorkspaceDictTest.exe SSWorkspaceDictUnitTest.cpp)
 #TARGET_LINK_LIBRARIES(ssWorkspaceDictTest.exe strideSearch)
 #ADD_TEST(NAME ssWorkspaceDict COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceDictTest.exe)
 
-
-#
 #ADD_EXECUTABLE(ssSectorListUnitTest.exe SSSectorListUnitTest.cpp)
 #TARGET_LINK_LIBRARIES(ssSectorListUnitTest.exe strideSearch)
 #ADD_TEST(NAME ssSectorList COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorListUnitTest.exe)

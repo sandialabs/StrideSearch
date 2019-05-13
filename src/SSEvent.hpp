@@ -12,6 +12,8 @@
 
 namespace StrideSearch {
 
+/// fwd decl
+template <typename DL> class EventSet;
 class IDCriterion; // fwd decl.
 
 /// A record of an important (as deemed by IDCriterion methods) event in the data.
@@ -32,6 +34,9 @@ class Event {
     public:
     typedef typename DataLayout::horiz_index_type horiz_index_type;
     typedef typename DataLayout::full_index_type full_index_type;
+    
+    template <typename DL> friend class EventSet;
+    
     
     /// Constructor for an Event in a horizontal data field
     Event(const std::string& desc_, const Real val, const Real lat_, const Real lon_, 
@@ -148,5 +153,21 @@ class Event {
         /// True if *this is in another Event's relatedEvents vector.
         bool isReferenced;
 };
+
+template <typename DataLayout>
+inline bool operator == (const Event<DataLayout>& left, const Event<DataLayout>& right) {
+    return left.isDuplicate(right);
+}
+
+template <typename DataLayout>
+inline bool operator < (const Event<DataLayout>& left, const Event<DataLayout>& right) {
+    return left.lowerIntensity(right);
+}
+
+template <typename DataLayout>
+inline bool operator > (const Event<DataLayout>& left, const Event<DataLayout>& right) {
+    return right < left;
+}
+
 }
 #endif
