@@ -1,5 +1,6 @@
 #include "StrideSearchConfig.h"
 #include "SSDefs.hpp"
+#include "SSUtilities.hpp"
 #include "SSWorkspace.hpp"
 #include <exception>
 #include <typeinfo>
@@ -7,6 +8,7 @@
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
+    print_copyright();
 std::cout << "Workspace unit tests." << std::endl;
 
     std::vector<std::string> varnames = {"U850", "V850"};

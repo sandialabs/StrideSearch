@@ -10,6 +10,7 @@
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
+print_copyright();
 std::cout << "Testing SS Sector class." << std::endl;
 
     const Real dummy_radius = 1000.0;

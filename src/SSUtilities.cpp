@@ -83,7 +83,8 @@ Real chordDistanceFromRadius(const Real radius) {
 
 void print_copyright(){
     std::cout <<  "------------------------------------------------------------------------------------------------\n";
-    std::cout <<  "Stride Search. Copyright 2016 Sandia Corporation. Under the terms of contract DE-AC04-94AL85000,\n"; 
+    std::cout <<  "Stride Search version " << StrideSearch_VERSION_MAJOR << "." << StrideSearch_VERSION_MINOR <<"\n";
+    std::cout <<  "Copyright 2016 Sandia Corporation. Under the terms of contract DE-AC04-94AL85000,\n"; 
     std::cout <<  "there is a non-exclusive license for use of this work by or on behalf of the U.S. Government. \n";
     std::cout <<  "Export of this program may require a license from the United States Government.\n";
     std::cout <<  "------------------------------------------------------------------------------------------------\n";

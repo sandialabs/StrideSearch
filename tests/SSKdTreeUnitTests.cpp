@@ -1,4 +1,5 @@
 #include "SSKdTree.hpp"
+#include "SSUtilities.hpp"
 #include <iostream>
 #include "nanoflann.hpp"
 #include <cmath>
@@ -6,6 +7,8 @@
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
+print_copyright();
+std::cout << "testing nanoflann interface." << std::endl;
     
     const std::string data_dir = StrideSearch_TEST_DATA_DIR;
     const std::string conus_file = data_dir + "/conusx4v1.g";
@@ -43,10 +46,7 @@ int main(int argc, char* argv[]) {
     std::cout << "\tret_ind = " << ret_ind << " dist = " << std::sqrt(sqdist) << std::endl;
     std::cout << "\tpt found (lat,lon) = (" << unif->getLat(ret_ind) << "," << unif->getLon(ret_ind) << ")" << std::endl;
     }
-    
-    
-    
-    
+
 std::cout << "tests pass." << std::endl;
 return 0;
 }

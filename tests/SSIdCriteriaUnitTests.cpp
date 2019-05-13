@@ -8,6 +8,8 @@ using namespace StrideSearch;
 void id_results(IDCriterion* idc, const Workspace& wspc);
 
 int main(int argc, char* argv[]) {
+print_copyright();
+
 std::cout << "Testing identification criteria..." << std::endl;
 
 //

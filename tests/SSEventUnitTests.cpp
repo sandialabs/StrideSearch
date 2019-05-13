@@ -8,6 +8,7 @@
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
+print_copyright();
 std::cout << "testing Event class..." << std::endl;
 
     const Int time_step_size = 6; // hours
