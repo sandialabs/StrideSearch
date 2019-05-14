@@ -2,6 +2,7 @@
 #define _SS_SECTOR_HPP_
 
 #include "SSDefs.hpp"
+#include "SSDataLayoutTraits.hpp"
 #include "SSUtilities.hpp"
 #include "SSEventTraits.hpp"
 #include "SSIdCriteria.hpp"
@@ -30,7 +31,7 @@ namespace StrideSearch {
 template <typename DataLayout=UnstructuredLayout> 
 struct Sector {
     typedef typename DataLayout::horiz_index_type horiz_index_type;
-    typedef typename DataLayout::full_index_type full_index_type;
+    typedef typename DataLayout::spatial_index_type spatial_index_type;
 
     /// Center latitude of Sector
     Real lat;
@@ -69,7 +70,7 @@ struct Sector {
     /// Incomplete constructor; data points & indices, and criteria are not yet known.
     /**
         Member variables
-        lats, lons, and indices must be set separately (e.g., by SectorSet and KDTree).
+        lats, lons, and indices must be set separately (e.g., by SSData::linkSectorsToData).
     
         @param clat : Sector's center latitude coordinate
         @param clon : Sector's center longitude coordinate

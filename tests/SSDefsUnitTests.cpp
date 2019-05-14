@@ -1,5 +1,6 @@
 #include "StrideSearchConfig.h"
 #include "SSDefs.hpp"
+#include "SSDataLayoutTraits.hpp"
 #include "SSUtilities.hpp"
 #include <typeinfo>
 #include <iostream>

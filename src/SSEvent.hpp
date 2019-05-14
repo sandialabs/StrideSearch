@@ -3,6 +3,7 @@
 
 #include "StrideSearchConfig.h"
 #include "SSDefs.hpp"
+#include "SSDataLayoutTraits.hpp"
 #include "SSDateTime.hpp"
 #include "SSConsts.hpp"
 #include "SSUtilities.hpp"
@@ -33,7 +34,7 @@ template <typename DataLayout=LatLonLayout>
 class Event {
     public:
     typedef typename DataLayout::horiz_index_type horiz_index_type;
-    typedef typename DataLayout::full_index_type full_index_type;
+    typedef typename DataLayout::spatial_index_type spatial_index_type;
     
     template <typename DL> friend class EventSet;
     
@@ -72,7 +73,7 @@ class Event {
         @param sdep : One of ::SpatialDependence types
     */
     Event(const std::string& desc_, const Real val, const Real lat_, const Real lon_,
-        const DateTime& dt, const full_index_type& ind, const Index& time_ind_, const std::string& fname,
+        const DateTime& dt, const spatial_index_type& ind, const Index& time_ind_, const std::string& fname,
         const IntensityComparison& icomp, const SpatialDependence& sdep) :
         desc(desc_), value(val), lat(lat_), lon(lon_), datetime(dt), loc_ind_3d(ind), loc_ind(), 
         time_ind(time_ind_), filename(fname), intensity_comparison(icomp),
@@ -188,7 +189,7 @@ class Event {
         /// Nearest location in data space (horizontal only)
         horiz_index_type loc_ind;
         /// Nearest location in data space (horizontal and level)
-        full_index_type loc_ind_3d;
+        spatial_index_type loc_ind_3d;
         /// Time index in data file
         Index time_ind;
         /// Filename for file containing the data that define this Event

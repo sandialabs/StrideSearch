@@ -14,7 +14,7 @@ namespace nf = nanoflann;
 /// Points adaptor for nanoflann kdtree 
 /**
 
-    @note: this class is an implementation detail, not typically used by client applications
+    @note this class is an implementation detail, not typically used by client applications
 
     This is the interface to the nanoflann KdTree package.
 */

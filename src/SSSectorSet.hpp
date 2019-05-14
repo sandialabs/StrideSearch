@@ -23,18 +23,45 @@ class SectorSet {
             @param nb : northern boundary of search domain (degrees latitude)
             @param wb : western boundary of search domain (degrees longitude)
             @param eb : eastern boundary of search domain (degrees longitude)
+            @param rad : sector radius
         */
         SectorSet(const Real sb=-90.0, const Real nb=90.0, const Real wb=0.0, const Real eb=360.0,
         const Real rad=2000.0);
         
     
         /// Constructor for predefined sector locations
-        SectorSet(const RealArray& center_lats, const ReayArray& center_lons, const Real rad);
+        SectorSet(const RealArray& center_lats, const RealArray& center_lons, const Real rad);
         
         
+        /// Constructor for Sectors centered on Event locations from an EventSet
+        SectorSet(const EventSet<DataLayout>& evs, const Real rad);
         
-    
+        RealArray centerLats() const;
+        RealArray centerLons() const;
+        
+        Index nSectors() const {return sectors.size();}
+        
+        std::vector<std::unique_ptr<Sector<DataLayout>>> sectors;
+        
+        Int maxPointsPerSector() const;
+        
+        Int minPointsPerSector() const;
     protected:
+        /// Southern boundary of search domain, in [-90, 90)
+        Real southern_boundary;
+        /// Northern boundary of search domain, in (-90,90]
+        Real northern_boundary;
+        /// Western boundary of search domain, in [0, 360)
+        Real western_boundary;
+        /// Eastern boundary of search domain, in (0, 360]
+        Real eastern_boundary;
+        
+        /// Latitude Stride: distance in latitude between strips
+        Real lat_stride_degrees;
+        /// Number of latitude strips
+        Int nstrips;
+        /// Longitude strides along each latitude strip
+        RealArray lon_strides_degrees;
 
 };
 

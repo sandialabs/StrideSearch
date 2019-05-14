@@ -3,6 +3,7 @@
 
 #include "StrideSearchConfig.h"
 #include "SSDefs.hpp"
+#include "SSDataLayoutTraits.hpp"
 #include "SSConsts.hpp"
 #include "SSUtilities.hpp"
 #include <netcdf>
@@ -11,7 +12,10 @@
 
 namespace StrideSearch {
 
-/// Defines a common data structure for all data sets to use with kd tree utilities.
+// fwd declaration
+template <typename RT> class SSData;
+
+/// Defines a common data structure for all data sets to use with kd tree utilities and SSData.
 /**
     Each pt (x[i], y[i], z[i]) has magnitude = EARTH_RADIUS_KM
 */
@@ -45,6 +49,8 @@ struct Points {
         - nPoints() const : return the number of horizontal grid points in the data set
         - getLat(const Index ind) const: Return the latitude of the data point in the Points object
         - getLon(const Index ind) const: Return the latitude of the data point in the Points object
+        - loadVariableValue(const Index ind, Real& val) const : Load one variable value 
+        - loadVariableValue(const Index ind, const Index lev_ind, Real& val) const : Load one variable value
 
 */
 class NCReader {
@@ -54,6 +60,10 @@ class NCReader {
         virtual Int nPoints() const = 0;
         virtual Real getLat(const Index ptInd) const = 0;
         virtual Real getLon(const Index ptInd) const = 0;
+        virtual void loadVariableValue(const Index ptInd, Real& val) const {}
+        virtual void loadVariableValue(const Index ptInd, const Index lev_ind, Real& val) const {}
+        template <int d>  
+        std::array<Index,d> getDataIndFromTreeInd(const Index ptInd) const {return std::array<Index,d>();}
         
         /// returns the time values contained in the NcFile
         /**
@@ -107,6 +117,8 @@ class NCReader {
 class LatLonNCReader : public NCReader {
     public: 
         typedef typename LatLonLayout::horiz_index_type data_index_type;
+        typedef LatLonLayout Layout;
+        template <typename RT> friend class SSData;
         
         /// Returns a collection of x, y, z points for use with nanoflann
         Points makePoints() const;    
@@ -125,8 +137,19 @@ class LatLonNCReader : public NCReader {
         /// Returns the number of horizontal grid points
         inline Int nPoints() const {return n_lat*n_lon;}
         
+        data_index_type getDataIndFromTreeInd(const Index ptInd) const {
+            data_index_type result;
+            result[0] = ptInd/n_lon;
+            result[1] = ptInd%n_lon;
+            return result;
+        }
+        
         Real getLat(const Index ptInd) const {return lats[ptInd/n_lon];}
         Real getLon(const Index ptInd) const {return lons[ptInd%n_lon];}
+        
+        void loadVariableValue(const data_index_type& ind, Real& val);
+        void loadVariableValue(const data_index_type& ind, const int& lev_ind, Real& val);
+        
     protected:
         Int n_lat;
         Int n_lon;
@@ -144,6 +167,8 @@ class LatLonNCReader : public NCReader {
 class UnstructuredNCReader : public NCReader {
     public: 
         typedef typename UnstructuredLayout::horiz_index_type data_index_type;
+        typedef UnstructuredLayout Layout;
+        template <typename RT> friend class SSData;
         
         /// Returns a collection of x, y, z points for use with nanoflann
         Points makePoints() const;
@@ -157,8 +182,17 @@ class UnstructuredNCReader : public NCReader {
         /// Returns the number of horizontal grid points.
         inline Int nPoints() const {return n_nodes;}
         
+        data_index_type getDataIndFromTreeInd(const Index ptInd) const {
+            data_index_type result;
+            result[0] = ptInd;
+            return result;
+        }
+        
         Real getLat(const Index ptInd) const {return lats[ptInd];}
         Real getLon(const Index ptInd) const {return lons[ptInd];}
+        
+        void loadVariableValue(const data_index_type& ind, Real& val);
+        void loadVariableValue(const data_index_type& ind, const int& lev_ind, Real& val);
     protected:
     
         /// Initializes x, y, z, arrays by reading coord* data from file.

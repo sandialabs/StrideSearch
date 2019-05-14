@@ -21,20 +21,6 @@ namespace StrideSearch {
     /// Memory index data type
     typedef int Index;
     
-    /// Compile-time specification for data layout.
-    template <int d>
-    struct HorizontalDimensionType {
-        enum {value = d};
-        typedef std::array<Index,d> horiz_index_type;
-        typedef std::array<Index,d+1> full_index_type;
-    };
-    
-    /// Unstructured data layout instantiation.
-    typedef HorizontalDimensionType<1> UnstructuredLayout;
-    
-    /// Structured lat-lon grid data layout instantiation.
-    typedef HorizontalDimensionType<2> LatLonLayout;
-    
 #ifdef HAVE_KOKKOS
     typedef Kokkos::View<Real*> RealArray;
     typedef Kokkos::View<Index*> IndexArray;
