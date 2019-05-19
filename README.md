@@ -25,6 +25,7 @@ To-do
 [ ] Doxygen class design plans & responsibilities@n
 [ ] Vorticity computation using gmls@n
 [x] Intensity traits and locality traits for idcriteria@n
-[ ] Consistent template DataLayout throughout@n
+[x] Consistent template DataLayout throughout@n
+[ ] Determine DataLayout at runtime, remove template parameters
 [ ] Decide whether to keep NCReader or consolidate its functions into SSData@n
 
