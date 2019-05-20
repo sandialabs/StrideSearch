@@ -6,9 +6,11 @@
 #include "SSDataLayoutTraits.hpp"
 #include "SSConsts.hpp"
 #include "SSUtilities.hpp"
+#include "SSWorkspace.hpp"
 #include <netcdf>
 #include <memory>
 #include <map>
+#include <vector>
 
 namespace StrideSearch {
 
@@ -60,10 +62,9 @@ class NCReader {
         virtual Int nPoints() const = 0;
         virtual Real getLat(const Index ptInd) const = 0;
         virtual Real getLon(const Index ptInd) const = 0;
-        virtual void loadVariableValue(const Index ptInd, Real& val) const {}
-        virtual void loadVariableValue(const Index ptInd, const Index lev_ind, Real& val) const {}
-        template <int d>  
-        std::array<Index,d> getDataIndFromTreeInd(const Index ptInd) const {return std::array<Index,d>();}
+
+        virtual void fillWorkspaceData(Workspace& wspc, const std::vector<typename UnstructuredLayout::horiz_index_type>& inds, const Int t_ind, const Int l_ind=-1) const {}
+        virtual void fillWorkspaceData(Workspace& wspc, const std::vector<typename LatLonLayout::horiz_index_type>& inds, const Int t_ind, const Int l_ind=-1) const {}
         
         /// returns the time values contained in the NcFile
         /**
@@ -121,7 +122,7 @@ class LatLonNCReader : public NCReader {
         template <typename RT> friend class SSData;
         
         /// Returns a collection of x, y, z points for use with nanoflann
-        Points makePoints() const;    
+        Points makePoints() const override;    
     
         LatLonNCReader(const std::string& filename) : NCReader(filename) {
             initCoordinates();
@@ -135,7 +136,7 @@ class LatLonNCReader : public NCReader {
         }
     
         /// Returns the number of horizontal grid points
-        inline Int nPoints() const {return n_lat*n_lon;}
+        inline Int nPoints() const override {return n_lat*n_lon;}
         
         data_index_type getDataIndFromTreeInd(const Index ptInd) const {
             data_index_type result;
@@ -144,18 +145,19 @@ class LatLonNCReader : public NCReader {
             return result;
         }
         
-        Real getLat(const Index ptInd) const {return lats[ptInd/n_lon];}
-        Real getLon(const Index ptInd) const {return lons[ptInd%n_lon];}
+        Real getLat(const Index ptInd) const override {return lats[ptInd/n_lon];}
+        Real getLon(const Index ptInd) const override {return lons[ptInd%n_lon];}
         
-        void loadVariableValue(const data_index_type& ind, Real& val);
-        void loadVariableValue(const data_index_type& ind, const int& lev_ind, Real& val);
+        void fillWorkspaceData(Workspace& wspc,
+            const std::vector<typename LatLonLayout::horiz_index_type>& inds,
+            const Int t_ind, const Int l_ind=-1) const override;
         
     protected:
         Int n_lat;
         Int n_lon;
     
         /// Initializes coordinate data by reading latitude and longitude data from file.
-        void initCoordinates();
+        void initCoordinates() override;
 };
 
 
@@ -171,7 +173,7 @@ class UnstructuredNCReader : public NCReader {
         template <typename RT> friend class SSData;
         
         /// Returns a collection of x, y, z points for use with nanoflann
-        Points makePoints() const;
+        Points makePoints() const override;
     
         UnstructuredNCReader(const std::string& filename) : NCReader(filename) {
             initCoordinates();
@@ -180,7 +182,7 @@ class UnstructuredNCReader : public NCReader {
         ~UnstructuredNCReader() {}
     
         /// Returns the number of horizontal grid points.
-        inline Int nPoints() const {return n_nodes;}
+        inline Int nPoints() const override {return n_nodes;}
         
         data_index_type getDataIndFromTreeInd(const Index ptInd) const {
             data_index_type result;
@@ -188,15 +190,16 @@ class UnstructuredNCReader : public NCReader {
             return result;
         }
         
-        Real getLat(const Index ptInd) const {return lats[ptInd];}
-        Real getLon(const Index ptInd) const {return lons[ptInd];}
+        Real getLat(const Index ptInd) const override {return lats[ptInd];}
+        Real getLon(const Index ptInd) const override {return lons[ptInd];}
         
-        void loadVariableValue(const data_index_type& ind, Real& val);
-        void loadVariableValue(const data_index_type& ind, const int& lev_ind, Real& val);
+        void fillWorkspaceData(Workspace& wspc, 
+            const std::vector<typename UnstructuredLayout::horiz_index_type>& inds, 
+            const Int t_ind, const Int l_ind=-1) const override;
     protected:
     
         /// Initializes x, y, z, arrays by reading coord* data from file.
-        void initCoordinates();
+        void initCoordinates() override;
         
         Int n_nodes;
         RealArray lats;

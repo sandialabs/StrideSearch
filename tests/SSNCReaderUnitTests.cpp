@@ -1,8 +1,12 @@
 #include "StrideSearchConfig.h"
 #include "SSNCReader.hpp"
 #include "SSUtilities.hpp"
+#include "SSWorkspace.hpp"
+#include "SSConsts.hpp"
 #include <iostream>
 #include <exception>
+#include <iomanip>
+#include <cmath>
 
 using namespace StrideSearch;
 
@@ -35,6 +39,28 @@ std::cout << "testing netCDF readers." << std::endl;
     llncr.printLats();
     std::cout << "unif_";
     llncr.printLons();
+    
+    auto timevals = llncr.getTime();
+    std::cout << "time = [";
+    for (int i=0; i<timevals.size(); ++i) {
+        std::cout << timevals[i] << (i==timevals.size()-1 ? "]\n" : " ");
+    }
+    if (timevals[0] != 730135.5) {
+        throw std::runtime_error("time variable read error.");
+    }
+    
+    Workspace wspc("pr", 2);
+    typedef typename LatLonLayout::horiz_index_type h_ind_type;
+    h_ind_type ind0({0,0});
+    h_ind_type ind1({0,1});
+    const std::vector<h_ind_type> inds = {ind0, ind1};
+    const Int time_ind = 0;
+    llncr.fillWorkspaceData(wspc, inds, time_ind);
+    std::cout << std::setprecision(20) << wspc << std::endl;
+    const Real diff = wspc.data.at("pr")[0] - 1.091546e-06 ;
+    if (std::abs(diff) > ZERO_TOL) {
+        throw std::runtime_error("pr variable read error.");
+    }
     
     std::cout << "tests pass." << std::endl;
 return 0;

@@ -71,6 +71,79 @@ void LatLonNCReader::initCoordinates() {
     }
 }
 
+void LatLonNCReader::fillWorkspaceData(Workspace& wspc,
+    const std::vector<typename LatLonLayout::horiz_index_type>& inds,
+    const Int t_ind, const Int l_ind) const {
+    /// throws if Workspace size != inds.size()
+    if (inds.size() != wspc.n) {
+        throw std::runtime_error("LatLonNCReader::fillWorkspaceData error: workspace/indices size mismatch.");
+    }
+    /// Loop over every variable in workspace, load data from inds at time t_ind
+    for (auto& var : wspc.data) {
+        netCDF::NcVar ncv(ncfile->getVar(var.first));
+        const Int ndim = ncv.getDimCount();
+        if (ndim == 3) { // (time, lat, lon)
+            auto getind = LatLonLayout::get_index_2d();
+            getind[0] = t_ind;
+            for (Int i=0; i<inds.size(); ++i) {
+                getind[1] = inds[i][0];
+                getind[2] = inds[i][1];
+                ncv.getVar(getind, &var.second[i]);
+            }
+        }
+        else if (ndim == 4) { // (time, level, lat, lon)
+            auto getind = LatLonLayout::get_index_3d();
+            getind[0] = t_ind;
+            getind[1] = l_ind;
+            for (Int i=0; i<inds.size(); ++i) {
+                getind[2] = inds[i][0];
+                getind[3] = inds[i][0];
+                ncv.getVar(getind, &var.second[i]);
+            }
+            
+        }
+        else {
+            /// throws if getDimCount() result is unexpected.
+            throw std::runtime_error("LatLonNCReader::fillWorkspaceData error: unsupported ndim value.");
+        }
+    }
+}
+
+void UnstructuredNCReader::fillWorkspaceData(Workspace& wspc, 
+    const std::vector<typename UnstructuredLayout::horiz_index_type>& inds,
+    const Int t_ind, const Int l_ind) const {
+    /// throws if workspace size != inds.size
+    if (inds.size() != wspc.n) {
+        throw std::runtime_error("UnstructuredNCReader::fillWorkspaceData error: workspace/inds size mismatch.");
+    }
+    /// Loop over every variable in workspace, load data from inds at time t_ind
+    for (auto& var : wspc.data) {
+        netCDF::NcVar ncv(ncfile->getVar(var.first));
+        const Int ndim = ncv.getDimCount();
+        if (ndim == 2) { // (time, node)
+            auto getind = UnstructuredLayout::get_index_2d();
+            getind[0] = t_ind;
+            for (Int i=0; i<inds.size(); ++i) {
+                getind[1] = inds[i][0];
+                ncv.getVar(getind, &var.second[i]);
+            }
+        }
+        else if (ndim == 3) { // (time, level, node)
+            auto getind = UnstructuredLayout::get_index_2d();
+            getind[0] = t_ind;
+            getind[1] = l_ind;
+            for (Int i=0; i<inds.size(); ++i) {
+                getind[2] = inds[i][0];
+                ncv.getVar(getind, &var.second[i]);
+            }
+        }
+        else {
+            /// throws if getDimCount() result is unexpected.
+            throw std::runtime_error("UnstructuredNCReader::fillWorkspaceData error: unsupported ndim value.");
+        }
+    }
+}
+
 Points LatLonNCReader::makePoints() const {
     Points result(n_lat*n_lon);
     for (Int i=0; i<n_lat; ++i) {

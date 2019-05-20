@@ -27,21 +27,21 @@ ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)
 ADD_TEST(NAME ssWorkspace COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceTest.exe)
 
-ADD_EXECUTABLE(ssIdCriteriaTest.exe SSIdCriteriaUnitTests.cpp)
-TARGET_LINK_LIBRARIES(ssIdCriteriaTest.exe strideSearch)
-ADD_TEST(NAME ssIdCriteria COMMAND ${PROJECT_BINARY_DIR}/bin/ssIdCriteriaTest.exe)
+#ADD_EXECUTABLE(ssIdCriteriaTest.exe SSIdCriteriaUnitTests.cpp)
+#TARGET_LINK_LIBRARIES(ssIdCriteriaTest.exe strideSearch)
+#ADD_TEST(NAME ssIdCriteria COMMAND ${PROJECT_BINARY_DIR}/bin/ssIdCriteriaTest.exe)
+#
+#ADD_EXECUTABLE(ssEventTest.exe SSEventUnitTests.cpp)
+#TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)
+#ADD_TEST(NAME ssEvent COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventTest.exe)
 
-ADD_EXECUTABLE(ssEventTest.exe SSEventUnitTests.cpp)
-TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)
-ADD_TEST(NAME ssEvent COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventTest.exe)
-
-ADD_EXECUTABLE(ssSectorUnitTest.exe SSSectorUnitTests.cpp)
-TARGET_LINK_LIBRARIES(ssSectorUnitTest.exe strideSearch)
-ADD_TEST(NAME ssSector COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorUnitTest.exe)
-
-ADD_EXECUTABLE(ssEventSetUnitTest.exe SSEventSetUnitTests.cpp)
-TARGET_LINK_LIBRARIES(ssEventSetUnitTest.exe strideSearch)
-ADD_TEST(NAME ssEventSet COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventSetUnitTest.exe)
+#ADD_EXECUTABLE(ssSectorUnitTest.exe SSSectorUnitTests.cpp)
+#TARGET_LINK_LIBRARIES(ssSectorUnitTest.exe strideSearch)
+#ADD_TEST(NAME ssSector COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorUnitTest.exe)
+#
+#ADD_EXECUTABLE(ssEventSetUnitTest.exe SSEventSetUnitTests.cpp)
+#TARGET_LINK_LIBRARIES(ssEventSetUnitTest.exe strideSearch)
+#ADD_TEST(NAME ssEventSet COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventSetUnitTest.exe)
 
 
 #ADD_EXECUTABLE(ssWorkspaceDictTest.exe SSWorkspaceDictUnitTest.cpp)
