@@ -60,6 +60,12 @@ std::vector<std::shared_ptr<Event<DataLayout>>> Sector<DataLayout>::evaluateCrit
     return result;
 }
 
+template <> template <>
+void Sector<UnstructuredLayout>::linkHelper<UnstructuredLayout>() {std::cout << "UnstructuredLayout Linker." << std::endl;}
+
+template <> template <>
+void Sector<LatLonLayout>::linkHelper<LatLonLayout>() {std::cout << "Linking LatLonLayout." << std::endl;}        
+
 
 /// ETI
 template struct Sector<UnstructuredLayout>;

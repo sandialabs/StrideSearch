@@ -31,8 +31,6 @@ namespace StrideSearch {
 template <typename DataLayout=UnstructuredLayout> 
 struct Sector {
     typedef typename DataLayout::horiz_index_type horiz_index_type;
-    typedef typename DataLayout::spatial_index_type spatial_index_type;
-
     /// Center latitude of Sector
     Real lat;
     /// Center longitude of Sector
@@ -80,6 +78,8 @@ struct Sector {
     Sector(const Real clat, const Real clon, const Real rad, const Int sid) :
         lat(clat), lon(clon), radius(rad), lats(), lons(), indices(), workspaces(), stripId(sid) {}
     
+    void linkToData() {linkHelper<DataLayout>();}
+    
     /// Allocates workspaces and memory for each workspace
     /**
         Each IDCriterion requires its own Workspace.@n
@@ -120,6 +120,15 @@ struct Sector {
     std::vector<std::shared_ptr<Event<DataLayout>>> evaluateCriteriaAtTimestep(
         std::vector<std::shared_ptr<IDCriterion>>& criteria,
         const DateTime& dt, const std::string& fname, const Index time_ind) const;
+    
+    private:
+        template <typename DL> typename
+        std::enable_if<std::is_same<DL,UnstructuredLayout>::value,void>::type
+        linkHelper();// {std::cout << "UnstructuredLayout Linker." << std::endl;}
+        
+        template <typename DL> typename 
+        std::enable_if<std::is_same<DL,LatLonLayout>::value,void>::type
+        linkHelper();// {std::cout << "LatLonLayout Linker." << std::endl;}
 };
 }
 #endif

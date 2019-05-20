@@ -30,7 +30,7 @@ class IDCriterion;
     
     The Event class is one of the fundamental StrideSearch classes (along with Sector and IDCriterion).
 */
-template <typename DataLayout=LatLonLayout>
+template <typename DataLayout=UnstructuredLayout>
 class Event {
     public:
     typedef typename DataLayout::horiz_index_type horiz_index_type;

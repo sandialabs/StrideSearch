@@ -37,6 +37,23 @@ std::cout << "testing nanoflann interface." << std::endl;
     std::cout << "conus search results(nn="<<num_results<<")"<<std::endl;
     std::cout << "\tret_ind = " << ret_ind << " dist = " << std::sqrt(sqdist) << std::endl;
     std::cout << "\tpt found (lat,lon) = (" << conus->getLat(ret_ind) << "," << conus->getLon(ret_ind) << ")" << std::endl;
+    
+    const std::vector<std::pair<Index,Real>> searchReturn = conusTree.search(qlat, qlon, 500.0, 20);
+    std::cout << "found " << searchReturn.size() << " data points near query pt in conus grid." << std::endl;
+
+    for (Int i=0; i<searchReturn.size(); ++i) {
+        std::cout << "found idx[" << i << "]= " << searchReturn[i].first << " dist[" << i << "]= " << std::sqrt(searchReturn[i].second) << " (lat,lon)= (" << conus->getLat(searchReturn[i].first) << "," << conus->getLon(searchReturn[i].first) << ")" << std::endl;
+    } 
+    std::cout << "________ csv ________" << std::endl;
+    std::cout << "x,y,z" << std::endl;   
+    for (Int i=0; i<searchReturn.size(); ++i) { 
+        const Real lat = conus->getLat(searchReturn[i].first);
+        const Real lon = conus->getLon(searchReturn[i].first);
+        Real x,y,z;
+        llToXYZ(x,y,z,lat,lon);
+        std::cout << x/EARTH_RADIUS_KM << "," << y/EARTH_RADIUS_KM << "," << z/EARTH_RADIUS_KM << std::endl;
+    }
+    std::cout << "______ end csv _______" << std::endl;
     }
     {
     nf::KNNResultSet<Real> resultSet(num_results);
@@ -45,6 +62,12 @@ std::cout << "testing nanoflann interface." << std::endl;
     std::cout << "latlon search results(nn="<<num_results<<")"<<std::endl;
     std::cout << "\tret_ind = " << ret_ind << " dist = " << std::sqrt(sqdist) << std::endl;
     std::cout << "\tpt found (lat,lon) = (" << unif->getLat(ret_ind) << "," << unif->getLon(ret_ind) << ")" << std::endl;
+    
+    const std::vector<std::pair<Index,Real>> searchReturn = unifTree.search(qlat, qlon, 500.0, 20);
+    std::cout << "found " << searchReturn.size() << " data points near query pt in lat-lon grid." << std::endl;
+    for (Int i=0; i<searchReturn.size(); ++i) {
+        std::cout << "found idx[" << i <<"]= " << searchReturn[i].first << " dist[" << i << "]= " << std::sqrt(searchReturn[i].second) << " (lat,lon)= (" << unif->getLat(searchReturn[i].first) << "," << unif->getLon(searchReturn[i].second) << ")" << std::endl;
+    }
     }
 
 std::cout << "tests pass." << std::endl;

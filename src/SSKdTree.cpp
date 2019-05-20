@@ -1,4 +1,5 @@
 #include "SSKdTree.hpp"
+#include <cmath>
 
 namespace StrideSearch {
 
@@ -8,5 +9,16 @@ KDTree::KDTree(const NCReader* ncr) : pts(ncr->makePoints()), adaptor(PointsKDTr
     index->buildIndex();
 }
 
+std::vector<std::pair<Index,Real>> KDTree::search(const Real clat, const Real clon, const Real radius_km, const Int size_guess) const {
+    std::vector<std::pair<Index, Real>> ret_matches;
+    ret_matches.reserve(size_guess);
+    nf::SearchParams params;
+    Real qx, qy, qz;
+    llToXYZ(qx,qy,qz, clat,clon);
+    const Real query_pt[3] = {qx,qy,qz};
+    const Index nFound = index->radiusSearch(&query_pt[0], searchRadiusInput(radius_km), ret_matches, params);
+    std::cout << "nfound = " << nFound << std::endl;
+    return ret_matches;
+}
 
 }

@@ -76,11 +76,6 @@ Real sphereDistance(const Real latA, const Real lonA, const Real latB, const Rea
     }
 }
 
-Real chordDistanceFromRadius(const Real radius) {
-    const Real theta = radius / (2*PI*EARTH_RADIUS_KM);
-    return std::sqrt(EARTH_RADIUS_KM*EARTH_RADIUS_KM*(1-2*std::cos(theta)));
-}
-
 void print_copyright(){
     std::cout <<  "------------------------------------------------------------------------------------------------\n";
     std::cout <<  "Stride Search version " << StrideSearch_VERSION_MAJOR << "." << StrideSearch_VERSION_MINOR <<"\n";

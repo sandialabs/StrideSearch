@@ -31,6 +31,7 @@ struct DataLayoutTraits {
 typedef DataLayoutTraits<1> UnstructuredLayout;
 typedef DataLayoutTraits<2> LatLonLayout;
 
+enum HorizontalLayout {TWO_D, ONE_D};
 
 }
 #endif

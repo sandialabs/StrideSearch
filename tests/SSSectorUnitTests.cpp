@@ -59,6 +59,7 @@ std::cout << "Testing SS Sector class." << std::endl;
     usec.workspaces[1].fillData(windVars[1], sample_v);
     std::cout << "--- unst. sector ---" << std::endl;
     std::cout << usec.infoString();
+    usec.linkToData();
     
     Sector<LatLonLayout> llsec(0, 180, dummy_radius, sample_lats, sample_lons, ll_inds, criteria.size(), 0);
     llsec.allocWorkspaces(criteria);
@@ -67,6 +68,7 @@ std::cout << "Testing SS Sector class." << std::endl;
     llsec.workspaces[1].fillData(windVars[1], sample_v);
     std::cout << "--- latlon sector ---" << std::endl;
     std::cout << llsec.infoString();
+    llsec.linkToData();
     
     std::vector<std::shared_ptr<Event<UnstructuredLayout>>> unst_events = usec.evaluateCriteriaAtTimestep(criteria,
         coding_day, fname, tind);

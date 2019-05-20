@@ -37,8 +37,6 @@ void XyzToLL(Real& lat, Real& lon, const Real& x, const Real& y, const Real& z);
 */
 Real sphereDistance(Real latA, Real lonA, Real latB, Real lonB);
 
-Real chordDistanceFromRadius(const Real radius);
-
 std::ostream& operator << (std::ostream& os, const std::array<Index,1>& arr);
 std::ostream& operator << (std::ostream& os, const std::array<Index,2>& arr);
 std::ostream& operator << (std::ostream& os, const std::array<Index,3>& arr);
