@@ -56,9 +56,7 @@ typedef nf::KDTreeSingleIndexAdaptor<nf::L2_Simple_Adaptor<Real,adaptor_type>,ad
 class KDTree {
     public:
         KDTree(const NCReader* ncr);
-        
-        std::unique_ptr<tree_type> index;
-        
+                
         std::vector<std::pair<Index, Real>> search(const Real clat, const Real clon, const Real radius_km, const Int size_guess = 20) const;
         
         /// Convert a great-circle distance (km) on the sphere to the corresponding nanoflann input value
@@ -75,10 +73,10 @@ class KDTree {
         */
         inline Real searchRadiusInput(const Real radius_km) const {
             const Real theta = radius_km / EARTH_RADIUS_KM;
-//             std::cout << "theta = " << theta << std::endl;
             return 2*EARTH_RADIUS_KM*EARTH_RADIUS_KM*(1-std::cos(theta));
         }
-    protected:
+    protected:    
+        std::unique_ptr<tree_type> index;
         Points pts;
         adaptor_type adaptor;
         

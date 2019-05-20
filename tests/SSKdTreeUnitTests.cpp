@@ -29,15 +29,6 @@ std::cout << "testing nanoflann interface." << std::endl;
     llToXYZ(qx, qy, qz, qlat, qlon);
     const Real query_pt[3] = {qx, qy, qz};
     {
-    nf::KNNResultSet<Real> resultSet(num_results);
-    resultSet.init(&ret_ind, &sqdist);
-    std::cout << "searching for point nearest (lat,lon) = (45,0)" << std::endl;
-    conusTree.index->findNeighbors(resultSet, &query_pt[0], nf::SearchParams(10));
-    
-    std::cout << "conus search results(nn="<<num_results<<")"<<std::endl;
-    std::cout << "\tret_ind = " << ret_ind << " dist = " << std::sqrt(sqdist) << std::endl;
-    std::cout << "\tpt found (lat,lon) = (" << conus->getLat(ret_ind) << "," << conus->getLon(ret_ind) << ")" << std::endl;
-    
     const std::vector<std::pair<Index,Real>> searchReturn = conusTree.search(qlat, qlon, 500.0, 20);
     std::cout << "found " << searchReturn.size() << " data points near query pt in conus grid." << std::endl;
 
@@ -56,13 +47,6 @@ std::cout << "testing nanoflann interface." << std::endl;
     std::cout << "______ end csv _______" << std::endl;
     }
     {
-    nf::KNNResultSet<Real> resultSet(num_results);
-    resultSet.init(&ret_ind, &sqdist);
-    unifTree.index->findNeighbors(resultSet,&query_pt[0], nf::SearchParams(10));
-    std::cout << "latlon search results(nn="<<num_results<<")"<<std::endl;
-    std::cout << "\tret_ind = " << ret_ind << " dist = " << std::sqrt(sqdist) << std::endl;
-    std::cout << "\tpt found (lat,lon) = (" << unif->getLat(ret_ind) << "," << unif->getLon(ret_ind) << ")" << std::endl;
-    
     const std::vector<std::pair<Index,Real>> searchReturn = unifTree.search(qlat, qlon, 500.0, 20);
     std::cout << "found " << searchReturn.size() << " data points near query pt in lat-lon grid." << std::endl;
     for (Int i=0; i<searchReturn.size(); ++i) {
