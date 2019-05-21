@@ -1,5 +1,6 @@
 #include "SSSector.hpp"
 #include <sstream>
+#include <cmath>
 
 namespace StrideSearch {
 
@@ -60,11 +61,34 @@ std::vector<std::shared_ptr<Event<DataLayout>>> Sector<DataLayout>::evaluateCrit
     return result;
 }
 
+/// Link Sector To Data implementation for UnstructuredLayout
 template <> template <>
-void Sector<UnstructuredLayout>::linkHelper<UnstructuredLayout>() {std::cout << "UnstructuredLayout Linker." << std::endl;}
+void Sector<UnstructuredLayout>::linkHelper<UnstructuredLayout>(const KDTree& tree, 
+    const std::shared_ptr<NCReader> ncr) {
+    const Real avgCellSizeSq = ncr->avgResKm * ncr->avgResKm;
+    const Int n_estimate = std::ceil(4*PI*radius*radius/(avgCellSizeSq));
+    auto searchReturn = tree.search(lat, lon, radius, n_estimate);
+    for (Int i=0; i<searchReturn.size(); ++i) {
+        const Index tree_ind = searchReturn[i].first;
+        indices.push_back(dynamic_cast<UnstructuredNCReader*>(ncr.get())->getDataIndexFromTreeIndex(tree_ind));
+        lats.push_back(ncr->getLat(tree_ind));
+        lons.push_back(ncr->getLon(tree_ind));
+    }
+}
 
+/// Link Sector To Data implementation for LatLonLayout
 template <> template <>
-void Sector<LatLonLayout>::linkHelper<LatLonLayout>() {std::cout << "Linking LatLonLayout." << std::endl;}        
+void Sector<LatLonLayout>::linkHelper<LatLonLayout>(const KDTree& tree, const std::shared_ptr<NCReader> ncr) {
+    const Real avgCellSizeSq = ncr->avgResKm * ncr->avgResKm;
+    const Int n_estimate = std::ceil(4*PI*radius*radius/avgCellSizeSq);
+    auto searchReturn = tree.search(lat, lon, radius, n_estimate);
+    for (Int i=0; i<searchReturn.size(); ++i) {
+        const Index tree_ind = searchReturn[i].first;
+        indices.push_back(dynamic_cast<LatLonNCReader*>(ncr.get())->getDataIndexFromTreeIndex(tree_ind));
+        lats.push_back(ncr->getLat(tree_ind));
+        lons.push_back(ncr->getLon(tree_ind));
+    }
+}        
 
 
 /// ETI

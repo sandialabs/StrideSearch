@@ -11,6 +11,7 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <cmath>
 
 namespace StrideSearch {
 
@@ -33,10 +34,10 @@ struct Points {
 
 /// Abstract base class for netcdf interface.  Subclassed for each type of data layout.
 /**    
-    Properties:
+    __Properties:__ @n
         An NCReader has unique ownership of an NcFile.  
     
-    Responsibilities:
+    __Responsibilities:__ @n
         The format of netcdf data is not standardized. 
         Some grids are unstructured, some are structured; some are given in angular variables (e.g., lat-lon),
         others are given in Cartesian variables (x,y,z).  
@@ -46,13 +47,17 @@ struct Points {
             1. In Cartesian (x,y,z) coordinates.
             2. On an Earth-sized sphere with units of kilometers.
 
-    Required subclass methods:
+    __Example subclasses:__ @n
+        - LatLonNCReader
+        - UnstructuredNCReader
+
+    __Required subclass methods:__
         - makePoints() const : return a Points object of Cartesian coordinates, each with magnitude = EARTH_RADIUS_KM
         - nPoints() const : return the number of horizontal grid points in the data set
         - getLat(const Index ind) const: Return the latitude of the data point in the Points object
         - getLon(const Index ind) const: Return the latitude of the data point in the Points object
-        - loadVariableValue(const Index ind, Real& val) const : Load one variable value 
-        - loadVariableValue(const Index ind, const Index lev_ind, Real& val) const : Load one variable value
+        - fillWorkspaceData() : Fill the workspace's required data arrays with values read from NcFile
+        - resolutionEstimate() : Return an estimate of the dataset's average horizontal resolution, in km.
 
 */
 class NCReader {
@@ -62,7 +67,6 @@ class NCReader {
         virtual Int nPoints() const = 0;
         virtual Real getLat(const Index ptInd) const = 0;
         virtual Real getLon(const Index ptInd) const = 0;
-
         virtual void fillWorkspaceData(Workspace& wspc, const std::vector<typename UnstructuredLayout::horiz_index_type>& inds, const Int t_ind, const Int l_ind=-1) const {}
         virtual void fillWorkspaceData(Workspace& wspc, const std::vector<typename LatLonLayout::horiz_index_type>& inds, const Int t_ind, const Int l_ind=-1) const {}
         
@@ -83,6 +87,8 @@ class NCReader {
         /// Print coordinates to console
         void printLons() const;
         
+        Real avgResKm;
+
     protected:
         NCReader() {}
         NCReader(const std::string& filename); 
@@ -102,6 +108,8 @@ class NCReader {
         */
         virtual void initCoordinates() = 0;
         
+        virtual Real resolutionEstimate() const = 0;
+        
         /// Latitude coordinates of data points
         RealArray lats;
         /// Longitude coordinates of data points
@@ -119,17 +127,21 @@ class LatLonNCReader : public NCReader {
     public: 
         typedef typename LatLonLayout::horiz_index_type data_index_type;
         typedef LatLonLayout Layout;
-        template <typename RT> friend class SSData;
         
         /// Returns a collection of x, y, z points for use with nanoflann
         Points makePoints() const override;    
     
         LatLonNCReader(const std::string& filename) : NCReader(filename) {
             initCoordinates();
+            avgResKm = resolutionEstimate();
         }
         
         ~LatLonNCReader() {}
     
+        /// Get data indices from tree indices
+        /**
+            @deprecated Use DataLayoutTraits::getDataIndexFromTreeIndex instead.
+        */
         void llIndices(Int& lat_ind, Int& lon_ind, const Int& pt_ind) const {
             lat_ind = pt_ind/n_lon;
             lon_ind = pt_ind%n_lon;
@@ -138,26 +150,60 @@ class LatLonNCReader : public NCReader {
         /// Returns the number of horizontal grid points
         inline Int nPoints() const override {return n_lat*n_lon;}
         
-        data_index_type getDataIndFromTreeInd(const Index ptInd) const {
-            data_index_type result;
-            result[0] = ptInd/n_lon;
-            result[1] = ptInd%n_lon;
-            return result;
+        /// Get data indices from tree indices
+        /**
+        */
+        data_index_type getDataIndexFromTreeIndex(const Index ptInd) const {
+            return LatLonLayout::getDataIndexFromTreeIndex(ptInd, n_lon);
         }
         
+        /// Return the latitude of the point with index ptInd (returned from KDTree::search)
+        /**
+            @param ptInd : index of a point output from a nanoflann search, implemented by the KDTree class.
+            @return latitude of the corresponding point
+        */
         Real getLat(const Index ptInd) const override {return lats[ptInd/n_lon];}
+        
+        /// Return the longitude of the point with index ptInd (returned from KDTree::search)
+        /**
+            @param ptInd : index of a point output from a nanoflann search, implemented by the KDTree class.
+            @return longitude of the corresponding point
+        */
         Real getLon(const Index ptInd) const override {return lons[ptInd%n_lon];}
         
+        /// Fill workspace data with values read from file
+        /**
+            The Workspace defines the variables it needs to complete its computations.
+            The data indices corresponding to the Workspace's Sector are the second argument.
+            
+            Procedure:@n
+            For each every variable name in Workspace.data, load datum for each horizontal index.
+            
+            @param wspc : Workspace with memory already allocated.
+            @param inds : Horizontal grid point indices
+            @param t_ind : time index in current source data file.
+            @param l_ind : level index (if applicable)
+        */
         void fillWorkspaceData(Workspace& wspc,
             const std::vector<typename LatLonLayout::horiz_index_type>& inds,
             const Int t_ind, const Int l_ind=-1) const override;
         
+        
+        
     protected:
+        /// number of latitude points in data set (frequently, n_lat = n_lon/2 + 1)
         Int n_lat;
+        /// number of longitude points in data set
         Int n_lon;
     
         /// Initializes coordinate data by reading latitude and longitude data from file.
         void initCoordinates() override;
+        
+        /// Estimate the data set's average horizontal resolution, in kilometers
+        /**
+            @return @f$\Delta \lambda = \frac{2\pi R}{n_{lon}}@f$
+        */
+        Real resolutionEstimate() const override {return 2*PI*EARTH_RADIUS_KM/n_lon;}
 };
 
 
@@ -170,13 +216,13 @@ class UnstructuredNCReader : public NCReader {
     public: 
         typedef typename UnstructuredLayout::horiz_index_type data_index_type;
         typedef UnstructuredLayout Layout;
-        template <typename RT> friend class SSData;
         
         /// Returns a collection of x, y, z points for use with nanoflann
         Points makePoints() const override;
     
         UnstructuredNCReader(const std::string& filename) : NCReader(filename) {
             initCoordinates();
+            avgResKm = resolutionEstimate();
         }
         
         ~UnstructuredNCReader() {}
@@ -184,26 +230,59 @@ class UnstructuredNCReader : public NCReader {
         /// Returns the number of horizontal grid points.
         inline Int nPoints() const override {return n_nodes;}
         
-        data_index_type getDataIndFromTreeInd(const Index ptInd) const {
-            data_index_type result;
-            result[0] = ptInd;
-            return result;
+        /// Get data indices from tree indices
+        /**
+            
+        */
+        data_index_type getDataIndexFromTreeIndex(const Index ptInd) const {
+            return UnstructuredLayout::getDataIndexFromTreeIndex(ptInd);
         }
         
+        /// Return the latitude of the point with index ptInd (returned from KDTree::search)
+        /**
+            @param ptInd : index of a point output from a nanoflann search, implemented by the KDTree class.
+            @return latitude of the corresponding point
+        */
         Real getLat(const Index ptInd) const override {return lats[ptInd];}
+        /// Return the longitude of the point with index ptInd (returned from KDTree::search)
+        /**
+            @param ptInd : index of a point output from a nanoflann search, implemented by the KDTree class.
+            @return longitude of the corresponding point
+        */
         Real getLon(const Index ptInd) const override {return lons[ptInd];}
         
+        /// Fill workspace data with values read from file
+        /**
+            The Workspace defines the variables it needs to complete its computations.
+            The data indices corresponding to the Workspace's Sector are the second argument.
+            
+            Procedure:@n
+            For each every variable name in Workspace.data, load datum for each horizontal index at time_index t_ind
+            
+            @param wspc : Workspace with memory already allocated.
+            @param inds : Horizontal grid point indices
+            @param t_ind : time index in current source data file.
+            @param l_ind : level index (if applicable)
+        */
         void fillWorkspaceData(Workspace& wspc, 
             const std::vector<typename UnstructuredLayout::horiz_index_type>& inds, 
             const Int t_ind, const Int l_ind=-1) const override;
+
     protected:
+    
+        /// Estimate the data set's average horizontal resolution, in kilometers
+        /**
+            @return @f$\Delta \lambda = \sqrt{\frac{4\pi R^2}{n_{nodes}}@f$
+        */
+        Real resolutionEstimate() const override {
+            return std::sqrt(4*PI*EARTH_RADIUS_KM*EARTH_RADIUS_KM/n_nodes);}
     
         /// Initializes x, y, z, arrays by reading coord* data from file.
         void initCoordinates() override;
         
+        /// Number of nodes in data set
         Int n_nodes;
-        RealArray lats;
-        RealArray lons;
+
 };
 
 }

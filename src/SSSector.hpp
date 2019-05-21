@@ -19,11 +19,11 @@ namespace StrideSearch {
 
 /// A Sector is the StrideSearch algorithm's basic unit of work.
 /**
-    A Sector has a center point on the sphere, and a radius.@n
+    A Sector has a center point on the sphere and a radius.@n
     It maintains a record of all data points that lie within its boundaries (both physical coordinates and data locations).
     
     Sectors are responsible for:
-    1. Receiving data from SSData objects at each time step
+    1. Receiving data from NCReader objects at each time step
     2. Evaluating a set of identification criteria (a collection of IDCriterion subclass instances).
     
     The Sector struct is one of the fundamental StrideSearch data types (along with Event and IDCriterion).
@@ -78,7 +78,13 @@ struct Sector {
     Sector(const Real clat, const Real clon, const Real rad, const Int sid) :
         lat(clat), lon(clon), radius(rad), lats(), lons(), indices(), workspaces(), stripId(sid) {}
     
-    void linkToData() {linkHelper<DataLayout>();}
+    /// Finds the data points (locations and indices) contained by this Sector
+    void linkToData(const KDTree& tree, const std::shared_ptr<NCReader> ncr) {
+        indices.clear();
+        lats.clear();
+        lons.clear();
+        linkHelper<DataLayout>(tree,ncr);
+    }
     
     /// Allocates workspaces and memory for each workspace
     /**
@@ -124,11 +130,11 @@ struct Sector {
     private:
         template <typename DL> typename
         std::enable_if<std::is_same<DL,UnstructuredLayout>::value,void>::type
-        linkHelper();// {std::cout << "UnstructuredLayout Linker." << std::endl;}
+        linkHelper(const KDTree& tree, const std::shared_ptr<NCReader> ncr);
         
         template <typename DL> typename 
         std::enable_if<std::is_same<DL,LatLonLayout>::value,void>::type
-        linkHelper();// {std::cout << "LatLonLayout Linker." << std::endl;}
+        linkHelper(const KDTree& tree, const std::shared_ptr<NCReader> ncr);
 };
 }
 #endif

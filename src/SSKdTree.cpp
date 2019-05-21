@@ -9,7 +9,8 @@ KDTree::KDTree(const NCReader* ncr) : pts(ncr->makePoints()), adaptor(PointsKDTr
     index->buildIndex();
 }
 
-std::vector<std::pair<Index,Real>> KDTree::search(const Real clat, const Real clon, const Real radius_km, const Int size_guess) const {
+std::vector<std::pair<Index,Real>> KDTree::search(const Real clat, const Real clon, const Real radius_km, 
+    const Int size_guess) const {
     std::vector<std::pair<Index, Real>> ret_matches;
     ret_matches.reserve(size_guess);
     nf::SearchParams params;

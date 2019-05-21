@@ -74,11 +74,10 @@ void LatLonNCReader::initCoordinates() {
 void LatLonNCReader::fillWorkspaceData(Workspace& wspc,
     const std::vector<typename LatLonLayout::horiz_index_type>& inds,
     const Int t_ind, const Int l_ind) const {
-    /// throws if Workspace size != inds.size()
+    /// @throws if Workspace size != inds.size()
     if (inds.size() != wspc.n) {
         throw std::runtime_error("LatLonNCReader::fillWorkspaceData error: workspace/indices size mismatch.");
     }
-    /// Loop over every variable in workspace, load data from inds at time t_ind
     for (auto& var : wspc.data) {
         netCDF::NcVar ncv(ncfile->getVar(var.first));
         const Int ndim = ncv.getDimCount();
@@ -103,7 +102,7 @@ void LatLonNCReader::fillWorkspaceData(Workspace& wspc,
             
         }
         else {
-            /// throws if getDimCount() result is unexpected.
+            /// @throws if getDimCount() result is unexpected.
             throw std::runtime_error("LatLonNCReader::fillWorkspaceData error: unsupported ndim value.");
         }
     }
@@ -112,11 +111,10 @@ void LatLonNCReader::fillWorkspaceData(Workspace& wspc,
 void UnstructuredNCReader::fillWorkspaceData(Workspace& wspc, 
     const std::vector<typename UnstructuredLayout::horiz_index_type>& inds,
     const Int t_ind, const Int l_ind) const {
-    /// throws if workspace size != inds.size
+    /// @throws if workspace size != inds.size
     if (inds.size() != wspc.n) {
         throw std::runtime_error("UnstructuredNCReader::fillWorkspaceData error: workspace/inds size mismatch.");
     }
-    /// Loop over every variable in workspace, load data from inds at time t_ind
     for (auto& var : wspc.data) {
         netCDF::NcVar ncv(ncfile->getVar(var.first));
         const Int ndim = ncv.getDimCount();
@@ -138,7 +136,7 @@ void UnstructuredNCReader::fillWorkspaceData(Workspace& wspc,
             }
         }
         else {
-            /// throws if getDimCount() result is unexpected.
+            /// @throws if getDimCount() result is unexpected.
             throw std::runtime_error("UnstructuredNCReader::fillWorkspaceData error: unsupported ndim value.");
         }
     }

@@ -5,6 +5,8 @@
 #include "SSIdCriteria.hpp"
 #include "SSUtilities.hpp"
 #include "SSWorkspace.hpp"
+#include "SSNCReader.hpp"
+#include "SSKdTree.hpp"
 #include <iostream>
 
 using namespace StrideSearch;
@@ -59,7 +61,7 @@ std::cout << "Testing SS Sector class." << std::endl;
     usec.workspaces[1].fillData(windVars[1], sample_v);
     std::cout << "--- unst. sector ---" << std::endl;
     std::cout << usec.infoString();
-    usec.linkToData();
+    //usec.linkToData();
     
     Sector<LatLonLayout> llsec(0, 180, dummy_radius, sample_lats, sample_lons, ll_inds, criteria.size(), 0);
     llsec.allocWorkspaces(criteria);
@@ -68,7 +70,7 @@ std::cout << "Testing SS Sector class." << std::endl;
     llsec.workspaces[1].fillData(windVars[1], sample_v);
     std::cout << "--- latlon sector ---" << std::endl;
     std::cout << llsec.infoString();
-    llsec.linkToData();
+    //llsec.linkToData();
     
     std::vector<std::shared_ptr<Event<UnstructuredLayout>>> unst_events = usec.evaluateCriteriaAtTimestep(criteria,
         coding_day, fname, tind);
@@ -85,6 +87,20 @@ std::cout << "Testing SS Sector class." << std::endl;
     for (int i=0; i<ll_events.size(); ++i) {
         std::cout << ll_events[i]->infoString();
     }
+    const std::string data_dir = StrideSearch_TEST_DATA_DIR;
+    const std::string conus_file = data_dir + "/conusx4v1.g";
+    const std::string unif_file = data_dir + "/sresa1b_ncar_ccsm3-example.nc";
+
+    std::shared_ptr<NCReader> conus(new UnstructuredNCReader(conus_file));
+    std::shared_ptr<NCReader> unif(new LatLonNCReader(unif_file));
+    KDTree conusTree(conus.get());
+    KDTree unifTree(unif.get());
+
+    usec.linkToData(conusTree, conus);
+    llsec.linkToData(unifTree, unif);
+    
+    std::cout << usec.infoString();
+    std::cout << llsec.infoString();
     
 std::cout << "tests pass." << std::endl;
 return 0;
