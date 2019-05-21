@@ -14,6 +14,12 @@ void Sector<DataLayout>::allocWorkspaces(const std::vector<std::shared_ptr<IDCri
 }
 
 template <typename DataLayout>
+void Sector<DataLayout>::allocWorkspace(const std::shared_ptr<IDCriterion> locator) {
+    workspaces = std::vector<Workspace>(1);
+    workspaces[0] = Workspace(locator->varnames, indices.size());
+}
+
+template <typename DataLayout>
 std::string Sector<DataLayout>::infoString(const int tab_lev, const bool printWorkspaces) const {
     std::ostringstream ss;
     std::string tabstr("");
@@ -60,6 +66,19 @@ std::vector<std::shared_ptr<Event<DataLayout>>> Sector<DataLayout>::evaluateCrit
     }
     return result;
 }
+
+template <typename DataLayout>
+std::shared_ptr<Event<DataLayout>> Sector<DataLayout>::evaluateLocatorCriterionAtTimestep(
+    std::shared_ptr<IDCriterion> locator, const DateTime& dt, const std::string& fname, const Index time_ind) const {
+    std::shared_ptr<Event<DataLayout>> result;
+    if (locator->evaluate(workspaces[0])) {
+        const Index wspc_ind = locator->wspcIndex;
+        result = std::shared_ptr<Event<DataLayout>>(new Event<DataLayout>(locator->description(), locator->val,
+            lats[wspc_ind], lons[wspc_ind], dt, indices[wspc_ind], time_ind, fname, locator->compareKind, INDEPENDENT));
+    }
+    return result;
+}
+
 
 /// Link Sector To Data implementation for UnstructuredLayout
 template <> template <>

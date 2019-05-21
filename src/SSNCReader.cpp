@@ -1,6 +1,7 @@
 #include "SSNCReader.hpp"
 #include <cmath>
 #include <exception>
+#include <sstream>
 
 namespace StrideSearch {
 
@@ -12,6 +13,22 @@ NCReader::NCReader(const std::string& filename) {
 void NCReader::updateFile(const std::string& filename) {
     src_file = filename;
     ncfile = std::unique_ptr<const netCDF::NcFile>(new netCDF::NcFile(filename, netCDF::NcFile::read));
+}
+
+std::string NCReader::infoString(const Int tab_lev) const {
+    std::ostringstream ss;
+    std::string tabstr("");
+    for (int i=0; i<tab_lev; ++i) {
+        tabstr += "\t";
+    }
+    ss << tabstr << "NCReader record:" << std::endl;
+    ss << tabstr << "\tsrc_file = " << src_file << std::endl;
+    ss << tabstr << "\tlats.size() = " << lats.size() << std::endl;
+    ss << tabstr << "\tlons.size() = " << lons.size() << std::endl;
+    ss << tabstr << "\tavgResKm = " << avgResKm << std::endl;
+    ss << tabstr << "\tnpoints = " << this->nPoints() << std::endl;
+    ss << tabstr << "--------------------------------------" << std::endl;
+    return ss.str();
 }
 
 void NCReader::printLats() const {

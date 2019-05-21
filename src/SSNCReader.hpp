@@ -72,6 +72,9 @@ class NCReader {
         
         /// returns the time values contained in the NcFile
         /**
+            @warning: Throughout Stride Search, time values read from netCDF files are assumed to be defined 
+            in units of days since start; they are therefore floating point (not integral) type.
+            @todo Generalize for different units.
             @throws std::runtime_error if *this cannot locate a time coordinate variable in ncfile.
         */
         RealArray getTime() const;  
@@ -88,6 +91,8 @@ class NCReader {
         void printLons() const;
         
         Real avgResKm;
+        
+        std::string infoString(const Int tab_lev=0) const;
 
     protected:
         NCReader() {}

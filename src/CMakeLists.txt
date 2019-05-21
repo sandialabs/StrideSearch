@@ -1,5 +1,5 @@
 ADD_LIBRARY(strideSearch SSUtilities.cpp  SSDateTime.cpp SSNCReader.cpp SSKdTree.cpp SSWorkspace.cpp
-            SSIdCriteria.cpp SSEvent.cpp SSSector.cpp SSEventSet.cpp SSSectorSet.cpp)
+            SSIdCriteria.cpp SSEvent.cpp SSSector.cpp SSEventSet.cpp SSSectorSet.cpp SSSearchManager.cpp)
 # SSData.cpp) # StrideSearchEvent.cpp
 #            StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterionBase.cpp
 #            StrideSearchMinMaxCriteria.cpp StrideSearchSectorListBase.cpp StrideSearchSectorListLatLon.cpp

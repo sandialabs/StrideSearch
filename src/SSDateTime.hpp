@@ -29,6 +29,11 @@ class DateTime {
         int hour;
         
         /// Basic Constructor.
+        /**
+            @note The default year = 1850 is an arbitrary choice related to the commonly used 1850 climate test cases.
+            @warning Some netCDF data sets have start year = 0, which can cause problems later. 
+            If that is true for your data set, choosing a value > 0 is recommended.
+        */
         DateTime(const int yr = 1850, const int mo = 1, const int dy = 1, const int hr = 0);
         
         /// Constructor using YYYY-MM-DD or YYYY-MM-DD-HH formatted string 

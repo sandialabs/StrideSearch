@@ -83,7 +83,9 @@ class SectorSet {
         */
         void linkToData(const KDTree& tree, const std::shared_ptr<NCReader> ncr);
         
-        std::string infoString(const bool printall=false) const;
+        std::string infoString(const Int tab_lev = 0, const bool printall=false) const;
+        
+        void allocWorkspaces(const std::vector<std::shared_ptr<IDCriterion>>& criteria);
         
     protected:
         /// Southern boundary of search domain, in [-90, 90)

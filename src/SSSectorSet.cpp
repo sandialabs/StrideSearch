@@ -119,25 +119,36 @@ void SectorSet<DataLayout>::linkToData(const KDTree& tree, const std::shared_ptr
 }
 
 template <typename DataLayout>
-std::string SectorSet<DataLayout>::infoString(const bool printall) const {
+void SectorSet<DataLayout>::allocWorkspaces(const std::vector<std::shared_ptr<IDCriterion>>& criteria) {
+    for (Index i=0; i<sectors.size(); ++i) {
+        sectors[i]->allocWorkspaces(criteria);
+    }
+}
+
+template <typename DataLayout>
+std::string SectorSet<DataLayout>::infoString(const Int tab_lev, const bool printall) const {
     std::ostringstream ss;
-    ss << "SectorSet record:" << std::endl;
-    ss << "\t(sb, nb, wb, eb) = (" << southern_boundary << ", " << northern_boundary << ", " 
+    std::string tabstr("");
+    for (int i=0; i<tab_lev; ++i) {
+        tabstr += "\t";
+    }
+    ss << tabstr << "SectorSet record:" << std::endl;
+    ss << tabstr << "\t(sb, nb, wb, eb) = (" << southern_boundary << ", " << northern_boundary << ", " 
        << western_boundary << "," << eastern_boundary << ")" << std::endl;
-    ss << "\tsize = " << sectors.size() << std::endl;
-    ss << "\tnstrips = " << nstrips << std::endl;
-    ss << "\tlat_stride_degrees = " << lat_stride_degrees << std::endl;
-    ss << "\tlon_strides_degrees = (";
+    ss << tabstr << "\tsize = " << sectors.size() << std::endl;
+    ss << tabstr << "\tnstrips = " << nstrips << std::endl;
+    ss << tabstr << "\tlat_stride_degrees = " << lat_stride_degrees << std::endl;
+    ss << tabstr << "\tlon_strides_degrees = (";
     for (Int i=0; i<nstrips; ++i) {
         ss << lon_strides_degrees[i] << (i==nstrips-1 ? ")" : " ");
     }
     ss << std::endl;
-    ss << "\tmin. points per sector = " << minPointsPerSector() << std::endl;
-    ss << "\tmax. points per sector = " << maxPointsPerSector() << std::endl;
+    ss << tabstr << "\tmin. points per sector = " << minPointsPerSector() << std::endl;
+    ss << tabstr << "\tmax. points per sector = " << maxPointsPerSector() << std::endl;
     ss << std::endl;
     if (printall) {
         for (Index i=0; i<sectors.size(); ++i) {
-            ss << sectors[i]->infoString(1);
+            ss << sectors[i]->infoString(tab_lev+1);
         }
     }
     ss << "--------------------------------------" << std::endl;

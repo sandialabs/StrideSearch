@@ -10,7 +10,8 @@ Units
 ------
 - Spatial units are kilometers
 - Angular units are degrees
-- Time units are hours
+- Stride Search time units are hours, and thus integers
+- NetCDF time units are days, and may have fractional values; they are floating point types
 
 DataLayout
 ---------
@@ -23,7 +24,10 @@ To-do
 [ ] Doxygen class design plans & responsibilities@n
 [ ] Vorticity, gradient, etc., computation using gmls@n
 [ ] EventSet needs output capabilities for python, ncl, text, etc.
-[ ] SectoSet needs impl.
+[x] SectorSet needs impl.
 [ ] MPI parallel over files
 [ ] OMP parallel over sectors
-
+[ ] Generalize time for various units
+[ ] SearchManager needs tests
+[ ] Tropical cyclone spatial search example
+[ ] Track utilities

@@ -97,6 +97,8 @@ struct Sector {
     */
     void allocWorkspaces(const std::vector<std::shared_ptr<IDCriterion>>& criteria);
     
+    void allocWorkspace(const std::shared_ptr<IDCriterion> locator);
+    
     /// Returns the number of points contained by this Sector
     inline Int nDataPoints() const {return indices.size();}
     
@@ -126,6 +128,10 @@ struct Sector {
     std::vector<std::shared_ptr<Event<DataLayout>>> evaluateCriteriaAtTimestep(
         std::vector<std::shared_ptr<IDCriterion>>& criteria,
         const DateTime& dt, const std::string& fname, const Index time_ind) const;
+    
+    std::shared_ptr<Event<DataLayout>> evaluateLocatorCriterionAtTimestep(
+        std::shared_ptr<IDCriterion> locator, const DateTime& dt, const std::string& fname,
+        const Index time_ind) const;
     
     private:
         template <typename DL> typename
