@@ -18,14 +18,17 @@ namespace StrideSearch {
 template <typename DataLayout=UnstructuredLayout>
 class EventSet {
     public:
+        typedef std::shared_ptr<Event<DataLayout>> event_ptr_type;
+        typedef std::shared_ptr<const Event<DataLayout>> const_event_ptr_type;
+    
         /// Default constructor.  Creates an empty set.
         EventSet() : events() {}
         
         /// Creates an EventSet from a vector of Event pointers.
-        EventSet(const std::vector<std::shared_ptr<Event<DataLayout>>>& events_) : events(events_) {}
+        EventSet(const std::vector<event_ptr_type>& events_) : events(events_) {}
         
         /// Creates an EventSet by flattening a vector of Event pointer vectors.
-        EventSet(const std::vector<std::vector<std::shared_ptr<Event<DataLayout>>>>& events_);
+        EventSet(const std::vector<std::vector<event_ptr_type>>& events_);
         
         /// Appends one EventSet to another
         void extend(const EventSet<DataLayout>& other);
@@ -55,7 +58,7 @@ class EventSet {
             The output is a std::map whose keys are DateTime instances and whose values are EventLists whose contained
             Events all exist at the DateTime of their key.
         */
-        std::map<DateTime,std::vector<std::shared_ptr<Event<DataLayout>>>> separateByDateTime() const;
+        std::map<DateTime,std::vector<event_ptr_type>> separateByDateTime() const;
         
         /// Consolidates related events under one Event listing.
         /** 
@@ -69,10 +72,12 @@ class EventSet {
             const Real dist_tol);
         
         /// Access a specific Event contained by *this.
-        inline std::shared_ptr<Event<DataLayout>> getEvent(const Index ind) {return events[ind];}
+        inline event_ptr_type getEvent(const Index ind) {return events[ind];}
+        
+        inline const_event_ptr_type getEventConst(const Index ind) const {return events[ind];}
     
     protected:
-        std::vector<std::shared_ptr<Event<DataLayout>>> events;
+        std::vector<event_ptr_type> events;
 };
 
 }

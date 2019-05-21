@@ -18,7 +18,6 @@ std::vector<std::pair<Index,Real>> KDTree::search(const Real clat, const Real cl
     llToXYZ(qx,qy,qz, clat,clon);
     const Real query_pt[3] = {qx,qy,qz};
     const Index nFound = index->radiusSearch(&query_pt[0], searchRadiusInput(radius_km), ret_matches, params);
-    std::cout << "nfound = " << nFound << std::endl;
     return ret_matches;
 }
 

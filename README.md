@@ -4,7 +4,7 @@ Stride Search Conventions
 Indices
 -------
 - 2d indices (i,j): i = latitude index, j = longitude index
-- 2d coordinates are (lat,lon), i.e., (lat[i], lon[j])
+- 2d coordinates are (lat,lon), i.e., (lats[i], lons[j])
 
 Units
 ------
@@ -20,11 +20,10 @@ Fundamental template parameter@n
 
 To-do
 =========
-[x] #ifdef kokkos for real array type@n
-[x] Reorg. repo so cxx is prominent@n
 [ ] Doxygen class design plans & responsibilities@n
-[ ] Vorticity computation using gmls@n
-[x] Intensity traits and locality traits for idcriteria@n
-[x] Consistent template DataLayout throughout@n
-[x] Decide whether to keep NCReader or consolidate its functions into SSData@n
+[ ] Vorticity, gradient, etc., computation using gmls@n
+[ ] EventSet needs output capabilities for python, ncl, text, etc.
+[ ] SectoSet needs impl.
+[ ] MPI parallel over files
+[ ] OMP parallel over sectors
 

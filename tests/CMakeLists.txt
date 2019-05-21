@@ -43,43 +43,6 @@ ADD_EXECUTABLE(ssEventSetUnitTest.exe SSEventSetUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssEventSetUnitTest.exe strideSearch)
 ADD_TEST(NAME ssEventSet COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventSetUnitTest.exe)
 
-
-#ADD_EXECUTABLE(ssWorkspaceDictTest.exe SSWorkspaceDictUnitTest.cpp)
-#TARGET_LINK_LIBRARIES(ssWorkspaceDictTest.exe strideSearch)
-#ADD_TEST(NAME ssWorkspaceDict COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceDictTest.exe)
-
-#ADD_EXECUTABLE(ssSectorListUnitTest.exe SSSectorListUnitTest.cpp)
-#TARGET_LINK_LIBRARIES(ssSectorListUnitTest.exe strideSearch)
-#ADD_TEST(NAME ssSectorList COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorListUnitTest.exe)
-#
-#ADD_EXECUTABLE(ssDataUnitTest.exe SSDataUnitTest.cpp)
-#TARGET_LINK_LIBRARIES(ssDataUnitTest.exe strideSearch)
-#ADD_TEST(NAME ssDataUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssDataUnitTest.exe)
-#
-#ADD_EXECUTABLE(ssDataLatLonUnitTest.exe SSDataLatLonUnitTest.cpp)
-#TARGET_LINK_LIBRARIES(ssDataLatLonUnitTest.exe strideSearch)
-#ADD_TEST(NAME ssDataLatLonUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssDataLatLonUnitTest.exe)
-#
-#ADD_EXECUTABLE(ssGridsTest.exe SSGridTests.cpp)
-#TARGET_LINK_LIBRARIES(ssGridsTest.exe strideSearch)
-#ADD_TEST(NAME ssGridsTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssGridsTest.exe)
-#
-#ADD_EXECUTABLE(ssTimerUnitTest.exe SSTimerUnitTests.cpp)
-#TARGET_LINK_LIBRARIES(ssTimerUnitTest.exe strideSearch)
-#ADD_TEST(NAME ssTimerUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssTimerUnitTest.exe)
-
-#ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)
-#TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)
-#ADD_TEST(NAME SSWorkspace COMMAND ${PROJECT_BINARY_DIR}/bin/ssWorkspaceTest.exe)
-#
-#ADD_EXECUTABLE(ssLLDataTest.exe SSDataLatLonTests.cpp)
-#TARGET_LINK_LIBRARIES(ssLLDataTest.exe strideSearch)
-#ADD_TEST(NAME SSLLData COMMAND ${PROJECT_BINARY_DIR}/bin/ssLLDataTest.exe)
-#
-#ADD_EXECUTABLE(ssLLSectorTest.exe SSLLSectorListTests.cpp)
-#TARGET_LINK_LIBRARIES(ssLLSectorTest.exe strideSearch)
-#ADD_TEST(NAME SSLLSectors COMMAND ${PROJECT_BINARY_DIR}/bin/ssLLSectorTest.exe)
-
-#ADD_EXECUTABLE(ssSectorListTest.exe SSSectorListTests.cpp)
-#TARGET_LINK_LIBRARIES(ssSectorListTest.exe strideSearch)
-#ADD_TEST(NAME SSSectorList COMMAND ${PROJECT_BINARY_DIR}/ssSectorListTest.exe)
+ADD_EXECUTABLE(ssSectorSetUnitTest.exe SSSectorSetUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssSectorSetUnitTest.exe strideSearch)
+ADD_TEST(NAME ssSectorSet COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorSetUnitTest.exe)

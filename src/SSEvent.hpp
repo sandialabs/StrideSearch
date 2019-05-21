@@ -14,6 +14,7 @@
 namespace StrideSearch {
 
 // fwd declarations
+template <typename DL> class SectorSet;
 template <typename DL> class EventSet;
 class IDCriterion; 
 
@@ -37,6 +38,7 @@ class Event {
     typedef typename DataLayout::spatial_index_type spatial_index_type;
     
     template <typename DL> friend class EventSet;
+    template <typename DL> friend class SectorSet;
     
     
     /// Constructor for an Event in a horizontal data field
@@ -174,6 +176,9 @@ class Event {
     
     /// Return the descriptions of *this and its related Events.
     std::set<std::string> getDescriptions() const;
+    
+    /// Returns the (lat,lon) coordinates of this event in an array.
+    inline std::array<Real,2> getCoords() const {return std::array<Real,2>({lat,lon});}
     
     protected:
         /// Event description.  Defined by IDCriterion::description() typically.
