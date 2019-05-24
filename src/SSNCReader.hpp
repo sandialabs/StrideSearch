@@ -15,10 +15,7 @@
 
 namespace StrideSearch {
 
-// fwd declaration
-template <typename RT> class SSData;
-
-/// Defines a common data structure for all data sets to use with kd tree utilities and SSData.
+/// Defines a common data structure for all data sets to use with KDTree interface to nanoflann TPL.
 /**
     Each pt (x[i], y[i], z[i]) has magnitude = EARTH_RADIUS_KM
 */
@@ -35,7 +32,7 @@ struct Points {
 /// Abstract base class for netcdf interface.  Subclassed for each type of data layout.
 /**    
     __Properties:__ @n
-        An NCReader has unique ownership of an NcFile.  
+        An NCReader has unique ownership of a `netCDF::NcFile`.  
     
     __Responsibilities:__ @n
         The format of netcdf data is not standardized. 
@@ -63,11 +60,47 @@ struct Points {
 class NCReader {
     public:
         virtual ~NCReader()  {}
+        
+        /// Returns a collection of x, y, z points for use with KDTree and nanoflann
         virtual Points makePoints() const = 0;
+        
+        /// Returns the number of horizontal grid points
         virtual Int nPoints() const = 0;
+        
+        /// Return the latitude of the point with index ptInd (returned from KDTree::search)
         virtual Real getLat(const Index ptInd) const = 0;
+        
+        /// Return the longitude of the point with index ptInd (returned from KDTree::search)
         virtual Real getLon(const Index ptInd) const = 0;
+        
+        /// Fill workspace data with values read from file
+        /**
+            The Workspace defines the variables it needs to complete its computations.
+            The data indices corresponding to the Workspace's Sector are the second argument.
+            
+            Procedure:@n
+            For each every variable name in Workspace.data, load datum for each horizontal index.
+            
+            @param wspc : Workspace with memory already allocated.
+            @param inds : Horizontal grid point indices
+            @param t_ind : time index in current source data file.
+            @param l_ind : level index (if applicable)
+        */
         virtual void fillWorkspaceData(Workspace& wspc, const std::vector<typename UnstructuredLayout::horiz_index_type>& inds, const Int t_ind, const Int l_ind=-1) const {}
+        
+        /// Fill workspace data with values read from file
+        /**
+            The Workspace defines the variables it needs to complete its computations.
+            The data indices corresponding to the Workspace's Sector are the second argument.
+            
+            Procedure:@n
+            For each every variable name in Workspace.data, load datum for each horizontal index.
+            
+            @param wspc : Workspace with memory already allocated.
+            @param inds : Horizontal grid point indices
+            @param t_ind : time index in current source data file.
+            @param l_ind : level index (if applicable)
+        */
         virtual void fillWorkspaceData(Workspace& wspc, const std::vector<typename LatLonLayout::horiz_index_type>& inds, const Int t_ind, const Int l_ind=-1) const {}
         
         /// returns the time values contained in the NcFile
@@ -90,15 +123,17 @@ class NCReader {
         /// Print coordinates to console
         void printLons() const;
         
+        /// Average horizontal resolution (in kilometers) of the data set.
         Real avgResKm;
         
+        /// Returns a string with the NCReader's basic info.s
         std::string infoString(const Int tab_lev=0) const;
 
     protected:
         NCReader() {}
         NCReader(const std::string& filename); 
         
-        /// Ptr to netCDF::NcFile
+        /// Ptr to `netCDF::NcFile`
         std::unique_ptr<const netCDF::NcFile> ncfile; 
         
         /// full filename (including path)
@@ -126,7 +161,7 @@ class NCReader {
 ///    Instantiation of NCReader for lat-lon structured grids
 /**
     This class's makePoints method packs the 2d data into a 1d array of points;
-    the inverse of this packing is computed as part of the getLat and getLon methods.
+    the inverse of this packing is computed as part of the LatLonNCReader::getLat and LatLonNCReader::getLon methods.
 */
 class LatLonNCReader : public NCReader {
     public: 
@@ -196,7 +231,7 @@ class LatLonNCReader : public NCReader {
         
         
     protected:
-        /// number of latitude points in data set (frequently, n_lat = n_lon/2 + 1)
+        /// number of latitude points in data set (frequently, `n_lat = n_lon/2 + 1`)
         Int n_lat;
         /// number of longitude points in data set
         Int n_lon;
@@ -277,7 +312,7 @@ class UnstructuredNCReader : public NCReader {
     
         /// Estimate the data set's average horizontal resolution, in kilometers
         /**
-            @return @f$\Delta \lambda = \sqrt{\frac{4\pi R^2}{n_{nodes}}@f$
+            @return @f$\Delta \lambda = \sqrt{\frac{4\pi R^2}{n_{nodes}}}@f$
         */
         Real resolutionEstimate() const override {
             return std::sqrt(4*PI*EARTH_RADIUS_KM*EARTH_RADIUS_KM/n_nodes);}

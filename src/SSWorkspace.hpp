@@ -9,12 +9,15 @@
 #include <iostream>
 
 namespace StrideSearch {
-/// Space for each sector to have its own local memory for the variables associated with a set of IDCriterion subclasses.
-/** A Workspace is a set of dictionaries whose keys are variable names and whose values arrays of data read from 
+/// Local memory (to each Sector) for the variables associated with a set of IDCriterion subclasses.
+/** A Workspace is a set of dictionary whose keys are variable names and whose values arrays of data read from 
     a netCDF file.  
     
+    
     Each IDCriterion has its own workspace, but the workspace may contain multiple data variables if the IDCriterion
-    requires.
+    requires.    
+    For example, the MaxMagnitudeCriterion may require data from separate components of a vector (e.g., wind).@n
+    Each of these components may have its own variable name in the netCDF data (e.g., 'U850', 'V850', etc.)
     
 */
 struct Workspace {
@@ -33,7 +36,10 @@ struct Workspace {
     /// Constructor with memory allocation
     Workspace(const std::vector<std::string>& vars, const Index nn);
     
-    /// Fill workspace with data from a predefined array.  Used for testing.
+    /// Fill workspace with data from a predefined array.  
+    /**
+     @note Used for testing.
+    */
     void fillData(const std::string& var, const RealArray& vals);
     
     /// Return a constant (read only) reference to the data stored in one workspace variable.

@@ -13,7 +13,9 @@ namespace StrideSearch {
 typedef std::map<int, int> calendar_map_type;
 typedef std::map<int, std::string> month_string_map_type;
 
+/// Map whose keys are month integers and values are the days in that month.
 static calendar_map_type monthDayMap;
+/// Map whos keys are month integers values are 3-letter capitalized string abbreviations of the month.
 static month_string_map_type monthStringMap;
 
 /// Bare-bones date-time structure and methods.
