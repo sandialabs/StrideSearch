@@ -8,7 +8,7 @@ template <typename DataLayout>
 void SearchManager<DataLayout>::setInputFiles(const std::vector<std::string>& fnames) {
     filenames = fnames;
     reader = readerHelper<DataLayout>();
-    tree = std::unique_ptr<KDTree>(new KDTree(reader.get()));;
+    tree = std::unique_ptr<KDTree>(new KDTree(reader.get()));
     main_sector_set.linkToData(*tree, reader);
     file_time = reader->getTime();
 }
@@ -49,11 +49,16 @@ std::string SearchManager<DataLayout>::infoString() const {
     ss << reader->infoString(1);
     ss << "\tstartdate = " << start_date.DTGString() << std::endl;
     ss << "\tcriteria = ";
-    for (Int i=0; i<criteria.size(); ++i) {
-        ss << criteria[i]->description() << " ";
+    if (criteria.size() == 0) {
+        ss << "null";
+    }
+    else {
+        for (Int i=0; i<criteria.size(); ++i) {
+            ss << criteria[i]->description() << " ";
+        }
     }
     ss << std::endl;
-    ss << "\tlocator_crit = " << locator_crit->description() << std::endl;
+    ss << "\tlocator_crit = " << (locator_crit ? locator_crit->description() : "null") << std::endl;
     ss << "--------------------------------------" << std::endl;
     return ss.str();
 }
@@ -131,6 +136,19 @@ void SearchManager<DataLayout>::processCollocations(EventSet<DataLayout>& events
     /// Step 3: require events to be collocated (if applicable)
     for (Int i=0; i<colloc_criteria.size(); ++i) {
         events.requireCollocation(colloc_criteria[i].first, colloc_criteria[i].second, sector_radius);
+    }
+}
+
+template <typename DataLayout>
+void SearchManager<DataLayout>::runSpatialSearch(std::ostream& os) {
+#ifdef HAVE_MPI
+    throw std::runtime_error("SearchManager::runSpatialSearch error: MPI not implemented.");
+#else
+    const Int start_findex = 0;
+    const Int end_findex = filenames.size();
+#endif
+    for (Int i=start_findex; i<=end_findex; ++i) {
+        runfile(i);        
     }
 }
 

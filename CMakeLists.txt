@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.1)
-
 #
 #   Project details
 #
@@ -10,6 +9,8 @@ SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 SET( StrideSearch_VERSION_MAJOR 2)
 SET( StrideSearch_VERSION_MINOR 0)
+
+cmake_policy(SET CMP0074 NEW)
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
 
@@ -56,6 +57,22 @@ if (Kokkos_ROOT)
     endif()
 endif()
 
+#
+#   Optional parallel packages
+#
+set(MPI_DIR $ENV{MPI_ROOT})
+FIND_PACKAGE(MPI HINTS $ENV{MPI_ROOT})
+If (MPI_FOUND)
+    Option(HAVE_MPI ON)
+else ()
+    Option(HAVE_MPI OFF)
+endif()
+FIND_PACKAGE(OpenMP)
+if (OpenMP_CXX_FOUND)
+    Option(HAVE_OPENMP ON)
+else()
+    Option(HAVE_OPENMP OFF)
+endif()
 
 #
 #   Optional packages for documentation

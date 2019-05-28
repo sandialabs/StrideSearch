@@ -65,7 +65,9 @@ RealArray NCReader::getTime() const {
     }
     const Int nsteps = time_var.getDim(0).getSize();
     Real time_vals[nsteps];
-    time_var.getVar(time_vals);
+    if (nsteps>0) {
+        time_var.getVar(time_vals);
+    }
     return RealArray(&time_vals[0], &time_vals[0]+nsteps);
 }
 

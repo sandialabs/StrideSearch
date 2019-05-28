@@ -46,3 +46,7 @@ ADD_TEST(NAME ssEventSet COMMAND ${PROJECT_BINARY_DIR}/bin/ssEventSetUnitTest.ex
 ADD_EXECUTABLE(ssSectorSetUnitTest.exe SSSectorSetUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssSectorSetUnitTest.exe strideSearch)
 ADD_TEST(NAME ssSectorSet COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorSetUnitTest.exe)
+
+ADD_EXECUTABLE(ssSearchManagerUnitTest.exe SSSearchManagerUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssSearchManagerUnitTest.exe strideSearch)
+ADD_TEST(NAME ssSearchManager COMMAND ${PROJECT_BINARY_DIR}/bin/ssSearchManagerUnitTest.exe)

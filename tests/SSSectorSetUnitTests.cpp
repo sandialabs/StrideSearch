@@ -1,11 +1,13 @@
 #include "SSDataLayoutTraits.hpp"
 #include "SSSectorSet.hpp"
+#include "SSUtilities.hpp"
 #include <iostream>
 #include <exception>
 
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]) {
+print_copyright();
 std::cout << "Testing SectorSet class." << std::endl;
 
     const Real fake_data_res_degrees = 10.0;

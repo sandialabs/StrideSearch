@@ -24,6 +24,7 @@ std::cout << "testing netCDF readers." << std::endl;
     if (conusncr.nPoints() != 9907) {
         throw std::runtime_error("conus grid file read error: incorrect nNodes");
     }
+    RealArray utime = conusncr.getTime();
     
     std::cout << "Looking for structured grid data in file: " << unif_file << std::endl;
     LatLonNCReader llncr(unif_file);

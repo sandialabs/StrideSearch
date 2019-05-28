@@ -15,6 +15,13 @@
 #include <string>
 #include <vector>
 #include <array>
+#ifdef HAVE_MPI
+#include <mpi.h>
+#include "SSMpiManager.hpp"
+#endif
+#ifdef HAVE_OPENMP
+#include <omp.h>
+#endif
 
 namespace StrideSearch {
 
@@ -34,8 +41,8 @@ class SearchManager {
             @param sreg : search region, rectangle in lat-lon space (south, north, west, east)
             @param srad : sector radius
         */
-        SearchManager(const region_type& sreg, const Real srad) : region(sreg), sector_radius(srad),
-            main_sector_set(sreg[0], sreg[1], sreg[2], sreg[3], srad), 
+        SearchManager(const region_type& sreg, const Real srad) : 
+            region(sreg), sector_radius(srad), main_sector_set(sreg[0], sreg[1], sreg[2], sreg[3], srad), 
             main_event_set(), reader(), tree(), filenames(), start_date(), criteria(), locator_crit() {} 
         
         /// Set data set start date.
@@ -45,15 +52,26 @@ class SearchManager {
         */
         void setStartDate(const DateTime& sd) {start_date = sd;}
         
+        /// Define the input files that contain the netCDF data.
+        /**
+        */
         void setInputFiles(const std::vector<std::string>& fnames); // build ncreader, tree, link to data
         
+        /// Set the definition of a "storm" as a set of identification criteria.
+        /**
+        */
         void defineCriteria(const std::vector<crit_ptr>& cs, const std::vector<colloc_pair>& cpairs = 
             std::vector<colloc_pair>());
         
+        /// Output SearchManager state info to string (e.g., for console output)
         std::string infoString() const;
         
-        void runfile(const Int f_ind);
-        void runTimestepSearch(const Int t_ind);
+        /// run spatial search on complete data set
+        /**
+            @param os : output stream (most of the time, `std::ofstream`; can also be `std::cout`.)
+            @note If using MPI, use only one output stream per rank.
+        */
+        void runSpatialSearch(std::ostream& os);
     
     protected:
         region_type region;
@@ -72,12 +90,17 @@ class SearchManager {
         std::vector<colloc_pair> colloc_criteria;
         
         EventSet<DataLayout> investigatePossibles(const Index time_ind, 
-            const std::vector<std::shared_ptr<Event<DataLayout>>>& poss);
+            const std::vector<event_ptr>& poss);
             
-        std::vector<std::shared_ptr<Event<DataLayout>>> runLocatorAtTimestep(const Index time_ind);
+        std::vector<event_ptr> runLocatorAtTimestep(const Index time_ind);
         
         void processCollocations(EventSet<DataLayout>& events) const;
         
+        /// Run spatial search on a file.
+        void runfile(const Int f_ind);
+        
+        /// Run spatial search on one timestep
+        void runTimestepSearch(const Int t_ind);
         
     private:
         template <typename DL> typename
