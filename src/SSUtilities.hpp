@@ -41,5 +41,43 @@ std::ostream& operator << (std::ostream& os, const std::array<Index,1>& arr);
 std::ostream& operator << (std::ostream& os, const std::array<Index,2>& arr);
 std::ostream& operator << (std::ostream& os, const std::array<Index,3>& arr);
 
+/// Class to show output progress in console
+/**
+*/
+class ProgressBar {
+    /// Name of process being tracked
+    std::string name;
+    /// Write frequency in percentage points
+    Real write_freq;
+    /// Number of total iterations
+    Int n_iter;
+    /// Number of current iteration
+    Int iter;
+    /// Next console update in percentage points
+    Real next;
+    /// Output stream
+    std::ostream& os;
+    
+    public:
+        ProgressBar(const std::string& nm, const Int nIter, const Real wf=1.0, std::ostream& ss = std::cout) :
+            name(nm), n_iter(nIter), write_freq(wf), os(ss), iter(0), next(wf) {
+            os << name << ": 0";
+            os.flush();
+        }
+        
+        void update() {
+            ++iter;
+            const Real p = 100*iter/n_iter;
+            if (p>=next || iter==n_iter) {
+                os << " " << p;
+                if (iter == n_iter) 
+                    os << std::endl;
+                os.flush();
+                next += write_freq;
+            }
+        }
+        
+};
+
 }
 #endif

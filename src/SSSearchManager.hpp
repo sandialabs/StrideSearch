@@ -12,6 +12,7 @@
 #include "SSSectorSet.hpp"
 #include "SSEvent.hpp"
 #include "SSEventSet.hpp"
+#include "SSCollocCriteria.hpp"
 #include <string>
 #include <vector>
 #include <array>
@@ -33,8 +34,8 @@ class SearchManager {
     public:
         typedef std::shared_ptr<NCReader> reader_ptr;
         typedef std::shared_ptr<IDCriterion> crit_ptr;
-        typedef std::pair<crit_ptr, crit_ptr> colloc_pair;
         typedef std::shared_ptr<Event<DataLayout>> event_ptr;
+        typedef std::shared_ptr<CollocationCriterion> colloc_ptr;
     
         /// Constructor.  Main user entry point to Stride Search.
         /** 
@@ -60,8 +61,8 @@ class SearchManager {
         /// Set the definition of a "storm" as a set of identification criteria.
         /**
         */
-        void defineCriteria(const std::vector<crit_ptr>& cs, const std::vector<colloc_pair>& cpairs = 
-            std::vector<colloc_pair>());
+        void defineCriteria(const std::vector<crit_ptr>& cs, const std::vector<colloc_ptr>& cpairs = 
+            std::vector<colloc_ptr>());
         
         /// Output SearchManager state info to string (e.g., for console output)
         std::string infoString() const;
@@ -71,7 +72,7 @@ class SearchManager {
             @param os : output stream (most of the time, `std::ofstream`; can also be `std::cout`.)
             @note If using MPI, use only one output stream per rank.
         */
-        void runSpatialSearch(std::ostream& os);
+        void runSpatialSearch(std::ostream& os, const Int stop_timestep=-1);
     
     protected:
         region_type region;
@@ -87,7 +88,7 @@ class SearchManager {
         DateTime start_date;
         std::vector<std::shared_ptr<IDCriterion>> criteria;
         std::shared_ptr<IDCriterion> locator_crit;
-        std::vector<colloc_pair> colloc_criteria;
+        std::vector<colloc_ptr> colloc_criteria;
         
         EventSet<DataLayout> investigatePossibles(const Index time_ind, 
             const std::vector<event_ptr>& poss);
@@ -97,7 +98,7 @@ class SearchManager {
         void processCollocations(EventSet<DataLayout>& events) const;
         
         /// Run spatial search on a file.
-        void runfile(const Int f_ind);
+        void runfile(const Int f_ind, const Int stop_timestep=-1);
         
         /// Run spatial search on one timestep
         void runTimestepSearch(const Int t_ind);

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <exception>
 
 namespace StrideSearch {
 
@@ -53,31 +54,31 @@ DateTime::DateTime(const Real daysSinceStart, const DateTime& start) {
 }
 
 void DateTime::buildMonthDayMap() {
-    monthDayMap.emplace(1, 31);
-    monthDayMap.emplace(2, 28);
-    monthDayMap.emplace(3, 31);
-    monthDayMap.emplace(4, 30);
-    monthDayMap.emplace(5, 31);
-    monthDayMap.emplace(6, 30);
+    monthDayMap.emplace(0, 31);
+    monthDayMap.emplace(1, 28);
+    monthDayMap.emplace(2, 31);
+    monthDayMap.emplace(3, 30);
+    monthDayMap.emplace(4, 31);
+    monthDayMap.emplace(5, 30);
+    monthDayMap.emplace(6, 31);
     monthDayMap.emplace(7, 31);
-    monthDayMap.emplace(8, 31);
-    monthDayMap.emplace(9, 30);
-    monthDayMap.emplace(10, 31);
-    monthDayMap.emplace(11, 30);
-    monthDayMap.emplace(12, 31);
+    monthDayMap.emplace(8, 30);
+    monthDayMap.emplace(9, 31);
+    monthDayMap.emplace(10, 30);
+    monthDayMap.emplace(11, 31);
     
-    monthStringMap.emplace(1, "JAN");
-    monthStringMap.emplace(2, "FEB");
-    monthStringMap.emplace(3, "MAR");
-    monthStringMap.emplace(4, "APR");
-    monthStringMap.emplace(5, "MAY");
-    monthStringMap.emplace(6, "JUN");
-    monthStringMap.emplace(7, "JUL");
-    monthStringMap.emplace(8, "AUG");
-    monthStringMap.emplace(9, "SEP");
-    monthStringMap.emplace(10, "OCT");
-    monthStringMap.emplace(11, "NOV");
-    monthStringMap.emplace(12, "DEC");
+    monthStringMap.emplace(0, "JAN");
+    monthStringMap.emplace(1, "FEB");
+    monthStringMap.emplace(2, "MAR");
+    monthStringMap.emplace(3, "APR");
+    monthStringMap.emplace(4, "MAY");
+    monthStringMap.emplace(5, "JUN");
+    monthStringMap.emplace(6, "JUL");
+    monthStringMap.emplace(7, "AUG");
+    monthStringMap.emplace(8, "SEP");
+    monthStringMap.emplace(9, "OCT");
+    monthStringMap.emplace(10, "NOV");
+    monthStringMap.emplace(11, "DEC");
 }
 
 std::string DateTime::DTGString(std::string time_zone_string) const {
@@ -103,7 +104,14 @@ std::string DateTime::monthString() const {
 }
 
 std::string DateTime::monthString(const int mInt) const {
-    return monthStringMap.at(mInt);
+    std::string result;
+    try {
+    result = monthStringMap.at(mInt);
+    }
+    catch (std::exception& e) {
+        std::cout << "DateTime::monthString error: caught std::exception " << e.what() << " mInt = " << mInt;
+    }
+    return result;
 }
 
 

@@ -46,10 +46,13 @@ std::cout << "testing EventSet class." << std::endl;
         event_ptr vort2(new event_type("max(vort)", vort_1, lat2, lon2, dt2, unst_ind2, time_ind+1, fname,
             IntensityComparison::GREATER_THAN, SpatialDependence::INDEPENDENT));
         
-        std::vector<event_ptr> evec = {psl1, psl2, vort1, vort2};
+        std::vector<event_ptr> evec1 = {psl1, psl2};
+        std::vector<event_ptr> evec2 = {vort1, vort2};
         
-        const Int start_size = evec.size();
-        EventSet<Layout> eset(evec);
+        const Int start_size = 4;
+        EventSet<Layout> eset(evec1);
+        EventSet<Layout> eset2(evec2);
+        eset.extend(eset2);
         std::cout << eset.infoString(0, true);
         
         std::cout << "*** removing duplicates ***" << std::endl;

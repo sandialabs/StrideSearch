@@ -1,4 +1,5 @@
 #include "SSSearchManager.hpp"
+#include "SSUtilities.hpp"
 #include <sstream>
 #include <iomanip>
 
@@ -25,7 +26,7 @@ std::shared_ptr<NCReader> SearchManager<LatLonLayout>::readerHelper<LatLonLayout
 
 template <typename DataLayout>
 void SearchManager<DataLayout>::defineCriteria(const std::vector<std::shared_ptr<IDCriterion>>& cs, 
-    const std::vector<colloc_pair>& cpairs) {
+    const std::vector<colloc_ptr>& cpairs) {
     criteria = cs;
     colloc_criteria = cpairs;
     if (cs[0]->locationKind == DEPENDENT) {
@@ -45,7 +46,7 @@ std::string SearchManager<DataLayout>::infoString() const {
        << region[2] << "," <<region[3] << ")" << std::endl;
     ss << "\tsector radius = " << sector_radius << std::endl;
     ss << main_sector_set.infoString(1);
-    ss << main_event_set.infoString(1);
+    ss << main_event_set.infoString(1,true);
     ss << reader->infoString(1);
     ss << "\tstartdate = " << start_date.DTGString() << std::endl;
     ss << "\tcriteria = ";
@@ -54,7 +55,7 @@ std::string SearchManager<DataLayout>::infoString() const {
     }
     else {
         for (Int i=0; i<criteria.size(); ++i) {
-            ss << criteria[i]->description() << " ";
+            ss << criteria[i]->description() << (i == criteria.size()-1 ? "" : ", ");
         }
     }
     ss << std::endl;
@@ -64,11 +65,14 @@ std::string SearchManager<DataLayout>::infoString() const {
 }
 
 template <typename DataLayout>
-void SearchManager<DataLayout>::runfile(const Int f_ind) {
+void SearchManager<DataLayout>::runfile(const Int f_ind, const Int stop_timestep) {
+    std::cout << "... file " << f_ind + 1 << " of " << filenames.size() << std::endl;
     reader->updateFile(filenames[f_ind]);
     file_time = reader->getTime();
-    for (Int k=0; k<file_time.size(); ++k) {
+    ProgressBar file_prog("\t% done", (stop_timestep==-1 ? file_time.size() : stop_timestep), 10);
+    for (Int k=0; k<(stop_timestep != -1 ? stop_timestep : file_time.size()); ++k) {
         runTimestepSearch(k);
+        file_prog.update();
     }
 }
 
@@ -135,20 +139,20 @@ template <typename DataLayout>
 void SearchManager<DataLayout>::processCollocations(EventSet<DataLayout>& events) const {
     /// Step 3: require events to be collocated (if applicable)
     for (Int i=0; i<colloc_criteria.size(); ++i) {
-        events.requireCollocation(colloc_criteria[i].first, colloc_criteria[i].second, sector_radius);
+        events.requireCollocation(colloc_criteria[i]->crit1, colloc_criteria[i]->crit2,
+             colloc_criteria[i]->distance_threshold);
     }
 }
 
 template <typename DataLayout>
-void SearchManager<DataLayout>::runSpatialSearch(std::ostream& os) {
+void SearchManager<DataLayout>::runSpatialSearch(std::ostream& os, const Int stop_timestep) {
 #ifdef HAVE_MPI
-    throw std::runtime_error("SearchManager::runSpatialSearch error: MPI not implemented.");
-#else
+    std::cout << "SearchManager::runSpatialSearch warning: MPI not implemented.");
+#endif
     const Int start_findex = 0;
     const Int end_findex = filenames.size();
-#endif
-    for (Int i=start_findex; i<=end_findex; ++i) {
-        runfile(i);        
+    for (Int i=start_findex; i<end_findex; ++i) {
+        runfile(i, stop_timestep);        
     }
 }
 

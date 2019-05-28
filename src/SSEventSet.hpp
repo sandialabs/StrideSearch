@@ -63,11 +63,14 @@ class EventSet {
         /// Consolidates related events under one Event listing.
         /** 
             Related Events are events that have different types, but are near each other in space at the same time.
-            Assumption: EventSet::removeDuplicates has already finished.
+            @note Assumption: EventSet::removeDuplicates has already finished.
         */
         void consolidateRelated(const Real dist_tol);
         
         /// Removes Events that are either not related to or not near another event of the required type
+        /**
+            @note: Assumption: EventSet::removeDuplicates and EventSet::consolidateRelated have already finished.
+        */
         void requireCollocation(const std::shared_ptr<IDCriterion> crit1, const std::shared_ptr<IDCriterion> crit2,
             const Real dist_tol);
         

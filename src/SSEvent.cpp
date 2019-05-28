@@ -124,7 +124,7 @@ bool Event<DataLayout>::isCollocated(const IDCriterion* crit1, const IDCriterion
     bool result = false;
     const std::set<std::string> descs = getDescriptions();
     if (descs.count(crit1->description()) == 1 && descs.count(crit2->description()) == 1) {
-        /// Both criteria have corresponding Events
+        // If both criteria have corresponding Events, get their locations
         Real lat1, lon1;
         Real lat2, lon2;
         if (desc == crit1->description()) {
@@ -159,6 +159,7 @@ bool Event<DataLayout>::isCollocated(const IDCriterion* crit1, const IDCriterion
                 }
             }
         }
+        // compare their distance against the threshold
         result = sphereDistance(lat1,lon1, lat2,lon2) <= distThreshold;
     }
     return result;

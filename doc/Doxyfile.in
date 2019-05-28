@@ -22,6 +22,8 @@ REFERENCED_BY_RELATION = YES
 REFERENCES_RELATION = YES
 CALL_GRAPH = YES
 AUTOLINK_SUPPORT = YES
+SEARCHENGINE = YES
+SERVER_BASED_SEARCH = NO
 
 # If member grouping is used in the documentation and the DISTRIBUTE_GROUP_DOC
 # tag is set to YES, then doxygen will reuse the documentation of the first

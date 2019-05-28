@@ -48,7 +48,7 @@ typedef nf::KDTreeSingleIndexAdaptor<nf::L2_Simple_Adaptor<Real,adaptor_type>,ad
 
 /// KDTree for spatial search
 /**
-    @note: this class is an implementation detail, not typically used by client applications
+    @note this class is an implementation detail, not typically used by client applications
 
     A tree is built only once per search (since the whole dataset is assumed to use the same grid).
     It is used to link SSData to each SSSector by defining each SSSector's local data indices.

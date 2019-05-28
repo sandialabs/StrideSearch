@@ -24,10 +24,12 @@ To-do
 [ ] Doxygen class design plans & responsibilities@n
 [ ] Vorticity, gradient, etc., computation using gmls@n
 [ ] EventSet needs output capabilities for python, ncl, text, etc.@n
-[x] SectorSet needs impl. @n
 [ ] MPI parallel over files @n
-[ ] OMP parallel over sectors @n
+[ ] Thread parallel over sectors @n
 [ ] Generalize time for various units @n
-[ ] SearchManager needs tests @n
-[ ] Tropical cyclone spatial search example @n
+[x] SearchManager needs tests @n
+[x] Tropical cyclone spatial search example @n
 [ ] Track utilities @n
+[x] Progress bar@n
+[ ] Generate a small test data set for TC spatial search@n
+[ ] DateTime doxygen: 0-indexing.

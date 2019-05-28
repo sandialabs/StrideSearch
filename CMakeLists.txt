@@ -55,6 +55,8 @@ if (Kokkos_ROOT)
 	        RESULT_VARIABLE WRAPS_NVCC OUTPUT_VARIABLE WRAPS_NVCC_OUT)
         string (FIND ${WRAPS_NVCC_OUT} "nvcc" pos)
     endif()
+else()
+    MESSAGE(STATUS "Kokkos not found.  Stride Search will run without thread-parallelism.")
 endif()
 
 #
@@ -66,12 +68,6 @@ If (MPI_FOUND)
     Option(HAVE_MPI ON)
 else ()
     Option(HAVE_MPI OFF)
-endif()
-FIND_PACKAGE(OpenMP)
-if (OpenMP_CXX_FOUND)
-    Option(HAVE_OPENMP ON)
-else()
-    Option(HAVE_OPENMP OFF)
 endif()
 
 #

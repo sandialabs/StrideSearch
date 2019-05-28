@@ -98,31 +98,41 @@ void LatLonNCReader::fillWorkspaceData(Workspace& wspc,
         throw std::runtime_error("LatLonNCReader::fillWorkspaceData error: workspace/indices size mismatch.");
     }
     for (auto& var : wspc.data) {
-        netCDF::NcVar ncv(ncfile->getVar(var.first));
-        const Int ndim = ncv.getDimCount();
-        if (ndim == 3) { // (time, lat, lon)
-            auto getind = LatLonLayout::get_index_2d();
-            getind[0] = t_ind;
+        if (var.first == "lat" || var.first == "latitude") {
             for (Int i=0; i<inds.size(); ++i) {
-                getind[1] = inds[i][0];
-                getind[2] = inds[i][1];
-                ncv.getVar(getind, &var.second[i]);
+                var.second[i] = lats[inds[i][0]];
             }
-        }
-        else if (ndim == 4) { // (time, level, lat, lon)
-            auto getind = LatLonLayout::get_index_3d();
-            getind[0] = t_ind;
-            getind[1] = l_ind;
-            for (Int i=0; i<inds.size(); ++i) {
-                getind[2] = inds[i][0];
-                getind[3] = inds[i][0];
-                ncv.getVar(getind, &var.second[i]);
-            }
-            
         }
         else {
-            /// @throws if getDimCount() result is unexpected.
-            throw std::runtime_error("LatLonNCReader::fillWorkspaceData error: unsupported ndim value.");
+            netCDF::NcVar ncv(ncfile->getVar(var.first));
+            const Int ndim = ncv.getDimCount();
+            if (ndim == 3) { // (time, lat, lon)
+                auto getind = LatLonLayout::get_index_2d();
+                getind[0] = t_ind;
+                for (Int i=0; i<inds.size(); ++i) {
+                    getind[1] = inds[i][0];
+                    getind[2] = inds[i][1];
+                    ncv.getVar(getind, &var.second[i]);
+                }
+            }
+            else if (ndim == 4) { // (time, level, lat, lon)
+                auto getind = LatLonLayout::get_index_3d();
+                getind[0] = t_ind;
+                getind[1] = l_ind;
+                for (Int i=0; i<inds.size(); ++i) {
+                    getind[2] = inds[i][0];
+                    getind[3] = inds[i][1];
+                    ncv.getVar(getind, &var.second[i]);
+                }
+            
+            }
+            else {
+                /// @throws if getDimCount() result is unexpected.
+                std::ostringstream ss;
+                ss << "LatLonNCReader::fillWorkspaceData error: unsupported ndim value: " 
+                   << var.first << " dimCount = " << ndim;
+                throw std::runtime_error(ss.str());
+            }
         }
     }
 }
@@ -135,28 +145,35 @@ void UnstructuredNCReader::fillWorkspaceData(Workspace& wspc,
         throw std::runtime_error("UnstructuredNCReader::fillWorkspaceData error: workspace/inds size mismatch.");
     }
     for (auto& var : wspc.data) {
-        netCDF::NcVar ncv(ncfile->getVar(var.first));
-        const Int ndim = ncv.getDimCount();
-        if (ndim == 2) { // (time, node)
-            auto getind = UnstructuredLayout::get_index_2d();
-            getind[0] = t_ind;
-            for (Int i=0; i<inds.size(); ++i) {
-                getind[1] = inds[i][0];
-                ncv.getVar(getind, &var.second[i]);
+    	if (var.first == "lat" || var.first == "latitude") {
+    	    for (Int i=0; i<inds.size(); ++i) {
+                var.second[i] = lats[inds[i][0]];
+    	    }
+    	}
+    	else {
+            netCDF::NcVar ncv(ncfile->getVar(var.first));
+            const Int ndim = ncv.getDimCount();
+            if (ndim == 2) { // (time, node)
+                auto getind = UnstructuredLayout::get_index_2d();
+                getind[0] = t_ind;
+                for (Int i=0; i<inds.size(); ++i) {
+                    getind[1] = inds[i][0];
+                    ncv.getVar(getind, &var.second[i]);
+                }
             }
-        }
-        else if (ndim == 3) { // (time, level, node)
-            auto getind = UnstructuredLayout::get_index_2d();
-            getind[0] = t_ind;
-            getind[1] = l_ind;
-            for (Int i=0; i<inds.size(); ++i) {
-                getind[2] = inds[i][0];
-                ncv.getVar(getind, &var.second[i]);
+            else if (ndim == 3) { // (time, level, node)
+                auto getind = UnstructuredLayout::get_index_2d();
+                getind[0] = t_ind;
+                getind[1] = l_ind;
+                for (Int i=0; i<inds.size(); ++i) {
+                    getind[2] = inds[i][0];
+                    ncv.getVar(getind, &var.second[i]);
+                }
             }
-        }
-        else {
-            /// @throws if getDimCount() result is unexpected.
-            throw std::runtime_error("UnstructuredNCReader::fillWorkspaceData error: unsupported ndim value.");
+            else {
+                /// @throws if getDimCount() result is unexpected.
+                throw std::runtime_error("UnstructuredNCReader::fillWorkspaceData error: unsupported ndim value.");
+            }
         }
     }
 }
