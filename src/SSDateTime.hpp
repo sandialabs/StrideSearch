@@ -5,7 +5,6 @@
 #include "SSDefs.hpp"
 #include <string>
 #include <map>
-#include <chrono>
 #include <ctime>
 
 namespace StrideSearch {
@@ -64,6 +63,7 @@ class DateTime {
         /// Return the month string corresponding to *this.
         std::string monthString() const;
         
+        std::tm dt2tm() const;
         
     protected:
         /// Builds the maps used to convert from integers to strings, and from months to days-in-month.

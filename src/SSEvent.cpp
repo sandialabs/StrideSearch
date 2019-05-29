@@ -36,6 +36,15 @@ std::string Event<DataLayout>::infoString(int tab_level) const {
 }
 
 template <typename DataLayout>
+std::string Event<DataLayout>::mgrCSVString() const {
+    //datetime,desc,value,lat,lon,loc_ind,loc_ind_3d,time_ind,filename
+    std::ostringstream ss;
+    ss << datetime.DTGString() << ',' << desc << ',' << value << ',' << lat << ',' << lon << ','
+       << loc_ind << ',' << loc_ind_3d << ',' << time_ind << ',' << filename << '\n';
+    return ss.str();
+}
+
+template <typename DataLayout>
 void Event<DataLayout>::addRelated(std::shared_ptr<Event> relEv) {
     if (datetime == relEv->datetime && time_ind == relEv->time_ind) {
         relatedEvents.push_back(relEv);

@@ -72,7 +72,9 @@ class SearchManager {
             @param os : output stream (most of the time, `std::ofstream`; can also be `std::cout`.)
             @note If using MPI, use only one output stream per rank.
         */
-        void runSpatialSearch(std::ostream& os, const Int stop_timestep=-1);
+        void runSpatialSearch(const Int stop_timestep=-1);
+    
+        void outputCSV(std::ostream& os) const;
     
     protected:
         region_type region;

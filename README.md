@@ -32,4 +32,4 @@ To-do
 [ ] Track utilities @n
 [x] Progress bar@n
 [ ] Generate a small test data set for TC spatial search@n
-[ ] DateTime doxygen: 0-indexing.
+[ ] Replace DateTime with ctime equivalents

@@ -2,6 +2,7 @@
 #include "SSUtilities.hpp"
 #include <sstream>
 #include <iomanip>
+#include <limits>
 
 namespace StrideSearch {
 
@@ -145,7 +146,7 @@ void SearchManager<DataLayout>::processCollocations(EventSet<DataLayout>& events
 }
 
 template <typename DataLayout>
-void SearchManager<DataLayout>::runSpatialSearch(std::ostream& os, const Int stop_timestep) {
+void SearchManager<DataLayout>::runSpatialSearch(const Int stop_timestep) {
 #ifdef HAVE_MPI
     std::cout << "SearchManager::runSpatialSearch warning: MPI not implemented.");
 #endif
@@ -153,6 +154,39 @@ void SearchManager<DataLayout>::runSpatialSearch(std::ostream& os, const Int sto
     const Int end_findex = filenames.size();
     for (Int i=start_findex; i<end_findex; ++i) {
         runfile(i, stop_timestep);        
+    }
+}
+
+template <typename DataLayout>
+void SearchManager<DataLayout>::outputCSV(std::ostream& os) const {
+    const Real fillvalue = std::numeric_limits<Real>::max();
+    const std::map<DateTime,std::vector<event_ptr>> dtmap = main_event_set.separateByDateTime();
+    // write header
+    os << "datetime,lat,lon,loc_ind,loc_ind3d,time_ind,filename";
+    for (Int i=0; i<criteria.size(); ++i) {
+        os << "," << criteria[i]->description();
+    }
+    os << '\n';
+    for (auto& elem : dtmap) {
+        os << elem.first.DTGString() << ',';
+        for (Int i=0; i<elem.second.size(); ++i) {
+            os << elem.second[i]->lat << ',' << elem.second[i]->lon << ',';
+            os << elem.second[i]->loc_ind << ',' << elem.second[i]->loc_ind_3d << ',';
+            os << elem.second[i]->time_ind << ',' << elem.second[i]->filename;
+            std::map<std::string, Real> event_values;
+            for (Int j=0; j<criteria.size(); ++j) {
+                event_values.emplace(criteria[j]->description(), fillvalue);
+            }
+            event_values[elem.second[i]->description()] = elem.second[i]->value;
+            for (Int j=0; j<elem.second[i]->relatedEvents.size(); ++j) {
+                event_values[elem.second[i]->relatedEvents[j]->description()] = 
+                    elem.second[i]->relatedEvents[j]->value;
+            }
+            for (Int j=0; j<criteria.size(); ++j) {
+                os << ',' << event_values[criteria[j]->description()];
+            }
+            os << '\n';
+        }
     }
 }
 

@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
     const std::string test_file2 = data_dir + "/f1850c5_ne240_rel06.cam.h2.0002-09-26-00000.nc";
     const std::vector<std::string> fnames = {test_file1, test_file2};
     
-    const DateTime start(1850, 1, 1, 0);
+    const DateTime start(1851, 10, 1, 0);
         
     const Real vort_threshold = 8.5e-4;
     crit_ptr vor850(new MaxSignedCriterion("VOR850", "lat", vort_threshold));
@@ -58,9 +58,10 @@ int main(int argc, char* argv[]) {
     search.setInputFiles(fnames);
     search.defineCriteria(criteria, colloc_criteria);
     
-    search.runSpatialSearch(std::cout, 4);
+    search.runSpatialSearch(4);
     
-    std::cout << search.infoString();    
+    //std::cout << search.infoString();    
+    search.outputCSV(std::cout);
     
 return 0;
 }

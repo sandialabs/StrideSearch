@@ -1,11 +1,25 @@
 #include "SSDateTime.hpp"
+#include "SSConsts.hpp"
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <exception>
 
+
 namespace StrideSearch {
+
+std::tm DateTime::dt2tm() const {
+    std::tm result = {0};
+    result.tm_sec = 0;
+    result.tm_min = 0;
+    result.tm_hour = hour;
+    result.tm_mday = day;
+    result.tm_mon = month-1;
+    result.tm_year = year - 1900;
+    result.tm_isdst = -1;
+    return result;
+}
 
 DateTime::DateTime(const int yr, const int mo, const int dy, const int hr) : year(yr), month(mo), day(dy), hour(hr) {
     if (monthDayMap.empty()) 
@@ -32,53 +46,44 @@ DateTime::DateTime(const std::tm& ctm) : year(ctm.tm_year), month(ctm.tm_mon), d
 };
 
 DateTime::DateTime(const Real daysSinceStart, const DateTime& start) {
-    std::tm t = {0};
-    t.tm_sec = 0;
-    t.tm_min = 0;
-    t.tm_year = start.year;
-    t.tm_mon = start.month;
-    t.tm_isdst = -1;
-    t.tm_mday = int(daysSinceStart) + start.day;
-    t.tm_hour = int((daysSinceStart - int(daysSinceStart)) * 24.0) + start.hour;
-    std::time_t num_time = std::mktime(&t);
-    
-    const std::tm *normal_date = std::localtime(&num_time);
-    
-    year = normal_date->tm_year;
-    month = normal_date->tm_mon;
-    day = normal_date->tm_mday;
-    hour = normal_date->tm_hour;
-    
     if (monthDayMap.empty()) 
         buildMonthDayMap();
+    
+    std::tm stm = start.dt2tm();    
+    std::time_t date_seconds = std::mktime(&stm) + SIDEREAL_DAY_SEC * daysSinceStart;
+    std::tm date = *std::localtime(&date_seconds);
+    year = date.tm_year+1900;
+    month = date.tm_mon+1;
+    day = date.tm_mday;
+    hour = date.tm_hour;
 }
 
 void DateTime::buildMonthDayMap() {
-    monthDayMap.emplace(0, 31);
-    monthDayMap.emplace(1, 28);
-    monthDayMap.emplace(2, 31);
-    monthDayMap.emplace(3, 30);
-    monthDayMap.emplace(4, 31);
-    monthDayMap.emplace(5, 30);
-    monthDayMap.emplace(6, 31);
+    monthDayMap.emplace(1, 31);
+    monthDayMap.emplace(2, 28);
+    monthDayMap.emplace(3, 31);
+    monthDayMap.emplace(4, 30);
+    monthDayMap.emplace(5, 31);
+    monthDayMap.emplace(6, 30);
     monthDayMap.emplace(7, 31);
-    monthDayMap.emplace(8, 30);
-    monthDayMap.emplace(9, 31);
-    monthDayMap.emplace(10, 30);
-    monthDayMap.emplace(11, 31);
+    monthDayMap.emplace(8, 31);
+    monthDayMap.emplace(9, 30);
+    monthDayMap.emplace(10, 31);
+    monthDayMap.emplace(11, 30);
+    monthDayMap.emplace(12, 31);
     
-    monthStringMap.emplace(0, "JAN");
-    monthStringMap.emplace(1, "FEB");
-    monthStringMap.emplace(2, "MAR");
-    monthStringMap.emplace(3, "APR");
-    monthStringMap.emplace(4, "MAY");
-    monthStringMap.emplace(5, "JUN");
-    monthStringMap.emplace(6, "JUL");
-    monthStringMap.emplace(7, "AUG");
-    monthStringMap.emplace(8, "SEP");
-    monthStringMap.emplace(9, "OCT");
-    monthStringMap.emplace(10, "NOV");
-    monthStringMap.emplace(11, "DEC");
+    monthStringMap.emplace(1, "JAN");
+    monthStringMap.emplace(2, "FEB");
+    monthStringMap.emplace(3, "MAR");
+    monthStringMap.emplace(4, "APR");
+    monthStringMap.emplace(5, "MAY");
+    monthStringMap.emplace(6, "JUN");
+    monthStringMap.emplace(7, "JUL");
+    monthStringMap.emplace(8, "AUG");
+    monthStringMap.emplace(9, "SEP");
+    monthStringMap.emplace(10, "OCT");
+    monthStringMap.emplace(11, "NOV");
+    monthStringMap.emplace(12, "DEC");
 }
 
 std::string DateTime::DTGString(std::string time_zone_string) const {
@@ -94,7 +99,13 @@ std::string DateTime::DTGString(std::string time_zone_string) const {
     ss2 << std::setw(2) << std::setfill('0') << hour << "00";
     std::string hrStr(ss2.str());
     
-    std::string moStr = monthString(month);
+    std::string moStr;
+    try {
+     moStr = monthString(month);
+    }
+    catch (std::exception& e) {
+    std::cout << "DateTime::monthString error: caught std::exception " << e.what() << " month = " << month << '\n';
+    }
 
     return dyStr + hrStr + time_zone_string + moStr + yrStr;
 }
@@ -105,12 +116,7 @@ std::string DateTime::monthString() const {
 
 std::string DateTime::monthString(const int mInt) const {
     std::string result;
-    try {
     result = monthStringMap.at(mInt);
-    }
-    catch (std::exception& e) {
-        std::cout << "DateTime::monthString error: caught std::exception " << e.what() << " mInt = " << mInt;
-    }
     return result;
 }
 

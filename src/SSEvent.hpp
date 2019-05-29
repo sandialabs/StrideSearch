@@ -39,6 +39,7 @@ class Event {
     
     template <typename DL> friend class EventSet;
     template <typename DL> friend class SectorSet;
+    template <typename DL> friend class SearchManager;
     
     
     /// Constructor for an Event in a horizontal data field
@@ -207,6 +208,8 @@ class Event {
         std::vector<std::shared_ptr<Event>> relatedEvents;
         /// True if *this is in another Event's relatedEvents vector.
         bool isReferenced;
+        
+        std::string mgrCSVString() const;
 };
 
 template <typename DataLayout>
