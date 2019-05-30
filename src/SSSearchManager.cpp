@@ -162,17 +162,19 @@ void SearchManager<DataLayout>::outputCSV(std::ostream& os) const {
     const Real fillvalue = std::numeric_limits<Real>::max();
     const std::map<DateTime,std::vector<event_ptr>> dtmap = main_event_set.separateByDateTime();
     // write header
-    os << "datetime,lat,lon,loc_ind,loc_ind3d,time_ind,filename";
+    os << "datetime;lat;lon;loc_ind;loc_ind3d;time_ind;filename";
     for (Int i=0; i<criteria.size(); ++i) {
-        os << "," << criteria[i]->description();
+        os << ";" << criteria[i]->description();
     }
     os << '\n';
+    const char dl = ';';
     for (auto& elem : dtmap) {
-        os << elem.first.DTGString() << ',';
+        const std::string dtg = elem.first.DTGString();
         for (Int i=0; i<elem.second.size(); ++i) {
-            os << elem.second[i]->lat << ',' << elem.second[i]->lon << ',';
-            os << elem.second[i]->loc_ind << ',' << elem.second[i]->loc_ind_3d << ',';
-            os << elem.second[i]->time_ind << ',' << elem.second[i]->filename;
+            os << elem.first.DTGString() << dl;
+            os << elem.second[i]->lat << dl << elem.second[i]->lon << dl;
+            os << elem.second[i]->loc_ind << dl << elem.second[i]->loc_ind_3d << dl;
+            os << elem.second[i]->time_ind << dl << elem.second[i]->filename;
             std::map<std::string, Real> event_values;
             for (Int j=0; j<criteria.size(); ++j) {
                 event_values.emplace(criteria[j]->description(), fillvalue);
@@ -183,7 +185,7 @@ void SearchManager<DataLayout>::outputCSV(std::ostream& os) const {
                     elem.second[i]->relatedEvents[j]->value;
             }
             for (Int j=0; j<criteria.size(); ++j) {
-                os << ',' << event_values[criteria[j]->description()];
+                os << dl << event_values[criteria[j]->description()];
             }
             os << '\n';
         }

@@ -65,6 +65,8 @@ class DateTime {
         
         std::tm dt2tm() const;
         
+        std::string easyReadStr() const;
+        
     protected:
         /// Builds the maps used to convert from integers to strings, and from months to days-in-month.
         void buildMonthDayMap();

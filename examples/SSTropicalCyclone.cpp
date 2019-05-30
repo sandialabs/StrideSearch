@@ -60,8 +60,9 @@ int main(int argc, char* argv[]) {
     
     search.runSpatialSearch(4);
     
-    //std::cout << search.infoString();    
-    search.outputCSV(std::cout);
+    std::ofstream csvfile("testOutput.txt");
+    search.outputCSV(csvfile);
+    csvfile.close();
     
 return 0;
 }

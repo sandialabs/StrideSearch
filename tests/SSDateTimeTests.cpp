@@ -41,18 +41,25 @@ int main (int argc, char* argv[]) {
     const DateTime startDate(2000, 1, 1, 0);
     DateTime relativeDate(300.25, startDate);
     std::cout << "300.25 days after Jan-1-2000 is " << relativeDate.DTGString() << std::endl;
-//     if (relativeDate != DateTime(2000,10,27,6)) {
-//         throw std::logic_error("bad relative date computation.");
-//     }
-    
     
     const DateTime startDate2(2017,12, 15, 0);
     const std::vector<Real> day_incs = {15, 16, 17, 17.25, 365, 365.5};
     for (int i=0; i<day_incs.size(); ++i) {
         const DateTime relDate(day_incs[i], startDate2);
-        std::cout << day_incs[i] << " days after midnight, Dec-15-2017, is " << relDate.DTGString() << '\n';
+        std::cout << day_incs[i] << " days after midnight, Dec-15-2017, is " << relDate.easyReadStr() << '\n';
     }
     
+    const DateTime simStart(1851,10,1,0);
+    const std::vector<Real> tvals = {330, 330.25, 330.5, 330.75, 331};
+    for (int i=0; i<tvals.size(); ++i) {
+        const DateTime relDate(tvals[i], simStart);
+        std::cout << tvals[i] << " days after " << simStart.easyReadStr() << ", is " << relDate.easyReadStr() << '\n';
+        if (i==0) {
+            if (relDate != DateTime(1852,8,27,0)) {
+                throw std::logic_error("bad relative date computation.");
+            }
+        }
+    }
     
 std::cout << "tests pass." << std::endl;
 return 0;

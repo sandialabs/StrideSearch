@@ -21,6 +21,15 @@ std::tm DateTime::dt2tm() const {
     return result;
 }
 
+std::string DateTime::easyReadStr() const {
+    std::ostringstream ss;
+    std::string mstr = monthString();
+    ss << mstr[0] << char(std::tolower(mstr[1])) << char(std::tolower(mstr[2])) << '-';
+    ss << day << '-' << std::setw(4) << std::setfill('0') << year << ',';
+    ss << std::setw(2) << std::setfill('0') << hour << ":00";
+    return ss.str();
+}
+
 DateTime::DateTime(const int yr, const int mo, const int dy, const int hr) : year(yr), month(mo), day(dy), hour(hr) {
     if (monthDayMap.empty()) 
         buildMonthDayMap();
@@ -48,11 +57,15 @@ DateTime::DateTime(const std::tm& ctm) : year(ctm.tm_year), month(ctm.tm_mon), d
 DateTime::DateTime(const Real daysSinceStart, const DateTime& start) {
     if (monthDayMap.empty()) 
         buildMonthDayMap();
-    
-    std::tm stm = start.dt2tm();    
+    int year_conv = 0;
+    if (start.year < 1900) {
+        year_conv = start.year - 1900;
+    }
+    const DateTime sd(start.year - year_conv, start.month, start.day, start.hour);
+    std::tm stm = sd.dt2tm();    
     std::time_t date_seconds = std::mktime(&stm) + SIDEREAL_DAY_SEC * daysSinceStart;
     std::tm date = *std::localtime(&date_seconds);
-    year = date.tm_year+1900;
+    year = date.tm_year+1900 + year_conv;
     month = date.tm_mon+1;
     day = date.tm_mday;
     hour = date.tm_hour;
