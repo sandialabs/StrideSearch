@@ -12,7 +12,10 @@ namespace StrideSearch {
     static constexpr Real RAD2DEG = 180.0 / PI;
     /// Degrees to radians conversion factor
     static constexpr Real DEG2RAD = PI / 180.0;
-
+    /// Hours to days conversion factor
+    static constexpr Real HOURS2DAYS = 1.0/24.0;
+    /// Minutes to days conversion factor
+    static constexpr Real MINUTES2DAYS = 1.0/24.0/60.0;
     /// Gravitational acceleration
     static constexpr Real G = 9.80616;
 

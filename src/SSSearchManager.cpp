@@ -7,13 +7,29 @@
 namespace StrideSearch {
 
 template <typename DataLayout>
-void SearchManager<DataLayout>::setInputFiles(const std::vector<std::string>& fnames) {
+void SearchManager<DataLayout>::setInputFiles(const std::vector<std::string>& fnames, const SearchParams& params) {
     filenames = fnames;
+    reader = readerHelper<DataLayout>();
+    tree = std::unique_ptr<KDTree>(new KDTree(reader.get()));
+    main_sector_set.linkToData(*tree, reader);
+    file_time = reader->getTime(params.time_units);
+}
+
+template <typename DataLayout>
+void SearchManager<DataLayout>::setInputFiles(const MPIManager& mpi, const std::vector<std::string>& allfiles) {
+    const Int rank = mpi.getRank();
+    const Int wsize = mpi.workSize(rank);
+    const Index start = mpi.startInd(rank);
+    filenames = std::vector<std::string>(wsize);
+    for (Int i=start; i<start + wsize; ++i) {
+        filenames[i] = allfiles[i];
+    }
     reader = readerHelper<DataLayout>();
     tree = std::unique_ptr<KDTree>(new KDTree(reader.get()));
     main_sector_set.linkToData(*tree, reader);
     file_time = reader->getTime();
 }
+
 
 template <> template <>
 std::shared_ptr<NCReader> SearchManager<UnstructuredLayout>::readerHelper<UnstructuredLayout>() const {
@@ -70,10 +86,22 @@ void SearchManager<DataLayout>::runfile(const Int f_ind, const Int stop_timestep
     std::cout << "... file " << f_ind + 1 << " of " << filenames.size() << std::endl;
     reader->updateFile(filenames[f_ind]);
     file_time = reader->getTime();
-    ProgressBar file_prog("\t% done", (stop_timestep==-1 ? file_time.size() : stop_timestep), 10);
+    ProgressBar file_prog("\t% done", (stop_timestep==-1 ? file_time.size() : stop_timestep), 1);
     for (Int k=0; k<(stop_timestep != -1 ? stop_timestep : file_time.size()); ++k) {
         runTimestepSearch(k);
         file_prog.update();
+    }
+}
+
+template <typename DataLayout>
+void SearchManager<DataLayout>::runfile(const Int f_ind, const SearchParams& params, const Int stop_timestep) {
+    std::cout << "... file " << f_ind +1 << " of " << filenames.size() << '\n';
+    reader->updateFile(filenames[f_ind]);
+    file_time = reader->getTime(params.time_units);
+    ProgressBar prog("\t% done", (stop_timestep == -1 ? file_time.size() : stop_timestep), 1);
+    for (Int k=0; k<(stop_timestep != -1 ? stop_timestep : file_time.size()); ++k) {
+        runTimestepSearch(k);
+        prog.update();
     }
 }
 
@@ -85,6 +113,13 @@ void SearchManager<DataLayout>::runTimestepSearch(const Index t_ind) {
     main_event_set.extend(found_results);
 }
 
+template <typename DataLayout>
+void SearchManager<DataLayout>::printTime() const {
+    std::cout << "file_time = (";
+    for (Int i=0; i<file_time.size(); ++i) {
+        std::cout << file_time[i] << (i<file_time.size()-1 ? " " : ")\n");
+    }
+}
 
 template <typename DataLayout> 
 std::vector<std::shared_ptr<Event<DataLayout>>> 
@@ -147,13 +182,19 @@ void SearchManager<DataLayout>::processCollocations(EventSet<DataLayout>& events
 
 template <typename DataLayout>
 void SearchManager<DataLayout>::runSpatialSearch(const Int stop_timestep) {
-#ifdef HAVE_MPI
-    std::cout << "SearchManager::runSpatialSearch warning: MPI not implemented.";
-#endif
     const Int start_findex = 0;
     const Int end_findex = filenames.size();
     for (Int i=start_findex; i<end_findex; ++i) {
         runfile(i, stop_timestep);        
+    }
+}
+
+template <typename DataLayout>
+void SearchManager<DataLayout>::runSpatialSearch(const SearchParams& params, const Int stop_timestep) {
+    const Int start_findex = 0;
+    const Int end_findex = filenames.size();
+    for (Int i=start_findex; i<end_findex; ++i) {
+        runfile(i, params, stop_timestep);
     }
 }
 
@@ -169,7 +210,6 @@ void SearchManager<DataLayout>::outputCSV(std::ostream& os) const {
     os << '\n';
     const char dl = ';';
     for (auto& elem : dtmap) {
-        const std::string dtg = elem.first.DTGString();
         for (Int i=0; i<elem.second.size(); ++i) {
             os << elem.first.isoFullStr() << dl;
             os << elem.second[i]->lat << dl << elem.second[i]->lon << dl;

@@ -10,10 +10,11 @@ int main(int argc, char* argv[]) {
 std::cout << "testing MPIManager class.\n";
 
     const Int nfiles = 51;
+    const Int ns = 201;
     
     MPIManager serial_mgr(nfiles);
     
-    MPIManager desktop_mgr(nfiles, 0, 4);
+    MPIManager desktop_mgr(ns, 0, 4, MPIManager::DISTRIBUTE_TIMESTEPS);
     
     MPIManager big_mgr(nfiles, 0, 24);
     

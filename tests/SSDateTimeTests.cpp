@@ -1,5 +1,6 @@
 #include "StrideSearchConfig.h"
 #include "SSDefs.hpp"
+#include "SSConsts.hpp"
 #include "SSUtilities.hpp"
 #include "SSDateTime.hpp"
 
@@ -60,6 +61,19 @@ int main (int argc, char* argv[]) {
                 throw std::logic_error("bad relative date computation.");
             }
         }
+    }
+    
+    const DateTime eraStart(1979,1,1,0);
+    const std::vector<Real> times = {920424, 920430, 920436, 920442, 920448, 920454, 920460, 920466};
+    for (int i=0; i<times.size(); ++i){
+        const DateTime relDate(times[i], eraStart, DateTime::DTUnits::MINUTES);
+        std::cout << times[i] << " minutes after " << eraStart.easyReadStr() << ", is " << relDate.easyReadStr() << '\n';
+    }
+    
+    const std::vector<Real> dayvals = {639.183, 639.187, 639.192, 639.196, 639.2};
+    for (int i=0; i<dayvals.size(); ++i) {
+        const DateTime relDate(dayvals[i], eraStart);
+        std::cout << dayvals[i] << " days after " << eraStart.easyReadStr() << ", is " << relDate.easyReadStr() << '\n';
     }
     
 std::cout << "tests pass." << std::endl;

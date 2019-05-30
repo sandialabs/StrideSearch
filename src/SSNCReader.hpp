@@ -7,6 +7,7 @@
 #include "SSConsts.hpp"
 #include "SSUtilities.hpp"
 #include "SSWorkspace.hpp"
+#include "SSDateTime.hpp"
 #include <netcdf>
 #include <memory>
 #include <map>
@@ -110,7 +111,7 @@ class NCReader {
             @todo Generalize for different units.
             @throws std::runtime_error if *this cannot locate a time coordinate variable in ncfile.
         */
-        RealArray getTime() const;  
+        RealArray getTime(const DateTime::DTUnits& dtu=DateTime::DTUnits::DAYS) const;  
         
         /// Updates reader to use a new source file in the same data set (the same horizontal grid is assumed).
         void updateFile(const std::string& filename);

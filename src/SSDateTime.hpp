@@ -28,6 +28,10 @@ class DateTime {
         int day;
         /// Hour
         int hour;
+        /// Minute
+        int minute;
+        
+        enum DTUnits {MINUTES, HOURS, DAYS};
         
         /// Basic Constructor.
         /**
@@ -35,7 +39,10 @@ class DateTime {
             @warning Some netCDF data sets have start year = 0, which can cause problems later. 
             If that is true for your data set, choosing a value > 0 is recommended.
         */
-        DateTime(const int yr = 1850, const int mo = 1, const int dy = 1, const int hr = 0);
+        DateTime(const int yr = 1850, const int mo = 1, const int dy = 1, const int hr = 0, const int mn = 0) : 
+            year(yr), month(mo), day(dy), hour(hr), minute(mn) {
+            if (monthDayMap.empty()) buildMonthDayMap();
+        }
         
         /// Constructor using YYYY-MM-DD or YYYY-MM-DD-HH formatted string 
         DateTime(const std::string ymd_string);
@@ -53,7 +60,7 @@ class DateTime {
             @param daysSinceStart time (in days) since Day 0 of a simulation.  May have fractional values.
             @param start Day 0.
         */
-        DateTime(const Real daysSinceStart, const DateTime& start);
+        DateTime(const Real timeSinceStart, const DateTime& start, const DTUnits& units=DAYS);
     
         /// Return a string formatted YYYYMMDDHH00.
         std::string intString() const;

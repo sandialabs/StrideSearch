@@ -25,9 +25,10 @@ To-do
 [ ] Vorticity, gradient, etc., computation using gmls@n
 [ ] EventSet needs output capabilities for python, ncl, text, etc.@n
 [ ] MPI parallel over files @n
+[ ] MPI rank-guard std::cout, etc., in SearchManager@n
 [ ] Thread parallel over sectors @n
 [ ] Generalize time for various units @n
 [ ] Track utilities @n
 [ ] Generate a small test data set for TC spatial search@n
-[ ] Replace DateTime with ctime equivalents
-[ ] Update main doxygen start page to cpp version
+[ ] Replace DateTime with ctime equivalents@n
+[ ] Update main doxygen start page to cpp version@n

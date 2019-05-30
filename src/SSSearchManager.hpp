@@ -16,15 +16,17 @@
 #include <string>
 #include <vector>
 #include <array>
+#include "SSMPIManager.hpp"
+#include "SSSearchParams.hpp"
 #ifdef HAVE_MPI
 #include <mpi.h>
-#include "SSMPIManager.hpp"
 #endif
 
 namespace StrideSearch {
 
 /// Rectangle in lat-lon space (south, north, west, east)
 typedef std::array<Real,4> region_type;
+
 
 /// Spatial search driver.
 /**
@@ -56,8 +58,15 @@ class SearchManager {
         
         /// Define the input files that contain the netCDF data.
         /**
+            @note This function will run setup a serial search.
         */
-        void setInputFiles(const std::vector<std::string>& fnames); // build ncreader, tree, link to data
+        void setInputFiles(const std::vector<std::string>& fnames, const SearchParams& params = SearchParams()); 
+        
+        /// Define the input files that contain the netCDF data for this rank
+        /**
+            @note This function will set up a parallel search, dividing files between MPI ranks.
+        */
+        void setInputFiles(const MPIManager& mpi, const std::vector<std::string>& allfiles);
         
         /// Set the definition of a "storm" as a set of identification criteria.
         /**
@@ -75,6 +84,10 @@ class SearchManager {
                 Values > 0 are used for testing.
         */
         void runSpatialSearch(const Int stop_timestep=-1);
+        
+        void runSpatialSearch(const SearchParams& params, const Int stop_timestep=-1);
+        
+        void runSpatialSearch(const MPIManager& mpi, const Int stop_timestep=-1);
     
         /// Outputs a delimited file in order of ascending DateTime.
         /**
@@ -86,6 +99,8 @@ class SearchManager {
                 @endcode
         */
         void outputCSV(std::ostream& os) const;
+        
+        void printTime() const;
     
     protected:
         region_type region;
@@ -113,9 +128,11 @@ class SearchManager {
         /// Run spatial search on a file.
         void runfile(const Int f_ind, const Int stop_timestep=-1);
         
+        void runfile(const Int f_ind, const SearchParams& params, const Int stop_timestep=-1);
+        
         /// Run spatial search on one timestep
         void runTimestepSearch(const Int t_ind);
-        
+                
     private:
         template <typename DL> typename
         std::enable_if<std::is_same<DL,UnstructuredLayout>::value, reader_ptr>::type

@@ -12,7 +12,7 @@ namespace StrideSearch {
 std::tm DateTime::dt2tm() const {
     std::tm result = {0};
     result.tm_sec = 0;
-    result.tm_min = 0;
+    result.tm_min = minute;
     result.tm_hour = hour;
     result.tm_mday = day;
     result.tm_mon = month-1;
@@ -26,7 +26,7 @@ std::string DateTime::easyReadStr() const {
     std::string mstr = monthString();
     ss << mstr[0] << char(std::tolower(mstr[1])) << char(std::tolower(mstr[2])) << '-';
     ss << day << '-' << std::setw(4) << std::setfill('0') << year << ',';
-    ss << std::setw(2) << std::setfill('0') << hour << ":00";
+    ss << std::setw(2) << std::setfill('0') << hour << ":" << std::setw(2) << std::setfill('0') <<  minute;
     return ss.str();
 }
 
@@ -46,7 +46,7 @@ std::string DateTime::isoFullStr() const {
 
 std::string DateTime::isoTimeStr() const {
     std::ostringstream ss;
-    ss << std::setw(2) << std::setfill('0') << hour << ":00:00";
+    ss << std::setw(2) << std::setfill('0') << hour << ':' << std::setw(2) << std::setfill('0') << minute;
     return ss.str();
 }
 
@@ -55,13 +55,8 @@ std::string DateTime::isoDatetimeStr() const {
     ss << std::setw(4) << std::setfill('0') << year;
     ss << std::setw(2) << std::setfill('0') << month;
     ss << std::setw(2) << std::setfill('0') << day;
-    ss << 'T' << std::setw(2) << std::setfill('0') << hour << "0000";
+    ss << 'T' << std::setw(2) << std::setfill('0') << hour << std::setw(2) << std::setfill('0') << minute << "00";
     return ss.str();
-}
-
-DateTime::DateTime(const int yr, const int mo, const int dy, const int hr) : year(yr), month(mo), day(dy), hour(hr) {
-    if (monthDayMap.empty()) 
-        buildMonthDayMap();
 }
 
 DateTime::DateTime(const std::string ymd_string) {
@@ -78,26 +73,29 @@ DateTime::DateTime(const std::string ymd_string) {
         buildMonthDayMap();
 }
 
-DateTime::DateTime(const std::tm& ctm) : year(ctm.tm_year), month(ctm.tm_mon), day(ctm.tm_mday), hour(ctm.tm_hour) {
+DateTime::DateTime(const std::tm& ctm) : year(ctm.tm_year), month(ctm.tm_mon), day(ctm.tm_mday), hour(ctm.tm_hour),
+    minute(ctm.tm_min) {
     if (monthDayMap.empty()) 
         buildMonthDayMap();
 };
 
-DateTime::DateTime(const Real daysSinceStart, const DateTime& start) {
+DateTime::DateTime(const Real timeSinceStart, const DateTime& start, const DTUnits& units) {
     if (monthDayMap.empty()) 
         buildMonthDayMap();
     int year_conv = 0;
     if (start.year < 1900) {
         year_conv = start.year - 1900;
     }
-    const DateTime sd(start.year - year_conv, start.month, start.day, start.hour);
-    std::tm stm = sd.dt2tm();    
-    std::time_t date_seconds = std::mktime(&stm) + SIDEREAL_DAY_SEC * daysSinceStart;
+    const DateTime sd(start.year - year_conv, start.month, start.day, start.hour, start.minute);
+    std::tm stm = sd.dt2tm();
+    const Real conv_fac = (units == DAYS ? 1.0 : (units == MINUTES ? MINUTES2DAYS : HOURS2DAYS));
+    std::time_t date_seconds = std::mktime(&stm) + SIDEREAL_DAY_SEC * timeSinceStart * conv_fac;
     std::tm date = *std::localtime(&date_seconds);
     year = date.tm_year+1900 + year_conv;
     month = date.tm_mon+1;
     day = date.tm_mday;
     hour = date.tm_hour;
+    minute = date.tm_min;
 }
 
 void DateTime::buildMonthDayMap() {
@@ -178,6 +176,10 @@ bool operator < (const DateTime& left, const DateTime& right) {
             else if (left.day == right.day) {
                 if (left.hour < right.hour)
                     result = true;
+                else if (left.hour == right.hour) {
+                    if (left.minute < right.minute)
+                        result = true;
+                }
             }
         }
     }
@@ -193,7 +195,8 @@ std::string DateTime::intString() const{
     ss << std::setw(4) << std::setfill('0') << year;
     ss << std::setw(2) << std::setfill('0') << month;
     ss << std::setw(2) << std::setfill('0') << day;
-    ss << std::setw(2) << std::setfill('0') << hour << "00";
+    ss << std::setw(2) << std::setfill('0') << hour;
+    ss << std::setw(2) << std::setfill('0') << minute;
     return ss.str();
 }
 

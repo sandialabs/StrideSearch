@@ -41,9 +41,8 @@ struct Input {
     
     void parse_args(int argc, char* argv[]);
     void print_help() const;
-    void print_summary() const;
-    region_type region() const {return region_type({sb,nb,wb,eb});}
-    DateTime start_date() const {return DateTime(start_year, start_month, start_day, start_hour);}
+    inline region_type region() const {return region_type({sb,nb,wb,eb});}
+    inline DateTime start_date() const {return DateTime(start_year, start_month, start_day, start_hour);}
     std::vector<std::string> getFilenames() const {return getLinesFromFile(filelist_fname);}
 };
 
@@ -52,7 +51,6 @@ int main(int argc, char* argv[]) {
     
     Input input;
     input.parse_args(argc, argv);
-    input.print_summary();
 
     crit_ptr vor850(new MaxSignedCriterion("VOR850", "lat", input.zeta_min));
     crit_ptr psl(new MinCriterion("PSL", input.psl_max));
@@ -70,6 +68,7 @@ int main(int argc, char* argv[]) {
     search.setStartDate(input.start_date());
     search.setInputFiles(input.getFilenames());
     search.defineCriteria(criteria, colloc_criteria);
+    std::cout << search.infoString();
     
     search.runSpatialSearch();
     
@@ -131,10 +130,5 @@ void Input::print_help() const {
     std::cout << ss.str();
 }
 
-void Input::print_summary() const {
-    std::ostringstream ss;
-    ss << "TODO: Write this message.\n";
-    std::cout << ss.str();
-}
 
 

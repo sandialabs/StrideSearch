@@ -18,7 +18,8 @@ void MPIManager::distribute() {
 std::string MPIManager::infoString() const {
     std::ostringstream ss;
     ss << "MPIManager record:\n";
-    ss << "\tdistributed " << nItems << " files over " << numProcs << " ranks.\n";
+    ss << "\tdistributed " << nItems << (strat == DISTRIBUTE_FILES ? " files" : 
+        (strat==DISTRIBUTE_TIMESTEPS ? " timesteps" : "null")) << " over " << numProcs << " ranks.\n";
     auto minmaxlocs = std::minmax_element(procWorkLength.begin(), procWorkLength.end());
     ss << "\tmin work size = " << *minmaxlocs.first << " max work size = " << *minmaxlocs.second << '\n';
     for (int i=0; i<numProcs; ++i) {
