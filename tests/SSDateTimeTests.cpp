@@ -54,6 +54,7 @@ int main (int argc, char* argv[]) {
     for (int i=0; i<tvals.size(); ++i) {
         const DateTime relDate(tvals[i], simStart);
         std::cout << tvals[i] << " days after " << simStart.easyReadStr() << ", is " << relDate.easyReadStr() << '\n';
+        std::cout << "\tISO STD 8601 format: " << relDate.isoFullStr() << ", or " << relDate.isoDatetimeStr() << '\n';
         if (i==0) {
             if (relDate != DateTime(1852,8,27,0)) {
                 throw std::logic_error("bad relative date computation.");

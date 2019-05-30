@@ -62,12 +62,9 @@ endif()
 #
 #   Optional parallel packages
 #
-set(MPI_DIR $ENV{MPI_ROOT})
-FIND_PACKAGE(MPI HINTS $ENV{MPI_ROOT})
+FIND_PACKAGE(MPI)
 If (MPI_FOUND)
-    Option(HAVE_MPI ON)
-else ()
-    Option(HAVE_MPI OFF)
+    Option(HAVE_MPI "Use MPI for parallel search over files." ON)
 endif()
 
 #
@@ -75,7 +72,7 @@ endif()
 #
 FIND_PACKAGE(Doxygen)
 IF (DOXYGEN_FOUND)
-    Message("Doxygen found.")
+    #    Message("Doxygen found.")
     #
     #   Doxygen setup
     #
@@ -84,10 +81,10 @@ IF (DOXYGEN_FOUND)
     EXECUTE_PROCESS(COMMAND which dot OUTPUT_VARIABLE DOT_PATH)
     IF (DOT_PATH) 
         SET(HAVE_DOT YES)
-        Message("Graphviz found.")
+    #        Message("Graphviz found.")
     ELSE ()
         SET(HAVE_DOT NO)
-        Message("Graphviz not found; this will affect the documentation output.")
+    #        Message("Graphviz not found; this will affect the documentation output.")
     ENDIF()
 
     #   input/output files

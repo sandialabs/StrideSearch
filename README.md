@@ -27,9 +27,7 @@ To-do
 [ ] MPI parallel over files @n
 [ ] Thread parallel over sectors @n
 [ ] Generalize time for various units @n
-[x] SearchManager needs tests @n
-[x] Tropical cyclone spatial search example @n
 [ ] Track utilities @n
-[x] Progress bar@n
 [ ] Generate a small test data set for TC spatial search@n
 [ ] Replace DateTime with ctime equivalents
+[ ] Update main doxygen start page to cpp version

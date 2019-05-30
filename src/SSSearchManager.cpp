@@ -148,7 +148,7 @@ void SearchManager<DataLayout>::processCollocations(EventSet<DataLayout>& events
 template <typename DataLayout>
 void SearchManager<DataLayout>::runSpatialSearch(const Int stop_timestep) {
 #ifdef HAVE_MPI
-    std::cout << "SearchManager::runSpatialSearch warning: MPI not implemented.");
+    std::cout << "SearchManager::runSpatialSearch warning: MPI not implemented.";
 #endif
     const Int start_findex = 0;
     const Int end_findex = filenames.size();
@@ -171,7 +171,7 @@ void SearchManager<DataLayout>::outputCSV(std::ostream& os) const {
     for (auto& elem : dtmap) {
         const std::string dtg = elem.first.DTGString();
         for (Int i=0; i<elem.second.size(); ++i) {
-            os << elem.first.DTGString() << dl;
+            os << elem.first.isoFullStr() << dl;
             os << elem.second[i]->lat << dl << elem.second[i]->lon << dl;
             os << elem.second[i]->loc_ind << dl << elem.second[i]->loc_ind_3d << dl;
             os << elem.second[i]->time_ind << dl << elem.second[i]->filename;

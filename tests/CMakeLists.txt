@@ -55,3 +55,7 @@ ADD_EXECUTABLE(ssTropicalCycloneTest.exe SSTropicalCycloneTest.cpp)
 TARGET_LINK_LIBRARIES(ssTropicalCycloneTest.exe strideSearch)
 ADD_TEST(NAME ssTropicalCyclone COMMAND ${PROJECT_BINARY_DIR}/bin/ssTropicalCycloneTest.exe)
 
+ADD_EXECUTABLE(ssMPIMangagerUnitTest.exe SSMPIManagerUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssMPIMangagerUnitTest.exe strideSearch)
+ADD_TEST(NAME ssMPIMangager COMMAND ${PROJECT_BINARY_DIR}/bin/ssMPIMangagerUnitTest.exe)
+

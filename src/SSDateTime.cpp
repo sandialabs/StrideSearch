@@ -30,6 +30,35 @@ std::string DateTime::easyReadStr() const {
     return ss.str();
 }
 
+std::string DateTime::isoDateStr() const {
+    std::ostringstream ss;
+    ss << std::setw(4) << std::setfill('0') << year << '-';
+    ss << std::setw(2) << std::setfill('0') << month << '-';
+    ss << std::setw(2) << std::setfill('0') << day;
+    return ss.str();
+}
+
+std::string DateTime::isoFullStr() const {
+    std::ostringstream ss;
+    ss << isoDateStr() << ' ' << isoTimeStr();
+    return ss.str();
+}
+
+std::string DateTime::isoTimeStr() const {
+    std::ostringstream ss;
+    ss << std::setw(2) << std::setfill('0') << hour << ":00:00";
+    return ss.str();
+}
+
+std::string DateTime::isoDatetimeStr() const {
+    std::ostringstream ss;
+    ss << std::setw(4) << std::setfill('0') << year;
+    ss << std::setw(2) << std::setfill('0') << month;
+    ss << std::setw(2) << std::setfill('0') << day;
+    ss << 'T' << std::setw(2) << std::setfill('0') << hour << "0000";
+    return ss.str();
+}
+
 DateTime::DateTime(const int yr, const int mo, const int dy, const int hr) : year(yr), month(mo), day(dy), hour(hr) {
     if (monthDayMap.empty()) 
         buildMonthDayMap();

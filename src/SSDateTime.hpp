@@ -40,7 +40,7 @@ class DateTime {
         /// Constructor using YYYY-MM-DD or YYYY-MM-DD-HH formatted string 
         DateTime(const std::string ymd_string);
         
-        /// Return a formatted Date-Time-Group string.   
+        /// Return a string formatted in the U.S. military's DTG style.   
         std::string DTGString(std::string time_zone_string = "Z") const;
         
         /// Constructor from ctime::tm
@@ -69,6 +69,22 @@ class DateTime {
         
         /// Return an easy-to-read string
         std::string easyReadStr() const;
+        
+        /// Return the date formatted by the ISO 8601 standard.
+        std::string isoDateStr() const;
+        
+        /// Return the time formatted by the ISO 8601 standard.
+        std::string isoTimeStr() const;
+        
+        /// Return the date and time formatted by the ISO 8601 standard with no white space.
+        std::string isoDatetimeStr() const;
+        
+        /// Return the date and time formatted by the ISO 8601 standard.
+        /**
+            @note This format can be automatically parsed by the python `dateutil.parser` module's `parse` method
+            to return a `datetime.datetime` instance.
+        */
+        std::string isoFullStr() const;
         
     protected:
         /// Builds the maps used to convert from integers to strings, and from months to days-in-month.
