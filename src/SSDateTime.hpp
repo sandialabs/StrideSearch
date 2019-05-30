@@ -49,6 +49,7 @@ class DateTime {
         /// Constructor using time values in units of days since a particular Day 0.
         /**
             This constructor converts dataset time to c++ "localtime" relative to a Day 0 defined by start.
+            @warning `std::tm` uses years in units of years since 1900; on the Mac at least, it gives bad output when start.year < 1900.
             @param daysSinceStart time (in days) since Day 0 of a simulation.  May have fractional values.
             @param start Day 0.
         */
@@ -63,8 +64,10 @@ class DateTime {
         /// Return the month string corresponding to *this.
         std::string monthString() const;
         
+        /// Return a `std::tm` struct corresponding to *this
         std::tm dt2tm() const;
         
+        /// Return an easy-to-read string
         std::string easyReadStr() const;
         
     protected:

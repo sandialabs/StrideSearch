@@ -50,3 +50,8 @@ ADD_TEST(NAME ssSectorSet COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorSetUnitTest.
 ADD_EXECUTABLE(ssSearchManagerUnitTest.exe SSSearchManagerUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssSearchManagerUnitTest.exe strideSearch)
 ADD_TEST(NAME ssSearchManager COMMAND ${PROJECT_BINARY_DIR}/bin/ssSearchManagerUnitTest.exe)
+
+ADD_EXECUTABLE(ssTropicalCycloneTest.exe SSTropicalCycloneTest.cpp)
+TARGET_LINK_LIBRARIES(ssTropicalCycloneTest.exe strideSearch)
+ADD_TEST(NAME ssTropicalCyclone COMMAND ${PROJECT_BINARY_DIR}/bin/ssTropicalCycloneTest.exe)
+

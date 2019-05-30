@@ -40,6 +40,9 @@ Real sphereDistance(Real latA, Real lonA, Real latB, Real lonB);
 std::ostream& operator << (std::ostream& os, const std::array<Index,1>& arr);
 std::ostream& operator << (std::ostream& os, const std::array<Index,2>& arr);
 std::ostream& operator << (std::ostream& os, const std::array<Index,3>& arr);
+std::ostream& operator << (std::ostream& os, const std::array<Real,4>& arr);
+
+std::vector<std::string> getLinesFromFile(const std::string& fname);
 
 /// Class to show output progress in console
 /**

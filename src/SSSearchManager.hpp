@@ -20,15 +20,16 @@
 #include <mpi.h>
 #include "SSMpiManager.hpp"
 #endif
-#ifdef HAVE_OPENMP
-#include <omp.h>
-#endif
 
 namespace StrideSearch {
 
 /// Rectangle in lat-lon space (south, north, west, east)
 typedef std::array<Real,4> region_type;
 
+/// Spatial search driver.
+/**
+    
+*/
 template <typename DataLayout=UnstructuredLayout>
 class SearchManager {
     public:
@@ -69,11 +70,21 @@ class SearchManager {
         
         /// run spatial search on complete data set
         /**
-            @param os : output stream (most of the time, `std::ofstream`; can also be `std::cout`.)
             @note If using MPI, use only one output stream per rank.
+            @param stop_timestep : the timestep loop will only search this many timesteps. 
+                Values > 0 are used for testing.
         */
         void runSpatialSearch(const Int stop_timestep=-1);
     
+        /// Outputs a delimited file in order of ascending DateTime.
+        /**
+            The delimiter is a semicolon ';'.
+            If the output is saved to a file, say, "output.txt" it may be read into a Pandas DataFrame in Python with@n
+                @code{.py}
+                import pandas as pd 
+                df = pd.read_csv("output.txt", sep=';')
+                @endcode
+        */
         void outputCSV(std::ostream& os) const;
     
     protected:

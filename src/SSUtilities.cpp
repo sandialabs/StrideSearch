@@ -7,6 +7,7 @@
 #include <sstream>
 #include <vector>
 #include <iomanip>
+#include <fstream>
 
 
 namespace StrideSearch {
@@ -106,6 +107,31 @@ std::ostream& operator << (std::ostream& os, const std::array<Index,3>& arr) {
     }
     return os;
 }
+
+std::ostream& operator << (std::ostream& os, const std::array<Real,4>& arr) {
+    os << "(";
+    for (int i=0; i<4; ++i) {
+        os << arr[i] << (i==3 ? ")" : ",");
+    }
+    return os;
+}
+
+std::vector<std::string> getLinesFromFile(const std::string& fname) {
+    std::vector<std::string> result;
+    
+    std::ifstream file(fname);
+    if (!file.is_open()) {
+        std::ostringstream ss;
+        ss << "getLinesFromFile error: cannot open file " << fname;
+        throw std::ios_base::failure(ss.str());
+    }
+    std::string line;
+    while (std::getline(file, line)) {
+        result.push_back(line);
+    }
+    return result;
+}
+
 
 }
 
