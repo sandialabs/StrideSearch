@@ -1,6 +1,0 @@
-<map id="StormListNode" name="StormListNode">
-<area shape="rect" id="node2" href="$classdated_storm_list_node.html" title="Extends StormListNode to include date information used for constructing storm tracks and applying tem..." alt="" coords="186,5,330,32"/>
-<area shape="rect" id="node3" href="$structpolarlowlistnodemodule_1_1polarlowlistnode.html" title="polarlowlistnodemodule\l::polarlowlistnode" alt="" coords="177,57,339,98"/>
-<area shape="rect" id="node4" href="$structstormtrackdatamodule_1_1datedstormlistnode.html" title="stormtrackdatamodule\l::datedstormlistnode" alt="" coords="181,122,335,163"/>
-<area shape="rect" id="node5" href="$structtropicalstormlistnodemodule_1_1tropicalstormlistnode.html" title="tropicalstormlistnodemodule\l::tropicalstormlistnode" alt="" coords="164,187,352,229"/>
-</map>

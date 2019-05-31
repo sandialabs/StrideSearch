@@ -1,9 +1,0 @@
-<map id="stridesearchmodule::dostridesearch" name="stridesearchmodule::dostridesearch">
-<area shape="rect" id="node2" href="$group___stride_search.html#gaf422dcacc22c11ec7d843c1fbb0f97d4" title="Allocates memory for storing data from a search sector along a latitude line. " alt="" coords="194,5,354,47"/>
-<area shape="rect" id="node3" href="$group___stride_search.html#ga45e23c227cc33035e298027965d11f6b" title="Defines a search sector relative to a stridesearchdatamodule::stridesearchdata object. Collects indices and locations of grid points within the sector. " alt="" coords="205,71,343,112"/>
-<area shape="rect" id="node5" href="$group___storm_list_node.html#gaaa546c0f6d16b92258e7194fa0fa235b" title="stormlistnodemodule\l::stormlistnode::initialize" alt="" coords="192,136,356,177"/>
-<area shape="rect" id="node6" href="$group___storm_list_node.html#ga83b6a91bebaf2860ad3101c67001c6d3" title="Adds a node (that must be predefined) to an existing list. " alt="" coords="201,201,347,243"/>
-<area shape="rect" id="node8" href="$group___stride_search.html#ga9e6db5f72b70d624376b04e2df001c12" title="Deletes memory used for stride search. This memory was allocated by SearchSetup. " alt="" coords="205,267,343,308"/>
-<area shape="rect" id="node4" href="$group___stride_search.html#gafebdd427f47c0270a4b8fa4e49eac704" title="Determines the great&#45;circle distance between points on an Earth&#45;sized sphere. " alt="" coords="407,71,546,112"/>
-<area shape="rect" id="node7" href="$group___storm_list_node.html#ga9b34aa8100d47395af8f1c72969bf8aa" title="Copies a StormListNode. " alt="" coords="404,201,549,243"/>
-</map>

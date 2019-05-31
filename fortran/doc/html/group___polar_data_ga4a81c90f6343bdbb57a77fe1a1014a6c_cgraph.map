@@ -1,7 +1,0 @@
-<map id="polardatamodule::initializepolardata" name="polardatamodule::initializepolardata">
-<area shape="rect" id="node2" href="$group___stride_search_data.html#gac94efcee03125a902bc9df4259d7fcc2" title="Reads coordinate dimensions and allocates memory to prepare a StrideSearchData object. Does not read variables, only coordinates. " alt="" coords="285,83,449,124"/>
-<area shape="rect" id="node3" href="$classnetcdfutilitiesmodule.html#a4214d4712e99256f040640d853d9d087" title="Get netCDF metadata from file header. " alt="" coords="497,24,640,66"/>
-<area shape="rect" id="node6" href="$group__netcdf_utilities.html#ga6d85fc23a16396c1f2e184f8f435df31" title="reads a 1d variable from a netcdf file into a buffer " alt="" coords="688,90,831,131"/>
-<area shape="rect" id="node4" href="$classget__date__mod.html#afea4d47ed104c709c7ef6d40d2d2374c" title="get_date_mod::handle_err" alt="" coords="879,32,1057,58"/>
-<area shape="rect" id="node5" href="$group__netcdf_utilities.html#ga259598816dcb08d4ece13c86943b5a7e" title="determines the length of a netcdf file coordinate axis array. " alt="" coords="688,24,831,66"/>
-</map>

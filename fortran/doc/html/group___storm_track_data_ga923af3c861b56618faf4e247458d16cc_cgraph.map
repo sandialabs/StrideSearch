@@ -1,3 +1,0 @@
-<map id="stormtrackdatamodule::initializetrackdata" name="stormtrackdatamodule::initializetrackdata">
-<area shape="rect" id="node2" href="$group___storm_track_data.html#ga51fff87ffed42d11d3ee76ac452a63c6" title="Counts the number of timesteps in an output file from a spatial search driver program. Used to allocate memory for a StormTrackData object. " alt="" coords="207,5,360,47"/>
-</map>
