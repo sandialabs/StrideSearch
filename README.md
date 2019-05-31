@@ -1,5 +1,4 @@
 # StrideSearch
-Storm detection in climate data
 
 Copyright 2016 Sandia Corporation. Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government retains certain rights in this software.
 
@@ -16,6 +15,14 @@ The algorithm reads the input data file and at each time step completes a spatia
 or exceed the spatial identification criteria.@n
 Following the spatial search, detected storms are built into tracks using a temporal correlation program, which also applies
 temporal identification criteria.
+
+A good starting point for a basic over view of StrideSearch is in the **Examples**:
+- Tropical cyclone search: SSTropicalCyclone.cpp
+- Extratropical cyclone search: SSSouthernExtraTrop.cpp
+
+Also each class has a corresponding set of **tests** (in `StrideSearch/tests`) that illustrate its basic functionality.
+To run these tests, after building StrideSearch, type `make test`.
+
 
 Spatial search
 ---------------
@@ -62,6 +69,7 @@ An MPI distribution is not required.   @n
 Build / Install
 ===============
 From the base StrideSearch directory, create a build directory:
+
     mkdir build
     cd build
 
@@ -99,35 +107,38 @@ Stride Search Conventions
 
 Indices
 -------
-- 2d indices (i,j): i = latitude index, j = longitude index
-- 2d coordinates are (lat,lon), i.e., (lats[i], lons[j])
+- **LatLonLayout**
+    - 2d indices `(i,j)`: `i` = latitude index, `j` = longitude index
+    - 2d coordinates are `(lat,lon) = (lats[i], lons[j])`
+    - Data are given in dimensions of `(time,lat,lon)` or `(time,lev,lat,lon)`
+
+    
+- **UnstructuredLayout**
+    - 1d indices `(i)`: `i` = node index
+    - 2d coordinates are `(lat,lon) = (lats[i], lons[i])`
+    - Data are given in dimesnions of `(time, node)` or `(time, lev, node)`
+
 
 Units
 ------
 - Spatial units are kilometers
 - Angular units are degrees
-- Stride Search time units are hours, and thus integers
+- Stride Search time units default to days (floating point type).  Use DTUnits to specify others.  See StrideSearch::DateTime and SSDateTime.hpp for more details.
 - NetCDF time units are days, and may have fractional values; they are floating point types
-
-DataLayout
----------
-Fundamental template parameter@n
-- Run the same test on different data layouts with a simple typedef
 
 
 To-do
 =========
-[ ] Doxygen class design plans & responsibilities@n
-[ ] Vorticity, gradient, etc., computation using gmls@n
-[ ] EventSet needs output capabilities for python, ncl, text, etc.@n
-[ ] MPI parallel over files @n
-[ ] MPI rank-guard std::cout, etc., in SearchManager@n
-[ ] Thread parallel over sectors @n
-[ ] Generalize time for various units @n
-[ ] Track utilities @n
-[ ] Generate a small test data set for TC spatial search@n
-[ ] Replace DateTime with ctime equivalents@n
-[ ] Update main doxygen start page to cpp version@n
+@todo Doxygen class design plans & responsibilities@n
+@todo Vorticity, gradient, etc., computation using gmls@n
+@todo EventSet needs output capabilities for python, ncl, text, etc.@n
+@todo MPI parallel over files @n
+@todo MPI rank-guard std::cout, etc., in SearchManager@n
+@todo Thread parallel over sectors @n
+@todo Track utilities @n
+@todo Generate a small test data set for TC spatial search@n
+@todo Replace DateTime with ctime equivalents@n
+
 
 References
 =================

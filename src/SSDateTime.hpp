@@ -58,8 +58,9 @@ class DateTime {
         /**
             This constructor converts dataset time to c++ "localtime" relative to a Day 0 defined by start.
             @warning `std::tm` uses years in units of years since 1900; on the Mac at least, it gives bad output when start.year < 1900.
-            @param daysSinceStart time (in days) since Day 0 of a simulation.  May have fractional values.
+            @param timeSinceStart time (in days) since Day 0 of a simulation.  May have fractional values.
             @param start Day 0.
+            @param units units of the timeSinceStart parameter
         */
         DateTime(const Real timeSinceStart, const DateTime& start, const DTUnits& units=DAYS);
     

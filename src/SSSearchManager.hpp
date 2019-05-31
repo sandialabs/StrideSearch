@@ -30,6 +30,21 @@ typedef std::array<Real,4> region_type;
 
 /// Spatial search driver.
 /**
+    The user must provide a search region (a rectangle in lat-lon space, possibly the whole globe) and a spatial scale.  The spatial scale defines the StrideSearch::Sector radius; any two StrideSearch::Event s detected within this radius may be consider part of the same storm.
+    
+    Users provide a definition of what a ``storm'' is through the use of StrideSearch::IDCriterion subclasses and StrideSearch::CollocationCriterion instances. 
+    For example, a simple barotropic low could be defined as a pressure minimum (StrideSearch::MinCriterion) collocated (StrideSearch::CollocationCriterion) with a cyclonic vorticity maximum (StrideSearch::MaxSignedCriterion).
+    
+    Users provide the filenames of their data set as well as its start date, formatted as a StrideSearch::DateTime.
+    
+    Upon completion, search results are stored in a StrideSearch::EventSet, the StrideSearch::SearchManager::main_event_set member variable.
+    
+    Examples
+    ----------
+    - SSSearchManagerUnitTests.cpp
+    - SSTropicalCycloneTest.cpp
+    - SSTropicalCyclone.cpp
+    - SSSouthernExtraTrop.cpp
     
 */
 template <typename DataLayout=UnstructuredLayout>
@@ -64,7 +79,7 @@ class SearchManager {
         
         /// Define the input files that contain the netCDF data for this rank
         /**
-            @note This function will set up a parallel search, dividing files between MPI ranks.
+            @note This function will set up a parallel search, dividing either files or timesteps between MPI ranks, depending on StrideSearch::MPIDistribute value.
         */
         void setInputFiles(const MPIManager& mpi, const std::vector<std::string>& allfiles);
         
@@ -79,14 +94,27 @@ class SearchManager {
         
         /// run spatial search on complete data set
         /**
-            @note If using MPI, use only one output stream per rank.
             @param stop_timestep : the timestep loop will only search this many timesteps. 
                 Values > 0 are used for testing.
         */
         void runSpatialSearch(const Int stop_timestep=-1);
         
+        /// run spatial search on complete data set
+        /**
+            @param params : SearchParameters
+            @param stop_timestep : the timestep loop will only search this many timesteps. 
+                Values > 0 are used for testing.
+        */
         void runSpatialSearch(const SearchParams& params, const Int stop_timestep=-1);
         
+        /// run spatial search on complete data set
+        /**
+            @note For MPI, use only one output stream per rank.
+            @param mpi : MPI rank-to-file or rank-to-timestep map.
+            @param params : SearchParameters
+            @param stop_timestep : the timestep loop will only search this many timesteps. 
+                Values > 0 are used for testing.
+        */
         void runSpatialSearch(const MPIManager& mpi, const SearchParams& params, const Int stop_timestep=-1);
     
         /// Outputs a delimited file in order of ascending DateTime.
@@ -103,31 +131,57 @@ class SearchManager {
         void printTime() const;
     
     protected:
+        /// Search domain (rectangle in lat-lon space, in degrees; latitudes between -90 and 90, longitudes between 0 and 360
         region_type region;
+        /// Sector radius in kilometers
         Real sector_radius;
+        /// Base search SectorSet.  Used by StrideSearch::SearchManager::runLocatorAtTimestep.
         SectorSet<DataLayout> main_sector_set;
+        /// Primary result from StrideSearch::runSpatialSearch.
         EventSet<DataLayout> main_event_set;
-        
+        /// Array of time values read from the current file.
         RealArray file_time;
         
+        /// NCReader for current file.
         reader_ptr reader;
+        /// KDTree for whole data set
         std::unique_ptr<KDTree> tree;
+        /// List of files for this rank
         std::vector<std::string> filenames;
+        /// Start date of data set
         DateTime start_date;
+        /// Identification criteria
         std::vector<std::shared_ptr<IDCriterion>> criteria;
+        /// Locator criterion
         std::shared_ptr<IDCriterion> locator_crit;
+        /// Collocation criterion
         std::vector<colloc_ptr> colloc_criteria;
         
+        /// Locates possible events using only the LocatorCriterion.  
+        /** 
+            This is step 1 of the per-timestep search algorithm.
+            Its results are the input to StrideSearch::SearchManager::investigatePossibles.
+        */
+        std::vector<event_ptr> runLocatorAtTimestep(const Index time_ind);
+        
+        /// Creates a new SectorSet centered on each possible Event, evaluates all criteria in each Sector.
+        /**
+            This is step 2 of the per-timestep search algorithm.
+            Its results are the input to StrideSearch::SearchManager::processCollocations.
+        */
         EventSet<DataLayout> investigatePossibles(const Index time_ind, 
             const std::vector<event_ptr>& poss);
             
-        std::vector<event_ptr> runLocatorAtTimestep(const Index time_ind);
-        
+        /// Removes duplicates and collates related events.
+        /** This is step 3 of the per-timestep search algorithm.
+            Its results are appended to StrideSearch::SearchManager::main_event_set.
+        */
         void processCollocations(EventSet<DataLayout>& events) const;
         
         /// Run spatial search on a file.
         void runfile(const Int f_ind, const Int stop_timestep=-1);
         
+        /// Run spatial search on a file
         void runfile(const Int f_ind, const SearchParams& params, const Int stop_timestep=-1);
         
         /// Run spatial search on one timestep

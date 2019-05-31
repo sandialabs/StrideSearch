@@ -106,9 +106,10 @@ class NCReader {
         
         /// returns the time values contained in the NcFile
         /**
-            @warning: Throughout Stride Search, time values read from netCDF files are assumed to be defined 
-            in units of days since start; they are therefore floating point (not integral) type.
-            @todo Generalize for different units.
+            @warning Throughout Stride Search, time values read from netCDF files are assumed to be defined 
+            in units of days since start; they are therefore floating point (not integral) type. For 
+            data defined with time in other units, use StrideSearch::DTUnits.
+
             @throws std::runtime_error if *this cannot locate a time coordinate variable in ncfile.
         */
         RealArray getTime(const DTUnits& dtu=DTUnits::DAYS) const;  

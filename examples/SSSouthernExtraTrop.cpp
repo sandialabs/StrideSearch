@@ -8,6 +8,16 @@
 #include <fstream>
 #include <sstream>
 
+/**
+    @file 
+    Basic example of a serial extratropical cyclone search driver.
+    Input is from the command line, with defaults for each variable predefined in the Input struct's constructor.
+    
+    Criteria from Mendes et. al. 2010, _Theor. Appl. Climatology_ 100.
+    
+    The ::main function illustrates the StrideSearch workflow and how to use the StrideSearch::SearchManager class.
+*/
+
 using namespace StrideSearch;
 
 typedef LatLonLayout Layout;
@@ -45,6 +55,7 @@ struct Input {
 
 int main(int argc, char* argv[]) {
     print_copyright();
+    /// Step 1: Collect user input
     Input input(argc, argv);
     std::vector<std::string> fn = {input.data_dir + "/" + input.dfilename};
     
@@ -57,16 +68,23 @@ int main(int argc, char* argv[]) {
     colloc_ptr pgcolloc(new CollocationCriterion(press_crit, grad_crit, input.sec_radius));
     std::vector<colloc_ptr> coll_criteria = {pgcolloc};
     
+    /** Step 2: Define search parameters.  
+        This is required because this data set has time values define in units of minutes, not days.
+        Also, using SearchParams::timestep_stride is a good way to speed up the search.
+    */
     SearchParams params(DTUnits::MINUTES, input.timestep_stride);
     
+    /// Step 3: Setup the search
     SearchManager<Layout> search(input.region(), input.sec_radius);
     search.setStartDate(input.start_date());
     search.setInputFiles(fn, params);
     search.defineCriteria(criteria, coll_criteria);
     std::cout << search.infoString();
     
+    /// Step 4: Run the search
     search.runSpatialSearch(params, input.stop_timestep);
     
+    /// Step 5: Output results
     std::ofstream outfile(input.ofilename);
     search.outputCSV(outfile);
     outfile.close();

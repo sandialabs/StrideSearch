@@ -24,6 +24,8 @@ CALL_GRAPH = YES
 AUTOLINK_SUPPORT = YES
 SEARCHENGINE = YES
 SERVER_BASED_SEARCH = NO
+INCLUDE_GRAPH = NO
+HIDE_UNDOC_RELATIONS = NO
 
 # If member grouping is used in the documentation and the DISTRIBUTE_GROUP_DOC
 # tag is set to YES, then doxygen will reuse the documentation of the first

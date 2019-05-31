@@ -5,7 +5,7 @@
 namespace StrideSearch {
 
 template <typename DataLayout>
-EventSet<DataLayout>::EventSet(const std::vector<std::vector<std::shared_ptr<Event<DataLayout>>>>& events_) {
+EventSet<DataLayout>::EventSet(const std::vector<std::vector<event_ptr_type>>& events_) {
     for (Index i=0; i<events_.size(); ++i) {
         for (Index j=0; j<events_[i].size(); ++j) {
             events.push_back(events_[i][j]);

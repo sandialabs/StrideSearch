@@ -10,7 +10,13 @@
 #include <fstream>
 #include <vector>
 #include <memory>
-
+/**
+    @file 
+    Basic example of a serial tropical cyclone search driver.
+    Input is from the command line, with defaults for each variable predefined in the Input struct's constructor.
+    
+    The ::main function illustrates the StrideSearch workflow and how to use the StrideSearch::SearchManager class.
+*/
 using namespace StrideSearch;
 
 typedef LatLonLayout Layout;
@@ -48,10 +54,11 @@ struct Input {
 
 int main(int argc, char* argv[]) {
     print_copyright();
-    
+    /// Step 1: Collect user input
     Input input;
     input.parse_args(argc, argv);
 
+    /// Step 2: Define a storm
     crit_ptr vor850(new MaxSignedCriterion("VOR850", "lat", input.zeta_min));
     crit_ptr psl(new MinCriterion("PSL", input.psl_max));
     crit_ptr sfcwind(new MaxMagnitudeCriterion("UBOT", "VBOT", input.wind_min));
@@ -64,14 +71,17 @@ int main(int argc, char* argv[]) {
     
     const std::vector<colloc_ptr> colloc_criteria = {pslVortColloc, pslWarmCoreColloc};    
 
+    /// Step 3: Setup the search
     SearchManager<Layout> search(input.region(), input.sec_radius);
     search.setStartDate(input.start_date());
     search.setInputFiles(input.getFilenames());
     search.defineCriteria(criteria, colloc_criteria);
     std::cout << search.infoString();
     
+    /// Step 4: Run the search
     search.runSpatialSearch();
     
+    /// Step 5: Output results
     std::ofstream csvfile(input.ofilename);
     search.outputCSV(csvfile);
     csvfile.close();
