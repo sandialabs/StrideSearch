@@ -27,11 +27,13 @@ struct Input {
     Int start_day;
     Int start_hour;
     Int stop_timestep;
+    Int timestep_stride;
     
     Input(const int argc, char* argv[]) : sb(-80), nb(-35), wb(100), eb(200), sec_radius(1000), 
         psl_max(101000), grad_min(0.55), data_dir(StrideSearch_TEST_DATA_DIR), 
         dfilename("ERAinterim_extratrop_grad.nc"), ofilename("so_extrop.txt"),
-        start_year(1979), start_month(1), start_day(1), start_hour(0), stop_timestep(-1) {
+        start_year(1979), start_month(1), start_day(1), start_hour(0), stop_timestep(-1),
+        timestep_stride(60) {
         parse(argc, argv);
     }
     
@@ -48,20 +50,20 @@ int main(int argc, char* argv[]) {
     
     crit_ptr press_crit(new MinCriterion("SLP", input.psl_max));
     crit_ptr grad_crit(new MaxCriterion("PRESGRAD", input.grad_min));
+    //crit_ptr grad_crit(new MaxAverageCriterion("PRESGRAD", "lat", input.grad_min));
     
     std::vector<crit_ptr> criteria = {press_crit, grad_crit};
     
     colloc_ptr pgcolloc(new CollocationCriterion(press_crit, grad_crit, input.sec_radius));
     std::vector<colloc_ptr> coll_criteria = {pgcolloc};
     
-    SearchParams params(DateTime::DTUnits::MINUTES);
+    SearchParams params(DTUnits::MINUTES, input.timestep_stride);
     
     SearchManager<Layout> search(input.region(), input.sec_radius);
     search.setStartDate(input.start_date());
     search.setInputFiles(fn, params);
     search.defineCriteria(criteria, coll_criteria);
     std::cout << search.infoString();
-//     search.printTime();
     
     search.runSpatialSearch(params, input.stop_timestep);
     
@@ -105,6 +107,9 @@ void Input::parse(const int argc, char* argv[]) {
         }
         else if (token == "-stop") {
             stop_timestep = std::stoi(argv[++i]);
+        }
+        else if (token == "-ts") {
+            timestep_stride = std::stoi(argv[++i]);
         }
     }
 }

@@ -7,12 +7,13 @@
 
 namespace StrideSearch {
 
+enum MPIDistribute {FILES, TIMESTEPS};
+
 class MPIManager {
     public:
-        enum Strategy {DISTRIBUTE_FILES, DISTRIBUTE_TIMESTEPS};
         
         MPIManager(const Index nitems_, const Int rank_=0, const Int nprocs=1, 
-            const Strategy& st=DISTRIBUTE_FILES) : 
+            const MPIDistribute& st=FILES) : 
             nItems(nitems_), numProcs(nprocs), rank(rank_), 
             procStartIndex(nprocs,-1), procWorkLength(nprocs,-1), strat(st) {
             distribute();
@@ -27,11 +28,12 @@ class MPIManager {
         
         inline Int getRank() const {return rank;}
         inline Int getNumProcs() const {return numProcs;}
+        inline MPIDistribute parallelStrategy() const {return strat;}
         
     protected:
         std::vector<Index> procStartIndex;
         std::vector<Index> procWorkLength;
-        Strategy strat;
+        MPIDistribute strat;
     
         Index nItems;
         Int numProcs;

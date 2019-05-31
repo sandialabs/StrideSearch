@@ -17,6 +17,9 @@ static calendar_map_type monthDayMap;
 /// Map whos keys are month integers values are 3-letter capitalized string abbreviations of the month.
 static month_string_map_type monthStringMap;
 
+/// Time step units
+enum DTUnits {MINUTES, HOURS, DAYS};
+
 /// Bare-bones date-time structure and methods.
 class DateTime {
     public:
@@ -30,8 +33,6 @@ class DateTime {
         int hour;
         /// Minute
         int minute;
-        
-        enum DTUnits {MINUTES, HOURS, DAYS};
         
         /// Basic Constructor.
         /**

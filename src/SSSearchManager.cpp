@@ -98,8 +98,8 @@ void SearchManager<DataLayout>::runfile(const Int f_ind, const SearchParams& par
     std::cout << "... file " << f_ind +1 << " of " << filenames.size() << '\n';
     reader->updateFile(filenames[f_ind]);
     file_time = reader->getTime(params.time_units);
-    ProgressBar prog("\t% done", (stop_timestep == -1 ? file_time.size() : stop_timestep), 1);
-    for (Int k=0; k<(stop_timestep != -1 ? stop_timestep : file_time.size()); ++k) {
+    ProgressBar prog("\t% done", (stop_timestep == -1 ? file_time.size() : stop_timestep)/params.timestep_stride, 1);
+    for (Int k=0; k<(stop_timestep != -1 ? stop_timestep : file_time.size()); k+=params.timestep_stride) {
         runTimestepSearch(k);
         prog.update();
     }
@@ -195,6 +195,24 @@ void SearchManager<DataLayout>::runSpatialSearch(const SearchParams& params, con
     const Int end_findex = filenames.size();
     for (Int i=start_findex; i<end_findex; ++i) {
         runfile(i, params, stop_timestep);
+    }
+}
+
+template <typename DataLayout>
+void SearchManager<DataLayout>::runSpatialSearch(const MPIManager& mpi, const SearchParams& params, const Int stop_timestep) {
+    switch (mpi.parallelStrategy()) {
+        case (MPIDistribute::FILES) : {
+            const Int start_findex = 0;
+            const Int end_findex = filenames.size();
+            for (Int i=start_findex; i<end_findex; ++i) {
+                runfile(i,params,stop_timestep);
+            }
+            break;
+        }
+        case (MPIDistribute::TIMESTEPS) : {
+            throw std::runtime_error("SearchManager::runSpatialSearch error: MPIDistribute::TIMESTEPS not implemented.");
+            break;
+        }
     }
 }
 

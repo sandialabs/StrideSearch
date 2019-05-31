@@ -178,6 +178,10 @@ class MaxAverageCriterion : public IDCriterion {
         */
         MaxAverageCriterion(const std::string& var, const Real thresh) :
             IDCriterion(var, thresh, IntensityComparison::GREATER_THAN, SpatialDependence::DEPENDENT) {}
+        
+        MaxAverageCriterion(const std::string& var, const std::string& weightvar, const Real thresh) :
+            IDCriterion(std::vector<std::string>({var, weightvar}), thresh, IntensityComparison::GREATER_THAN,
+                SpatialDependence::DEPENDENT) {}
             
         bool evaluate(const Workspace& wspc);
         

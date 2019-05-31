@@ -87,7 +87,7 @@ class SearchManager {
         
         void runSpatialSearch(const SearchParams& params, const Int stop_timestep=-1);
         
-        void runSpatialSearch(const MPIManager& mpi, const Int stop_timestep=-1);
+        void runSpatialSearch(const MPIManager& mpi, const SearchParams& params, const Int stop_timestep=-1);
     
         /// Outputs a delimited file in order of ascending DateTime.
         /**

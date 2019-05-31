@@ -89,8 +89,26 @@ std::string MaxMagnitudeCriterion::description() const {
 }
 
 bool MaxAverageCriterion::evaluate(const Workspace& wspc) {
-    auto vardata = wspc.getConstDataRef(varnames[0]);
-    val = std::accumulate(vardata.cbegin(), vardata.cend(), 0.0)/wspc.n;
+    switch (wspc.nVars()) {
+        case (1) : {
+            auto vardata = wspc.getConstDataRef(varnames[0]);
+            val = std::accumulate(vardata.cbegin(), vardata.cend(), 0.0)/wspc.n;
+            break;
+        }
+        case (2) : {
+            auto vardata = wspc.getConstDataRef(varnames[0]);
+            auto weight = wspc.getConstDataRef(varnames[1]);
+            bool latweight = varnames[1] == "lat";
+            val = 0.0;
+            Real area = 0.0;
+            for (int i=0; i<wspc.n; ++i) {
+                val += vardata[i]*(latweight ? std::cos(DEG2RAD*weight[i]) : weight[i]);
+                area += weight[i]*(latweight ? std::cos(DEG2RAD*weight[i]) : weight[i]);
+            }
+            val /= area;
+            break;
+        }
+    }
     return val > threshold;
 }
 

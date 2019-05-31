@@ -14,7 +14,7 @@ std::cout << "testing MPIManager class.\n";
     
     MPIManager serial_mgr(nfiles);
     
-    MPIManager desktop_mgr(ns, 0, 4, MPIManager::DISTRIBUTE_TIMESTEPS);
+    MPIManager desktop_mgr(ns, 0, 4, MPIDistribute::TIMESTEPS);
     
     MPIManager big_mgr(nfiles, 0, 24);
     

@@ -47,7 +47,7 @@ void NCReader::printLons() const {
     std::cout << std::endl;
 }
 
-RealArray NCReader::getTime(const DateTime::DTUnits& dtu) const {
+RealArray NCReader::getTime(const DTUnits& dtu) const {
     const std::vector<std::string> time_vars = {"time", "time_whole"};
     netCDF::NcVar time_var;
     bool time_found = false;
@@ -68,8 +68,8 @@ RealArray NCReader::getTime(const DateTime::DTUnits& dtu) const {
     if (nsteps>0) {
         time_var.getVar(time_vals);
     }
-    if (dtu != DateTime::DTUnits::DAYS) {
-        const Real conv_fac = (dtu == DateTime::DTUnits::HOURS ? HOURS2DAYS : MINUTES2DAYS);
+    if (dtu != DTUnits::DAYS) {
+        const Real conv_fac = (dtu == DTUnits::HOURS ? HOURS2DAYS : MINUTES2DAYS);
         for (Int i=0; i<nsteps; ++i) {
             time_vals[i] *= conv_fac;
         }

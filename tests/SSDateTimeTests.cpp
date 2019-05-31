@@ -66,7 +66,7 @@ int main (int argc, char* argv[]) {
     const DateTime eraStart(1979,1,1,0);
     const std::vector<Real> times = {920424, 920430, 920436, 920442, 920448, 920454, 920460, 920466};
     for (int i=0; i<times.size(); ++i){
-        const DateTime relDate(times[i], eraStart, DateTime::DTUnits::MINUTES);
+        const DateTime relDate(times[i], eraStart, DTUnits::MINUTES);
         std::cout << times[i] << " minutes after " << eraStart.easyReadStr() << ", is " << relDate.easyReadStr() << '\n';
     }
     
