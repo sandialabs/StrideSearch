@@ -1,18 +1,12 @@
 # StrideSearch
-Storm detection in climate data
 
 Copyright 2016 Sandia Corporation. Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government retains certain rights in this software.
 
 Algorithms to detect and track storms from model output or reanalysis data.
 
-NEW!
-=======
-Python implementation in `StrideSearch/python`.  Many more capabilities than the Fortran implementation, but possibly slower.  
-Development is ongoing.
-
 Storm detection and tracking algorithm
 =========
-This library provides methods for searching latitude-longitude data sets 
+This library provides methods for searching climate data sets 
 in [NetCDF](http://www.unidata.ucar.edu/software/netcdf/) format for various kinds of storms which may be defined by the user. @n
 Storm identification criteria may correspond to any meteorological phenomena of interest that can be described quantitatively
 in terms of available data. 
@@ -22,21 +16,32 @@ or exceed the spatial identification criteria.@n
 Following the spatial search, detected storms are built into tracks using a temporal correlation program, which also applies
 temporal identification criteria.
 
+A good starting point for a basic over view of StrideSearch is in the **Examples**:
+- Tropical cyclone search: SSTropicalCyclone.cpp
+- Extratropical cyclone search: SSSouthernExtraTrop.cpp
+
+Also each class has a corresponding set of **tests** (in `StrideSearch/tests`) that illustrate its basic functionality.
+To run these tests, after building StrideSearch, type `make test`.
+
+
 Spatial search
 ---------------
 The user must specify a sector radius (in km) to define the search sectors.  @n
 Only one storm may be detected per radius so this input is a tunable parameter of the algorithm.  @n
 Depending on the application, larger or smaller radii may be desired.  @n
-Any 2 storms that are separated by a great-circle distance less than the sector radius will be considered duplicates and one of them will be removed.
+Any 2 storms that are separated by a great-circle distance less than the sector radius will be considered duplicates and one of them will be skipped.
 
 The spatial search algorithm:
 * Covers the requested search area (specified by a maximum and minimum latitude) with overlapping circular search sectors, 
 defined by the user-specified great-circle distance in km.	  
 * Reads the NetCDF input file for relevant storm data (i.e., windspeed, sea level pressure, vorticity) in each storm sector.
-* Stores information about any sector (and its relevant data) in a linked-list data structure if that sector's data
-exceeds some user-defined storm threshold.   
-* After all sectors have been searched, it compares the found storms from the linked-list to remove duplicates.  
-* Outputs the linked-list to various formats.
+* Stores information about any sector (and its relevant data) in a local data structure for thread-parallelism.   
+* Outputs the set of found storms to a data file for later input to the track-building algorithm.
+
+The main class responsible for accomplishing the spatial search is StrideSearch::SearchManager.
+It requires the user provide StrideSearch::IDCriterion derived classes and StrideSearch::CollocationCriterion pointers to define (quantitatively) the features they seek from their data.
+
+Upon completing its search, StrideSearch::SearchManager contains a StrideSearch::EventSet containing the records of all events found from the data.  Each StrideSearch::Event contains all information required to locate the corresponding feature in the data set, including filename, location index, time index, etc.
 
 Temporal correlation
 -----------------
@@ -55,110 +60,92 @@ has been searched.
 
 Software requirements
 ===============
-The software requires [NetCDF](http://www.unidata.ucar.edu/software/netcdf/) and [NetCDF Fortran](http://www.unidata.ucar.edu/software/netcdf/)
-libraries and a modern Fortran compiler.      @n
+The software requires [NetCDF](http://www.unidata.ucar.edu/software/netcdf/) and either [NetCDF C++](http://www.unidata.ucar.edu/software/netcdf/)
+or libraries, as well as [CMake](https://cmake.org) for its configuration step.
+Either a C++ compiler (preferred) or a modern Fortran compiler are also required.      @n
 An MPI distribution is not required.   @n   
 
-NetCDF file access utilities provided by the __Geophysical Fluid Dynamics Laboratory's (GFDL)__ 
-[TSTORMS](http://www.gfdl.noaa.gov/tstorms) code for tropical cyclone detection are incorporated into this software.
 
 Build / Install
 ===============
-This version has been updated to use the CMake cross-platform Makefile generator.  A sample configure script is
+From the base StrideSearch directory, create a build directory:
+
+    mkdir build
+    cd build
+
+Configure with CMake using a configure script similar to the one below; save it in the build directory as `configureStrideSearch.sh`.
 
     #!/bin/bash
-
-    export CC=mpicc
-    export CXX=mpicxx
-	export FC=mpifort
-	export NETCDF=/opt/netcdf-4.3.2
-	
-	SRC_DIR=$HOME/StrideSearch
-	BUILD_DIR=$SRC_DIR/build
-	INSTALL_DIR=$SRC_DIR/install
-
-	rm -rf CMakeCache.txt
-	rm -rf CMakeFiles/
-
-	cmake \
-	-D CMAKE_BUILD_TYPE:STRING=RELEASE \
-	-D CMAKE_INSTALL_PREFIX:FILEPATH=$INSTALL_DIR \
-	$SRC_DIR
-
-Users should edit the `-D CMAKE_INSTALL_PREFIX:FILEPATH` variable to their desired install directory, and edit the 
-`NETCDF` variable to the root of their local [NetCDF](http://www.unidata.ucar.edu/software/netcdf/) library.  @n
-Note: the [NetCDF](http://www.unidata.ucar.edu/software/netcdf/) Fortran library must be built
-separately from the NetCDF C library.  @n
-This build script assumes they are installed to the same location.
-
-After running the configure script, build the project with 
-
-    make
     
-Then install it with 
-
-	make install
-
-Software / algorithm design
-===============
-The fundamental data structure in the StrideSearch software is a linked-list e.g. @ref StormListNode, @ref TrackListNode.  @n
-We do not know in advance how many storms will be detected per timestep, or how many storm tracks may be built from one dataset. @n
-Linked-lists handled these unknowns using dynamic memory allocation; each time a new storm or new track is found, the software
-allocates memory for that storm and saves its information to that newly allocated memory.  @n
-The basic structure of the linked-lists used by StrideSearch is 
-
-    type ListNode
-    	real :: aStormDatum
-    	integer :: anotherStormDatum
-    	
-    	type(ListNode), pointer :: nextNode
-    end type
+    export NETCDF_ROOT=/opt/netcdf-4.4.1
+    SRC_ROOT=$HOME/StrideSearch/
     
-Users may alter the data items of a list node (StrideSearch has an example of this: compare @ref StormListNode to @ref TropicalStormListNode). @n
-The pointer `nextNode` is the means of constructing and traversing a list.  @n
-It points to the location in memory of the next node or, if it is the end of the list, it is a null pointer.  @n
-Both the spatial search algorithm (@ref StrideSearch ) and the temporal correlation algorithm (@ref TrackListNode) use this basic data structure.
-
-Lists are traversed with other pointers. @n
-A pointer, say `current`, may point to the current node and be used to access its data.@n
-Then the entire list may be traversed with code similar to the following
-
-    type(ListNode), pointer :: current
-
-    current => listRoot
-    do while ( associated(current) )
-    	! < do something with the data at current node >
-    	current => current%nextNode
-    enddo
+    rm -f CMakeCache.txt
+    rm -rf CMakeFiles/
     
-This do loop will automatically terminate when `current` reaches the null pointer `current%%nextNode` at the end of the list.
+    EXTRA_ARGS=$1
+    
+    cmake \
+    -D CMAKE_BUILD_TYPE:STRING="RELEASE" \
+    -D CMAKE_VERBOSE_MAKEFILE:BOOL=OFF \
+    $EXTRA_ARGS \
+    $SRC_ROOT
 
-This basic data structure is applied to each application.  Each application has three files (and three data types) associated with it.
-1. A data file.  StrideSearchData provides the basic data container for netcdf data to be searched.   This data type may
-be extended to facilitate other applications.  Examples are provided by TropicalData and PolarData.
-2. A storm list node. The linked list of storms per-timestep that will be output by the search algorithm.  The basic type is 
-given by StormListNode, and example extensions may be found in TropicalStormListNode and PolarLowListNode.
-3. A driver program.  Examples are given by PolarSearch.f90 and TropicalSearchDriver.f90.
 
-Use
-===============
-Users may extend the basic @ref StormListNode data type following the example of @ref TropicalStormListNode to an application of their choosing. @n
-Each linked list relies on the `initialize` and `Copy` subroutines to construct linked lists, and must also implement 
-`removeNodeFromList` and recursive `deleteList` procedures.  @n
-The @ref StrideSearchData class and subroutines should also be extended or altered to read the data corresponding to the new application. @n
-Finally, the @ref stridesearchmodule::dostridesearch subroutine should be modified to include the storm identification criteria suitable for the new application. @n
-An example of each of these extensions of the basic Stride Search data types and methods are provided by @ref TropicalData and @ref TropicalStrideSearch.
+Then, build the project by typing 
+
+    ./configureStrideSearch.sh
+    make -j 4 && make install
+    make test
+
+If Doxygen documentation is desired, type 
+
+    make docs
+
+Stride Search Conventions
+===========
+
+Indices
+-------
+- **LatLonLayout**
+    - 2d indices `(i,j)`: `i` = latitude index, `j` = longitude index
+    - 2d coordinates are `(lat,lon) = (lats[i], lons[j])`
+    - Data are given in dimensions of `(time,lat,lon)` or `(time,lev,lat,lon)`
+
+    
+- **UnstructuredLayout**
+    - 1d indices `(i)`: `i` = node index
+    - 2d coordinates are `(lat,lon) = (lats[i], lons[i])`
+    - Data are given in dimesnions of `(time, node)` or `(time, lev, node)`
+
+
+Units
+------
+- Spatial units are kilometers
+- Angular units are degrees
+- Stride Search time units default to days (floating point type).  Use DTUnits to specify others.  See StrideSearch::DateTime and SSDateTime.hpp for more details.
+- NetCDF time units are days, and may have fractional values; they are floating point types
+
+
+To-do
+=========
+@todo Doxygen class design plans & responsibilities@n
+@todo Vorticity, gradient, etc., computation using gmls@n
+@todo EventSet needs output capabilities for python, ncl, text, etc.@n
+@todo MPI parallel over files @n
+@todo MPI rank-guard std::cout, etc., in SearchManager@n
+@todo Thread parallel over sectors @n
+@todo Track utilities @n
+@todo Generate a small test data set for TC spatial search@n
+@todo Replace DateTime with ctime equivalents@n
 
 
 References
 =================
 Stride Search is described in more detail in P. Bosler et al., 2015, _Geosci. Model Dev._.  
 
-Stride Search uses the netcdf file access subprograms provided by GFDL's [TSTORMS](http://www.gfdl.noaa.gov/tstorms) software.
-These are contained in the `<stride search root>/gfdlUtilities` subdirectory.  
-
 Included in the Stride Search software are two examples of driver programs.  @n
 1. The tropical cyclone driver uses identification criteria defined in F. Vitart et al., 1997, _J. Climate_, 10:745-760.
-2. The polar low search uses the identification criteria given by T. J. Bracegirdle and S. L. Gray, 2008, _Int. J. Climatology_, 28:1903-1919.
+2. The polar low search (Fortran only) uses the identification criteria given by T. J. Bracegirdle and S. L. Gray, 2008, _Int. J. Climatology_, 28:1903-1919.
 
 

@@ -1,5 +1,0 @@
-<map id="stormtrackdatamodule::copydatedlist" name="stormtrackdatamodule::copydatedlist">
-<area shape="rect" id="node2" href="$group___storm_track_data.html#gae8f888e7195d1ad126c3090e4886b44f" title="Adds an initialized (initializeDatedNode must be called on newNode prior to this subroutine) to a lin..." alt="" coords="207,5,360,47"/>
-<area shape="rect" id="node3" href="$group___storm_track_data.html#ga45e4905ed70c096a68f714c8e3d13b3d" title="Copies a datedStormListNode object. " alt="" coords="408,5,561,47"/>
-<area shape="rect" id="node4" href="$group___storm_list_node.html#ga9b34aa8100d47395af8f1c72969bf8aa" title="Copies a StormListNode. " alt="" coords="609,5,755,47"/>
-</map>
