@@ -24,8 +24,7 @@
 
 namespace StrideSearch {
 
-/// Rectangle in lat-lon space (south, north, west, east)
-typedef std::array<Real,4> region_type;
+
 
 
 /// Spatial search driver.

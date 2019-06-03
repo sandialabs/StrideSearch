@@ -11,6 +11,8 @@ namespace StrideSearch {
 /// Prints the required copyright information to the console.
 void print_copyright();
 
+std::string copyright_str();
+
 /// Four-quadrant arc tangent
 /** Similar to std::atan2 except that the branch cut is moved so the output of atan4
     lies with [0, 2*pi), rather than (-pi, pi).

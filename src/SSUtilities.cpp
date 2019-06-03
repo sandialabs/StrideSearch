@@ -77,13 +77,19 @@ Real sphereDistance(const Real latA, const Real lonA, const Real latB, const Rea
     }
 }
 
-void print_copyright(){
-    std::cout <<  "------------------------------------------------------------------------------------------------\n";
-    std::cout <<  "Stride Search version " << StrideSearch_VERSION_MAJOR << "." << StrideSearch_VERSION_MINOR <<"\n";
-    std::cout <<  "Copyright 2016 Sandia Corporation. Under the terms of contract DE-AC04-94AL85000,\n"; 
-    std::cout <<  "there is a non-exclusive license for use of this work by or on behalf of the U.S. Government. \n";
-    std::cout <<  "Export of this program may require a license from the United States Government.\n";
-    std::cout <<  "------------------------------------------------------------------------------------------------\n";
+std::string copyright_str() {
+    std::ostringstream ss;
+    ss <<  "------------------------------------------------------------------------------------------------\n";
+    ss <<  "Stride Search version " << StrideSearch_VERSION_MAJOR << "." << StrideSearch_VERSION_MINOR <<"\n";
+    ss <<  "Copyright 2016 Sandia Corporation. Under the terms of contract DE-AC04-94AL85000,\n"; 
+    ss <<  "there is a non-exclusive license for use of this work by or on behalf of the U.S. Government. \n";
+    ss <<  "Export of this program may require a license from the United States Government.\n";
+    ss <<  "------------------------------------------------------------------------------------------------\n";
+    return ss.str();
+}
+
+void print_copyright() {
+    std::cout << copyright_str();
 }
 
 std::ostream& operator << (std::ostream& os, const std::array<Index,2>& arr) {
