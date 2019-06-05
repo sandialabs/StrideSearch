@@ -25,7 +25,7 @@ IF (netcdf)
 ELSE (netcdf)
     message("CMake ERROR: Cannot find the NetCDF Library" \n)
 ENDIF (netcdf)
-FIND_LIBRARY(netcdf_c++ netcdf_c++4 PATHS $ENV{NETCDF_ROOT}/lib HINTS ${NETCDF_DIR}/lib REQUIRED NO_DEFAULT_PATH)
+FIND_LIBRARY(netcdf_c++ netcdf_c++4 PATHS $ENV{NETCDF_ROOT}/lib $ENV{NETCDF_CXX_ROOT}/lib HINTS ${NETCDF_CXX_DIR}/lib REQUIRED NO_DEFAULT_PATH)
 
 IF (netcdf_c++)
     message("**** Found NetCDF C++ : " ${netcdf_c++})
