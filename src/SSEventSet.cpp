@@ -63,17 +63,15 @@ void EventSet<DataLayout>::removeDuplicates(const Real dist_tol) {
     }
     /// Step 2: Mark and count redundant events
     for (Index i=0; i<events.size(); ++i) {
-        if (!duplicates[i]) {
-            for (Index j=i+1; j<events.size(); ++j) {
-                if (!duplicates[j]) {
-                    if (events[i]->isRedundant(*events[j], dist_tol)) {
-                        dup_ct += 1;
-                        if ( events[i]->lowerIntensity(*events[j])) {
-                            duplicates[i] = true;
-                        }
-                        else {
-                            duplicates[j] = true;
-                        }
+        for (Index j=i+1; j<events.size(); ++j) {
+            if (!duplicates[i] && !duplicates[j]) {
+                if (events[i]->isRedundant(*events[j], dist_tol)) {
+                    dup_ct += 1;
+                    if ( events[i]->lowerIntensity(*events[j])) {
+                        duplicates[i] = true;
+                    }
+                    else {
+                        duplicates[j] = true;
                     }
                 }
             }
