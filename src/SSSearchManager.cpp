@@ -86,7 +86,7 @@ void SearchManager<DataLayout>::runfile(const Int f_ind, const Int stop_timestep
     std::cout << "... file " << f_ind + 1 << " of " << filenames.size() << std::endl;
     reader->updateFile(filenames[f_ind]);
     file_time = reader->getTime();
-    ProgressBar file_prog("\t% done", (stop_timestep==-1 ? file_time.size() : stop_timestep), 1);
+    ProgressBar file_prog("\t% done", (stop_timestep==-1 ? file_time.size() : stop_timestep), 10);
     for (Int k=0; k<(stop_timestep != -1 ? stop_timestep : file_time.size()); ++k) {
         runTimestepSearch(k);
         file_prog.update();
@@ -98,7 +98,7 @@ void SearchManager<DataLayout>::runfile(const Int f_ind, const SearchParams& par
     std::cout << "... file " << f_ind +1 << " of " << filenames.size() << '\n';
     reader->updateFile(filenames[f_ind]);
     file_time = reader->getTime(params.time_units);
-    ProgressBar prog("\t% done", (stop_timestep == -1 ? file_time.size() : stop_timestep)/params.timestep_stride, 1);
+    ProgressBar prog("\t% done", (stop_timestep == -1 ? file_time.size() : stop_timestep)/params.timestep_stride, 10);
     for (Int k=0; k<(stop_timestep != -1 ? stop_timestep : file_time.size()); k+=params.timestep_stride) {
         runTimestepSearch(k);
         prog.update();
