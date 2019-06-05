@@ -43,9 +43,9 @@ class Track(object):
     def printInfo(self, verbose = False):
         istr =  self.infoString(True)
         if verbose:
-            print istr
+            print (istr)
         else:
-            print istr.split("\n")[0]
+            print (istr.split("\n")[0])
 
     def startDate(self):
         return self.events[0].datetime
@@ -142,7 +142,7 @@ class TrackList(object):
         return str1
     
     def printInfo(self, verb = False):
-        print self.infoString(verb)
+        print (self.infoString(verb))
     
     def getDataFrameList(self):
         dfl = []

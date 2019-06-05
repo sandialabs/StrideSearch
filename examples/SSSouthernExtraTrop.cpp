@@ -49,8 +49,8 @@ int main(int argc, char* argv[]) {
     std::vector<std::string> fn = {input.data_dir + "/" + input.filelist_fname};
     
     crit_ptr press_crit(new MinCriterion("SLP", input.psl_max));
-    crit_ptr grad_crit(new MaxCriterion("PRESGRAD", input.grad_min));
-    //crit_ptr grad_crit(new MaxAverageCriterion("PRESGRAD", "lat", input.grad_min));
+    //crit_ptr grad_crit(new MaxCriterion("PRESGRAD", input.grad_min));
+    crit_ptr grad_crit(new MaxAverageCriterion("PRESGRAD", "lat", input.grad_min));
     
     std::vector<crit_ptr> criteria = {press_crit, grad_crit};
     
@@ -81,17 +81,17 @@ int main(int argc, char* argv[]) {
 
 void ExTropInput::parse_args(const int argc, char* argv[]) {
     filelist_fname = "ERAinterim_extratrop_grad.nc";
-    sb = -70;
-    nb = -30;
-    wb = 240;
-    eb = 360;
-    sec_radius = 1000;
-    psl_max = 101000;
-    grad_min = 0.55;
-    time_units = DTUnits::MINUTES;
-    timestep_stride = 60;
-    stop_timestep = -1;
-    start_year = 1979;
+    sb = 20;
+    nb = 40;
+    wb = 280;
+    eb = 310;
+    sec_radius = 500;
+    psl_max = 99000;
+    grad_min = 0.22;
+    time_units = DTUnits::HOURS;
+    timestep_stride = 1;
+    stop_timestep = 124;
+    start_year = 1900;
     start_month = 1;
     ofilename = "so_extratrop_results.txt";
     for (int i=1; i<argc; ++i) {
@@ -128,7 +128,7 @@ std::string ExTropInput::help_msg() const {
     std::ostringstream ss;
     ss << Input::help_msg();
     ss << "\t-psl <psl threshold> \t Sea level pressure threshold in Pascals.\n";
-    ss << "\t-grad <press. gradient threshold> \t Pressure gradient threshold in hPa per 250 km.\n";
+    ss << "\t-grad <press. gradient threshold> \t Pressure gradient threshold in Pa per km.\n";
     ss << "\t-stop <timestep number> \t Stop search at this time step [default: -1].\n";
     return ss.str();
 }
