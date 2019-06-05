@@ -3,14 +3,19 @@
 
 #include "StrideSearchConfig.h"
 #include "StrideSearchTypeDefs.h"
+#include "StrideSearchUtilities.h"
 #include "StrideSearchDataBase.h"
 #include "StrideSearchWorkspaceDict.h"
 #include "StrideSearchIDCriterionBase.h"
 #include "StrideSearchSector.h"
 #include "StrideSearchEventList.h"
 #include "StrideSearchEvent.h"
+#include "StrideSearchNanoflannTree.h"
 #include <vector>
 #include <memory>
+#ifdef USE_NANOFLANN
+#include "StrideSearchNanoflannAdaptor.h"
+#endif
 
 namespace StrideSearch {
 
@@ -62,14 +67,16 @@ class SectorList {
         void buildWorkspaces(const std::vector<std::vector<IDCriterion*>>& separate_criteria);
         
         /// Links each sector to the data points within its boundaries.
-        void linkSectorsToData(const StrideSearchData* data_ptr);
+        void linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, NanoflannTree tree);
+
+	void linkSectorsToDataWNano(const std::shared_ptr<StrideSearchData> data_ptr);
+
+	void linkSectorsToDataWOutNano(const std::shared_ptr<StrideSearchData> data_ptr);
         
         /// Find the sector that's closest to an arbitrary point.
         index_type closestSectorToPoint(const scalar_type lat, const scalar_type lon) const;
 
-#ifdef USE_NANOFLANN
-        void fastLinkSectorsToData(const StrideSearchData* data_ptr);
-#endif
+
         
         /// Pointers to Sectors contained by *this
         std::vector<std::unique_ptr<Sector>> sectors;
@@ -78,6 +85,8 @@ class SectorList {
         index_type maxDataPointsPerSector() const;
         /// Returns the minimum number of data points contained by any one sector.
         index_type minDataPointsPerSector() const;
+
+	//void initTree(const std::shared_ptr<StrideSearchData> data_ptr);
         
     protected: 
         /// Southern boundary of search domain, in [-90, 90).        
@@ -99,12 +108,12 @@ class SectorList {
         
         /// Longitude strides along each latitude strip, if applicable.
         std::vector<scalar_type> lon_strides_deg;
-        
-        
-        
 
-        
-        
+	//#ifdef USE_NANOFLANN
+	//NanoflannAdaptor* adaptor;
+	//tree_type* search_tree;
+        //#endif
+	
 };
 
 

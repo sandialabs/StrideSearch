@@ -1,4 +1,5 @@
 #include "StrideSearchDataBase.h"
+#include "StrideSearchSectorListBase.h"
 #include <vector>
 #include <string> 
 #include <netcdf>
@@ -6,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <cmath>
 
 namespace StrideSearch {
 
@@ -49,6 +51,27 @@ void StrideSearchData::updateSourceFile(const std::string fname){
     initTime();
 }
 
+index_type StrideSearchData::get1dIndex(const index_type latI, const index_type lonJ) const {
+    index_type result = -1;
+    if (twoD) {
+        const index_type nLat = lats.size();
+        const index_type nLon = lons.size();
+        result = lonJ * nLat + latI;
+    }
+    return result;
+}
+
+std::pair<index_type, index_type> StrideSearchData::get2dIndex(const index_type ind) const {
+    std::pair<index_type, index_type> result(-1,-1);
+    if (twoD) {
+        const index_type nLat = lats.size();
+        const index_type nLon = lons.size();
+        result.second = ind / nLat;
+        result.first = ind - result.second * nLat;
+    }
+    return result;
+}
+
 void StrideSearchData::initDimensions() {
     
     netCDF::NcFile file(filename, netCDF::NcFile::read);
@@ -67,6 +90,8 @@ void StrideSearchData::initDimensions() {
         const index_type nLat = lat_var.getDim(0).getSize();
         const index_type nLon = lon_var.getDim(0).getSize();
         
+        _nPoints = nLat * nLon;
+        
         std::cout << "File : " << filename << std::endl;
         std::cout << "\tFound lat-lon coordinates: nLat = " << nLat << ", nLon = " << nLon << "; nNodes = " << 
             nLat * nLon << std::endl;   
@@ -80,7 +105,10 @@ void StrideSearchData::initDimensions() {
         lons = std::vector<scalar_type>(&lonArr[0], &lonArr[0] + nLon);
         
         twoD = true;
-        oneD = false; 
+        oneD = false;
+        
+        sphereRadius = 1.0;
+        
     }
     else if (!x_var.isNull() && !y_var.isNull() && !z_var.isNull()) {
         //
@@ -111,7 +139,17 @@ void StrideSearchData::initDimensions() {
         }
      
         oneD = true;
-        twoD = false;    
+        twoD = false;
+        
+        scalar_type avg_norm = 0.0;
+        for (int i=0; i<3; ++i) {
+            avg_norm += std::sqrt(xArr[i]*xArr[i] + yArr[i]*yArr[i] + zArr[i]*zArr[i]);
+        }
+        avg_norm /= 3.0;
+        
+        sphereRadius = avg_norm;
+        
+        _nPoints = nNodes;    
     }
     else if (!coord_var.isNull()) {       
         //
@@ -140,6 +178,16 @@ void StrideSearchData::initDimensions() {
         
         oneD = true;
         twoD = false;
+        
+        scalar_type avg_norm = 0.0;
+        for (int i=0; i<3; ++i) {
+            avg_norm += std::sqrt(xyzArr[0][i]*xyzArr[0][i] + xyzArr[1][i]*xyzArr[1][i] + xyzArr[2][i]*xyzArr[2][i]);
+        }
+        avg_norm /= 3.0;
+        
+        sphereRadius = avg_norm;
+        
+        _nPoints = nNodes;
     }
     else {
         std::cerr << "Cannot find coordinate variables in file " << filename << std::endl;

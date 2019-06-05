@@ -11,6 +11,10 @@
 #include <algorithm>
 #include <numeric>
 
+#ifdef USE_NANOFLANN
+#include "StrideSearchNanoflannAdaptor.h"
+#endif
+
 namespace StrideSearch {
 
 SectorList::SectorList(const scalar_type sb, const scalar_type nb, const scalar_type wb, const scalar_type eb, 
@@ -53,10 +57,37 @@ SectorList::SectorList(const EventList& evList, const scalar_type radius) {
 }
 
 #ifdef USE_NANOFLANN
-    void SectorList::fastLinkSectorsToData(const StrideSearchData* data_ptr){};
-#endif
+  void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, NanoflannTree tree) {
+    //std::cout << "Running Stride with nano" << std::endl;
 
-void SectorList::linkSectorsToData(const StrideSearchData* data_ptr) {
+    for (index_type secInd = 0; secInd < nSectors(); ++secInd){
+      std::vector<std::pair<index_type, scalar_type>> return_matches;
+      // radius search from sector center with sector radius                                                                                                                                              
+      scalar_type xyz[3];
+      llToXYZ(xyz[0], xyz[1], xyz[2], sectors[secInd]->centerLat, sectors[secInd]->centerLon);
+
+      nanoflann::SearchParams params;
+
+      const index_type nMatches = tree.search_tree->radiusSearch(&xyz[0], sectors[secInd]->radius * sectors[secInd]->radius, return_matches, params);
+      if (data_ptr->layout1d()) {
+	for (index_type i = 0; i < nMatches; ++i) {
+	  std::vector<index_type> llind = {return_matches[i].first};
+	  sectors[secInd]->data_indices.push_back(llind);
+	  sectors[secInd]->data_coords.push_back(ll_coord_type(data_ptr->lats[return_matches[i].first], data_ptr->lons[return_matches[i].first]));
+	}
+      }
+      else if (data_ptr->layout2d()) {
+	for (index_type i = 0; i < nMatches; ++i) {
+	  const std::pair<index_type, index_type> llpair = data_ptr->get2dIndex(return_matches[i].first);
+	  const std::vector<index_type> llind = {llpair.first, llpair.second};
+	  sectors[secInd]->data_indices.push_back(llind);
+	  sectors[secInd]->data_coords.push_back(ll_coord_type(data_ptr->lats[llpair.first], data_ptr->lons[llpair.second]));
+	}
+      }
+    } 
+}
+#else
+  void SectorList::linkSectorsToData(const std::shared_ptr<StrideSearchData> data_ptr, NanoflannTree tree) {
     if (data_ptr->layout1d()) {
         //
         //  This loop is embarrassingly parallel
@@ -65,7 +96,7 @@ void SectorList::linkSectorsToData(const StrideSearchData* data_ptr) {
             for (index_type i = 0; i < data_ptr->lats.size(); ++ i) {
                 const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
                     data_ptr->lats[i], data_ptr->lons[i]);
-                if ( dist <= sectors[sec_i]->radius) {
+                if ( dist < sectors[sec_i]->radius) {
                     sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[i]));
                     const std::vector<index_type> ind = {i};
                     sectors[sec_i]->data_indices.push_back(ind);
@@ -82,7 +113,7 @@ void SectorList::linkSectorsToData(const StrideSearchData* data_ptr) {
                for (index_type j = 0; j < data_ptr->lons.size(); ++j) {
                     const scalar_type dist = sphereDistance(sectors[sec_i]->centerLat, sectors[sec_i]->centerLon,
                         data_ptr->lats[i], data_ptr->lons[j]);
-                    if ( dist <= sectors[sec_i]->radius ) {
+                    if ( dist < sectors[sec_i]->radius ) {
                         sectors[sec_i]->data_coords.push_back(ll_coord_type(data_ptr->lats[i], data_ptr->lons[j]));
                         const std::vector<index_type> ind = {i, j};
                         sectors[sec_i]->data_indices.push_back(ind);
@@ -92,6 +123,7 @@ void SectorList::linkSectorsToData(const StrideSearchData* data_ptr) {
         }
     }
 }
+#endif
 
 index_type SectorList::closestSectorToPoint(const scalar_type lat, const scalar_type lon) const {
     index_type result = -1;

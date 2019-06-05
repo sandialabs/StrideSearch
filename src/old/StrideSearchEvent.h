@@ -34,7 +34,7 @@ class Event {
         friend class EventList;
         friend class Track;
         /// Types of events
-        enum IntensityComparison {LESS_THAN, GREATER_THAN};
+        enum IntensityComparison {LESS_THAN, GREATER_THAN, NO_COMPARE};
         
         /// Default constructor.  Creates an empty event.  Rarely used.
         Event();
@@ -88,6 +88,10 @@ class Event {
         
         /// Geodesic distance betweeen *this and an other Event.
         scalar_type distance(const Event& other) const;
+        
+        inline const DateTime* getDateTime() const {return &datetime;}
+        
+        std::string tstormsEntry() const;
         
         /// Returns the latitude-longitude coordinate of *this.
         inline ll_coord_type location() const {return latLon;}

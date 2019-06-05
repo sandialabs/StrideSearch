@@ -110,6 +110,14 @@ std::map<DateTime, std::vector<Event>> EventList::separateByDate() const {
     return result;
 }
 
+void EventList::writeASCIIFormatTSTORMS(std::ostream& os) const{
+    const DateTime* dt = events[0]->getDateTime();
+    os << dt->day << " " << dt->month << " " << dt->year << " " << size() << " " << dt->hour << std::endl;
+    for (int i=0; i<events.size(); ++i) {
+        os << events[i]->tstormsEntry();
+    }
+}
+
 void EventList::consolidateRelatedEvents(const scalar_type distThreshold) {
     std::vector<bool> alreadyUsed(events.size(), false);
     for (index_type i = 0; i < events.size(); ++i) {

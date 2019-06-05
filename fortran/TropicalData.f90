@@ -19,8 +19,8 @@ public
 !> @class TropicalData
 !> @brief Extends StrideSearchData to tropical cylcone applications
 type, extends(StrideSearchData) :: TropicalData
-	real, pointer :: vertAvgT(:,:) !< vertically averaged temperature (500 hPa and 200 hPa)
-	real, pointer :: thickness(:,:) !< thickness between 1000 hPa and 200 hPa surfaces
+	real, allocatable :: vertAvgT(:,:) !< vertically averaged temperature (500 hPa and 200 hPa)
+	real, allocatable :: thickness(:,:) !< thickness between 1000 hPa and 200 hPa surfaces
 end type
 
 contains
@@ -28,22 +28,25 @@ contains
 !> @brief initializes tropical cylcone detection data
 !> @param tData container to be initialized
 !> @param filename netcdf filename
-subroutine InitializeTropicalData( tData, filename)
+subroutine InitializeTropicalData( tData, filename, doThickness)
 	type(TropicalData), intent(out) :: tData
 	character(len=*), intent(in) :: filename
+	logical, intent(in), optional :: doThickness
 	
 	call InitializeData( tData%StrideSearchData, filename )
 	
 	allocate(tData%vertAvgT( tData%nLon, tData%nLat ))
-	allocate(tData%thickness( tData%nLon, tData%nLat))
+	if (present(doThickness)) then
+	    if (doThickness) allocate(tData%thickness( tData%nLon, tData%nLat))
+	endif
 end subroutine
 
 !> @brief deletes and frees a tropical cylcone netcdf data container
 !> @param tData
 subroutine DeleteTropicalData( tData )
 	type(TropicalData), intent(inout) :: tData
-	deallocate(tData%vertAvgT)
-	deallocate(tData%thickness)
+	if (allocated(tData%vertAvgT)) deallocate(tData%vertAvgT)
+	if (allocated(tData%thickness)) deallocate(tData%thickness)
 	call DeleteData(tData%StrideSearchData)
 end subroutine
 
@@ -54,8 +57,10 @@ subroutine PrintTropicalVariableInfo( tData )
 	call PrintVariableInfo(tData%StrideSearchData)
 	print *, "max vertAvgT = ", maxval(tData%vertAvgT)
 	print *, "min vertAvgT = ", minval(tData%vertAvgT)
-	print *, "max thickness = ", maxval(tData%thickness)
-	print *, "min thickness = ", minval(tData%thickness)
+	if (allocated(tData%thickness)) then
+        print *, "max thickness = ", maxval(tData%thickness)
+        print *, "min thickness = ", minval(tData%thickness)
+	endif
 end subroutine
 
 !> @brief Reads netcdf data from file at a given timeIndex.
@@ -100,10 +105,11 @@ subroutine ReadTropicalVariablesAtTimestep( tData, year, month, day, hour, timeI
 	call read_variable_2d( tData%ncFileID, 'T200', start, work1)
 	call read_variable_2d( tData%ncFileID, 'T500', start, work2)
 	tData%vertAvgT = 0.5 * ( work1 + work2 )
-	
-	call read_variable_2d( tData%ncFileID, 'Z1000', start, work1)
-	call read_variable_2d( tData%ncFileID, 'Z200', start, work2)
-	tData%thickness = work2 - work1
+	if (allocated(tData%thickness)) then
+        call read_variable_2d( tData%ncFileID, 'Z1000', start, work1)
+        call read_variable_2d( tData%ncFileID, 'Z200', start, work2)
+        tData%thickness = work2 - work1
+	endif
 end subroutine
 
 !> @}
