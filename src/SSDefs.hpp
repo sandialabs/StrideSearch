@@ -21,6 +21,9 @@ namespace StrideSearch {
     /// Memory index data type
     typedef int Index;
     
+    /// Rectangle in lat-lon space (south, north, west, east)
+    typedef std::array<Real,4> region_type;
+    
 #ifdef HAVE_KOKKOS
     typedef Kokkos::View<Real*> RealArray;
     typedef Kokkos::View<Index*> IndexArray;

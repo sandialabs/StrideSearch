@@ -50,7 +50,7 @@ std::string DateTime::isoTimeStr() const {
     return ss.str();
 }
 
-std::string DateTime::isoDatetimeStr() const {
+std::string DateTime::isoFullStrNoSpace() const {
     std::ostringstream ss;
     ss << std::setw(4) << std::setfill('0') << year;
     ss << std::setw(2) << std::setfill('0') << month;

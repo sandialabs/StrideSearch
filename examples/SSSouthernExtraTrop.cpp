@@ -3,6 +3,7 @@
 #include "SSUtilities.hpp"
 #include "SSSearchParams.hpp"
 #include "SSSearchManager.hpp"
+#include "SSInput.hpp"
 #include <memory>
 #include <iostream>
 #include <fstream>
@@ -24,40 +25,28 @@ typedef LatLonLayout Layout;
 typedef std::shared_ptr<IDCriterion> crit_ptr;
 typedef std::shared_ptr<CollocationCriterion> colloc_ptr;
 
-struct Input {
-    Real sb, nb, wb, eb;
-    Real sec_radius;
+struct ExTropInput : public Input {
     Real psl_max;
     Real grad_min;
-    std::string data_dir;
-    std::string dfilename;
-    std::string ofilename;
-    Int start_year;
-    Int start_month;
-    Int start_day;
-    Int start_hour;
     Int stop_timestep;
     Int timestep_stride;
-    
-    Input(const int argc, char* argv[]) : sb(-80), nb(-35), wb(100), eb(200), sec_radius(1000), 
-        psl_max(101000), grad_min(0.55), data_dir(StrideSearch_TEST_DATA_DIR), 
-        dfilename("ERAinterim_extratrop_grad.nc"), ofilename("so_extrop.txt"),
-        start_year(1979), start_month(1), start_day(1), start_hour(0), stop_timestep(-1),
-        timestep_stride(60) {
-        parse(argc, argv);
-    }
-    
-    inline region_type region() const {return region_type({sb,nb,wb,eb});}
-    inline DateTime start_date() const {return DateTime(start_year, start_month, start_day, start_hour);}
-    void parse(const int argc, char* argv[]);
-    void print_help() const;
+
+    ExTropInput(int argc, char* argv[]): Input(argc, argv) {parse_args(argc, argv);}
+
+    void parse_args(const int argc, char* argv[]) override;
+    std::string help_msg() const override;
+    std::string status_msg() const;
 };
 
 int main(int argc, char* argv[]) {
     print_copyright();
     /// Step 1: Collect user input
-    Input input(argc, argv);
-    std::vector<std::string> fn = {input.data_dir + "/" + input.dfilename};
+    ExTropInput input(argc, argv);
+    std::cout << input.status_msg();
+    if (!input.valid) {
+        throw std::runtime_error("invalid input.");
+    }
+    std::vector<std::string> fn = {input.data_dir + "/" + input.filelist_fname};
     
     crit_ptr press_crit(new MinCriterion("SLP", input.psl_max));
     crit_ptr grad_crit(new MaxCriterion("PRESGRAD", input.grad_min));
@@ -72,7 +61,7 @@ int main(int argc, char* argv[]) {
         This is required because this data set has time values define in units of minutes, not days.
         Also, using SearchParams::timestep_stride is a good way to speed up the search.
     */
-    SearchParams params(DTUnits::MINUTES, input.timestep_stride);
+    SearchParams params(input.time_units, input.timestep_stride);
     
     /// Step 3: Setup the search
     SearchManager<Layout> search(input.region(), input.sec_radius);
@@ -90,50 +79,56 @@ int main(int argc, char* argv[]) {
     outfile.close();
 }
 
-void Input::parse(const int argc, char* argv[]) {
+void ExTropInput::parse_args(const int argc, char* argv[]) {
+    filelist_fname = "ERAinterim_extratrop_grad.nc";
+    sb = -70;
+    nb = -30;
+    wb = 240;
+    eb = 360;
+    sec_radius = 1000;
+    psl_max = 101000;
+    grad_min = 0.55;
+    time_units = DTUnits::MINUTES;
+    timestep_stride = 60;
+    stop_timestep = -1;
+    start_year = 1979;
+    start_month = 1;
+    ofilename = "so_extratrop_results.txt";
     for (int i=1; i<argc; ++i) {
         const std::string& token = argv[i];
-        if (token == "-sb") {
-            sb = std::stod(argv[++i]);
-        }
-        else if (token == "-nb") {
-            nb = std::stod(argv[++i]);
-        }
-        else if (token == "-wb") {
-            wb = std::stod(argv[++i]);
-        }
-        else if (token == "-eb") {
-            eb = std::stod(argv[++i]);
-        }
-        else if (token == "-sr") {
-            sec_radius = std::stod(argv[++i]);
-        }
-        else if (token == "-psl") {
+        if (token == "-psl") {
             psl_max = std::stod(argv[++i]);
         }
         else if (token == "-pg" || token == "-grad") {
             grad_min = std::stod(argv[++i]);
         }
-        else if (token == "-h" || token == "--help") {
-            print_help();
-        }
-        else if (token == "-o" || token == "-of") {
-            ofilename = argv[++i];
-        }
-        else if (token == "-i") {
-            dfilename = argv[++i];
-        }
         else if (token == "-stop") {
             stop_timestep = std::stoi(argv[++i]);
         }
-        else if (token == "-ts") {
-            timestep_stride = std::stoi(argv[++i]);
+        else if (token == "-h" | token == "--help") {
+            std::cout << help_msg();
+            valid = false;
         }
     }
 }
 
-void Input::print_help() const {
+std::string ExTropInput::status_msg() const {
     std::ostringstream ss;
-    ss << "southernOceanSearch.\n";
-    std::cout << ss.str();
+    ss << prog_name << " input summary:\n";
+    ss << "\tsearch region = " << region() << '\n';
+    ss << "\tsector radius = " << sec_radius << " km\n";
+    ss << "\tdata_dir = " << data_dir << '\n';
+    ss << "\tfilelist_fname = " << filelist_fname << '\n';
+    ss << "\tstart date = " << start_date().isoFullStr() << '\n';
+    ss << "\toutput file = " << ofilename << '\n';
+    return ss.str();
+}
+
+std::string ExTropInput::help_msg() const {
+    std::ostringstream ss;
+    ss << Input::help_msg();
+    ss << "\t-psl <psl threshold> \t Sea level pressure threshold in Pascals.\n";
+    ss << "\t-grad <press. gradient threshold> \t Pressure gradient threshold in hPa per 250 km.\n";
+    ss << "\t-stop <timestep number> \t Stop search at this time step [default: -1].\n";
+    return ss.str();
 }

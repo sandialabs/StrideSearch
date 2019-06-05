@@ -86,7 +86,7 @@ class DateTime {
         std::string isoTimeStr() const;
         
         /// Return the date and time formatted by the ISO 8601 standard with no white space.
-        std::string isoDatetimeStr() const;
+        std::string isoFullStrNoSpace() const;
         
         /// Return the date and time formatted by the ISO 8601 standard.
         /**

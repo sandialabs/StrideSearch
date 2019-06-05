@@ -59,3 +59,7 @@ ADD_EXECUTABLE(ssMPIMangagerUnitTest.exe SSMPIManagerUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssMPIMangagerUnitTest.exe strideSearch)
 ADD_TEST(NAME ssMPIMangager COMMAND ${PROJECT_BINARY_DIR}/bin/ssMPIMangagerUnitTest.exe)
 
+ADD_EXECUTABLE(ssInputUnitTest.exe SSInputUnitTests.cpp)
+TARGET_LINK_LIBRARIES(ssInputUnitTest.exe strideSearch)
+ADD_TEST(NAME ssInput COMMAND ${PROJECT_BINARY_DIR}/bin/ssInputUnitTest.exe)
+
