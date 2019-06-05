@@ -19,13 +19,13 @@ SET (CMAKE_CXX_STANDARD 11)
 #
 #   Find NetCDF (required)
 #
-FIND_LIBRARY(netcdf netcdf PATHS $ENV{NETCDF_ROOT}/lib REQUIRED NO_DEFAULT_PATH)
+FIND_LIBRARY(netcdf netcdf PATHS $ENV{NETCDF_ROOT}/lib HINTS ${NETCDF_DIR}/lib REQUIRED NO_DEFAULT_PATH)
 IF (netcdf)
     message("**** Found NetCDF: " ${netcdf})
 ELSE (netcdf)
     message("CMake ERROR: Cannot find the NetCDF Library" \n)
 ENDIF (netcdf)
-FIND_LIBRARY(netcdf_c++ netcdf_c++4 PATHS $ENV{NETCDF_ROOT}/lib REQUIRED NO_DEFAULT_PATH)
+FIND_LIBRARY(netcdf_c++ netcdf_c++4 PATHS $ENV{NETCDF_ROOT}/lib HINTS ${NETCDF_DIR}/lib REQUIRED NO_DEFAULT_PATH)
 
 IF (netcdf_c++)
     message("**** Found NetCDF C++ : " ${netcdf_c++})
