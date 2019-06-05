@@ -27,9 +27,8 @@ std::string Event<DataLayout>::infoString(int tab_level) const {
     if (relatedEvents.size() > 0) {
         ss << tabstr << "\tRelated Events:" << std::endl;
         ss << tabstr << "\t>>>>>>>>>>>>>>>>>>>\n";
-        tab_level += 1;
         for (int i = 0; i < relatedEvents.size(); ++i)
-            ss << relatedEvents[i]->infoString(tab_level);
+            ss << relatedEvents[i]->infoString(tab_level+1);
     }
     ss << tabstr << "--------------------\n";
     return ss.str();

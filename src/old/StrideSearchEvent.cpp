@@ -112,6 +112,76 @@ scalar_type Event::maxRelatedDistance() const {
     return result;
 }
 
+std::string Event::tstormsEntry() const {
+    std::ostringstream ss;
+    bool vorMaxFound = false;
+    const std::string vorToken = "max(VOR";
+    scalar_type vorMax = 0.0;
+    bool windFound = false;
+    const std::string windToken = "max(sqrt(U";
+    scalar_type windMax = 0.0;
+    bool warmCoreFound = false;
+    const std::string wcToken = "max(max(0.5";
+    scalar_type tempExcess = 0.0;
+    bool pslMinFound = false;
+    const std::string pslToken = "min(PSL)";
+    scalar_type pslMin = 0.0;
+    
+    std::string::size_type pos;
+    pos = desc.find(vorToken);
+    if (pos != std::string::npos) {
+        vorMax = true;
+        vorMax = val;
+    }
+    pos = desc.find(windToken);
+    if (pos != std::string::npos) {
+        windFound = true;
+        windMax = val;
+    }
+    pos = desc.find(wcToken);
+    if (pos != std::string::npos) {
+        warmCoreFound = true;
+        tempExcess = val;
+    }
+    pos = desc.find(pslToken);
+    if (pos != std::string::npos) {
+        pslMinFound = true;
+        pslMin = val;
+    }
+    
+    for (int i=0; i < relatedEvents.size(); ++i) {
+        std::string::size_type pos;
+        pos = desc.find(vorToken);
+        if (pos != std::string::npos) {
+            vorMax = true;
+            vorMax = val;
+        }
+        pos = desc.find(windToken);
+        if (pos != std::string::npos) {
+            windFound = true;
+            windMax = val;
+        }
+        pos = desc.find(wcToken);
+        if (pos != std::string::npos) {
+            warmCoreFound = true;
+            tempExcess = val;
+        }
+        pos = desc.find(pslToken);
+        if (pos != std::string::npos) {
+            pslMinFound = true;
+            pslMin = val;
+        }
+    }
+    
+    for (int i=0; i<dataIndex.size(); ++i)
+        ss << dataIndex[i] << " ";
+    ss << latLon.second << " " << latLon.first << " ";
+    ss << windMax << " " << vorMax << " " << pslMin << " " << (warmCoreFound ? " T " : " F ") << " F ";
+    ss << tempExcess << " 0 " << std::endl;
+    
+    return ss.str();
+}
+
 std::string Event::infoString(int tabLevel) const {
     std::string tabstr("");
     for (int i = 0; i < tabLevel; ++i)

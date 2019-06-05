@@ -1,16 +1,16 @@
 #!/bin/bash
 
-dataDir=/Volumes/Storage/polarStorms/ne240
-outputLoc=$HOME/Desktop/ssearchResults
-exeLoc=$HOME/Desktop/StrideSearch/install/bin
+dataDir=/ascldap/users/mataylo/scratch1/acme_v1/latlon
+outputLoc=$HOME/strideSearchResults
+exeLoc=/ascldap/users/pabosle/StrideSearch/build
 
-cp $exeLoc/tropicalSearch.exe $dataDir/.
+cp $exeLoc/tropicalSearch.exe $outputLoc/.
 
 cd $dataDir
 
 for filename in *.nc
 do 
-cat <<EOF > tropicalSearch-ne240.namelist
+cat <<EOF > $outputLoc/tropicalSearch-ne120.namelist
 &input
 	ncfilename = '${dataDir}/${filename}'
 	southernBoundary = -40.0
@@ -23,12 +23,13 @@ cat <<EOF > tropicalSearch-ne240.namelist
 	tempPslDistThreshold = 225.0
 	tempExcessThreshold = 2.0
 	outputDir = '${outputLoc}'
-	outputRoot = '${filename%.nc}-timing'
+	doThickness = .FALSE.
+	outputRoot = '${filename%.nc}'
 /
 EOF
 
-./tropicalSearch.exe tropicalSearch-ne240.namelist
+$outputLoc/tropicalSearch.exe $outputLoc/tropicalSearch-ne120.namelist
 
-cat $outputLoc/${filename%.nc}-timing.txt >> $outputLoc/sSearchOutputFile-ne240-timing.txt
+cat $outputLoc/${filename%.nc}.txt >> $outputLoc/sSearchOutputFile-ne120_8.5e-4_2.0C.txt
 
 done

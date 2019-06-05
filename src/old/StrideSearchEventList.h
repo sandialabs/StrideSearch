@@ -70,6 +70,7 @@ class EventList {
         /// Access a specific Event contained by *this.
         inline std::shared_ptr<Event> getEvent(const index_type i) const {return events[i];}
     
+        void writeASCIIFormatTSTORMS(std::ostream& os) const;
     protected:
         /// Contained Event pointers.
         std::vector<std::shared_ptr<Event>> events;
