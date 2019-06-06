@@ -93,7 +93,6 @@ bool MaxAverageCriterion::evaluate(const Workspace& wspc) {
         case (1) : {
             auto vardata = wspc.getConstDataRef(varnames[0]);
             val = std::accumulate(vardata.cbegin(), vardata.cend(), 0.0)/wspc.n;
-            std::cout << "sum1 = " << val*wspc.n << '\n';
             break;
         }
         case (2) : {
@@ -105,7 +104,6 @@ bool MaxAverageCriterion::evaluate(const Workspace& wspc) {
                 val += vardata[i]*weight[i];
                 area += weight[i];
             }
-            std::cout << "sum2 = " << val << ", area = " << area << ", avg = " << val/area << '\n';
             val /= area;
             break;
         }

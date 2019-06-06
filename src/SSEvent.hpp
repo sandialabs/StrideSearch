@@ -94,6 +94,10 @@ class Event {
     */
     std::string infoString(const int tab_level=0) const;
     
+    
+    /// Return the value
+    inline Real getVal() const {return value;}
+    
     /// Add a related Event to this Event.
     /**
         Related Events are different events that correspond to the same data feature.
