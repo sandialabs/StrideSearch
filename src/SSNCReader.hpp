@@ -317,7 +317,7 @@ class UnstructuredNCReader : public NCReader {
             @return @f$\Delta \lambda = \sqrt{\frac{4\pi R^2}{n_{nodes}}}@f$
         */
         Real resolutionEstimate() const override {
-            return std::sqrt(4*PI*EARTH_RADIUS_KM*EARTH_RADIUS_KM/n_nodes);}
+            return std::sqrt(4*PI*SQ_EARTH_RADIUS_KM/n_nodes);}
     
         /// Initializes x, y, z, arrays by reading coord* data from file.
         void initCoordinates() override;

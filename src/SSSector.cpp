@@ -58,9 +58,18 @@ std::vector<std::shared_ptr<Event<DataLayout>>> Sector<DataLayout>::evaluateCrit
     for (Int i=0; i<criteria.size(); ++i) {
         if (criteria[i]->evaluate(workspaces[i])) {
             const Index wspc_ind = criteria[i]->wspcIndex;
+            Real elat, elon;
+            if (dynamic_cast<MaxAverageCriterion*>(criteria[i].get())) {
+                elat = lat;
+                elon = lon;
+            }
+            else {
+                elat = lats[wspc_ind];
+                elon = lons[wspc_ind];
+            }
             result.push_back(std::shared_ptr<Event<DataLayout>>(
                 new Event<DataLayout>(criteria[i]->description(), criteria[i]->val,
-                    lats[wspc_ind], lons[wspc_ind], dt, indices[wspc_ind], time_ind, fname,
+                    elat, elon, dt, indices[wspc_ind], time_ind, fname,
                     criteria[i]->compareKind, criteria[i]->locationKind)));
         }
     }

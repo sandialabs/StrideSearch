@@ -61,7 +61,8 @@ class SearchManager {
         */
         SearchManager(const region_type& sreg, const Real srad) : 
             region(sreg), sector_radius(srad), main_sector_set(sreg[0], sreg[1], sreg[2], sreg[3], srad), 
-            main_event_set(), reader(), tree(), filenames(), start_date(), criteria(), locator_crit() {} 
+            main_event_set(), reader(), tree(), filenames(), start_date(), criteria(), locator_crit(), 
+            colloc_criteria() {} 
         
         /// Set data set start date.
         /**
