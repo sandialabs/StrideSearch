@@ -112,7 +112,7 @@ void LatLonNCReader::fillWorkspaceData(Workspace& wspc,
         else if (var.first == "area_weight" || var.first == "weight") {
             const Real dlam = this->resolutionEstimate()/EARTH_RADIUS_KM;
             for (Int i=0; i<inds.size(); ++i) {
-                var.second[i] = 2*SQ_EARTH_RADIUS_KM * dlam * std::cos(lats[inds[i][0]])*std::sin(dlam);
+                var.second[i] = SQ_EARTH_RADIUS_KM*dlam*dlam*std::cos(DEG2RAD*lats[inds[i][0]]);
             }
         }
         else {
@@ -165,7 +165,7 @@ void UnstructuredNCReader::fillWorkspaceData(Workspace& wspc,
     	else if (var.first == "area_weight" || var.first == "weight") {
             const Real dlam = this->resolutionEstimate()/EARTH_RADIUS_KM;
             for (Int i=0; i<inds.size(); ++i) {
-                var.second[i] = 2*SQ_EARTH_RADIUS_KM * dlam * std::cos(lats[inds[i][0]])*std::sin(dlam);
+                var.second[i] = SQ_EARTH_RADIUS_KM * dlam*dlam * std::cos(lats[inds[i][0]]);
             }
         }
     	else {

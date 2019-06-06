@@ -63,3 +63,9 @@ ADD_EXECUTABLE(ssInputUnitTest.exe SSInputUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssInputUnitTest.exe strideSearch)
 ADD_TEST(NAME ssInput COMMAND ${PROJECT_BINARY_DIR}/bin/ssInputUnitTest.exe)
 
+ADD_EXECUTABLE(ssAvgAreaTest.exe SSAverageAreaTest.cpp)
+TARGET_LINK_LIBRARIES(ssAvgAreaTest.exe strideSearch)
+ADD_TEST(NAME ssAvgArea COMMAND ${PROJECT_BINARY_DIR}/bin/ssAvgAreaTest.exe)
+
+
+
