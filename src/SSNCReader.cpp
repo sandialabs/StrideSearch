@@ -109,6 +109,12 @@ void LatLonNCReader::fillWorkspaceData(Workspace& wspc,
                 var.second[i] = lats[inds[i][0]];
             }
         }
+        else if (var.first == "area_weight" || var.first == "weight") {
+            const Real dlam = this->resolutionEstimate()/EARTH_RADIUS_KM;
+            for (Int i=0; i<inds.size(); ++i) {
+                var.second[i] = 2*SQ_EARTH_RADIUS_KM * dlam * std::cos(lats[inds[i][0]])*std::sin(dlam);
+            }
+        }
         else {
             netCDF::NcVar ncv(ncfile->getVar(var.first));
             const Int ndim = ncv.getDimCount();
@@ -156,6 +162,12 @@ void UnstructuredNCReader::fillWorkspaceData(Workspace& wspc,
                 var.second[i] = lats[inds[i][0]];
     	    }
     	}
+    	else if (var.first == "area_weight" || var.first == "weight") {
+            const Real dlam = this->resolutionEstimate()/EARTH_RADIUS_KM;
+            for (Int i=0; i<inds.size(); ++i) {
+                var.second[i] = 2*SQ_EARTH_RADIUS_KM * dlam * std::cos(lats[inds[i][0]])*std::sin(dlam);
+            }
+        }
     	else {
             netCDF::NcVar ncv(ncfile->getVar(var.first));
             const Int ndim = ncv.getDimCount();
