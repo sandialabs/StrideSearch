@@ -18,9 +18,7 @@
 #include <array>
 #include "SSMPIManager.hpp"
 #include "SSSearchParams.hpp"
-#ifdef HAVE_MPI
-#include <mpi.h>
-#endif
+
 
 namespace StrideSearch {
 
