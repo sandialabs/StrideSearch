@@ -93,7 +93,7 @@ IF (DOXYGEN_FOUND)
 
     #   configure files
     CONFIGURE_FILE(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    MESSAGE("Doxygen build started.")
+    MESSAGE("Doxygen build enabled.  Use 'make docs' to build html documentation.")
 
     #   build docs
     ADD_CUSTOM_TARGET(docs COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
