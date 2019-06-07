@@ -10,6 +10,8 @@
 
 namespace StrideSearch {
 
+template <typename DL> class Track;
+
 /// Class for performing operations on a collections of Event instances.
 /**
     Consolidates operations like removing duplicate Event instances or finding related Event instances into one class.
@@ -20,6 +22,8 @@ class EventSet {
     public:
         typedef std::shared_ptr<Event<DataLayout>> event_ptr_type;
         typedef std::shared_ptr<const Event<DataLayout>> const_event_ptr_type;
+    
+        template <typename DL> friend class Track;
     
         /// Default constructor.  Creates an empty set.
         EventSet() : events() {}
@@ -32,6 +36,9 @@ class EventSet {
         
         /// Appends one EventSet to another
         void extend(const EventSet<DataLayout>& other);
+        
+        /// Append a single event to a set
+        void append(const event_ptr_type ep) {events.push_back(ep);}
         
         /// Returns the number of Events in *this
         inline Index size() const {return events.size();}
@@ -79,6 +86,8 @@ class EventSet {
         
         inline const_event_ptr_type getEventConst(const Index ind) const {return events[ind];}
     
+//         void writeData(std::ostream& os);
+        
     protected:
         std::vector<event_ptr_type> events;
 };

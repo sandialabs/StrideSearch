@@ -61,14 +61,15 @@ std::string DateTime::isoFullStrNoSpace() const {
 
 DateTime::DateTime(const std::string ymd_string) {
     year = std::stoi(ymd_string.substr(0,4));
-    month = std::stoi(ymd_string.substr(5,2));
-    day = std::stoi(ymd_string.substr(8,2));
+    month = std::stoi(ymd_string.substr(4,2));
+    day = std::stoi(ymd_string.substr(6,2));
     std::string hr_str = "00";
     try {
-         hr_str = ymd_string.substr(11,2);
+         hr_str = ymd_string.substr(8,2);
     }
     catch (const std::out_of_range& e) {}
     hour = std::stoi(hr_str);
+    minute = 0;
     if (monthDayMap.empty())
         buildMonthDayMap();
 }

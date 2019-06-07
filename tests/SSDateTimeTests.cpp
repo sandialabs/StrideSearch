@@ -50,6 +50,12 @@ int main (int argc, char* argv[]) {
         std::cout << day_incs[i] << " days after midnight, Dec-15-2017, is " << relDate.easyReadStr() << '\n';
     }
     
+    const DateTime jtwcDate("2014012912");
+    std::cout << "jtwc date (2014012912) = " << jtwcDate.isoFullStr() << '\n';
+    if (jtwcDate != DateTime(2014,1,29,12)) {
+        throw std::runtime_error("Bad parse of best track format.");
+    }
+    
     const DateTime simStart(1851,10,1,0);
     const std::vector<Real> tvals = {330, 330.25, 330.5, 330.75, 331};
     for (int i=0; i<tvals.size(); ++i) {

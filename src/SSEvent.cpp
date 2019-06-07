@@ -21,7 +21,7 @@ std::string Event<DataLayout>::infoString(int tab_level) const {
     ss << tabstr << "\tloc_ind = " << loc_ind << std::endl;
     ss << tabstr << "\tloc_ind_3d = " << loc_ind_3d << std::endl;
     ss << tabstr << "\ttime_ind = " << time_ind << std::endl;
-    ss << tabstr << "\tDTG = " << datetime.DTGString() << std::endl;
+    ss << tabstr << "\tdatetime = " << datetime.isoFullStr() << std::endl;
     ss << tabstr << "\tfilename = " << filename << std::endl;
     ss << tabstr << "\tisReferenced = " << (isReferenced ? "true" : "false") << std::endl;
     if (relatedEvents.size() > 0) {
@@ -169,6 +169,20 @@ bool Event<DataLayout>::isCollocated(const IDCriterion* crit1, const IDCriterion
         }
         // compare their distance against the threshold
         result = sphereDistance(lat1,lon1, lat2,lon2) <= distThreshold;
+    }
+    return result;
+}
+
+template <typename DataLayout>
+std::vector<std::shared_ptr<Event<DataLayout>>> Event<DataLayout>::flatten() const {
+    std::shared_ptr<Event<DataLayout>> main(new Event<DataLayout>(this->desc, this->value,
+        this->lat, this->lon, this->datetime, this->loc_ind, this->time_ind, this->filename,
+        this->intensity_comparison, this->spatial_dependence));
+    main->loc_ind_3d = this->loc_ind_3d;
+    std::vector<std::shared_ptr<Event<DataLayout>>> result;
+    result.push_back(main);
+    for (int i=0; i<relatedEvents.size(); ++i) {
+        result.push_back(relatedEvents[i]);
     }
     return result;
 }

@@ -16,6 +16,7 @@ namespace StrideSearch {
 // fwd declarations
 template <typename DL> class SectorSet;
 template <typename DL> class EventSet;
+template <typename DL> class Track;
 class IDCriterion; 
 
 /// A record of an important (as deemed by IDCriterion::evaluate methods) event in the data.
@@ -40,6 +41,7 @@ class Event {
     template <typename DL> friend class EventSet;
     template <typename DL> friend class SectorSet;
     template <typename DL> friend class SearchManager;
+    template <typename DL> friend class Track;
     
     
     /// Constructor for an Event in a horizontal data field
@@ -94,6 +96,7 @@ class Event {
     */
     std::string infoString(const int tab_level=0) const;
     
+    std::vector<std::shared_ptr<Event<DataLayout>>> flatten() const;
     
     /// Return the value
     inline Real getVal() const {return value;}
@@ -184,6 +187,8 @@ class Event {
     
     /// Returns the (lat,lon) coordinates of this event in an array.
     inline std::array<Real,2> getCoords() const {return std::array<Real,2>({lat,lon});}
+    
+    inline int nRelated() const {return relatedEvents.size();}
     
     protected:
         /// Event description.  Defined by IDCriterion::description() typically.

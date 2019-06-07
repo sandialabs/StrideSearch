@@ -6,6 +6,10 @@
 namespace StrideSearch {
     /// Meters per second to Kilometers per hour conversion factor
     static const Real MPS2KPH = 3.6;
+    /// Knots to meters per second conversion factor
+    static const Real KTS2MPS = 0.5144444;
+    /// Nautical miles to kilometers conversion factor
+    static const Real NM2KM = 1.852;
     /// Pi
     static constexpr Real PI = 3.1415926535897932384626433832795027975;
     /// Radians to degrees conversion factor

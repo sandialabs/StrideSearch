@@ -183,6 +183,11 @@ void EventSet<DataLayout>::consolidateRelated(const Real dist_tol) {
     events = new_events;
 }
 
+// template <typename DataLayout>
+// void EventSet<DataLayout>::writeData(std::ostream& os) {
+//     const char sep = ';';
+// }
+
 template <typename DataLayout>
 void EventSet<DataLayout>::requireCollocation(const std::shared_ptr<IDCriterion> crit1, 
     const std::shared_ptr<IDCriterion> crit2, const Real dist_tol) {
