@@ -5,6 +5,14 @@ namespace StrideSearch {
 
 template <typename DataLayout>
 void Track<DataLayout>::writeTrackData(std::ostream& os, const std::vector<std::string>& descs) const {
+    os << "datetime;lat;lon";
+    if (!descs.empty()) {
+        os << ";";
+        for (int i=0; i<descs.size(); ++i) {
+            os << descs[i] << (i==descs.size()-1?"":";");
+        }
+    }
+    os << '\n';
     for (int i=0; i<events.size(); ++i) {
         const event_ptr ev = events.events[i];
         os << ev->datetime.isoFullStr() << ';' << ev->lat << ';' << ev->lon;
