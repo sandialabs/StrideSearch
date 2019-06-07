@@ -74,6 +74,13 @@ int main(int argc, char* argv[]) {
     search.outputCSV(csvfile);
     csvfile.close();
     
+    std::vector<std::string> descs;
+    for (auto& c : criteria) {
+        descs.push_back(c->description());
+    }
+    search.buildTracks(15, 6, 2);
+    search.outputTracks("ss_tc_example", descs);
+    
 return 0;
 }
 

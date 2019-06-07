@@ -21,6 +21,8 @@ class TrackSet {
         
         inline void addTrack(const track_ptr tr) {tracks.push_back(tr);}
         
+        TrackSet() : maxKmPerTimestep(0), minTrackLength(0), tracks(), timestep_hours(0) {}
+        
         TrackSet(const Real storm_spd_mps, const Real dt_hours, const Int mintracklen=1) :
             maxKmPerTimestep(MPS2KPH*storm_spd_mps*dt_hours), minTrackLength(mintracklen),
             timestep_hours(dt_hours), tracks() {}

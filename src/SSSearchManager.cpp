@@ -217,6 +217,12 @@ void SearchManager<DataLayout>::runSpatialSearch(const MPIManager& mpi, const Se
 }
 
 template <typename DataLayout>
+void SearchManager<DataLayout>::buildTracks(const Real storm_spd_mps, const Real dt_hours, const Int mintracklen) {
+    main_track_set = TrackSet<DataLayout>(storm_spd_mps, dt_hours, mintracklen);
+    main_track_set.build(main_event_set);
+}
+
+template <typename DataLayout>
 void SearchManager<DataLayout>::outputCSV(std::ostream& os) const {
     const Real fillvalue = std::numeric_limits<Real>::max();
     const std::map<DateTime,std::vector<event_ptr>> dtmap = main_event_set.separateByDateTime();
