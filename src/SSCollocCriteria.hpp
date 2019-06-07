@@ -14,13 +14,11 @@ namespace StrideSearch {
 class CollocationCriterion {
     public:
     CollocationCriterion(const std::shared_ptr<IDCriterion> crit_1, const std::shared_ptr<IDCriterion> crit_2,
-        const Real dist) : crit1(crit_1), crit2(crit_2), distance_threshold(dist), val(std::numeric_limits<Real>::max()) {}
+        const Real dist) : crit1(crit_1), crit2(crit_2), distance_threshold(dist) {}
     
     std::shared_ptr<IDCriterion> crit1;
     std::shared_ptr<IDCriterion> crit2;
-    const Real distance_threshold;
-    
-    Real val;
+    Real distance_threshold;
 };
 
 }

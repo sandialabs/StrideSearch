@@ -59,7 +59,7 @@ std::vector<std::shared_ptr<Event<DataLayout>>> Sector<DataLayout>::evaluateCrit
         if (criteria[i]->evaluate(workspaces[i])) {
             const Index wspc_ind = criteria[i]->wspcIndex;
             Real elat, elon;
-            if (dynamic_cast<MaxAverageCriterion*>(criteria[i].get())) {
+            if (criteria[i]->useSectorLocation()) {
                 elat = lat;
                 elon = lon;
             }

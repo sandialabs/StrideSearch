@@ -61,6 +61,8 @@ class IDCriterion {
         /// Value of a triggered Event.  This is only defined if the Criterion has evaluated True.
         Real val;
         
+        virtual bool useSectorLocation() const {return false;}
+        
         virtual ~IDCriterion(){};
         
         /// Each subclass defines this method that has 2 responsibilities:
@@ -183,9 +185,11 @@ class MaxAverageCriterion : public IDCriterion {
             IDCriterion(std::vector<std::string>({var, weightvar}), thresh, IntensityComparison::GREATER_THAN,
                 SpatialDependence::DEPENDENT) {}
             
-        bool evaluate(const Workspace& wspc);
+        bool evaluate(const Workspace& wspc) override;
         
-        std::string description() const;
+        bool useSectorLocation() const override {return true;}
+        
+        std::string description() const override;
 };
 
 /// Compares the difference between a maximum value and the average value of a variable.
