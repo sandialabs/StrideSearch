@@ -19,30 +19,30 @@ SET (CMAKE_CXX_STANDARD 11)
 #
 #   Find NetCDF (required)
 #
-FIND_LIBRARY(netcdf netcdf PATHS $ENV{NETCDF_ROOT}/lib HINTS ${NETCDF_DIR}/lib REQUIRED NO_DEFAULT_PATH)
+FIND_LIBRARY(netcdf netcdf PATHS $ENV{NETCDF_C_ROOT}/lib REQUIRED NO_DEFAULT_PATH)
 IF (netcdf)
     message("**** Found NetCDF: " ${netcdf})
 ELSE (netcdf)
     message("CMake ERROR: Cannot find the NetCDF Library" \n)
 ENDIF (netcdf)
-FIND_LIBRARY(netcdf_c++ netcdf_c++4 PATHS $ENV{NETCDF_ROOT}/lib $ENV{NETCDF_CXX_ROOT}/lib HINTS ${NETCDF_CXX_DIR}/lib REQUIRED NO_DEFAULT_PATH)
+FIND_LIBRARY(netcdf_c++ netcdf_c++4 PATHS $ENV{NETCDF_CXX_ROOT}/lib REQUIRED NO_DEFAULT_PATH)
 
 IF (netcdf_c++)
     message("**** Found NetCDF C++ : " ${netcdf_c++})
 ELSE (netcdf_c++)
     message("CMake ERROR: Cannot find the NetCDF C++ Library")
 ENDIF (netcdf_c++)
-INCLUDE_DIRECTORIES($ENV{NETCDF_ROOT}/include)
+INCLUDE_DIRECTORIES($ENV{NETCDF_C_ROOT}/include $ENV{NETCDF_CXX_ROOT}/include)
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/tpl/include)
 
 #
-#   Optional packages for GPU 
-#   
+#   Optional packages for GPU
+#
 #   *not implemented yet*
 #
 set(CUDA_BUILD FALSE)
-if (Kokkos_ROOT)   
+if (Kokkos_ROOT)
     option(HAVE_KOKKOS "Located Kokkos library." ON)
     include(${Kokkos_ROOT}/kokkos_generated_settings.cmake)
     set(Kokkos_INCLUDE_DIRS ${Kokkos_ROOT}/include)
@@ -51,7 +51,7 @@ if (Kokkos_ROOT)
     if (${cuda_str_pos} GREATER -1)
         option(HAVE_CUDA "If true, indicates a Kokkos Cuda build." ON)
         set(CUDA_BUILD TRUE)
-        execute_process(COMMAND ${CMAKE_CXX_COMPILER} "--nvcc-wrapper-show" 
+        execute_process(COMMAND ${CMAKE_CXX_COMPILER} "--nvcc-wrapper-show"
 	        RESULT_VARIABLE WRAPS_NVCC OUTPUT_VARIABLE WRAPS_NVCC_OUT)
         string (FIND ${WRAPS_NVCC_OUT} "nvcc" pos)
     endif()
@@ -79,7 +79,7 @@ IF (DOXYGEN_FOUND)
 
     #   dot
     EXECUTE_PROCESS(COMMAND which dot OUTPUT_VARIABLE DOT_PATH)
-    IF (DOT_PATH) 
+    IF (DOT_PATH)
         SET(HAVE_DOT YES)
     #        Message("Graphviz found.")
     ELSE ()
