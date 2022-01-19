@@ -51,9 +51,10 @@ ADD_EXECUTABLE(ssSearchManagerUnitTest.exe SSSearchManagerUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssSearchManagerUnitTest.exe strideSearch)
 ADD_TEST(NAME ssSearchManager COMMAND ${PROJECT_BINARY_DIR}/bin/ssSearchManagerUnitTest.exe)
 
-ADD_EXECUTABLE(ssTropicalCycloneTest.exe SSTropicalCycloneTest.cpp)
-TARGET_LINK_LIBRARIES(ssTropicalCycloneTest.exe strideSearch)
-ADD_TEST(NAME ssTropicalCyclone COMMAND ${PROJECT_BINARY_DIR}/bin/ssTropicalCycloneTest.exe)
+# Disabling because data files are too big to upload to github
+#ADD_EXECUTABLE(ssTropicalCycloneTest.exe SSTropicalCycloneTest.cpp)
+#TARGET_LINK_LIBRARIES(ssTropicalCycloneTest.exe strideSearch)
+#ADD_TEST(NAME ssTropicalCyclone COMMAND ${PROJECT_BINARY_DIR}/bin/ssTropicalCycloneTest.exe)
 
 ADD_EXECUTABLE(ssMPIMangagerUnitTest.exe SSMPIManagerUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssMPIMangagerUnitTest.exe strideSearch)
@@ -63,9 +64,10 @@ ADD_EXECUTABLE(ssInputUnitTest.exe SSInputUnitTests.cpp)
 TARGET_LINK_LIBRARIES(ssInputUnitTest.exe strideSearch)
 ADD_TEST(NAME ssInput COMMAND ${PROJECT_BINARY_DIR}/bin/ssInputUnitTest.exe)
 
-ADD_EXECUTABLE(ssAvgAreaTest.exe SSAverageAreaTest.cpp)
-TARGET_LINK_LIBRARIES(ssAvgAreaTest.exe strideSearch)
-ADD_TEST(NAME ssAvgArea COMMAND ${PROJECT_BINARY_DIR}/bin/ssAvgAreaTest.exe)
+# Disabling because data files are too big to upload to github
+#ADD_EXECUTABLE(ssAvgAreaTest.exe SSAverageAreaTest.cpp)
+#TARGET_LINK_LIBRARIES(ssAvgAreaTest.exe strideSearch)
+#ADD_TEST(NAME ssAvgArea COMMAND ${PROJECT_BINARY_DIR}/bin/ssAvgAreaTest.exe)
 
 ADD_EXECUTABLE(ssTrackTest.exe SSTrackTest.cpp)
 TARGET_LINK_LIBRARIES(ssTrackTest.exe strideSearch)
